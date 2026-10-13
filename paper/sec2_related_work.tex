@@ -134,7 +134,9 @@ Table~\ref{tab:sota_taxonomy_expanded} summarizes representative evasion, verifi
 
 \begin{table*}[p]
 \caption{Taxonomic Comparison of Adversarial Evasion and Verification Methods for NIDS (2016--2026)}\label{tab:sota_taxonomy_expanded}%
-\begin{tabular*}{\textwidth}{@{\extracolsep\fill}lccccc@{}}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lccccc@{}}
 \toprule
 \textbf{Paper / Method} & \textbf{Target Model} & \textbf{Optimization Engine} & \textbf{Query Complexity} & \textbf{Physical Feasibility} & \textbf{Year} \\
 \midrule
@@ -169,7 +171,8 @@ Table~\ref{tab:sota_taxonomy_expanded} summarizes representative evasion, verifi
 \midrule
 \textbf{Flow-Field Evasion (Ours)} & \textbf{XGBoost / LightGBM} & \textbf{Lie Vector Field Steering} & \textbf{9.1 (Low)} & \textbf{100.0\% (Guaranteed)} & \textbf{2026} \\
 \bottomrule
-\end{tabular*}
+\end{tabular}%
+}
 \end{table*}
 
 ---

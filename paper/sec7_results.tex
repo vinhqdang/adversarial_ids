@@ -8,7 +8,9 @@ Table~\ref{tab:clean_baseline_expanded} reports the test set performance ($3,000
 
 \begin{table*}[htbp]
 \caption{Clean Test Set Classification Metrics Across Tree Ensemble Architectures on CSE-CIC-IDS2018}\label{tab:clean_baseline_expanded}%
-\begin{tabular*}{\textwidth}{@{\extracolsep\fill}lcccccc@{}}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lcccccc@{}}
 \toprule
 \textbf{Model Architecture} & \textbf{Accuracy (\%)} & \textbf{Precision (\%)} & \textbf{Recall (\%)} & \textbf{F1 Score (\%)} & \textbf{ROC-AUC (\%)} & \textbf{Train Time (s)} \\
 \midrule
@@ -17,7 +19,8 @@ Table~\ref{tab:clean_baseline_expanded} reports the test set performance ($3,000
 \textbf{CatBoost}             & 99.67\% & 99.31\% & 99.31\% & 99.31\% & 99.98\%  & 4.15s \\
 \textbf{Random Forest (Bagging)} & 99.53\% & 99.17\% & 99.03\% & 99.10\% & 99.95\%  & 1.84s \\
 \bottomrule
-\end{tabular*}
+\end{tabular}%
+}
 \end{table*}
 
 The empirical data in Table~\ref{tab:clean_baseline_expanded} validates our theoretical premise:
@@ -32,7 +35,9 @@ We evaluate evasion against an evaluation cohort of 100 correctly classified, ac
 
 \begin{table*}[htbp]
 \caption{Master Adversarial Evasion Benchmark Against CUDA XGBoost on CSE-CIC-IDS2018 ($N = 100$ Attacks)}\label{tab:master_evasion_benchmark}%
-\begin{tabular*}{\textwidth}{@{\extracolsep\fill}lcccccc@{}}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lcccccc@{}}
 \toprule
 \textbf{Adversarial Attack Method} & \textbf{ASR (\%)} & \textbf{PFR (\%)} & \textbf{Real ASR (\%)} & \textbf{Avg Queries} & \textbf{Avg Cost ($L_1$)} & \textbf{Total Time (s)} \\
 \midrule
@@ -44,7 +49,8 @@ We evaluate evasion against an evaluation cohort of 100 correctly classified, ac
 \midrule
 \textbf{Flow-Field Evasion (FFE - Ours)} & \textbf{100.0\%} & \textbf{100.0\%} & \textbf{100.0\%} & \textbf{9.1} & \textbf{28,681.9} & \textbf{2.80s} \\
 \bottomrule
-\end{tabular*}
+\end{tabular}%
+}
 \end{table*}
 
 \paragraph{Metric Definitions}
@@ -96,7 +102,9 @@ Table~\ref{tab:family_breakdown} breaks down the performance of Flow-Field Evasi
 
 \begin{table*}[htbp]
 \caption{Flow-Field Evasion (FFE) Performance Breakdown Across Attack Families}\label{tab:family_breakdown}%
-\begin{tabular*}{\textwidth}{@{\extracolsep\fill}lccccc@{}}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lccccc@{}}
 \toprule
 \textbf{Attack Family} & \textbf{ASR (\%)} & \textbf{PFR (\%)} & \textbf{Avg Queries} & \textbf{Dominant Generator} & \textbf{Avg Latency (ms)} \\
 \midrule
@@ -108,7 +116,8 @@ Table~\ref{tab:family_breakdown} breaks down the performance of Flow-Field Evasi
 \midrule
 \textbf{Aggregate Mean / Total}                & \textbf{100.0\%} & \textbf{100.0\%} & \textbf{9.1} & \textbf{Adaptive Dynamic} & \textbf{28.0 ms} \\
 \bottomrule
-\end{tabular*}
+\end{tabular}%
+}
 \end{table*}
 
 \subsubsection{Behavioral Analysis by Attack Family}
@@ -132,20 +141,23 @@ To verify that Flow-Field Evasion generalizes across diverse network topologies 
 
 \begin{table*}[htbp]
 \caption{Cross-Benchmark Evaluation of Flow-Field Evasion Across Multiple Datasets}\label{tab:multidataset_benchmark}%
-\begin{tabular*}{\textwidth}{@{\extracolsep\fill}llccccccc@{}}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llccccccc@{}}
 \toprule
 \textbf{Dataset} & \textbf{Target Model} & \textbf{Clean Acc} & \textbf{Clean AUC} & \textbf{ASR (\%)} & \textbf{PFR (\%)} & \textbf{Real ASR (\%)} & \textbf{Avg Queries} & \textbf{Avg Latency} \\
 \midrule
 \multirow{2}{*}{\textbf{CSE-CIC-IDS2018}} & \textbf{XGBoost (CUDA)} & 99.73\% & 100.00\% & 100.0\% & 100.0\% & 100.0\% & 9.1 & 28.0 ms \\
-                                          & \textbf{LightGBM}      & 99.80\% & 100.00\% & 100.0\% & 100.0\% & 100.0\% & 8.8 & 27.2 ms \\
+                                           & \textbf{LightGBM}      & 99.80\% & 100.00\% & 100.0\% & 100.0\% & 100.0\% & 8.8 & 27.2 ms \\
 \midrule
 \multirow{2}{*}{\textbf{UNSW-NB15}}      & \textbf{XGBoost (CUDA)} & 98.42\% & 99.64\%  & 99.0\%  & 100.0\% & 99.0\%  & 10.3 & 31.4 ms \\
-                                          & \textbf{LightGBM}      & 98.65\% & 99.71\%  & 99.0\%  & 100.0\% & 99.0\%  & 9.9 & 30.1 ms \\
+                                           & \textbf{LightGBM}      & 98.65\% & 99.71\%  & 99.0\%  & 100.0\% & 99.0\%  & 9.9 & 30.1 ms \\
 \midrule
 \multirow{2}{*}{\textbf{CIDDS-002}}       & \textbf{XGBoost (CUDA)} & 99.18\% & 99.88\%  & 100.0\% & 100.0\% & 100.0\% & 7.8 & 24.5 ms \\
-                                          & \textbf{LightGBM}      & 99.25\% & 99.91\%  & 100.0\% & 100.0\% & 100.0\% & 7.4 & 23.8 ms \\
+                                           & \textbf{LightGBM}      & 99.25\% & 99.91\%  & 100.0\% & 100.0\% & 100.0\% & 7.4 & 23.8 ms \\
 \bottomrule
-\end{tabular*}
+\end{tabular}%
+}
 \end{table*}
 
 \paragraph{Cross-Dataset Empirical Insights.}

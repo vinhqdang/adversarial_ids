@@ -162,11 +162,11 @@ Algorithm~\ref{alg:tsbs} implements Tree-Split Boundary Snapping. While Lie deri
 \subsubsection{Computational Complexity \& Comparison to MILP}
 Table~\ref{tab:complexity_comparison} compares the asymptotic time and space complexity of Flow-Field Evasion against exact MILP solvers \cite{kantchelian2016evasion} and heuristic black-box optimizers (MOEVA \cite{simonetto2021constrained}, Traffic Manipulator \cite{han2021traffic}).
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
+\caption{Asymptotic Complexity Comparison of Evasion Algorithms for Tree Ensembles}\label{tab:complexity_comparison}%
 \centering
-\caption{Asymptotic Complexity Comparison of Evasion Algorithms for Tree Ensembles}
-\label{tab:complexity_comparison}
-\begin{tabular}{lccc}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lccc@{}}
 \toprule
 \textbf{Algorithm} & \textbf{Time Complexity} & \textbf{Query Complexity} & \textbf{Coupled Invariants} \\
 \midrule
@@ -176,8 +176,9 @@ Table~\ref{tab:complexity_comparison} compares the asymptotic time and space com
 \midrule
 \textbf{Flow-Field Evasion (Ours)}                     & $\mathcal{O}(M \cdot K \cdot T \cdot D)$ & $\le 4M + 1$ ($\approx 9.1$) & \textbf{Exact Closed-Form} \\
 \bottomrule
-\end{tabular}
-\end{table}
+\end{tabular}%
+}
+\end{table*}
 
 Where:
 \begin{itemize}

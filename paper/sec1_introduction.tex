@@ -5,7 +5,7 @@ Machine learning has transitioned from an exploratory paradigm into the fundamen
 
 To classify these high-dimensional tabular records in real time, machine learning ensembles based on Gradient Boosted Decision Trees (GBDTs)---most prominently XGBoost \cite{chen2016xgboost}, LightGBM \cite{ke2017lightgbm}, and CatBoost \cite{prokhorenkova2018catboost}---have emerged as the undisputed state of the art. Across extensive benchmark evaluations on standardized intrusion datasets, including CSE-CIC-IDS2018 \cite{sharafaldin2018toward}, UNSW-NB15 \cite{moustafa2015unsw}, and CIDDS-001/CIDDS-002 \cite{ring2017flow, dang2021evaluating, dang2022studying, dang2022using, dang2019studying}, tree-based ensembles consistently outperform deep neural network architectures (such as Multi-Layer Perceptrons, Convolutional Neural Networks, and TabNet), routinely establishing detection accuracy, precision, recall, and Area Under the ROC Curve (ROC-AUC) metrics exceeding $99.7\%$ \cite{apruzzese2022role, sghamizi2024tabularbench, alomari2026adversarial}.
 
-\subsection{The Paradox of 99.xx\% Detection Accuracy}
+\subsection{The Paradox of Near-Perfect Detection Accuracy}
 Despite these near-perfect empirical evaluations, learning-based NIDS face an acute crisis of practical robustness when deployed against real-world adversaries. Security audits, red-teaming evaluations, and operational incident response data have consistently revealed that the stellar performance of GBDT models on benchmark datasets is largely illusory \cite{sommer2010outside, geirhos2020shortcut}. 
 
 This discrepancy stems from three fundamental architectural and methodological phenomena:

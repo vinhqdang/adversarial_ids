@@ -235,3 +235,6 @@ __marimo__/
 *.blg
 *.bbl
 
+
+orcid_*.json
+parse_orcid.py

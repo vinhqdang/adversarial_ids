@@ -101,6 +101,7 @@ Table~\ref{tab:defense_evaluation} reports the clean test accuracy and robust ad
 \centering
 \caption{Defensive Hardening Evaluation Against Flow-Field Evasion on CSE-CIC-IDS2018}
 \label{tab:defense_evaluation}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Model Configuration} & \textbf{Clean Accuracy (\%)} & \textbf{Clean ROC-AUC (\%)} & \textbf{Robust Accuracy under FFE (\%)} & \textbf{FFE Evasion ASR (\%)} \\
@@ -110,7 +111,8 @@ Table~\ref{tab:defense_evaluation} reports the clean test accuracy and robust ad
 \textbf{LGAT-Hardened XGBoost}         & 98.12\% & 98.85\%  & 82.0\% & 18.0\%  \\
 \textbf{Dual-Hardened (MPS + LGAT)}    & \textbf{97.80\%} & \textbf{98.50\%} & \textbf{89.0\%} & \textbf{11.0\%} \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table*}
 
 \paragraph{Analysis of Defensive Hardening.}

@@ -152,9 +152,10 @@ satisfies $x(t) \in \mathcal{M}_{\text{flow}}$ for all $t \ge 0$.
 \begin{proof}
 Let $\Psi(x) = [\Psi_1(x), \Psi_2(x), \Psi_3(x)]^T = 0$ denote the algebraic constraint manifold. 
 Along the trajectory $x(t)$, the time derivative of the constraint function is:
-\begin{equation}
-    \frac{d}{dt} \Psi(x(t)) = J_\Psi(x(t)) \cdot \dot{x}(t) = J_\Psi(x(t)) \sum_{k=1}^4 u_k(t) \vec{v}_k(x(t)) = \sum_{k=1}^4 u_k(t) \big( J_\Psi(x(t)) \cdot \vec{v}_k(x(t)) \big)
-\end{equation}
+\begin{align}
+    \frac{d}{dt} \Psi(x(t)) &= J_\Psi(x(t)) \cdot \dot{x}(t) = J_\Psi(x(t)) \sum_{k=1}^4 u_k(t) \vec{v}_k(x(t)) \nonumber \\
+    &= \sum_{k=1}^4 u_k(t) \big( J_\Psi(x(t)) \cdot \vec{v}_k(x(t)) \big)
+\end{align}
 By Equations~(\ref{eq:tangent_byte_rate})--(\ref{eq:tangent_mean_len}), each generator $\vec{v}_k(x)$ is constructed such that $J_\Psi(x) \cdot \vec{v}_k(x) = 0$ identically for all $x \in \mathcal{M}_{\text{flow}}$. 
 
 Therefore:

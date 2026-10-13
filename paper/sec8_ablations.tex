@@ -10,6 +10,7 @@ In operational deployments, an attacker may face strict query throttling or insp
 \centering
 \caption{Ablation 1: Evasion Performance vs. Maximum Step Budget $M$}
 \label{tab:ablation_budget_expanded}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{cccccc}
 \toprule
 \textbf{Step Budget $M$} & \textbf{ASR (\%)} & \textbf{PFR (\%)} & \textbf{Avg Queries} & \textbf{Avg Cost ($L_1$)} & \textbf{Total Time (s)} \\
@@ -22,7 +23,8 @@ In operational deployments, an attacker may face strict query throttling or insp
 20 & 100.0\% & 100.0\% & 9.1  & 28,681.9 & 2.80s \\
 50 & 100.0\% & 100.0\% & 9.1  & 28,681.9 & 2.80s \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 \paragraph{Key Insights on Step Budget.}
@@ -39,6 +41,7 @@ To quantify the role played by each elementary network transformation, we evalua
 \centering
 \caption{Ablation 2: Individual and Combinatorial Generator Contributions}
 \label{tab:ablation_generators}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Active Generator Subset} & \textbf{ASR (\%)} & \textbf{PFR (\%)} & \textbf{Avg Queries} & \textbf{Primary Evasion Mechanism} \\
@@ -54,7 +57,8 @@ To quantify the role played by each elementary network transformation, we evalua
 \midrule
 \textbf{Complete Lie Cone} ($\vec{v}_1, \vec{v}_2, \vec{v}_3, \vec{v}_4$) & \textbf{100.0\%} & \textbf{100.0\%} & \textbf{9.1} & \textbf{Full Differential Control} \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table*}
 
 \paragraph{Key Insights on Generator Mechanics.}
@@ -77,6 +81,7 @@ In Algorithm~\ref{alg:ffe_master}, the cost vector $\vec{c} = [c_1, c_2, c_3, c_
 \centering
 \caption{Ablation 3: Sensitivity to Operational Cost Regimes}
 \label{tab:ablation_costs}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Cost Regime} & \textbf{ASR (\%)} & \textbf{Avg Queries} & \textbf{Dominant Generator} & \textbf{Mean Delay Added} \\
@@ -86,7 +91,8 @@ In Algorithm~\ref{alg:ffe_master}, the cost vector $\vec{c} = [c_1, c_2, c_3, c_
 \textbf{Regime C (Bandwidth-Constrained)} & 98.0\% & 8.6 & $\vec{v}_{\text{time}}$ ($89\%$) & $210.4$ ms \\
 \textbf{Regime D (Uniform / Flat)}     & 100.0\% & 9.4  & $\vec{v}_{\text{time}}$ ($62\%$) & $138.1$ ms \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 Under Regime B (where transmission delays are penalized by 5 orders of magnitude), FFE automatically shifts its operational strategy: it de-prioritizes temporal dilation and instead relies on payload padding and chaff packet insertion, achieving $96.0\%$ evasion while reducing the average added delay from $142.5$ ms down to just $8.2$ ms.
@@ -98,6 +104,7 @@ Algorithm~\ref{alg:tsbs} (TSBS) snaps mutable features to active split threshold
 \centering
 \caption{Ablation 4: Boundary Snapping Numerical Offset $\epsilon$}
 \label{tab:ablation_epsilon}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{ccccc}
 \toprule
 \textbf{Offset $\epsilon$} & \textbf{ASR (\%)} & \textbf{PFR (\%)} & \textbf{Boundary Jitter (\%)} & \textbf{Avg $L_1$ Cost} \\
@@ -108,7 +115,8 @@ $10^{-4}$  & 100.0\% & 100.0\% & 0.0\% (Completely Stable)        & 28,681.9 \\
 $10^{-2}$  & 100.0\% & 100.0\% & 0.0\% (Completely Stable)        & 28,685.4 \\
 $1.0$      & 100.0\% & 100.0\% & 0.0\% (Over-Perturbed)           & 28,710.2 \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 When $\epsilon = 0.0$, numerical floating-point inaccuracies cause $8\%$ of samples lying exactly on the decision boundary $\theta_j$ to fail threshold comparisons in different compiler floating-point units. Setting $\epsilon = 10^{-4}$ provides robust, numerically stable facet traversal with negligible cost overhead.
@@ -120,6 +128,7 @@ In many operational settings, an attacker may not have direct query access to th
 \centering
 \caption{Cross-Architecture Adversarial Transferability Matrix (Attack Success Rate \%)}
 \label{tab:transferability}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Source Model $\downarrow$ \textbackslash{} Target Model $\rightarrow$} & \textbf{XGBoost (CUDA)} & \textbf{LightGBM} & \textbf{CatBoost} & \textbf{Random Forest} \\
@@ -129,10 +138,11 @@ In many operational settings, an attacker may not have direct query access to th
 \textbf{CatBoost}        & 96.0\%  & 97.0\%  & \textbf{100.0\%} & 92.0\%  \\
 \textbf{Random Forest}   & 93.0\%  & 94.0\%  & 91.0\%  & \textbf{100.0\%} \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table*}
 
-\paragraph{Analysis of Transferability.}
-Remarkably, FFE exhibits \textbf{exceptional cross-model transferability}: adversarial flows crafted against XGBoost achieve a \textbf{98.0\% ASR on LightGBM}, \textbf{95.0\% on CatBoost}, and \textbf{94.0\% on Random Forest}. 
+\paragraph{Cross-Model Analysis.}
+Remarkably, FFE exhibits \textbf{exceptional cross-model transferability}: adversarial flows crafted against XGBoost achieve a \textbf{98.0\% ASR on LightGBM}, \textbf{95.0\% on CatBoost}, and \textbf{94.0\% on Random Forest}.
 
 This high transferability occurs because FFE does not overfit to idiosyncratic decision split thresholds of a single model; instead, it steers the flow along physical vector fields that align with the true underlying benign data distribution. Because all tree architectures learn similar volumetric shortcuts from the benchmark dataset, moving a flow toward the physical manifold of benign web browsing successfully evades all tree models simultaneously.

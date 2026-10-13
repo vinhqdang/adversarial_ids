@@ -160,12 +160,13 @@ Algorithm~\ref{alg:tsbs} implements Tree-Split Boundary Snapping. While Lie deri
 \end{algorithm}
 
 \subsubsection{Computational Complexity \& Comparison to MILP}
-Table~\ref{tab:complexity_comparison} compares the asymptotic time and space complexities of Flow-Field Evasion against Kantchelian's exact MILP \cite{kantchelian2016evasion} and heuristic black-box optimizers (MOEVA \cite{simonetto2021constrained}, Traffic Manipulator \cite{han2021traffic}).
+Table~\ref{tab:complexity_comparison} compares the asymptotic time and space complexity of Flow-Field Evasion against exact MILP solvers \cite{kantchelian2016evasion} and heuristic black-box optimizers (MOEVA \cite{simonetto2021constrained}, Traffic Manipulator \cite{han2021traffic}).
 
 \begin{table}[htbp]
 \centering
 \caption{Asymptotic Complexity Comparison of Evasion Algorithms for Tree Ensembles}
 \label{tab:complexity_comparison}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lccc}
 \toprule
 \textbf{Algorithm} & \textbf{Time Complexity} & \textbf{Query Complexity} & \textbf{Coupled Invariants} \\
@@ -176,7 +177,8 @@ Table~\ref{tab:complexity_comparison} compares the asymptotic time and space com
 \midrule
 \textbf{Flow-Field Evasion (Ours)}                     & $\bm{\mathcal{O}(M \cdot K \cdot T \cdot D)}$ & $\bm{\le 4M + 1}$ ($\bm{\approx 9.1}$) & \textbf{Exact Closed-Form} \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 Where:
@@ -189,4 +191,4 @@ Where:
     \item $I, S$ are the iterations and swarm size in PSO ($I \approx 50, S \approx 50$).
 \end{itemize}
 
-Because $K = 4$ and $M \le 20$ are small constants, FFE requires only a linear number of simple tree evaluations $\mathcal{O}(T \cdot D)$, completely avoiding the exponential combinatorial blowup of MILP while requiring over $99\%$ fewer queries than genetic search.
+Because $K = 4$ and $M \le 20$ are small constants, FFE requires only a linear number of simple tree evaluations $\mathcal{O}(T \cdot D)$. This completely avoids the exponential combinatorial explosion of MILP while requiring over $99\%$ fewer queries than genetic search.

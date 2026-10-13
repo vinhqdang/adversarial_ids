@@ -1,12 +1,12 @@
-\section{Comprehensive State of the Art \& Taxonomic Review (2016--2026)}
+\section{State of the Art \& Related Work (2016--2026)}
 \label{sec:sota}
 
-The intersection of adversarial machine learning (AML), network security, and decision tree verification has undergone intensive development over the past decade. To contextualize the theoretical and empirical contributions of Flow-Field Evasion (FFE), this section presents an exhaustive taxonomic analysis of existing paradigms, tracing their evolution from early unconstrained attacks through problem-space formalisms, exact formal verification solvers, and modern 2025--2026 constraint-aware benchmarks.
+The intersection of adversarial machine learning (AML), network security, and decision tree verification has undergone intensive development over the past decade. To contextualize the theoretical and empirical contributions of Flow-Field Evasion (FFE), this section analyzes existing paradigms, tracing their evolution from early unconstrained attacks through problem-space formalisms, exact formal verification solvers, and modern 2025--2026 constraint-aware benchmarks.
 
 \subsection{Foundations: Machine Learning for Network Telemetry}
-The application of statistical machine learning to network intrusion detection originated with the realization that signature-based detection engines (such as Snort and Suricata) cannot detect novel, zero-day exploits or polymorphism \cite{sommer2010outside}. Early systems explored unsupervised anomaly detection and shallow classifiers (such as Support Vector Machines, Naive Bayes, and shallow Multi-Layer Perceptrons) trained on datasets like KDD Cup 1999 and NSL-KDD. However, these early models suffered from high false alarm rates, poor scalability, and severe feature representation artifacts \cite{sommer2010outside}.
+The application of statistical machine learning to network intrusion detection originated with the realization that signature-based detection engines (such as Snort and Suricata) cannot detect novel, zero-day exploits or polymorphism \cite{sommer2010outside}. Early systems explored unsupervised anomaly detection and shallow classifiers (such as Support Vector Machines, Naive Bayes, and shallow Multi-Layer Perceptrons) trained on legacy corpora like KDD Cup 1999 and NSL-KDD. However, these early models suffered from high false alarm rates, poor scalability, and severe feature representation artifacts \cite{sommer2010outside, dang2019studying}.
 
-The introduction of modern high-throughput flow extractors (such as CICFlowMeter \cite{sharafaldin2018toward}, Zeek, and YAF) coupled with the publication of realistic benchmark datasets (CSE-CIC-IDS2018 \cite{sharafaldin2018toward}, CIC-IDS2017, and UNSW-NB15 \cite{moustafa2015unsw}) shifted the community toward Gradient Boosted Decision Tree (GBDT) ensembles. Tree ensembles---specifically XGBoost \cite{chen2016xgboost}, LightGBM \cite{ke2017lightgbm}, and CatBoost \cite{prokhorenkova2018catboost}---became the de facto gold standard for tabular network telemetry. Their popularity stems from several distinct structural advantages:
+The introduction of modern high-throughput flow extractors (such as CICFlowMeter \cite{sharafaldin2018toward}, Zeek, and YAF) coupled with the publication of realistic benchmark datasets---most prominently CSE-CIC-IDS2018 \cite{sharafaldin2018toward}, UNSW-NB15 \cite{moustafa2015unsw}, and CIDDS-001/CIDDS-002 \cite{dang2021evaluating, dang2022studying}---shifted the community toward Gradient Boosted Decision Tree (GBDT) ensembles. Comprehensive empirical studies on ML-based IDS \cite{dang2022using, dang2023multilayer, apruzzese2022role} established that tree ensembles---specifically XGBoost \cite{chen2016xgboost}, LightGBM \cite{ke2017lightgbm}, and CatBoost \cite{prokhorenkova2018catboost}---represent the de facto gold standard for tabular network telemetry. Their popularity stems from several distinct structural advantages:
 \begin{enumerate}
     \item \textbf{Handling Mixed Tabular Types:} Flow records naturally blend continuous metrics (inter-arrival duration, byte rates) with discrete counts (packet totals, header lengths) and categorical attributes (TCP flags, protocols). Decision trees partition continuous and discrete variables natively without requiring complex embedding layers or continuous scaling.
     \item \textbf{Invariance to Monotonic Transformations:} Unlike deep neural networks, whose linear combinations are sensitive to feature scales and outliers, decision tree split points depend solely on the rank ordering of feature values.
@@ -111,7 +111,7 @@ The exact minimal $L_1$ or $L_0$ perturbation is found by solving:
 While mathematically exact, Kantchelian's MILP formulation suffers from severe practical limitations:
 \begin{enumerate}
     \item \textbf{Combinatorial Complexity:} The number of binary variables scales with the total number of leaves across all trees $\sum_{t=1}^T |L_t| \approx T \cdot 2^D$. For modern production ensembles with $T = 100$ trees and depth $D = 8$, the solver must reason over $25,600$ integer variables. The problem is NP-hard, and standard solvers (such as Gurobi or CPLEX) frequently timeout or exhaust system memory.
-    \item \textbf{Linearity Restriction:} MILP solvers natively accept only linear constraints. When non-linear network flow invariants are introduced (e.g., $x_{\text{rate}} = \frac{x_{\text{bytes}}}{x_{\text{duration}}}$), the formulation becomes a Mixed-Integer Non-Linear Program (MINLP), which is generally intractable.
+    \item \textbf{Linearity Restriction:} MILP solvers natively accept only linear constraints. When non-linear network flow invariants are introduced (such as non-linear rate equations relating bytes and duration), the formulation becomes a Mixed-Integer Non-Linear Program (MINLP), which is generally intractable.
 \end{enumerate}
 
 \subsubsection{SAT and SMT Formal Verification: XReason}
@@ -130,43 +130,46 @@ To circumvent mathematical feature-space abstractions entirely, security practit
 While these frameworks guarantee physical routability by operating directly on packets, their optimization engines treat the target classifier as an opaque black box. Because Genetic Algorithms and PSO randomly mutate parameters without knowing which tree splits are active, they require $1,000$ to $10,000$ queries per flow, taking several minutes per sample.
 
 \subsection{Recent Literature Matrix (2025--2026)}
-Table~\ref{tab:sota_taxonomy_expanded} provides a comprehensive comparative taxonomy of 20 representative works across 2016--2026, detailing target architectures, optimization mechanisms, query complexities, physical feasibility guarantees, and verified Digital Object Identifiers (DOIs).
+Table~\ref{tab:sota_taxonomy_expanded} summarizes representative evasion, verification, and defense methods developed between 2016 and 2026, comparing target architectures, optimization mechanisms, query complexities, and problem-space feasibility.
 
 \begin{table*}[p]
 \centering
-\caption{Comprehensive Taxonomy of Adversarial Evasion and Verification Methods for NIDS (2016--2026)}
+\caption{Taxonomic Comparison of Adversarial Evasion and Verification Methods for NIDS (2016--2026)}
 \label{tab:sota_taxonomy_expanded}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccc}
+\begin{tabular}{lccccc}
 \toprule
-\textbf{Paper / Method} & \textbf{Target Model} & \textbf{Optimization Engine} & \textbf{Query Complexity} & \textbf{Physical Feasibility} & \textbf{Year} & \textbf{Verified DOI} \\
+\textbf{Paper / Method} & \textbf{Target Model} & \textbf{Optimization Engine} & \textbf{Query Complexity} & \textbf{Physical Feasibility} & \textbf{Year} \\
 \midrule
-\textbf{Kantchelian et al.} \cite{kantchelian2016evasion} & GBDT / Random Forest & Mixed-Integer Linear Program (MILP) & Zero (White-Box) & 0\% (Unconstrained) & 2016 & \doi{10.5555/3045390.3045642} \\
-\textbf{Chen \& Guestrin} \cite{chen2016xgboost} & XGBoost Framework & Exact Greedy \& Histogram Trees & N/A (Model) & N/A & 2016 & \doi{10.1145/2939672.2939785} \\
-\textbf{Carlini \& Wagner} \cite{carlini2017towards} & Deep Neural Networks & Lagrangian $L_2/L_\infty$ Optimization & $O(N_{\text{iter}})$ & 0\% (Feature Space) & 2017 & \doi{10.1109/SP.2017.49} \\
-\textbf{Ke et al.} \cite{ke2017lightgbm} & LightGBM Framework & Gradient-Based One-Side Sampling & N/A (Model) & N/A & 2017 & \doi{10.5555/3294996.3295074} \\
-\textbf{Chen et al. (ZOO)} \cite{chen2017zoo} & Black-Box Classifiers & Zeroth-Order Coordinate Descent & $O(d \cdot N_{\text{iter}})$ & $\le 10\%$ & 2017 & \doi{10.1145/3134600.3134606} \\
-\textbf{Sharafaldin et al.} \cite{sharafaldin2018toward} & CIC-IDS2018 Dataset & Statistical Flow Extraction (CICFlowMeter) & N/A (Dataset) & Real Testbed & 2018 & \doi{10.5220/0006639801080116} \\
-\textbf{Prokhorenkova et al.} \cite{prokhorenkova2018catboost} & CatBoost Framework & Oblivious Symmetric Trees & N/A (Model) & N/A & 2018 & \doi{10.5555/3327757.3327770} \\
-\textbf{Al-Dujaili et al.} \cite{aldujaili2018toward} & Neural NIDS & Adversarial Retraining (FGSM/PGD) & $O(N_{\text{train}})$ & 0\% (Feature Space) & 2018 & \doi{10.1145/3264003.3264024} \\
-\textbf{Madry et al.} \cite{madry2018towards} & Robust Classifiers & Min-Max Saddle-Point PGD & $O(N_{\text{iter}})$ & 0\% (Box Clamped) & 2018 & \doi{10.48550/arXiv.1706.06083} \\
-\textbf{Pierazzi et al.} \cite{pierazzi2020intrusion} & NIDS Classifiers & Problem-Space Formalization & Analytic & Formally Defined & 2020 & \doi{10.1109/SP40001.2020.00049} \\
-\textbf{Geirhos et al.} \cite{geirhos2020shortcut} & Deep Learning & Shortcut Learning Formalization & Analytic & N/A & 2020 & \doi{10.1038/s42256-020-00257-z} \\
-\textbf{Han et al.} \cite{han2021traffic} & Black-Box NIDS & Particle Swarm Optimization (PCAP) & $O(10^3 - 10^4)$ & 100\% (Packet Mutation) & 2021 & \doi{10.1109/JSAC.2021.3087244} \\
-\textbf{Simonetto et al. (CAA)} \cite{simonetto2021constrained} & Tabular Models & CAPGD + MOEVA (Genetic Alg.) & $O(10^3)$ & Partial ($\approx 60\%$) & 2021 & \doi{10.48550/arXiv.2110.14241} \\
-\textbf{Apruzzese et al.} \cite{apruzzese2022role} & NIDS Classifiers & Realistic Evaluation Review & Empirical Audit & Real Testbed & 2022 & \doi{10.1109/TIFS.2022.3204910} \\
-\textbf{Ignatiev et al.} \cite{ignatiev2022formal} & GBDT Ensembles & Boolean SAT / SMT Solvers & Zero (White-Box) & $\le 15\%$ & 2022 & \doi{10.1609/aaai.v36i7.20758} \\
-\textbf{Apruzzese et al.} \cite{apruzzese2023modeling} & Learning-Based NIDS & Problem-Space Adversary Modeling & Empirical Audit & Real Packets & 2023 & \doi{10.1109/EuroSP57164.2023.00032} \\
-\textbf{Doriguzzi-Corin et al.} \cite{doriguzzi2024lucid} & Convolutional NIDS & Lightweight Traffic Windowing & $O(1)$ & 100\% (Packet Level) & 2024 & \doi{10.1109/TNSM.2024.3355012} \\
-\textbf{Izza et al. (XReason)} \cite{xreason2024} & XGBoost / LightGBM & MaxSAT Explanation / Synthesis & Zero (White-Box) & $\le 20\%$ & 2024 & \doi{10.24963/ijcai.2024/385} \\
-\textbf{Sghamizi et al.} \cite{sghamizi2024tabularbench} & Tabular Benchmarks & TabularBench Framework & $O(10^3)$ & Partial (Bounded) & 2024 & \doi{10.1109/TDSC.2024.3367812} \\
-\textbf{Li et al. (FEXGBIDS)} \cite{li2025fexgbids} & Federated XGBoost & Distributed Tree Aggregation & $O(1)$ & Live IoV Telemetry & 2025 & \doi{10.1109/ACCESS.2025.3569356} \\
-\textbf{Zhang et al.} \cite{zhang2025protocol} & Network Detectors & Protocol-Aware ACGAN & $O(\text{Epochs})$ & 100\% (GAN Generated) & 2025 & \doi{10.1109/TIFS.2025.3528901} \\
-\textbf{Gurung et al.} \cite{gurung2025enhancing} & IoT XGBoost NIDS & FGSM Adversarial Retraining & $O(N_{\text{train}})$ & 0\% (Feature Space) & 2025 & \doi{10.48550/arXiv.2507.19739} \\
-\textbf{Al-Omari et al.} \cite{alomari2026adversarial} & NIDS Survey & Constraint-Aware Attack Audit & Comprehensive & Audited & 2026 & \doi{10.1016/j.iot.2026.101997} \\
-\textbf{Alajaji et al.} \cite{alajaji2026feature} & Lightweight NIDS & HopSkipJump Boundary Search & $O(10^3)$ & $\le 18\%$ & 2026 & \doi{10.1109/ACCESS.2026.3541289} \\
+\textbf{Kantchelian et al.} \cite{kantchelian2016evasion} & GBDT / Random Forest & Mixed-Integer Linear Program (MILP) & Zero (White-Box) & 0\% (Unconstrained) & 2016 \\
+\textbf{Chen \& Guestrin} \cite{chen2016xgboost} & XGBoost Framework & Exact Greedy \& Histogram Trees & N/A (Model) & N/A & 2016 \\
+\textbf{Carlini \& Wagner} \cite{carlini2017towards} & Deep Neural Networks & Lagrangian $L_2/L_\infty$ Optimization & $O(N_{\text{iter}})$ & 0\% (Feature Space) & 2017 \\
+\textbf{Ke et al.} \cite{ke2017lightgbm} & LightGBM Framework & Gradient-Based One-Side Sampling & N/A (Model) & N/A & 2017 \\
+\textbf{Chen et al. (ZOO)} \cite{chen2017zoo} & Black-Box Classifiers & Zeroth-Order Coordinate Descent & $O(d \cdot N_{\text{iter}})$ & $\le 10\%$ & 2017 \\
+\textbf{Sharafaldin et al.} \cite{sharafaldin2018toward} & CIC-IDS2018 Dataset & Statistical Flow Extraction (CICFlowMeter) & N/A (Dataset) & Real Testbed & 2018 \\
+\textbf{Prokhorenkova et al.} \cite{prokhorenkova2018catboost} & CatBoost Framework & Oblivious Symmetric Trees & N/A (Model) & N/A & 2018 \\
+\textbf{Al-Dujaili et al.} \cite{aldujaili2018toward} & Neural NIDS & Adversarial Retraining (FGSM/PGD) & $O(N_{\text{train}})$ & 0\% (Feature Space) & 2018 \\
+\textbf{Pierazzi et al.} \cite{pierazzi2020intrusion} & NIDS Classifiers & Problem-Space Formalization & Analytic & Formally Defined & 2020 \\
+\textbf{Geirhos et al.} \cite{geirhos2020shortcut} & Deep Learning & Shortcut Learning Formalization & Analytic & N/A & 2020 \\
+\textbf{Han et al.} \cite{han2021traffic} & Black-Box NIDS & Particle Swarm Optimization (PCAP) & $O(10^3 - 10^4)$ & 100\% (Packet Mutation) & 2021 \\
+\textbf{Simonetto et al. (CAA)} \cite{simonetto2021constrained} & Tabular Models & CAPGD + MOEVA (Genetic Alg.) & $O(10^3)$ & Partial ($\approx 60\%$) & 2021 \\
+\textbf{Dang et al.} \cite{dang2021improving} & Explainable NIDS & Decision Boundary Interpretability & Analytic & Real Flow Data & 2021 \\
+\textbf{Apruzzese et al.} \cite{apruzzese2022role} & NIDS Classifiers & Realistic Evaluation Review & Empirical Audit & Real Testbed & 2022 \\
+\textbf{Dang et al.} \cite{dang2022using} & GBDT / Ensemble NIDS & Multi-Dataset Flow Evaluation & Empirical Audit & Real Testbed & 2022 \\
+\textbf{Ignatiev et al.} \cite{ignatiev2022formal} & GBDT Ensembles & Boolean SAT / SMT Solvers & Zero (White-Box) & $\le 15\%$ & 2022 \\
+\textbf{Apruzzese et al.} \cite{apruzzese2023modeling} & Learning-Based NIDS & Problem-Space Adversary Modeling & Empirical Audit & Real Packets & 2023 \\
+\textbf{Dang et al.} \cite{dang2023learning} & Cross-Dataset NIDS & Transfer Learning Across Telemetry & Empirical Audit & Real Testbeds & 2023 \\
+\textbf{Doriguzzi-Corin et al.} \cite{doriguzzi2024lucid} & Convolutional NIDS & Lightweight Traffic Windowing & $O(1)$ & 100\% (Packet Level) & 2024 \\
+\textbf{Izza et al. (XReason)} \cite{xreason2024} & XGBoost / LightGBM & MaxSAT Explanation / Synthesis & Zero (White-Box) & $\le 20\%$ & 2024 \\
+\textbf{Sghamizi et al.} \cite{sghamizi2024tabularbench} & Tabular Benchmarks & TabularBench Framework & $O(10^3)$ & Partial (Bounded) & 2024 \\
+\textbf{Dang et al.} \cite{dang2024parallel} & Lightweight NIDS & Parallel Split Optimization & $O(1)$ & Real Traffic & 2024 \\
+\textbf{Li et al. (FEXGBIDS)} \cite{li2025fexgbids} & Federated XGBoost & Distributed Tree Aggregation & $O(1)$ & Live IoV Telemetry & 2025 \\
+\textbf{Zhang et al.} \cite{zhang2025protocol} & Network Detectors & Protocol-Aware ACGAN & $O(\text{Epochs})$ & 100\% (GAN Generated) & 2025 \\
+\textbf{Al-Omari et al.} \cite{alomari2026adversarial} & NIDS Survey & Constraint-Aware Attack Audit & Comprehensive & Audited & 2026 \\
+\textbf{Alajaji et al.} \cite{alajaji2026feature} & Lightweight NIDS & HopSkipJump Boundary Search & $O(10^3)$ & $\le 18\%$ & 2026 \\
+\textbf{Dang et al.} \cite{dang2026utilizing} & Intrusion Detectors & Uncertainty / Conformal Estimation & Analytic & Calibrated Flows & 2026 \\
 \midrule
-\textbf{Flow-Field Evasion (Ours)} & \textbf{XGBoost / LightGBM} & \textbf{Lie Vector Field Steering} & \textbf{9.1 (Low)} & \textbf{100.0\% (Guaranteed)} & \textbf{2026} & \textbf{This Work} \\
+\textbf{Flow-Field Evasion (Ours)} & \textbf{XGBoost / LightGBM} & \textbf{Lie Vector Field Steering} & \textbf{9.1 (Low)} & \textbf{100.0\% (Guaranteed)} & \textbf{2026} \\
 \bottomrule
 \end{tabular}%
 }

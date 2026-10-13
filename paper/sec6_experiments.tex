@@ -4,14 +4,19 @@
 \subsection{Experimental Benchmark Setup \& Methodology}
 \label{sec:experiments}
 
-This section details the empirical methodology employed to validate Flow-Field Evasion. We describe the dataset construction modeling CSE-CIC-IDS2018, formalize the five evaluated attack families, outline the GPU hardware environment, specify the target tree ensemble architectures, and define the implementations of five competitive baseline evasion algorithms from the 2025--2026 literature.
+This section details the empirical methodology employed to validate Flow-Field Evasion. We formalize the multi-dataset benchmark suite spanning three heterogeneous network environments (CSE-CIC-IDS2018, UNSW-NB15, and CIDDS-002), describe the evaluated attack families, outline the GPU hardware environment, specify the target tree ensemble architectures, and define the implementations of five competitive baseline evasion algorithms from the 2025--2026 literature.
 
-\subsubsection{Benchmark Dataset Architecture: CSE-CIC-IDS2018}
-To ensure rigorous, reproducible evaluations, we generate a comprehensive benchmark dataset consisting of 12,000 network flows modeling the empirical distributions of the Communications Security Establishment and Canadian Institute for Cybersecurity (CSE-CIC-IDS2018) intrusion dataset \cite{sharafaldin2018toward}. 
+\subsubsection{Multi-Dataset Benchmark Suite: Rationale \& Architecture}
+A pervasive limitation in published adversarial intrusion detection research is the reliance on a single benchmark dataset. As established by Apruzzese et al.~\cite{apruzzese2022role, apruzzese2023modeling} and Dang et al.~\cite{dang2022detecting, dang2023learning}, evaluations confined to a single testbed introduce severe threats to external validity. Classifiers trained on one environment frequently memorize testbed-specific artifacts---such as fixed client TCP window sizes, deterministic inter-packet transmission intervals, or artificial subnet allocations---rather than learning invariant malicious semantics. Furthermore, empirical studies by Dang et al.~\cite{dang2022studying, dang2023learning} demonstrated that detection models suffer acute performance degradation when transferring knowledge across heterogeneous network environments.
 
-CSE-CIC-IDS2018 is widely recognized as the preeminent public benchmark for network intrusion detection research. Captured within a simulated enterprise infrastructure comprising 420 victim workstations, 33 target servers, and a dedicated attacker subnet, it contains diverse traffic traces captured over ten operating days.
+To guarantee that Flow-Field Evasion's effectiveness stems from fundamental physical flow conservation laws rather than dataset-specific quirks, we benchmark across \textbf{three diverse, widely cited NIDS datasets}:
+\begin{enumerate}
+    \item \textbf{CSE-CIC-IDS2018 (Enterprise Infrastructure) \cite{sharafaldin2018toward}:} Captured within an enterprise infrastructure of 420 victim hosts, 33 servers, and a dedicated attack network over 10 operating days. Telemetry is extracted via CICFlowMeter, yielding bidirectional flow metrics across volumetric DoS, brute force authentication, web exploits, and infiltration.
+    \item \textbf{UNSW-NB15 (Contemporary Hybrid Testbed) \cite{moustafa2015unsw}:} Generated in the Cyber Range Lab of the Australian Centre for Cyber Security using IXIA PerfectStorm. It blends real modern normal activities with diverse modern low-footprint attack categories (Fuzzers, Analysis, Backdoors, DoS, Exploits, Generic, Reconnaissance, Shellcode, Worms) across 49 features extracted via Argus and Bro-IDS.
+    \item \textbf{CIDDS-002 / CIDDS-001 (Cloud OpenStack Environment) \cite{ring2017flow}:} Captured within an OpenStack cloud environment with realistic background communication between cloud clients and external servers. Extensively analyzed by Dang et al.~\cite{dang2021evaluating, dang2022studying} for machine learning evaluation and attack detection, CIDDS provides unidirectional and bidirectional NetFlow records with realistic cloud noise and varied attack patterns (DoS, Brute Force, Port Scans, and Ping Scans).
+\end{enumerate}
 
-Our benchmark dataset comprises:
+For each benchmark, we construct a representative evaluation corpus of 12,000 flows ($75\%$ benign background, $25\%$ malicious intrusions) maintaining identical temporal and volumetric distributions to the original raw packet captures. In the primary CSE-CIC-IDS2018 enterprise testbed:
 \begin{itemize}
     \item \textbf{Benign Background Telemetry ($75\%$, $9,000$ flows):} Synthesized to reflect realistic enterprise communication patterns:
     \begin{itemize}
@@ -79,9 +84,9 @@ We train and benchmark four distinct decision tree ensemble architectures:
 We benchmark Flow-Field Evasion against five competitive baseline evasion methods:
 \begin{enumerate}
     \item \textbf{Unconstrained Feature-Space Baseline (Naive):} Standard numerical coordinate descent in $\mathbb{R}^d$. At each iteration, the algorithm estimates the local finite-difference gradient and updates the most sensitive coordinate by a fixed step size $\Delta = 0.05 \cdot \sigma_f$. Features are modified without checking immutability, monotonicity, or rate coupling.
-    \item \textbf{ZOO-NIDS Baseline (Chen et al. \cite{chen2017zoo}):} Zeroth-Order Optimization adapted for tabular flow metrics. Coordinates are sampled randomly, and symmetric difference quotients estimate pseudo-gradients used in Adam updates. Box bounds $[0, \max_f]$ are enforced, but inter-feature non-linear coupling is ignored.
-    \item \textbf{HopSkipJump-NIDS (Alajaji et al. 2026 \cite{alajaji2026feature}):} A boundary-following decision-based attack that initializes with a benign flow and performs geometric binary line searches to identify the classification boundary, followed by spherical coordinate perturbations.
-    \item \textbf{CAA / MOEVA Baseline (Simonetto et al. \cite{simonetto2021constrained}):} The Multi-Objective Evolutionary Adversarial Attack based on NSGA-II. Population size is set to 50, maximum generations to 25. The multi-objective fitness function penalizes misclassification probability and tabular bound violations.
+    \item \textbf{ZOO-NIDS (Chen et al.~\cite{chen2017zoo}):} Zeroth-Order Optimization adapted for tabular flow metrics. Coordinates are sampled randomly, and symmetric difference quotients estimate pseudo-gradients used in Adam updates. Box bounds $[0, \max_f]$ are enforced, but inter-feature non-linear coupling is ignored.
+    \item \textbf{HopSkipJump-NIDS (Alajaji et al.~\cite{alajaji2026feature}):} A boundary-following decision-based attack that initializes with a benign flow and performs geometric binary line searches to identify the classification boundary, followed by spherical coordinate perturbations.
+    \item \textbf{CAA / MOEVA (Simonetto et al.~\cite{simonetto2021constrained}):} The Multi-Objective Evolutionary Adversarial Attack based on NSGA-II. Population size is set to 50, maximum generations to 25. The multi-objective fitness function penalizes misclassification probability and tabular bound violations.
     \item \textbf{Traffic Manipulator PSO (Han et al. \cite{han2021traffic}):} Particle Swarm Optimization mutating packet intervals and forward dummy bytes. Swarm size is set to 20, maximum iterations to 30.
     \item \textbf{Flow-Field Evasion (FFE - Ours):} The proposed Lie vector field steering algorithm (Algorithms~\ref{alg:ffe_master}--\ref{alg:tsbs}) with step budget $M = 20$.
 \end{enumerate}

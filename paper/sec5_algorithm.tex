@@ -166,7 +166,6 @@ Table~\ref{tab:complexity_comparison} compares the asymptotic time and space com
 \centering
 \caption{Asymptotic Complexity Comparison of Evasion Algorithms for Tree Ensembles}
 \label{tab:complexity_comparison}
-\resizebox{\textwidth}{!}{%
 \begin{tabular}{lccc}
 \toprule
 \textbf{Algorithm} & \textbf{Time Complexity} & \textbf{Query Complexity} & \textbf{Coupled Invariants} \\
@@ -175,10 +174,9 @@ Table~\ref{tab:complexity_comparison} compares the asymptotic time and space com
 \textbf{MOEVA / CAA} \cite{simonetto2021constrained}   & $\mathcal{O}(G \cdot P \cdot T \cdot D)$   & $\mathcal{O}(10^3 - 10^4)$ & Approximate Penalty \\
 \textbf{Traffic Manipulator} \cite{han2021traffic}    & $\mathcal{O}(I \cdot S \cdot T \cdot D)$   & $\mathcal{O}(10^3 - 10^4)$ & Packet Re-evaluation \\
 \midrule
-\textbf{Flow-Field Evasion (Ours)}                     & $\bm{\mathcal{O}(M \cdot K \cdot T \cdot D)}$ & $\bm{\le 4M + 1}$ ($\bm{\approx 9.1}$) & \textbf{Exact Closed-Form} \\
+\textbf{Flow-Field Evasion (Ours)}                     & $\mathcal{O}(M \cdot K \cdot T \cdot D)$ & $\le 4M + 1$ ($\approx 9.1$) & \textbf{Exact Closed-Form} \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular}
 \end{table}
 
 Where:

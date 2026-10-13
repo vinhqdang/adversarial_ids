@@ -133,11 +133,8 @@ While these frameworks guarantee physical routability by operating directly on p
 Table~\ref{tab:sota_taxonomy_expanded} summarizes representative evasion, verification, and defense methods developed between 2016 and 2026, comparing target architectures, optimization mechanisms, query complexities, and problem-space feasibility.
 
 \begin{table*}[p]
-\centering
-\caption{Taxonomic Comparison of Adversarial Evasion and Verification Methods for NIDS (2016--2026)}
-\label{tab:sota_taxonomy_expanded}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lccccc}
+\caption{Taxonomic Comparison of Adversarial Evasion and Verification Methods for NIDS (2016--2026)}\label{tab:sota_taxonomy_expanded}%
+\begin{tabular*}{\textwidth}{@{\extracolsep\fill}lccccc@{}}
 \toprule
 \textbf{Paper / Method} & \textbf{Target Model} & \textbf{Optimization Engine} & \textbf{Query Complexity} & \textbf{Physical Feasibility} & \textbf{Year} \\
 \midrule
@@ -171,8 +168,7 @@ Table~\ref{tab:sota_taxonomy_expanded} summarizes representative evasion, verifi
 \midrule
 \textbf{Flow-Field Evasion (Ours)} & \textbf{XGBoost / LightGBM} & \textbf{Lie Vector Field Steering} & \textbf{9.1 (Low)} & \textbf{100.0\% (Guaranteed)} & \textbf{2026} \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular*}
 \end{table*}
 
 ---

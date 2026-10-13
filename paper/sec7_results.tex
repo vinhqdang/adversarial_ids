@@ -7,11 +7,8 @@ This section presents an in-depth empirical evaluation of Flow-Field Evasion. We
 Table~\ref{tab:clean_baseline_expanded} reports the test set performance ($3,000$ unseen flows) across the four target tree ensemble architectures prior to adversarial perturbation.
 
 \begin{table*}[htbp]
-\centering
-\caption{Clean Test Set Classification Metrics Across Tree Ensemble Architectures on CSE-CIC-IDS2018}
-\label{tab:clean_baseline_expanded}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccc}
+\caption{Clean Test Set Classification Metrics Across Tree Ensemble Architectures on CSE-CIC-IDS2018}\label{tab:clean_baseline_expanded}%
+\begin{tabular*}{\textwidth}{@{\extracolsep\fill}lcccccc@{}}
 \toprule
 \textbf{Model Architecture} & \textbf{Accuracy (\%)} & \textbf{Precision (\%)} & \textbf{Recall (\%)} & \textbf{F1 Score (\%)} & \textbf{ROC-AUC (\%)} & \textbf{Train Time (s)} \\
 \midrule
@@ -20,8 +17,7 @@ Table~\ref{tab:clean_baseline_expanded} reports the test set performance ($3,000
 \textbf{CatBoost}             & 99.67\% & 99.31\% & 99.31\% & 99.31\% & 99.98\%  & 4.15s \\
 \textbf{Random Forest (Bagging)} & 99.53\% & 99.17\% & 99.03\% & 99.10\% & 99.95\%  & 1.84s \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular*}
 \end{table*}
 
 The empirical data in Table~\ref{tab:clean_baseline_expanded} validates our theoretical premise:
@@ -35,11 +31,8 @@ The empirical data in Table~\ref{tab:clean_baseline_expanded} validates our theo
 We evaluate evasion against an evaluation cohort of 100 correctly classified, active malicious attack flows randomly sampled from the test partition. Table~\ref{tab:master_evasion_benchmark} presents the master comparative benchmark against CUDA-accelerated XGBoost.
 
 \begin{table*}[htbp]
-\centering
-\caption{Master Adversarial Evasion Benchmark Against CUDA XGBoost on CSE-CIC-IDS2018 ($N = 100$ Attacks)}
-\label{tab:master_evasion_benchmark}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccc}
+\caption{Master Adversarial Evasion Benchmark Against CUDA XGBoost on CSE-CIC-IDS2018 ($N = 100$ Attacks)}\label{tab:master_evasion_benchmark}%
+\begin{tabular*}{\textwidth}{@{\extracolsep\fill}lcccccc@{}}
 \toprule
 \textbf{Adversarial Attack Method} & \textbf{ASR (\%)} & \textbf{PFR (\%)} & \textbf{Real ASR (\%)} & \textbf{Avg Queries} & \textbf{Avg Cost ($L_1$)} & \textbf{Total Time (s)} \\
 \midrule
@@ -51,8 +44,7 @@ We evaluate evasion against an evaluation cohort of 100 correctly classified, ac
 \midrule
 \textbf{Flow-Field Evasion (FFE - Ours)} & \textbf{100.0\%} & \textbf{100.0\%} & \textbf{100.0\%} & \textbf{9.1} & \textbf{28,681.9} & \textbf{2.80s} \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular*}
 \end{table*}
 
 \paragraph{Metric Definitions}
@@ -90,17 +82,21 @@ FFE requires an average of only \textbf{9.1 model queries} per sample. In stark 
 This dramatic reduction occurs because FFE evaluates directional Lie derivatives along the four physically admissible generators rather than searching blindly across the 12-dimensional continuous space.
 
 \paragraph{4. Sub-Second Execution Latency}
-FFE executes 100 full attack flows in \textbf{2.80 seconds}, equating to an average latency of \textbf{28 milliseconds per flow}. Conversely, Traffic Manipulator takes 420.15 seconds (over 7 minutes). This 150$\times$ speedup makes real-time inline packet manipulation computationally viable on production network interface cards.
+FFE executes 100 full attack flows in \textbf{2.80 seconds}, equating to an average latency of \textbf{28 milliseconds per flow}. Conversely, Traffic Manipulator takes 420.15 seconds (over 7 minutes). This 150$\times$ speedup makes real-time inline packet manipulation computationally viable on production network interface cards. Figure~\ref{fig:master_benchmark} provides a multi-axis visualization of the master comparative benchmark.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_master_benchmark.pdf}
+\caption{Master comparative benchmark results against state-of-the-art evasion baselines on CSE-CIC-IDS2018 ($N=100$ intrusion flows). (a) Theoretical ASR versus admissible Real ASR (\%) confirming the collapse of unconstrained AML and the 100\% guarantee of FFE. (b) Query complexity per flow (logarithmic scale) highlighting FFE's $203\times$ query reduction. (c) Total execution time for 100 flows (seconds). (d) FFE per-flow latency and query counts across the five individual intrusion families.}
+\label{fig:master_benchmark}
+\end{figure*}
 
 \subsubsection{Evasion Performance Across Individual Attack Families}
 Table~\ref{tab:family_breakdown} breaks down the performance of Flow-Field Evasion across the five evaluated attack families against CUDA XGBoost.
 
 \begin{table*}[htbp]
-\centering
-\caption{Flow-Field Evasion (FFE) Performance Breakdown Across Attack Families}
-\label{tab:family_breakdown}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lccccc}
+\caption{Flow-Field Evasion (FFE) Performance Breakdown Across Attack Families}\label{tab:family_breakdown}%
+\begin{tabular*}{\textwidth}{@{\extracolsep\fill}lccccc@{}}
 \toprule
 \textbf{Attack Family} & \textbf{ASR (\%)} & \textbf{PFR (\%)} & \textbf{Avg Queries} & \textbf{Dominant Generator} & \textbf{Avg Latency (ms)} \\
 \midrule
@@ -112,8 +108,7 @@ Table~\ref{tab:family_breakdown} breaks down the performance of Flow-Field Evasi
 \midrule
 \textbf{Aggregate Mean / Total}                & \textbf{100.0\%} & \textbf{100.0\%} & \textbf{9.1} & \textbf{Adaptive Dynamic} & \textbf{28.0 ms} \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular*}
 \end{table*}
 
 \subsubsection{Behavioral Analysis by Attack Family}
@@ -126,14 +121,18 @@ Table~\ref{tab:family_breakdown} breaks down the performance of Flow-Field Evasi
 
 \subsubsection{Multi-Dataset Cross-Benchmark Validation}
 \label{sec:multidataset_results}
-To verify that Flow-Field Evasion generalizes across diverse network topologies and does not merely exploit CSE-CIC-IDS2018 testbed idiosyncrasies, we evaluate FFE across all three benchmark datasets: CSE-CIC-IDS2018 (enterprise), UNSW-NB15 (contemporary hybrid), and CIDDS-002 (cloud OpenStack). For each dataset, target XGBoost (CUDA Hist) and LightGBM models were trained and benchmarked against 100 representative active intrusion flows. Table~\ref{tab:multidataset_benchmark} summarizes the cross-benchmark results.
+To verify that Flow-Field Evasion generalizes across diverse network topologies and does not merely exploit CSE-CIC-IDS2018 testbed idiosyncrasies, we evaluate FFE across all three benchmark datasets: CSE-CIC-IDS2018 (enterprise), UNSW-NB15 (contemporary hybrid), and CIDDS-002 (cloud OpenStack). For each dataset, target XGBoost (CUDA Hist) and LightGBM models were trained and benchmarked against 100 representative active intrusion flows. Figure~\ref{fig:multidataset_benchmark} and Table~\ref{tab:multidataset_benchmark} summarize the cross-benchmark results.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_multidataset.pdf}
+\caption{Multi-dataset cross-benchmark evaluation across CSE-CIC-IDS2018, UNSW-NB15, and CIDDS-002. (a) Clean baseline classification accuracy across XGBoost and LightGBM models. (b) Real Attack Success Rate ($\ge 99.0\%$) and strictly 100\% Physical Feasibility Rate under FFE. (c) Computational efficiency showing sub-32ms per-flow execution latency and bounded query complexity (7.4--10.3 queries) across all three deployment environments.}
+\label{fig:multidataset_benchmark}
+\end{figure*}
 
 \begin{table*}[htbp]
-\centering
-\caption{Cross-Benchmark Evaluation of Flow-Field Evasion Across Multiple Datasets}
-\label{tab:multidataset_benchmark}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{llccccccc}
+\caption{Cross-Benchmark Evaluation of Flow-Field Evasion Across Multiple Datasets}\label{tab:multidataset_benchmark}%
+\begin{tabular*}{\textwidth}{@{\extracolsep\fill}llccccccc@{}}
 \toprule
 \textbf{Dataset} & \textbf{Target Model} & \textbf{Clean Acc} & \textbf{Clean AUC} & \textbf{ASR (\%)} & \textbf{PFR (\%)} & \textbf{Real ASR (\%)} & \textbf{Avg Queries} & \textbf{Avg Latency} \\
 \midrule
@@ -146,8 +145,7 @@ To verify that Flow-Field Evasion generalizes across diverse network topologies 
 \multirow{2}{*}{\textbf{CIDDS-002}}       & \textbf{XGBoost (CUDA)} & 99.18\% & 99.88\%  & 100.0\% & 100.0\% & 100.0\% & 7.8 & 24.5 ms \\
                                           & \textbf{LightGBM}      & 99.25\% & 99.91\%  & 100.0\% & 100.0\% & 100.0\% & 7.4 & 23.8 ms \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular*}
 \end{table*}
 
 \paragraph{Cross-Dataset Empirical Insights.}

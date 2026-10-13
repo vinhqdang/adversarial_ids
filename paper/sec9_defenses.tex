@@ -95,14 +95,18 @@ We trained three defensively hardened XGBoost models on CSE-CIC-IDS2018:
     \item \textbf{Dual-Hardened (MPS + LGAT):} Both defenses enabled simultaneously.
 \end{enumerate}
 
-Table~\ref{tab:defense_evaluation} reports the clean test accuracy and robust adversarial resistance under active FFE attack.
+Figure~\ref{fig:defense_evaluation} and Table~\ref{tab:defense_evaluation} report the clean test accuracy and robust adversarial resistance under active FFE attack.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig5_defenses.pdf}
+\caption{Defensive hardening trade-offs and adversarial suppression on CSE-CIC-IDS2018. (a) Clean test accuracy versus robust accuracy under active FFE attack across undefended, MPS-hardened, LGAT-hardened, and dual-hardened XGBoost models. (b) Flow-Field Evasion suppression, showing an attack deflection from 100\% down to 11\% with a negligible clean accuracy penalty of less than 2\%.}
+\label{fig:defense_evaluation}
+\end{figure*}
 
 \begin{table*}[htbp]
-\centering
-\caption{Defensive Hardening Evaluation Against Flow-Field Evasion on CSE-CIC-IDS2018}
-\label{tab:defense_evaluation}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccc}
+\caption{Defensive Hardening Evaluation Against Flow-Field Evasion on CSE-CIC-IDS2018}\label{tab:defense_evaluation}%
+\begin{tabular*}{\textwidth}{@{\extracolsep\fill}lcccc@{}}
 \toprule
 \textbf{Model Configuration} & \textbf{Clean Accuracy (\%)} & \textbf{Clean ROC-AUC (\%)} & \textbf{Robust Accuracy under FFE (\%)} & \textbf{FFE Evasion ASR (\%)} \\
 \midrule
@@ -111,8 +115,7 @@ Table~\ref{tab:defense_evaluation} reports the clean test accuracy and robust ad
 \textbf{LGAT-Hardened XGBoost}         & 98.12\% & 98.85\%  & 82.0\% & 18.0\%  \\
 \textbf{Dual-Hardened (MPS + LGAT)}    & \textbf{97.80\%} & \textbf{98.50\%} & \textbf{89.0\%} & \textbf{11.0\%} \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular*}
 \end{table*}
 
 \paragraph{Analysis of Defensive Hardening.}

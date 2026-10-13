@@ -4,7 +4,14 @@
 \subsection{Differential Geometry of Network Flows: The Physical Lie Cone}
 \label{sec:geometry}
 
-To resolve the conflict between discrete decision trees and continuous physical flow invariants, this section establishes a formal differential-geometric framework for network flow evasion. We formalize the tangent space $T_x \mathcal{M}_{\text{flow}}$, derive the closed-form infinitesimal generators of physical network transformations, analyze their Lie bracket commutators, and prove that integrating along the positive Lie Cone guarantees absolute physical feasibility.
+To resolve the conflict between discrete decision trees and continuous physical flow invariants, this section establishes a formal differential-geometric framework for network flow evasion. We formalize the tangent space $T_x \mathcal{M}_{\text{flow}}$, derive the closed-form infinitesimal generators of physical network transformations, analyze their Lie bracket commutators, and prove that integrating along the positive Lie Cone guarantees absolute physical feasibility. Figure~\ref{fig:system_architecture} illustrates the high-level system architecture and mathematical trajectory of the proposed framework.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_system_architecture.pdf}
+\caption{Architectural overview and differential geometric workflow of Flow-Field Evasion (FFE). (1) Real packet streams under invariant network conservation laws map to flow manifolds $\mathcal{M}_{\text{flow}}$. (2) Infinitesimal Lie cone generators $\vec{v}_{\text{time}}, \vec{v}_{\text{pad}}, \vec{v}_{\text{chaff}}, \vec{v}_{\text{win}}$ ensure non-negative physical realizability ($u_k \ge 0$). (3) Decision tree partition geometry and directional Lie derivatives steer trajectories across decision boundaries using Tree-Split Boundary Snapping (TSBS). (4) Outcome achieves 100\% physical routability and sub-30ms inline execution.}
+\label{fig:system_architecture}
+\end{figure*}
 
 \subsubsection{The Tangent Space $T_x \mathcal{M}_{\text{flow}}$}
 Consider the smooth embedding of the flow manifold $\mathcal{M}_{\text{flow}} \subset \mathbb{R}^{12}$. The coupled conservation equations defining $\mathcal{M}_{\text{flow}}$ can be expressed as the zero level-set of a smooth vector-valued constraint function $\Psi: \mathbb{R}^{12} \to \mathbb{R}^3$:

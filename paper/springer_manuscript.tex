@@ -1,83 +1,75 @@
-\documentclass[runningheads,10pt]{llncs}
+\documentclass[pdflatex,sn-mathphys-num]{sn-jnl}
 
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
+%%%% Standard Packages
+\usepackage{graphicx}
+\usepackage{multirow}
 \usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage[title]{appendix}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\usepackage{manyfoot}
+\usepackage{booktabs}
 \usepackage{algorithm}
 \usepackage{algorithmic}
-\usepackage{graphicx}
-\usepackage{booktabs}
-\usepackage{multirow}
-\usepackage{cite}
-\usepackage{url}
-\usepackage{hyperref}
-\usepackage{xcolor}
-\usepackage[expansion=false]{microtype}
-\usepackage{enumitem}
+\usepackage{listings}
 \usepackage{bm}
+\usepackage{enumitem}
 
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-    citecolor=blue,
-    pdfauthor={Anonymous},
-    pdftitle={Steering Through the Trees: Physical Lie Vector Field Evasion of Tree Ensembles in Network Intrusion Detection}
-}
+\theoremstyle{thmstyleone}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{thmstyletwo}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+
+\theoremstyle{thmstylethree}
+\newtheorem{definition}{Definition}
+
+\raggedbottom
 
 \begin{document}
 
-\title{Steering Through the Trees: Physical Lie Vector Field Evasion of Tree Ensembles in Network Intrusion Detection}
-\titlerunning{Physical Lie Vector Field Evasion of Tree Ensembles in NIDS}
+\title[Physical Lie Vector Field Evasion of Tree Ensembles in NIDS]{Steering Through the Trees: Physical Lie Vector Field Evasion of Tree Ensembles in Network Intrusion Detection}
 
-\author{Anonymous Authors}
-\authorrunning{Anonymous et al.}
-\institute{Anonymous Institution(s)\\
-\email{anonymous@institution.org}}
+\author*[1]{\fnm{Anonymous} \sur{Authors}}\email{anonymous@institution.org}
+\affil*[1]{\orgname{Anonymous Institution(s)}}
 
-\maketitle
-
-\begin{abstract}
+\abstract{
 Learning-based Network Intrusion Detection Systems (NIDS) powered by Gradient Boosted Decision Tree (GBDT) ensembles---such as XGBoost, LightGBM, and CatBoost---routinely establish near-perfect detection metrics ($\ge 99.7\%$ accuracy, $100.0\%$ ROC-AUC) on standard benchmark datasets like CSE-CIC-IDS2018. However, recent literature indicates that this empirical superiority largely stems from shortcut learning on synthetic testbed artifacts: automated attack scripts exhibit deterministic temporal burst durations, fixed socket profiles, and extreme packet rates that models memorize rather than extracting invariant malicious semantics. Confronting an adaptive adversary, existing adversarial machine learning (AML) evasion algorithms exhibit an acute dichotomy. Feature-space attacks (e.g., Projected Gradient Descent, Carlini-Wagner, and Kantchelian's exact Mixed-Integer Linear Programming) treat network telemetry as unconstrained Cartesian coordinates in $\mathbb{R}^d$, producing non-routable flows that violate physical conservation laws and protocol state machines (yielding a $0\%$ physical feasibility rate). Conversely, packet-level heuristic mutators (e.g., genetic algorithms, particle swarm optimization) operate as opaque black boxes, requiring thousands of model queries, suffering high computational latency, and failing to exploit the internal hyper-rectangular partition geometry of decision trees.
 
 To bridge this fundamental gap, this paper introduces \textbf{Flow-Field Evasion (FFE)}, a novel, non-heuristic adversarial evasion framework founded on the differential geometry of network traffic. Rather than perturbing tabular features directly or relying on blind stochastic mutations, FFE formulates the \emph{Lie Cone of Infinitesimal Flow Generators} $\mathcal{K}_{\text{net}}(x) \subset T_x \mathcal{M}_{\text{flow}}$ directly induced by four elementary packet-level transformations: temporal dilation, payload padding, chaff packet injection, and TCP window morphing. By evaluating the directional Lie derivatives $\mathcal{L}_{\vec{v}_k} F(x)$ of the tree ensemble's decision score along these generators, FFE steers malicious flows along the optimal physical geodesic into the benign classification region. We prove that integrating along the Lie Cone guarantees 100\% physical realizability by mathematical construction. 
 
 Evaluated across three heterogeneous benchmark datasets---CSE-CIC-IDS2018 (enterprise testbed), UNSW-NB15 (contemporary hybrid traffic), and CIDDS-002 (cloud OpenStack environment)---against CUDA-accelerated XGBoost and LightGBM on an NVIDIA RTX 5000 Ada GPU across five distinct attack families (DoS bursts, UDP floods, Brute Force, Web exploits, and Infiltration), FFE consistently achieves a \textbf{99.0\%--100.0\% Attack Success Rate (ASR)} and a \textbf{100.0\% Physical Feasibility Rate (PFR)}, requiring an average of only \textbf{7.4--10.3 queries} per flow and an average latency under \textbf{32 ms}---outperforming existing 2025--2026 baselines by orders of magnitude while strictly preserving TCP/IP semantics. Finally, we analyze defensive hardening, demonstrating that Malleability-Penalized Tree Splitting and Lie Geodesic Adversarial Training reduce evasion rates down to $11.0\%$.
+}
 
-\keywords{Adversarial Machine Learning \and Network Intrusion Detection \and Tree Ensembles \and XGBoost \and Problem-Space Constraints \and Lie Algebra \and Evasion Attacks \and Robust Machine Learning.}
-\end{abstract}
+\keywords{Adversarial Machine Learning, Network Intrusion Detection, Tree Ensembles, XGBoost, Problem-Space Constraints, Lie Algebra, Evasion Attacks, Robust Machine Learning}
 
-\newpage
-\tableofcontents
-\newpage
+\maketitle
 
 % =========================================================================
 % SECTION 1: INTRODUCTION
 % =========================================================================
 \input{sec1_introduction.tex}
 
-
-\newpage
 % =========================================================================
-% SECTION 2: COMPREHENSIVE RELATED WORKS & TAXONOMY
+% SECTION 2: STATE OF THE ART & RELATED WORK (2016--2026)
 % =========================================================================
 \input{sec2_related_work.tex}
 
-\newpage
 % =========================================================================
 % SECTION 3: PROBLEM FORMULATION & THREAT MODEL
 % =========================================================================
 \input{sec3_problem_formulation.tex}
 
-\newpage
 % =========================================================================
 % SECTION 4: THE FLOW-FIELD EVASION (FFE) FRAMEWORK
 % =========================================================================
 \input{sec4_differential_geometry.tex}
 \input{sec5_algorithm.tex}
 
-\newpage
 % =========================================================================
 % SECTION 5: EMPIRICAL BENCHMARK, ABLATION STUDIES & DEFENSES
 % =========================================================================
@@ -86,7 +78,6 @@ Evaluated across three heterogeneous benchmark datasets---CSE-CIC-IDS2018 (enter
 \input{sec8_ablations.tex}
 \input{sec9_defenses.tex}
 
-\newpage
 % =========================================================================
 % SECTION 6: DISCUSSION & CONCLUSION
 % =========================================================================
@@ -144,7 +135,6 @@ Several promising avenues for future research remain:
 % =========================================================================
 % REFERENCES
 % =========================================================================
-\bibliographystyle{splncs04}
 \bibliography{references}
 
 \end{document}

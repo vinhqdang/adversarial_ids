@@ -1,0 +1,192 @@
+\subsection{Algorithmic Realization of Flow-Field Evasion}
+\label{sec:algorithm}
+
+This section details the algorithmic realization of Flow-Field Evasion (FFE). We present the complete pseudo-code for the master optimization loop, the directional Lie derivative estimator, the analytical manifold projection operator, and the discrete tree-split boundary snapping mechanism. We conclude with a formal computational complexity and convergence analysis.
+
+\subsubsection{Master Optimization Loop}
+Algorithm~\ref{alg:ffe_master} outlines the primary execution loop of Flow-Field Evasion. Given an attack flow $x_0 \in \mathcal{M}_{\text{flow}}$ flagged by the tree ensemble ($F(x_0) \ge 0$), FFE iteratively selects the infinitesimal generator that maximizes the reduction in malicious classification score per unit of physical operational cost.
+
+\begin{algorithm}[htbp]
+\caption{Flow-Field Evasion (FFE) Master Optimization Loop}
+\label{alg:ffe_master}
+\begin{algorithmic}[1]
+\REQUIRE Classifier $F: \mathbb{R}^d \to \mathbb{R}$, initial flow $x_0 \in \mathcal{M}_{\text{flow}}$, feature schema $\mathcal{S}$, step budget $M$, cost vector $\vec{c} = [c_1, c_2, c_3, c_4]^T$, target threshold $\tau = 0.0$
+\ENSURE Evasive flow $x^* \in \mathcal{M}_{\text{flow}}$ with $F(x^*) < \tau$, or failure flag
+\STATE $x \leftarrow \text{ProjectManifoldInvariants}(x_0, \mathcal{S})$
+\IF{$F(x) < \tau$}
+    \STATE \RETURN $x, \text{SUCCESS}$ \COMMENT{Flow already classified as Benign}
+\ENDIF
+\STATE $\text{queries} \leftarrow 1$
+\FOR{$\text{step} = 1$ \TO $M$}
+    \STATE $p_{\text{curr}} \leftarrow \sigma(F(x))$
+    \IF{$p_{\text{curr}} < 0.5$}
+        \STATE $x^* \leftarrow \text{TreeBoundarySnap}(F, x, \mathcal{S})$
+        \STATE \RETURN $x^*, \text{SUCCESS}$
+    \ENDIF
+    \STATE $\mathcal{D}, q_{\text{used}} \leftarrow \text{EstimateLieDerivatives}(F, x, \mathcal{S})$
+    \STATE $\text{queries} \leftarrow \text{queries} + q_{\text{used}}$
+    \STATE $k^* \leftarrow \text{null}$
+    \STATE $\text{max\_efficiency} \leftarrow 0.0$
+    \FOR{\textbf{each } $(k, \nabla_k, \vec{v}_k, \Delta s_k) \in \mathcal{D}$}
+        \IF{$\nabla_k < 0$}
+            \STATE $\text{efficiency} \leftarrow (-\nabla_k) / c_k$ \COMMENT{Derivative is negative (score decreases)}
+            \IF{$\text{efficiency} > \text{max\_efficiency}$}
+                \STATE $\text{max\_efficiency} \leftarrow \text{efficiency}$
+                \STATE $k^* \leftarrow (k, \vec{v}_k, \Delta s_k)$
+            \ENDIF
+        \ENDIF
+    \ENDFOR
+    \IF{$k^* \neq \text{null}$}
+        \STATE $(\sim, \vec{v}, \Delta s) \leftarrow k^*$
+        \STATE $x \leftarrow \text{ProjectManifoldInvariants}(x + \Delta s \cdot \vec{v}, \mathcal{S})$
+    \ELSE
+        \STATE \COMMENT{Fallback Geodesic: Low-and-Slow Temporal Dilation}
+        \STATE $\vec{v}_t \leftarrow \text{Generator}_{\text{time}}(x)$
+        \STATE $\Delta t \leftarrow \max(50000.0, x_6 \cdot 1.5)$
+        \STATE $x \leftarrow \text{ProjectManifoldInvariants}(x + \Delta t \cdot \vec{v}_t, \mathcal{S})$
+    \ENDIF
+\ENDFOR
+\IF{$F(x) < \tau$}
+    \STATE $x^* \leftarrow \text{TreeBoundarySnap}(F, x, \mathcal{S})$
+    \STATE \RETURN $x^*, \text{SUCCESS}$
+\ELSE
+    \STATE \RETURN $x, \text{FAILURE}$
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Adaptive Lie Derivative Numerical Estimator}
+Algorithm~\ref{alg:lie_estimator} details the numerical estimation of the directional Lie derivative $\mathcal{L}_{\vec{v}_k} F(x)$ across the non-differentiable step boundaries of the tree ensemble. Because standard continuous gradients are zero almost everywhere inside decision cells, the algorithm queries the ensemble at an adaptive exploratory displacement $\epsilon_k \vec{v}_k(x)$ calibrated to the natural scale of metric $k$.
+
+\begin{algorithm}[htbp]
+\caption{Adaptive Directional Lie Derivative Estimator}
+\label{alg:lie_estimator}
+\begin{algorithmic}[1]
+\REQUIRE Classifier $F$, current flow state $x$, feature schema $\mathcal{S}$
+\ENSURE List of candidate evaluation tuples $\mathcal{D} = \{(k, \nabla_k, \vec{v}_k, \Delta s_k)\}_{k=1}^4$, total queries used $q$
+\STATE $\mathcal{D} \leftarrow \emptyset$
+\STATE $p_{\text{base}} \leftarrow \sigma(F(x))$
+\STATE $q \leftarrow 1$
+
+\STATE \COMMENT{1. Evaluate Temporal Dilation Generator}
+\STATE $\vec{v}_1 \leftarrow \vec{v}_{\text{time}}(x)$
+\STATE $\Delta s_1 \leftarrow \max(1000.0, x_6 \cdot 0.10)$ \COMMENT{Test 10\% delay dilation}
+\STATE $x_{\text{test}} \leftarrow \text{ProjectManifoldInvariants}(x + \Delta s_1 \cdot \vec{v}_1, \mathcal{S})$
+\STATE $\nabla_1 \leftarrow (F(x_{\text{test}}) - F(x)) / \Delta s_1$
+\STATE Append $(1, \nabla_1, \vec{v}_1, \Delta s_1)$ to $\mathcal{D}$
+
+\STATE \COMMENT{2. Evaluate Payload Padding Generator}
+\STATE $\vec{v}_2 \leftarrow \vec{v}_{\text{pad}}(x)$
+\STATE $\Delta s_2 \leftarrow \max(50.0, x_4 \cdot 0.20)$ \COMMENT{Test 20\% forward byte padding}
+\STATE $x_{\text{test}} \leftarrow \text{ProjectManifoldInvariants}(x + \Delta s_2 \cdot \vec{v}_2, \mathcal{S})$
+\STATE $\nabla_2 \leftarrow (F(x_{\text{test}}) - F(x)) / \Delta s_2$
+\STATE Append $(2, \nabla_2, \vec{v}_2, \Delta s_2)$ to $\mathcal{D}$
+
+\STATE \COMMENT{3. Evaluate Chaff Packet Injection Generator}
+\STATE $\vec{v}_3 \leftarrow \vec{v}_{\text{chaff}}(x)$
+\STATE $\Delta s_3 \leftarrow \max(1.0, \text{round}(x_2 \cdot 0.20))$ \COMMENT{Test 20\% chaff packet injection}
+\STATE $x_{\text{test}} \leftarrow \text{ProjectManifoldInvariants}(x + \Delta s_3 \cdot \vec{v}_3, \mathcal{S})$
+\STATE $\nabla_3 \leftarrow (F(x_{\text{test}}) - F(x)) / \Delta s_3$
+\STATE Append $(3, \nabla_3, \vec{v}_3, \Delta s_3)$ to $\mathcal{D}$
+
+\STATE \COMMENT{4. Evaluate TCP Window Morphing Generator}
+\STATE $\vec{v}_4 \leftarrow \vec{v}_{\text{win}}(x)$
+\STATE $\Delta s_4 \leftarrow |64240.0 - x_7|$
+\IF{$\Delta s_4 > 0$}
+    \STATE $x_{\text{test}} \leftarrow \text{ProjectManifoldInvariants}(x + \Delta s_4 \cdot \vec{v}_4, \mathcal{S})$
+    \STATE $\nabla_4 \leftarrow (F(x_{\text{test}}) - F(x)) / \Delta s_4$
+    \STATE Append $(4, \nabla_4, \vec{v}_4, \Delta s_4)$ to $\mathcal{D}$
+    \STATE $q \leftarrow q + 4$
+\ELSE
+    \STATE $q \leftarrow q + 3$
+\ENDIF
+\STATE \RETURN $\mathcal{D}, q$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Analytical Manifold Projection Operator $\mathcal{P}_{\mathcal{M}}$}
+Algorithm~\ref{alg:manifold_proj} specifies the closed-form projection operator $\mathcal{P}_{\mathcal{M}}: \mathbb{R}^{12} \to \mathcal{M}_{\text{flow}}$. This operator ensures that discrete count boundaries, header length inequalities, and coupled rate equations are strictly satisfied after any continuous displacement.
+
+\begin{algorithm}[htbp]
+\caption{Analytical Manifold Projection Operator $\mathcal{P}_{\mathcal{M}}$}
+\label{alg:manifold_proj}
+\begin{algorithmic}[1]
+\REQUIRE Perturbed vector $x \in \mathbb{R}^{12}$, feature schema $\mathcal{S}$
+\ENSURE Projected flow vector $x_{\text{proj}} \in \mathcal{M}_{\text{flow}}$
+\STATE $x_{\text{proj}} \leftarrow \text{copy}(x)$
+\STATE \COMMENT{Enforce discrete bounds and minimum header thresholds}
+\STATE $x_{\text{proj}}[2] \leftarrow \max(1.0, \text{round}(x_{\text{proj}}[2]))$ \COMMENT{Integer Forward Packets}
+\STATE $x_{\text{proj}}[3] \leftarrow \max(0.0, \text{round}(x_{\text{proj}}[3]))$ \COMMENT{Integer Backward Packets}
+\STATE $x_{\text{proj}}[4] \leftarrow \max(x_{\text{proj}}[2] \times 20.0, x_{\text{proj}}[4])$ \COMMENT{At least 20 bytes per forward packet}
+\STATE $x_{\text{proj}}[5] \leftarrow \max(0.0, x_{\text{proj}}[5])$
+\STATE $x_{\text{proj}}[6] \leftarrow \max(1.0, x_{\text{proj}}[6])$ \COMMENT{Duration $\ge 1 \mu$s}
+\STATE $x_{\text{proj}}[7] \leftarrow \text{clamp}(x_{\text{proj}}[7], 0.0, 65535.0)$ \COMMENT{TCP Window $[0, 65535]$}
+
+\STATE \COMMENT{Analytically recalculate coupled non-linear flow rates}
+\STATE $T_{\text{sec}} \leftarrow x_{\text{proj}}[6] / 10^6$
+\STATE $B_{\text{tot}} \leftarrow x_{\text{proj}}[4] + x_{\text{proj}}[5]$
+\STATE $N_{\text{tot}} \leftarrow x_{\text{proj}}[2] + x_{\text{proj}}[3]$
+\STATE $x_{\text{proj}}[8] \leftarrow B_{\text{tot}} / T_{\text{sec}}$ \COMMENT{Flow Bytes/s}
+\STATE $x_{\text{proj}}[9] \leftarrow N_{\text{tot}} / T_{\text{sec}}$ \COMMENT{Flow Packets/s}
+\STATE $x_{\text{proj}}[10] \leftarrow x_{\text{proj}}[4] / x_{\text{proj}}[2]$ \COMMENT{Forward Packet Length Mean}
+\STATE $x_{\text{proj}}[11] \leftarrow \max(x_{\text{proj}}[2] \times 20.0, x_{\text{proj}}[11])$ \COMMENT{Header Length}
+\STATE \RETURN $x_{\text{proj}}$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Tree-Split Boundary Snapping (TSBS)}
+Algorithm~\ref{alg:tsbs} implements Tree-Split Boundary Snapping. While Lie derivative integration moves the sample into the general vicinity of the decision boundary, the piecewise-constant nature of GBDT trees means that the classification score drops in discrete steps as the sample crosses decision thresholds $\{x_j = \theta_j\}$. TSBS snaps mutable feature coordinates to the nearest active split point $\theta_j + \epsilon$, guaranteeing that the flow transitions cleanly across the polyhedral facet without numerical boundary jitter.
+
+\begin{algorithm}[htbp]
+\caption{Tree-Split Boundary Snapping (TSBS)}
+\label{alg:tsbs}
+\begin{algorithmic}[1]
+\REQUIRE Classifier $F$, flow candidate $x \in \mathcal{M}_{\text{flow}}$, feature schema $\mathcal{S}$, tolerance $\epsilon = 10^{-4}$
+\ENSURE Snapped flow $x^* \in \mathcal{M}_{\text{flow}}$
+\STATE $x^* \leftarrow \text{copy}(x)$
+\STATE $\text{active\_splits} \leftarrow \text{ExtractActiveSplits}(F, x^*)$
+    \FOR{\textbf{each } $(\text{feature\_index } j, \text{threshold } \theta_j) \in \text{active\_splits}$}
+        \IF{$j \in \mathcal{I}_{\text{mono}}^+$ \AND $x^*[j] < \theta_j$}
+        \STATE $x_{\text{cand}} \leftarrow \text{copy}(x^*)$
+        \STATE $x_{\text{cand}}[j] \leftarrow \theta_j + \epsilon$
+        \STATE $x_{\text{cand}} \leftarrow \text{ProjectManifoldInvariants}(x_{\text{cand}}, \mathcal{S})$
+        \IF{$F(x_{\text{cand}}) < F(x^*)$}
+            \STATE $x^* \leftarrow x_{\text{cand}}$
+        \ENDIF
+    \ENDIF
+\ENDFOR
+\STATE \RETURN $x^*$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Computational Complexity \& Comparison to MILP}
+Table~\ref{tab:complexity_comparison} compares the asymptotic time and space complexities of Flow-Field Evasion against Kantchelian's exact MILP \cite{kantchelian2016evasion} and heuristic black-box optimizers (MOEVA \cite{simonetto2021constrained}, Traffic Manipulator \cite{han2021traffic}).
+
+\begin{table}[htbp]
+\centering
+\caption{Asymptotic Complexity Comparison of Evasion Algorithms for Tree Ensembles}
+\label{tab:complexity_comparison}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Algorithm} & \textbf{Time Complexity} & \textbf{Query Complexity} & \textbf{Coupled Invariants} \\
+\midrule
+\textbf{Kantchelian MILP} \cite{kantchelian2016evasion} & $\mathcal{O}(2^{T \cdot 2^D})$ (Worst Case) & $0$ (White-Box) & Unsupported (Linear Only) \\
+\textbf{MOEVA / CAA} \cite{simonetto2021constrained}   & $\mathcal{O}(G \cdot P \cdot T \cdot D)$   & $\mathcal{O}(10^3 - 10^4)$ & Approximate Penalty \\
+\textbf{Traffic Manipulator} \cite{han2021traffic}    & $\mathcal{O}(I \cdot S \cdot T \cdot D)$   & $\mathcal{O}(10^3 - 10^4)$ & Packet Re-evaluation \\
+\midrule
+\textbf{Flow-Field Evasion (Ours)}                     & $\bm{\mathcal{O}(M \cdot K \cdot T \cdot D)}$ & $\bm{\le 4M + 1}$ ($\bm{\approx 9.1}$) & \textbf{Exact Closed-Form} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Where:
+\begin{itemize}
+    \item $T$ is the number of trees in the ensemble (typically $50 - 100$).
+    \item $D$ is the maximum depth of each tree (typically $6 - 10$).
+    \item $M$ is the FFE step budget ($M \le 20$).
+    \item $K$ is the number of Lie generators ($K = 4$).
+    \item $G, P$ are the generations and population size in MOEVA ($G \approx 100, P \approx 100$).
+    \item $I, S$ are the iterations and swarm size in PSO ($I \approx 50, S \approx 50$).
+\end{itemize}
+
+Because $K = 4$ and $M \le 20$ are small constants, FFE requires only a linear number of simple tree evaluations $\mathcal{O}(T \cdot D)$, completely avoiding the exponential combinatorial blowup of MILP while requiring over $99\%$ fewer queries than genetic search.

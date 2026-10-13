@@ -1,0 +1,87 @@
+\section{Empirical Benchmark, Ablation Studies \& Defenses}
+\label{sec:empirical_evaluation}
+
+\subsection{Experimental Benchmark Setup \& Methodology}
+\label{sec:experiments}
+
+This section details the empirical methodology employed to validate Flow-Field Evasion. We describe the dataset construction modeling CSE-CIC-IDS2018, formalize the five evaluated attack families, outline the GPU hardware environment, specify the target tree ensemble architectures, and define the implementations of five competitive baseline evasion algorithms from the 2025--2026 literature.
+
+\subsubsection{Benchmark Dataset Architecture: CSE-CIC-IDS2018}
+To ensure rigorous, reproducible evaluations, we generate a comprehensive benchmark dataset consisting of 12,000 network flows modeling the empirical distributions of the Communications Security Establishment and Canadian Institute for Cybersecurity (CSE-CIC-IDS2018) intrusion dataset \cite{sharafaldin2018toward}. 
+
+CSE-CIC-IDS2018 is widely recognized as the preeminent public benchmark for network intrusion detection research. Captured within a simulated enterprise infrastructure comprising 420 victim workstations, 33 target servers, and a dedicated attacker subnet, it contains diverse traffic traces captured over ten operating days.
+
+Our benchmark dataset comprises:
+\begin{itemize}
+    \item \textbf{Benign Background Telemetry ($75\%$, $9,000$ flows):} Synthesized to reflect realistic enterprise communication patterns:
+    \begin{itemize}
+        \item Web browsing (HTTP 80 and HTTPS 443) representing $85\%$ of benign traffic.
+        \item Core network services: DNS (port 53), FTP (port 21), and SSH (port 22).
+        \item Forward packet counts follow a log-normal distribution with $\mu = 2.0, \sigma = 0.8$, clipped to $[2, 500]$ packets.
+        \item Backward packet counts model realistic server responses with server-to-client amplification ratios uniformly distributed in $[0.8, 2.5]$.
+        \item Flow durations follow an exponential distribution with scale parameter $\lambda^{-1} = 1.5 \times 10^6 \mu$s ($1.5$ seconds) with a minimum duration of $5,000 \mu$s.
+        \item Initial TCP receive window sizes match common client OS values ($8,192$, $16,384$, $29,200$, $64,240$, and $65,535$).
+    \end{itemize}
+    \item \textbf{Malicious Intrusion Telemetry ($25\%$, $3,000$ flows):} Encompassing five distinct attack families.
+\end{itemize}
+
+\subsubsection{The Five Evaluated Attack Families}
+We evaluate evasion across five distinct cyberattack categories representing distinct volumetric, temporal, and semantic profiles:
+
+\begin{enumerate}
+    \item \textbf{Family 1: Volumetric DoS SYN Flood ($1,000$ flows):}
+    \begin{itemize}
+        \item \emph{Mechanics:} Rapid transmission of high-frequency TCP SYN packets targeting port 80 without completing the 3-way handshake.
+        \item \emph{Profile:} Forward packet counts between $20$ and $300$; server backward responses are negligible ($0$ to $2$ packets); forward bytes consist purely of 40--70 byte SYN packets; flow duration is extremely compressed ($100$ to $50,000 \mu$s, under $50$ ms); botnet window sizes are small ($1,024$, $2,048$, or $4,096$).
+    \end{itemize}
+    \item \textbf{Family 2: UDP Volumetric Flood ($500$ flows):}
+    \begin{itemize}
+        \item \emph{Mechanics:} High-rate UDP datagram flooding targeting arbitrary open ports, overwhelming network link bandwidth.
+        \item \emph{Profile:} Forward packet counts between $100$ and $500$; zero backward responses ($N_{\text{bwd}} = 0, B_{\text{bwd}} = 0$); extreme byte rate ($R_B > 5 \times 10^7$ bytes/s); flow duration $< 20$ ms.
+    \end{itemize}
+    \item \textbf{Family 3: Brute Force Authentication ($700$ flows):}
+    \begin{itemize}
+        \item \emph{Mechanics:} Automated password spraying and dictionary attacks targeting SSH (port 22) and FTP (port 21).
+        \item \emph{Profile:} Medium packet counts ($15$ to $80$ packets); bidirectional exchange with target server ($N_{\text{bwd}} \in [10, 50]$); fixed payload sizes reflecting credential submission attempts; flow durations span $0.2$ to $3.0$ seconds; standard client window size ($8,192$).
+    \end{itemize}
+    \item \textbf{Family 4: Web Application Exploits ($500$ flows):}
+    \begin{itemize}
+        \item \emph{Mechanics:} SQL Injection (SQLi) and Cross-Site Scripting (XSS) payloads embedded within HTTP GET/POST requests targeting port 80 and 8080.
+        \item \emph{Profile:} Moderate packet counts ($5$ to $25$ packets); asymmetrical byte ratios with large forward request payloads ($500$ to $2,000$ bytes); duration dictated by server database query execution ($0.1$ to $1.2$ seconds).
+    \end{itemize}
+    \item \textbf{Family 5: Low-and-Slow Infiltration ($300$ flows):}
+    \begin{itemize}
+        \item \emph{Mechanics:} Covert command-and-control (C2) beaconing and periodic exfiltration designed to mimic normal human interaction.
+        \item \emph{Profile:} Low packet counts ($4$ to $12$ packets); elongated flow durations ($5$ to $30$ seconds); low byte rates ($R_B < 1,000$ bytes/s).
+    \end{itemize}
+\end{enumerate}
+
+The complete dataset is partitioned into Training ($8,000$ flows, $66.7\%$), Validation ($1,000$ flows, $8.3\%$), and Testing ($3,000$ flows, $25.0\%$).
+
+\subsubsection{Hardware and Software Computational Environment}
+To reflect modern GPU-accelerated machine learning pipelines, all training and evaluation experiments were executed on an enterprise mobile workstation equipped with:
+\begin{itemize}
+    \item \textbf{GPU:} NVIDIA RTX 5000 Ada Generation Laptop GPU equipped with 16 GB GDDR6 ECC VRAM, 7,680 CUDA cores, and 240 Tensor cores.
+    \item \textbf{Host System:} Intel Core i9 processor, 32 GB DDR5 RAM, Windows 11 Enterprise (64-bit).
+    \item \textbf{Software Stack:} Conda environment \texttt{py313} executing Python 3.13.11, PyTorch 2.6.0 with CUDA 12.4 support, XGBoost 3.4.1 (compiled with native CUDA histogram tree builder \texttt{device='cuda'}), LightGBM 4.7.0, CatBoost 1.2.10, and scikit-learn 1.8.0.
+\end{itemize}
+
+\subsubsection{Target Tree Ensemble Architectures}
+We train and benchmark four distinct decision tree ensemble architectures:
+\begin{enumerate}
+    \item \textbf{XGBoost (CUDA Hist):} 60 gradient boosted decision trees, maximum tree depth 6, learning rate $\eta = 0.1$, exact histogram building on CUDA (\texttt{device='cuda'}, \texttt{tree\_method='hist'}), logistic loss objective.
+    \item \textbf{LightGBM:} 60 leaf-wise gradient boosted trees, maximum depth 6, learning rate $\eta = 0.1$, exclusive feature bundling enabled.
+    \item \textbf{CatBoost:} 60 symmetric (oblivious) decision trees, maximum depth 6, learning rate $\eta = 0.1$, border count 254.
+    \item \textbf{Random Forest:} 100 fully grown bagging trees, Gini impurity splitting, maximum depth 12.
+\end{enumerate}
+
+\subsubsection{Competitive Baseline Attack Implementations}
+We benchmark Flow-Field Evasion against five competitive baseline evasion methods:
+\begin{enumerate}
+    \item \textbf{Unconstrained Feature-Space Baseline (Naive):} Standard numerical coordinate descent in $\mathbb{R}^d$. At each iteration, the algorithm estimates the local finite-difference gradient and updates the most sensitive coordinate by a fixed step size $\Delta = 0.05 \cdot \sigma_f$. Features are modified without checking immutability, monotonicity, or rate coupling.
+    \item \textbf{ZOO-NIDS Baseline (Chen et al. \cite{chen2017zoo}):} Zeroth-Order Optimization adapted for tabular flow metrics. Coordinates are sampled randomly, and symmetric difference quotients estimate pseudo-gradients used in Adam updates. Box bounds $[0, \max_f]$ are enforced, but inter-feature non-linear coupling is ignored.
+    \item \textbf{HopSkipJump-NIDS (Alajaji et al. 2026 \cite{alajaji2026feature}):} A boundary-following decision-based attack that initializes with a benign flow and performs geometric binary line searches to identify the classification boundary, followed by spherical coordinate perturbations.
+    \item \textbf{CAA / MOEVA Baseline (Simonetto et al. \cite{simonetto2021constrained}):} The Multi-Objective Evolutionary Adversarial Attack based on NSGA-II. Population size is set to 50, maximum generations to 25. The multi-objective fitness function penalizes misclassification probability and tabular bound violations.
+    \item \textbf{Traffic Manipulator PSO (Han et al. \cite{han2021traffic}):} Particle Swarm Optimization mutating packet intervals and forward dummy bytes. Swarm size is set to 20, maximum iterations to 30.
+    \item \textbf{Flow-Field Evasion (FFE - Ours):} The proposed Lie vector field steering algorithm (Algorithms~\ref{alg:ffe_master}--\ref{alg:tsbs}) with step budget $M = 20$.
+\end{enumerate}

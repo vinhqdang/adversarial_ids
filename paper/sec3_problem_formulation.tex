@@ -1,0 +1,161 @@
+\section{Problem Formulation \& Problem-Space Semantics}
+\label{sec:formulation}
+
+This section formalizes the mathematical relationship between the physical problem space of network packet transmissions and the feature space of tabular flow telemetry. We define the properties of the feature aggregation mapping, establish the formal structure of the network flow manifold $\mathcal{M}_{\text{flow}}$, and specify the adversary's formal threat model.
+
+\subsection{Packet Streams and Network Protocols}
+Let $\Omega = \{0, 1\}^*$ denote the space of all binary payloads. A single network packet $p$ is a structured tuple:
+\begin{equation}
+    p = (\text{hdr}_{\text{link}}, \text{hdr}_{\text{net}}, \text{hdr}_{\text{trans}}, \text{payload}) \in \Omega
+\end{equation}
+complying with standard layered protocol architectures (Ethernet at the link layer, IPv4/IPv6 at the network layer, and TCP/UDP at the transport layer).
+
+A packet stream (or transmission sequence) $P$ is an ordered sequence of $m$ timestamped packets:
+\begin{equation}
+    P = \big( (p_1, t_1), (p_2, t_2), \dots, (p_m, t_m) \big)
+\end{equation}
+where $t_i \in \mathbb{R}_{\ge 0}$ represents the physical transmission timestamp at the network interface card (NIC). The sequence satisfies strict temporal causality:
+\begin{equation}
+    0 \le t_1 \le t_2 \le \dots \le t_m
+\end{equation}
+
+\subsubsection{The Space of Valid Packet Streams $\mathcal{P}_{\text{valid}}$}
+Not all arbitrary bit sequences are admissible in real-world networking. We denote by $\mathcal{P}_{\text{valid}} \subset (\Omega \times \mathbb{R}_{\ge 0})^*$ the set of packet streams that satisfy three mandatory physical constraints:
+\begin{enumerate}
+    \item \textbf{Syntactic RFC Compliance:} Every packet $p_i$ must have valid header fields, matching total length declarations, and correct Internet Checksums:
+    \begin{equation}
+        \text{Checksum}(p_i) = \text{RFC791}(\text{hdr}_{\text{net}}) = 0
+    \end{equation}
+    Packets with corrupted checksums are discarded at the physical NIC layer by intermediate routers before reaching an intrusion detection sensor.
+    \item \textbf{Transport State Machine Consistency:} For TCP traffic, packets must respect the TCP finite state machine (RFC 793): sequence numbers ($seq$) and acknowledgment numbers ($ack$) must advance monotonically consistent with the number of transmitted payload bytes:
+    \begin{equation}
+        seq_{i+1} = seq_i + \text{Len}(\text{payload}_i)
+    \end{equation}
+    \item \textbf{Maximum Transmission Unit (MTU) Bounds:} The total length of any single physical packet cannot exceed the link-layer MTU (typically 1,500 bytes for standard Ethernet):
+    \begin{equation}
+        \forall i \in \{1, \dots, m\}, \quad \text{Len}(p_i) \le \text{MTU} = 1500 \text{ bytes}
+    \end{equation}
+\end{enumerate}
+
+\subsection{Flow-Based Telemetry Feature Mapping $\Phi$}
+A network flow is defined as a bidirectional sequence of packets sharing a common 5-tuple socket identifier:
+\begin{equation}
+    \text{FlowID} = (\text{IP}_{\text{src}}, \text{IP}_{\text{dst}}, \text{Port}_{\text{src}}, \text{Port}_{\text{dst}}, \text{Proto})
+\end{equation}
+Packets are separated into two directional sub-streams:
+\begin{itemize}
+    \item \textbf{Forward Direction ($\text{Fwd}$):} Packets originating from the client initiator toward the destination server.
+    \item \textbf{Backward Direction ($\text{Bwd}$):} Response packets originating from the destination server toward the client.
+\end{itemize}
+
+A flow exporter (e.g., CICFlowMeter \cite{sharafaldin2018toward}) computes a deterministic, many-to-one aggregation mapping:
+\begin{equation}
+    \Phi: \mathcal{P}_{\text{valid}} \to \mathbb{R}^d
+\end{equation}
+The feature vector $x = \Phi(P) \in \mathbb{R}^d$ summarizes the statistical, volumetric, and temporal dynamics of the transmission.
+
+\subsection{The 12-Dimensional Flow Feature Schema}
+To formulate our analysis concretely, we focus on a representative, standardized 12-dimensional feature schema capturing the core metrics analyzed by state-of-the-art NIDS models on CSE-CIC-IDS2018 \cite{sharafaldin2018toward}. The feature vector $x \in \mathbb{R}^{12}$ is structured as follows:
+
+\begin{enumerate}
+    \item[$x_0$:] \textbf{Destination Port ($\text{dst\_port}$):} Service port on the target machine (e.g., 80 for HTTP, 443 for HTTPS, 22 for SSH).
+    \item[$x_1$:] \textbf{Protocol ($\text{protocol}$):} Transport layer protocol identifier (TCP = 6, UDP = 17).
+    \item[$x_2$:] \textbf{Total Forward Packets ($N_{\text{fwd}}$):} The total number of packets transmitted in the forward client-to-server direction:
+    \begin{equation}
+        x_2 = |\{ p_i \in P \mid \text{Dir}(p_i) = \text{Fwd} \}|
+    \end{equation}
+    \item[$x_3$:] \textbf{Total Backward Packets ($N_{\text{bwd}}$):} The total number of response packets received from the server.
+    \item[$x_4$:] \textbf{Total Length of Forward Packets ($B_{\text{fwd}}$):} Total bytes transmitted in the forward direction:
+    \begin{equation}
+        x_4 = \sum_{p_i \in P_{\text{fwd}}} \text{Len}(p_i)
+    \end{equation}
+    \item[$x_5$:] \textbf{Total Length of Backward Packets ($B_{\text{bwd}}$):} Total bytes received in the backward direction.
+    \item[$x_6$:] \textbf{Flow Duration ($T$):} Total elapsed time of the flow in microseconds:
+    \begin{equation}
+        x_6 = (t_m - t_1) \times 10^6 \quad (\mu\text{s})
+    \end{equation}
+    \item[$x_7$:] \textbf{Initial Forward Window Bytes ($W_{\text{fwd}}$):} TCP receive window size advertised in the initial SYN/ACK handshake packet ($0 \le x_7 \le 65535$).
+    \item[$x_8$:] \textbf{Flow Bytes/s ($R_B$):} The overall transmission rate in bytes per second:
+    \begin{equation}
+        x_8 = \frac{x_4 + x_5}{x_6 \times 10^{-6}} = \frac{10^6 \cdot (x_4 + x_5)}{x_6}
+    \end{equation}
+    \item[$x_9$:] \textbf{Flow Packets/s ($R_P$):} The overall packet frequency in packets per second:
+    \begin{equation}
+        x_9 = \frac{x_2 + x_3}{x_6 \times 10^{-6}} = \frac{10^6 \cdot (x_2 + x_3)}{x_6}
+    \end{equation}
+    \item[$x_{10}$:] \textbf{Forward Packet Length Mean ($\bar{S}_{\text{fwd}}$):} Average size of forward packets in bytes:
+    \begin{equation}
+        x_{10} = \frac{x_4}{\max(1, x_2)}
+    \end{equation}
+    \item[$x_{11}$:] \textbf{Forward Header Length ($H_{\text{fwd}}$):} Cumulative size of transport headers in the forward direction. Because the minimum IPv4 header is 20 bytes and minimum TCP header is 20 bytes (without options):
+    \begin{equation}
+        x_{11} \ge x_2 \times 20 \text{ bytes}
+    \end{equation}
+\end{enumerate}
+
+\subsection{Formal Categorization of Feature Invariants}
+We formally partition the feature index set $\mathcal{D} = \{0, 1, \dots, 11\}$ into four disjoint sets based on physical network semantics:
+
+\subsubsection{1. Immutable Features $\mathcal{I}_{\text{imm}} = \{0, 1, 3, 5\}$}
+These attributes are strictly fixed. Destination port ($x_0$) and protocol ($x_1$) cannot be changed without redirecting the attack to an unintended service. Backward packets ($x_3$) and backward bytes ($x_5$) are generated by the target server; an external client cannot directly control server responses. Thus:
+\begin{equation}
+    \forall i \in \mathcal{I}_{\text{imm}}, \quad \Delta x_i = 0
+\end{equation}
+
+\subsubsection{2. Monotonically Non-Decreasing Features $\mathcal{I}_{\text{mono}}^+ = \{2, 4, 6\}$}
+An attacker can inject dummy packets ($\Delta N_{\text{fwd}} \ge 0$), pad payloads with null bytes ($\Delta B_{\text{fwd}} \ge 0$), or delay transmissions ($\Delta T \ge 0$). However, an attacker cannot subtract payload bytes required to deliver their malicious shellcode, nor can they transmit negative packets:
+\begin{equation}
+    \forall j \in \mathcal{I}_{\text{mono}}^+, \quad \Delta x_j \ge 0
+\end{equation}
+
+\subsubsection{3. Bounded Continuous Features $\mathcal{I}_{\text{bound}} = \{7\}$}
+The TCP receive window size $x_7$ can be modulated within operating system protocol limits:
+\begin{equation}
+    0 \le x_7 + \Delta x_7 \le 65535
+\end{equation}
+
+\subsubsection{4. Coupled / Dependent Features $\mathcal{I}_{\text{dep}} = \{8, 9, 10, 11\}$}
+Features $x_8, x_9, x_{10}, x_{11}$ are deterministic, non-linear algebraic functions of base metrics:
+\begin{align}
+    x_8 &= g_8(x_4, x_5, x_6) = \frac{10^6 \cdot (x_4 + x_5)}{x_6} \\
+    x_9 &= g_9(x_2, x_3, x_6) = \frac{10^6 \cdot (x_2 + x_3)}{x_6} \\
+    x_{10} &= g_{10}(x_4, x_2) = \frac{x_4}{x_2} \\
+    x_{11} &= g_{11}(x_2, x_{11}) = \max(x_2 \times 20, x_{11})
+\end{align}
+
+\subsection{The Flow Manifold $\mathcal{M}_{\text{flow}}$}
+The image of $\mathcal{P}_{\text{valid}}$ under $\Phi$ defines an intrinsic, non-convex, semi-algebraic sub-manifold:
+\begin{equation}
+    \mathcal{M}_{\text{flow}} = \left\{ x \in \mathbb{R}^{12} \;\middle|\; \exists P \in \mathcal{P}_{\text{valid}} \text{ s.t. } \Phi(P) = x \right\}
+\end{equation}
+Equivalently, $\mathcal{M}_{\text{flow}}$ is the algebraic intersection:
+\begin{equation}
+    \mathcal{M}_{\text{flow}} = \left\{ x \in \mathbb{R}^{12} \;\middle|\; 
+    \begin{aligned}
+        &x_0 \in \mathbb{Z}_{\ge 1}, \quad x_1 \in \{6, 17\}, \quad x_2 \ge 1, \quad x_4 \ge x_2 \times 20, \\
+        &x_6 > 0, \quad 0 \le x_7 \le 65535, \\
+        &x_8 = \frac{10^6 (x_4 + x_5)}{x_6}, \quad x_9 = \frac{10^6 (x_2 + x_3)}{x_6}, \quad x_{10} = \frac{x_4}{x_2}
+    \end{aligned}
+    \right\}
+\end{equation}
+
+\subsection{Formal Threat Model}
+We formalize the attacker's operational game under standard adversarial machine learning criteria:
+
+\begin{itemize}
+    \item \textbf{Adversary's Goal:} Given a malicious flow $x_{\text{orig}} = \Phi(P) \in \mathcal{M}_{\text{flow}}$ classified as an attack ($P(\text{Malicious} \mid x_{\text{orig}}) \ge 0.5$), synthesize a modified flow $x^* = \Phi(P^*) \in \mathcal{M}_{\text{flow}}$ such that:
+    \begin{equation}
+        P(\text{Malicious} \mid x^*) < 0.5
+    \end{equation}
+    \item \textbf{Adversary's Knowledge:} We assume grey-box or black-box query access: the adversary can submit candidate flow features $x$ (or transmit probe traffic) and observe the soft classification probability $p = P(\text{Malicious} \mid x) \in [0, 1]$.
+    \item \textbf{Functionality Preservation:} The transformed packet trace $P^*$ must preserve the original malicious semantics:
+    \begin{equation}
+        \mathcal{S}(P^*) = \mathcal{S}(P)
+    \end{equation}
+    meaning exploit delivery, shellcode execution, or denial-of-service degradation must succeed on the victim target.
+    \item \textbf{Minimal Transmission Cost:} The adversary seeks to minimize operational transmission overhead:
+    \begin{equation}
+        \min \quad \mathcal{C}(x^*, x_{\text{orig}}) = \sum_{i=0}^{11} w_i |x_i^* - x_i^{\text{orig}}|
+    \end{equation}
+    where $w_i$ denotes the physical cost associated with metric $i$ (e.g., bandwidth inflation, transmission latency, memory socket allocation).
+\end{itemize}

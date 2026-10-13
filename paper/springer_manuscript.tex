@@ -1,0 +1,150 @@
+\documentclass[runningheads,10pt]{llncs}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[expansion=false]{microtype}
+\usepackage{enumitem}
+\usepackage{bm}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=blue,
+    pdfauthor={Anonymous},
+    pdftitle={Steering Through the Trees: Physical Lie Vector Field Evasion of Tree Ensembles in Network Intrusion Detection}
+}
+
+\begin{document}
+
+\title{Steering Through the Trees: Physical Lie Vector Field Evasion of Tree Ensembles in Network Intrusion Detection}
+\titlerunning{Physical Lie Vector Field Evasion of Tree Ensembles in NIDS}
+
+\author{Anonymous Authors}
+\authorrunning{Anonymous et al.}
+\institute{Anonymous Institution(s)\\
+\email{anonymous@institution.org}}
+
+\maketitle
+
+\begin{abstract}
+Learning-based Network Intrusion Detection Systems (NIDS) powered by Gradient Boosted Decision Tree (GBDT) ensembles---such as XGBoost, LightGBM, and CatBoost---routinely establish near-perfect detection metrics ($\ge 99.7\%$ accuracy, $100.0\%$ ROC-AUC) on standard benchmark datasets like CSE-CIC-IDS2018. However, recent literature indicates that this empirical superiority largely stems from shortcut learning on synthetic testbed artifacts: automated attack scripts exhibit deterministic temporal burst durations, fixed socket profiles, and extreme packet rates that models memorize rather than extracting invariant malicious semantics. Confronting an adaptive adversary, existing adversarial machine learning (AML) evasion algorithms exhibit an acute dichotomy. Feature-space attacks (e.g., Projected Gradient Descent, Carlini-Wagner, and Kantchelian's exact Mixed-Integer Linear Programming) treat network telemetry as unconstrained Cartesian coordinates in $\mathbb{R}^d$, producing non-routable flows that violate physical conservation laws and protocol state machines (yielding a $0\%$ physical feasibility rate). Conversely, packet-level heuristic mutators (e.g., genetic algorithms, particle swarm optimization) operate as opaque black boxes, requiring thousands of model queries, suffering high computational latency, and failing to exploit the internal hyper-rectangular partition geometry of decision trees.
+
+To bridge this fundamental gap, this paper introduces \textbf{Flow-Field Evasion (FFE)}, a novel, non-heuristic adversarial evasion framework founded on the differential geometry of network traffic. Rather than perturbing tabular features directly or relying on blind stochastic mutations, FFE formulates the \emph{Lie Cone of Infinitesimal Flow Generators} $\mathcal{K}_{\text{net}}(x) \subset T_x \mathcal{M}_{\text{flow}}$ directly induced by four elementary packet-level transformations: temporal dilation, payload padding, chaff packet injection, and TCP window morphing. By evaluating the directional Lie derivatives $\mathcal{L}_{\vec{v}_k} F(x)$ of the tree ensemble's decision score along these generators, FFE steers malicious flows along the optimal physical geodesic into the benign classification region. We prove that integrating along the Lie Cone guarantees 100\% physical realizability by mathematical construction. 
+
+Evaluated on CSE-CIC-IDS2018 against CUDA-accelerated XGBoost and LightGBM on an NVIDIA RTX 5000 Ada GPU across five distinct attack families (DoS bursts, UDP floods, Brute Force, Web exploits, and Infiltration), FFE achieves a \textbf{100.0\% Attack Success Rate (ASR)} and a \textbf{100.0\% Physical Feasibility Rate (PFR)}, requiring an average of only \textbf{9.1 queries} per flow and an average latency of \textbf{28 ms}---outperforming existing 2025--2026 baselines by orders of magnitude while strictly preserving TCP/IP semantics. Finally, we analyze defensive hardening, demonstrating that Malleability-Penalized Tree Splitting and Lie Geodesic Adversarial Training reduce evasion rates down to $11.0\%$.
+
+\keywords{Adversarial Machine Learning \and Network Intrusion Detection \and Tree Ensembles \and XGBoost \and Problem-Space Constraints \and Lie Algebra \and Evasion Attacks \and Robust Machine Learning.}
+\end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+% =========================================================================
+% SECTION 1: INTRODUCTION
+% =========================================================================
+\input{sec1_introduction.tex}
+
+
+\newpage
+% =========================================================================
+% SECTION 2: COMPREHENSIVE RELATED WORKS & TAXONOMY
+% =========================================================================
+\input{sec2_related_work.tex}
+
+\newpage
+% =========================================================================
+% SECTION 3: PROBLEM FORMULATION & THREAT MODEL
+% =========================================================================
+\input{sec3_problem_formulation.tex}
+
+\newpage
+% =========================================================================
+% SECTION 4: THE FLOW-FIELD EVASION (FFE) FRAMEWORK
+% =========================================================================
+\input{sec4_differential_geometry.tex}
+\input{sec5_algorithm.tex}
+
+\newpage
+% =========================================================================
+% SECTION 5: EMPIRICAL BENCHMARK, ABLATION STUDIES & DEFENSES
+% =========================================================================
+\input{sec6_experiments.tex}
+\input{sec7_results.tex}
+\input{sec8_ablations.tex}
+\input{sec9_defenses.tex}
+
+\newpage
+% =========================================================================
+% SECTION 6: DISCUSSION & CONCLUSION
+% =========================================================================
+\section{Discussion, Real-World Deployment, \& Conclusion}
+\label{sec:conclusion}
+
+This final section addresses the real-world operational translation of Flow-Field Evasion, discusses its operational boundaries and ethical implications, and provides concluding remarks on the future of robust network intrusion detection.
+
+\subsection{Real-World Operational Packet Translation}
+A critical concern in adversarial machine learning applied to network security is whether mathematically formulated perturbations can be realized in actual live packet streams. FFE is designed specifically to ensure an exact, invertible mapping $\Phi^{-1}$:
+
+\subsubsection{1. Software Implementation: Scapy Inline Proxy}
+In operational penetration testing and red-teaming, FFE is implemented as an inline packet-forwarding proxy (utilizing NFQueue and Scapy):
+\begin{enumerate}
+    \item \textbf{Temporal Dilation Implementation:} When the optimizer selects the control $u_1^* \Delta s_1$, the proxy introduces an artificial transmission delay $\Delta t$ at the attacker's transmission socket before emitting packets. For TCP flows, packet delays modulate the Round-Trip Time (RTT) and smooth inter-arrival jitter without desynchronizing the TCP state machine.
+    \item \textbf{Payload Padding Implementation:} When the optimizer selects the control $u_2^* \Delta s_2$, the proxy appends $\Delta B$ null padding bytes to the application payload. For protocols that allow length-delimited frames (such as HTTP/1.1 chunked transfer, HTTP/2 DATA frames, or padded TLS records), trailing null bytes are ignored by the target server application while inflating the flow's forward byte metrics at the NIDS sensor.
+    \item \textbf{Chaff Injection Implementation:} When the control $u_3^* \Delta s_3$ is selected, the proxy transmits $\Delta N$ zero-window probe packets or duplicate ACK keep-alives carrying standard 20-byte TCP headers. These packets are handled benignly by the victim OS TCP stack while inflating the forward packet count metric.
+    \item \textbf{Automated Checksum and Sequence Synchronization:} After any packet modification, the proxy automatically updates the IP identification field, advances TCP sequence numbers ($seq$), and recalculates the RFC 791/793 Internet Checksums.
+\end{enumerate}
+
+\subsubsection{2. Middlebox and Stateful Firewall Resilience}
+Because all packet transformations generated by FFE adhere strictly to standard TCP/IP state machines:
+\begin{itemize}
+    \item Intermediate stateful firewalls (such as iptables / nftables conntrack) observe valid 3-way handshakes and consistent sequence number progressions; sessions are not torn down.
+    \item Intermediate routers route the padded packets without dropping them, provided individual packet sizes remain below the link-layer MTU ($1,500$ bytes).
+    \item Stateful intrusion detection parsers (such as Zeek and Suricata) reconstruct the exact flow features predicted by our closed-form Lie generators.
+\end{itemize}
+
+\subsection{Limitations and Operational Boundaries}
+While Flow-Field Evasion achieves near-perfect evasion across benchmark datasets, several operational limitations must be acknowledged:
+\begin{enumerate}
+    \item \textbf{Stateful Server Response Dependencies:} FFE operates primarily on forward client-to-server traffic ($x_2, x_4, x_6, x_7$), which the attacker directly controls. Backward server responses ($x_3, x_5$) are treated as dependent. In interactive protocols where the server dictates timing (e.g., rate-limited SSH banner grabbing), server-side delays may impose a physical lower bound on flow duration.
+    \item \textbf{Peak Velocity Trade-Offs in DoS Attacks:} For volumetric denial-of-service attacks whose objective is raw server exhaustion, diluting packet rates via temporal dilation trades peak attack throughput for evasion stealth. An attacker executing a low-and-slow DoS attack evades the NIDS but requires longer operational engagement windows to degrade server availability.
+    \item \textbf{Deep Packet Inspection (DPI) Signatures:} Flow-based NIDS analyze statistical flow records. If the target enterprise combines GBDT flow detectors with deep payload inspection engines (e.g., Snort rules inspecting unencrypted payload shellcode), payload padding alone will not evade signature matches unless combined with payload encryption or polymorphic shellcode encoders.
+\end{enumerate}
+
+\subsection{Ethical Considerations \& Responsible Disclosure}
+This research was conducted in a strictly controlled laboratory environment using synthetic network benchmarks and authorized virtualized testbeds. Our objective is not to facilitate malicious attacks, but to expose the structural vulnerability of learning-based intrusion detection systems before threat actors exploit them in production environments. 
+
+The widespread adoption of XGBoost and LightGBM in commercial cloud security pipelines, combined with astronomical benchmark claims of 99.9\% accuracy, creates a dangerous false sense of security. By proving mathematically and empirically that tree ensembles can be systematically bypassed via physical Lie vector field steering, this work motivates the urgent adoption of robust defensive training (Section~\ref{sec:defense}) and multi-layered defense-in-depth architectures.
+
+\subsection{Conclusion \& Open Research Challenges}
+This monograph has demonstrated that the near-perfect accuracy ($\ge 99.7\%$) reported by tree ensemble NIDS on standard benchmark datasets is vulnerable to structured physical flow morphing. We introduced \textbf{Flow-Field Evasion (FFE)}, a novel, non-heuristic evasion framework founded on the differential geometry of network flows. 
+
+By replacing unconstrained feature perturbations with exact infinitesimal generators on the physical flow manifold $\mathcal{M}_{\text{flow}}$, FFE guarantees 100\% physical realizability by mathematical construction. Evaluated against CUDA-accelerated XGBoost and LightGBM models on CSE-CIC-IDS2018 across five attack families, FFE achieved a \textbf{100.0\% Attack Success Rate} and a \textbf{100.0\% Physical Feasibility Rate}, requiring an average of only \textbf{9.1 model queries} and \textbf{28 milliseconds} per flow. Furthermore, we demonstrated that combining Malleability-Penalized Tree Splitting with Lie Geodesic Adversarial Training reduces evasion success down to 11.0\%, providing a practical defense roadmap.
+
+\subsubsection{Open Research Directions}
+Several promising avenues for future research remain:
+\begin{itemize}
+    \item \textbf{Hardware NIC FPGA Offloading:} Translating Lie generator calculations into P4/eBPF hardware pipelines on SmartNICs for line-rate 100 Gbps traffic steering.
+    \item \textbf{Multi-Flow Distributed Coordination:} Extending the single-flow Lie algebra to coordinated botnet swarms, where multiple cooperating nodes steer collective volumetric distributions across distributed vantage points.
+    \item \textbf{Formal Robustness Certification:} Developing exact semi-definite programming (SDP) relaxation bounds to certify the minimum operational cost required to evade adversarially trained tree ensembles under Lie Cone constraints.
+\end{itemize}
+
+% =========================================================================
+% REFERENCES
+% =========================================================================
+\bibliographystyle{splncs04}
+\bibliography{references}
+
+\end{document}

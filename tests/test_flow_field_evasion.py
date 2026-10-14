@@ -296,3 +296,27 @@ def test_worst_case_query_bound_adversarial_stall():
     assert res.queries_used <= 4 * budget + 10
     assert res.physically_valid
 
+
+def test_extract_active_splits_raw_xgb_and_lgb_fallbacks():
+    """Tests the fallback branch of extract_active_splits for raw XGBoost and LightGBM models."""
+    schema = get_cicids_schema()
+    X = np.random.RandomState(42).randn(100, 12)
+    y = (X[:, 2] > 0).astype(int)
+
+    # 1. Raw XGBClassifier
+    from xgboost import XGBClassifier
+    raw_xgb = XGBClassifier(n_estimators=5, max_depth=3, random_state=42)
+    raw_xgb.fit(X, y)
+    splits_xgb = extract_active_splits(raw_xgb, X[0], schema)
+    assert isinstance(splits_xgb, list)
+    assert len(splits_xgb) > 0
+
+    # 2. Raw LGBMClassifier
+    import lightgbm as lgb
+    raw_lgb = lgb.LGBMClassifier(n_estimators=5, max_depth=3, random_state=42, verbosity=-1)
+    raw_lgb.fit(X, y)
+    splits_lgb = extract_active_splits(raw_lgb, X[0], schema)
+    assert isinstance(splits_lgb, list)
+    assert len(splits_lgb) > 0
+
+

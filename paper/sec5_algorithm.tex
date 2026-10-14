@@ -121,9 +121,13 @@ Algorithm~\ref{alg:manifold_proj} specifies the closed-form projection operator 
 \caption{Analytical Manifold Projection Operator $\mathcal{P}_{\mathcal{M}}$}
 \label{alg:manifold_proj}
 \begin{algorithmic}[1]
-\REQUIRE Perturbed vector $x \in \mathbb{R}^{12}$, feature schema $\mathcal{S}$
+\REQUIRE Perturbed vector $x \in \mathbb{R}^{12}$, feature schema $\mathcal{S}$, optional baseline flow $x_{\text{orig}}$
 \ENSURE Projected flow vector $x_{\text{proj}} \in \mathcal{M}_{\text{flow}}$
 \STATE $x_{\text{proj}} \leftarrow \text{copy}(x)$
+\IF{$x_{\text{orig}}$ is provided}
+    \STATE $x_{\text{proj}}[j] \leftarrow x_{\text{orig}}[j]$ for all $j \in \mathcal{I}_{\text{immut}}$ \COMMENT{Preserve immutable features}
+    \STATE $x_{\text{proj}}[j] \leftarrow \max(x_{\text{orig}}[j], x_{\text{proj}}[j])$ for all $j \in \mathcal{I}_{\text{mono}}^+$ \COMMENT{Enforce monotonicity lower bounds}
+\ENDIF
 \STATE \COMMENT{Enforce discrete bounds and protocol-dependent packet/header sizes}
 \STATE $x_{\text{proj}}[2] \leftarrow \max(1.0, \text{round}(x_{\text{proj}}[2]))$ \COMMENT{Integer Forward Packets}
 \STATE $x_{\text{proj}}[3] \leftarrow x[3]$ \COMMENT{Immutable Backward Packets Preserved}

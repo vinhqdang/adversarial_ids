@@ -44,19 +44,25 @@ class NIDSEnsembleTrainer:
             self.model = lgb.LGBMClassifier(**default_params)
             
         elif self.model_type == 'catboost':
-            try:
-                from catboost import CatBoostClassifier
-                default_params = {
-                    'iterations': 50,
-                    'depth': 6,
-                    'learning_rate': 0.1,
-                    'verbose': False,
-                    'random_seed': 42
-                }
-                default_params.update(self.params)
-                self.model = CatBoostClassifier(**default_params)
-            except ImportError:
-                raise ImportError("CatBoost is not yet installed. Please wait for pip installation.")
+            from catboost import CatBoostClassifier
+            default_params = {
+                'iterations': 50,
+                'depth': 6,
+                'learning_rate': 0.1,
+                'verbose': False,
+                'random_seed': 42
+            }
+            default_params.update(self.params)
+            self.model = CatBoostClassifier(**default_params)
+        elif self.model_type in ('random_forest', 'rf'):
+            from sklearn.ensemble import RandomForestClassifier
+            default_params = {
+                'n_estimators': 100,
+                'max_depth': 12,
+                'random_state': 42
+            }
+            default_params.update(self.params)
+            self.model = RandomForestClassifier(**default_params)
         else:
             raise ValueError(f"Unknown model_type: {self.model_type}")
 
@@ -125,6 +131,12 @@ class NIDSEnsembleTrainer:
                 for tree_info in dump.get('tree_info', []):
                     if 'tree_structure' in tree_info:
                         recurse_tree(tree_info['tree_structure'])
+            elif self.model_type in ('random_forest', 'rf'):
+                for estimator in self.model.estimators_:
+                    tree = estimator.tree_
+                    for f, t in zip(tree.feature, tree.threshold):
+                        if f >= 0:
+                            splits.append((int(f), float(t)))
         except Exception:
             pass
         return splits

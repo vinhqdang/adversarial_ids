@@ -109,7 +109,7 @@ where $J_X, J_Y \in \mathbb{R}^{12 \times 12}$ are the Jacobian matrices of $X$ 
 
 \begin{proposition}[Commutativity and Integrability of Physical Flow Generators]
 \label{prop:lie_commutativity}
-Because protocol $x_1 \in \{6, 17\}$ is an immutable attribute ($\dot{x}_1 \equiv 0$), the ambient manifold $\widetilde{\mathcal{M}}_{\text{flow}}$ decomposes into two disjoint smooth invariant sub-manifolds: $\widetilde{\mathcal{M}}_{\text{flow}}^{(6)}$ (TCP flows) and $\widetilde{\mathcal{M}}_{\text{flow}}^{(17)}$ (UDP flows). On each component, parameters $L_0, H_0$ and indicator $\mathbb{I}_{x_1=6}$ are constant, and denominators satisfy $x_2 \ge 1, x_6 > 0$, ensuring $\vec{v}_{\text{time}}, \vec{v}_{\text{pad}}, \vec{v}_{\text{chaff}}$ are $C^\infty$ vector fields and $\vec{v}_{\text{win}}$ is globally Lipschitz (its brackets exist almost everywhere and vanish there, because $x_7$ is neither read nor written by the other three generators). The Lie brackets between all four infinitesimal packet transformation generators vanish identically on $\widetilde{\mathcal{M}}_{\text{flow}}$:
+Because protocol $x_1 \in \{6, 17\}$ is an immutable attribute ($\dot{x}_1 \equiv 0$), the ambient manifold $\widetilde{\mathcal{M}}_{\text{flow}}$ decomposes into two disjoint smooth invariant sub-manifolds: $\widetilde{\mathcal{M}}_{\text{flow}}^{(6)}$ (TCP flows) and $\widetilde{\mathcal{M}}_{\text{flow}}^{(17)}$ (UDP flows). On each component, the indicator $\mathbb{I}_{x_1=6}$ is constant, and $L_0, H_0$ are constant along any trajectory (the implementation selects $H_0 = 32$ iff the mean forward header $x_{11}/x_2 \ge 26$; injecting chaff of header size $H_0$ moves that mean toward $H_0$ and never across the threshold, so the selection is invariant under the flow), and denominators satisfy $x_2 \ge 1, x_6 > 0$, ensuring $\vec{v}_{\text{time}}, \vec{v}_{\text{pad}}, \vec{v}_{\text{chaff}}$ are $C^\infty$ vector fields and $\vec{v}_{\text{win}}$ is globally Lipschitz (its brackets exist almost everywhere and vanish there, because $x_7$ is neither read nor written by the other three generators). The Lie brackets between all four infinitesimal packet transformation generators vanish identically on $\widetilde{\mathcal{M}}_{\text{flow}}$:
 \begin{equation}
     [\vec{v}_i, \vec{v}_j] \equiv \mathbf{0} \in \mathbb{R}^{12}, \quad \forall i, j \in \{1, 2, 3, 4\}
 \end{equation}
@@ -204,7 +204,7 @@ Furthermore, examining the base physical coordinate trajectories across the boun
         g_2(x) &= x_4 - x_{11} - 20 x_2 \ge 0 \quad (\text{Header + payload lower bound}) \\
         g_3(x) &= x_{11} - x_2(20 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17}) \ge 0 \\
         g_4(x) &= x_2(60 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17}) - x_{11} \ge 0 \\
-        g_5(x) &= x_6 - x_{6,\min} \ge 0 \\
+        g_5(x) &= x_6 - 1 \ge 0 \quad (x_{6,\min} = 1\,\mu\text{s}) \\
         g_6(x) &= x_2 - 1 \ge 0 \\
         g_7(x) &= 1.1 \times 10^8 - x_6 \ge 0 \quad (\text{flow-timeout cap})
     \end{align}

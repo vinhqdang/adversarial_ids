@@ -1,0 +1,29 @@
+{
+  "cohort_size": 100,
+  "models": {
+    "Baseline XGBoost (Undefended)": {
+      "clean_accuracy": 99.72,
+      "clean_roc_auc": 99.99,
+      "robust_recall": 5.0,
+      "ffe_asr": 95.0
+    },
+    "MPS-Hardened XGBoost": {
+      "clean_accuracy": 97.8,
+      "clean_roc_auc": 99.81,
+      "robust_recall": 23.0,
+      "ffe_asr": 77.0
+    },
+    "LGAT-Hardened XGBoost": {
+      "clean_accuracy": 99.25,
+      "clean_roc_auc": 99.97,
+      "robust_recall": 12.0,
+      "ffe_asr": 88.0
+    },
+    "Dual-Hardened (MPS + LGAT)": {
+      "clean_accuracy": 97.3,
+      "clean_roc_auc": 99.69,
+      "robust_recall": 44.0,
+      "ffe_asr": 56.0
+    }
+  }
+}

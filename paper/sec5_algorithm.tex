@@ -147,7 +147,7 @@ Algorithm~\ref{alg:manifold_proj} specifies the closed-form projection operator 
 \end{algorithm}
 
 \subsubsection{Tree-Split Boundary Snapping (TSBS)}
-Algorithm~\ref{alg:tsbs} implements Tree-Split Boundary Snapping. While Lie derivative integration moves the sample into the general vicinity of the decision boundary, the piecewise-constant nature of GBDT trees means that the classification score drops in discrete steps as the sample crosses decision thresholds $\{x_j = \theta_j\}$. In Tier~1 white-box settings, TSBS extracts active split thresholds along the flow's current evaluation paths and evaluates candidate boundary crossings ($x_j \leftarrow \theta_j + \epsilon_j$), retaining the candidate that strictly minimizes the classification score $F$ while strictly preserving manifold constraints via $\mathcal{P}_{\mathcal{M}}$. 
+Algorithm~\ref{alg:tsbs} implements Tree-Split Boundary Snapping. While Lie derivative integration moves the sample into the general vicinity of the decision boundary, the piecewise-constant nature of GBDT trees means that the classification score drops in discrete steps as the sample crosses decision thresholds $\{x_j = \theta_j\}$. In Tier~1 white-box settings, TSBS extracts the ensemble's split thresholds ($	ext{ExtractActiveSplits}$ returns every threshold used by any tree, and TSBS retains, per feature, the closest one on the benign side of the current value) and evaluates candidate boundary crossings ($x_j \leftarrow \theta_j + \epsilon_j$), retaining the candidate that strictly minimizes the classification score $F$ while strictly preserving manifold constraints via $\mathcal{P}_{\mathcal{M}}$. 
 
 Importantly, GBDTs frequently split on non-linear coupled telemetry features: byte rate ($x_8$), packet rate ($x_9$), and forward mean packet length ($x_{10}$). TSBS inverts these coupled constraints in closed form into admissible infinitesimal generator controls:
 \begin{enumerate}
@@ -209,8 +209,10 @@ Importantly, GBDTs frequently split on non-linear coupled telemetry features: by
 \STATE $\theta_{10}^* \leftarrow \max\{\theta_{10} \mid (10, \theta_{10}) \in \text{active\_splits} \;\land\; L_0 < \theta_{10} < x^*[10]\}$
 \IF{$\theta_{10}^*$ exists}
     \STATE $N \leftarrow \lfloor (x^*[4] - \theta_{10}^* x^*[2]) / (\theta_{10}^* - L_0) \rfloor + 1$
+    \IF{$N \le 1000$}
     \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[2] \leftarrow x^*[2] + N$; $x_{\text{c}}[4] \leftarrow x^*[4] + N \cdot L_0$; $x_{\text{c}}[11] \leftarrow x^*[11] + N \cdot H_0$
-    \STATE $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
+    \STATE $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$ \COMMENT{Chaff budget cap: $N \le 1000$ packets}
+    \ENDIF
 \ENDIF
 \STATE \COMMENT{4. TCP Window morphing to benign OS baseline}
 \IF{$x^*[1] = 6$ \AND $x^*[7] \neq 64240.0$}
@@ -263,8 +265,8 @@ Where:
 \end{itemize}
 
 \paragraph{Query Accounting Details.}
-In the worst case, executing all $M_{\max} = 20$ iterations without early termination requires $1$ baseline query plus up to $K = 4$ exploratory probes per iteration, giving an upper bound of $Q_{\max} \le 4 M_{\max} + 1 = 81$ model queries (or $\le 101$ queries if fallback dilation evaluations are triggered on stagnation). UDP flows ($x_1 = 17$) and TCP flows whose client window already equals the benign value skip window morphing, so such an iteration costs $q = 3$ probes instead of $4$. In practice, because FFE steers along the Lie generator with maximal score reduction per cost ($-\nabla_k / c_k$), the loop terminates far below the budget. On the $N = 100$ master-benchmark cohort the reference implementation consumes a mean of $12.9$ model queries per flow, of which $10.6$ are external queries (the baseline query, the Lie-derivative probes, and stagnation fallbacks) and $2.4$ are candidate evaluations inside the TSBS routine (Algorithm~\ref{alg:tsbs}).
+In the worst case, executing all $M_{\max} = 20$ iterations without early termination requires $1$ baseline query plus up to $K = 4$ exploratory probes per iteration, giving an upper bound of $Q_{\max} \le 4 M_{\max} + 1 = 81$ model queries (or $\le 101$ queries if fallback dilation evaluations are triggered on stagnation). UDP flows ($x_1 = 17$) and TCP flows whose client window already equals the benign value skip window morphing, so such an iteration costs $q = 3$ probes instead of $4$. In practice, because FFE steers along the Lie generator with maximal score reduction per cost ($-\nabla_k / c_k$), the loop terminates far below the budget. On the $N = 100$ master-benchmark cohort the reference implementation consumes a mean of $12.9$ model queries per flow, of which $10.56$ are external queries (the baseline query, the Lie-derivative probes, and stagnation fallbacks) and $2.38$ are candidate evaluations inside the TSBS routine (Algorithm~\ref{alg:tsbs}).
 
-In Tier~1 white-box settings, TSBS extracts candidate thresholds directly from the adversary's local copy of the ensemble ($\text{ExtractActiveSplits}$), so its candidate evaluations could be executed offline against that copy. The reported figure of $12.9$ is deliberately conservative: the implementation routes every TSBS candidate evaluation through the same query counter, so it includes these $2.4$ evaluations. A strictly black-box adversary would instead have to pay them as true queries, which is how they are counted here.
+In Tier~1 white-box settings, TSBS extracts candidate thresholds directly from the adversary's local copy of the ensemble ($\text{ExtractActiveSplits}$), so its candidate evaluations could be executed offline against that copy. The reported figure of $12.9$ is deliberately conservative: the implementation routes every TSBS candidate evaluation through the same query counter, so it includes these $2.38$ evaluations. A strictly black-box adversary would instead have to pay them as true queries, which is how they are counted here.
 
 Because $K \le 4$ and $M \le 20$ are small constants, FFE requires only a linear number of simple tree evaluations $\mathcal{O}(T \cdot D)$. This completely avoids the exponential combinatorial explosion of MILP while requiring roughly $99\%$ fewer queries than genetic search ($12.9$ vs.\ $\le 1{,}250$) and PSO ($12.9$ vs.\ $\le 1{,}850$).

@@ -9,12 +9,12 @@ To resolve the conflict between discrete decision trees and continuous physical 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/fig1_system_architecture.pdf}
-\caption{Geometric, architectural, and packet-level workflow of the Flow-Field Evasion (FFE) framework. \textbf{(a)}~Differential geometry of network telemetry flows: the physical conservation constraints define the smooth sub-manifold $\mathcal{M}_{\text{flow}}$ (hyperbolic iso-byte contours $x_8 = B/x_6$) and tangent space $T_{x_0}\mathcal{M}_{\text{flow}}$; infinitesimal Lie generators ($\vec{v}_{\text{time}}, \vec{v}_{\text{pad}}, \vec{v}_{\text{chaff}}$) span the forward Lie Cone $\mathcal{K}_{\text{net}}(x_0)$, preventing excursions into the inadmissible off-manifold domain ($\Psi(x) \neq 0$). \textbf{(b)}~Steering through axis-aligned GBDT partition geometry: unconstrained AML vectors jump off-manifold into non-routable feature space ($0\%$ PFR, dropped by standard network stacks), whereas FFE traverses continuous geodesics on $\mathcal{M}_{\text{flow}}$ with Tree-Split Boundary Snapping (TSBS, $x^*_j = \theta_j + \epsilon$) into the benign region. \textbf{(c)}~Inline packet stream translation via the $\Phi^{-1}$ proxy: transforms high-volumetric malicious bursts $\mathcal{P}_0$ into strictly RFC~791/793 compliant packet sequences $\mathcal{P}^*$ via socket delay dilation, zero-pad encapsulation, and TCP keep-alive chaff. \textbf{(d)}~TSBS decision score convergence trajectory: step-by-step descent of classifier log-odds $F(x_m)$ across $M=7$ optimization steps, achieving $100\%$ Real ASR in under $28$~ms.}
+\caption{Geometric, architectural, and packet-level workflow of the Flow-Field Evasion (FFE) framework. \textbf{(a)}~Differential geometry of network telemetry flows: the physical conservation constraints define the smooth sub-manifold $\mathcal{M}_{\text{flow}}$ (hyperbolic iso-byte contours $x_8 = B/x_6$) and tangent space $T_{x_0}\mathcal{M}_{\text{flow}}$; infinitesimal Lie generators ($\vec{v}_{\text{time}}, \vec{v}_{\text{pad}}, \vec{v}_{\text{chaff}}$) span the forward Lie Cone $\mathcal{K}_{\text{net}}(x_0)$, preventing excursions into the inadmissible off-manifold domain ($\Psi(x) \neq 0$). \textbf{(b)}~Steering through axis-aligned GBDT partition geometry: unconstrained AML vectors jump off-manifold into non-routable feature space (PFR collapsing to $17.8\%$--$25.0\%$, dropped by standard network stacks), whereas FFE traverses continuous Lie-flow paths on $\mathcal{M}_{\text{flow}}$ with Tree-Split Boundary Snapping (TSBS, $x^*_j = \theta_j + \epsilon$) into the benign region. \textbf{(c)}~Inline packet stream translation via the $\Phi^{-1}$ proxy: transforms high-volumetric malicious bursts $\mathcal{P}_0$ into strictly RFC~791 / RFC~9293 compliant packet sequences $\mathcal{P}^*$ via socket delay dilation, zero-pad encapsulation, and TCP probe chaff. \textbf{(d)}~TSBS decision score convergence trajectory: step-by-step descent of classifier log-odds $F(x_m)$ across an illustrative $M=7$ step trace (the empirical benchmark mean is $12.9$ queries per flow, including TSBS candidate evaluations), achieving $100\%$ Real ASR on the $N=100$ master cohort.}
 \label{fig:system_architecture}
 \end{figure*}
 
-\subsubsection{The Tangent Space $T_x \mathcal{M}_{\text{flow}}$}
-Consider the smooth embedding of the flow manifold $\mathcal{M}_{\text{flow}} \subset \mathbb{R}^{12}$. The coupled conservation equations defining $\mathcal{M}_{\text{flow}}$ can be expressed as the zero level-set of a smooth vector-valued constraint function $\Psi: \mathbb{R}^{12} \to \mathbb{R}^3$:
+\subsubsection{The Continuous Relaxation \texorpdfstring{$\widetilde{\mathcal{M}}_{\text{flow}}$}{M\_tilde} and Tangent Space \texorpdfstring{$T_x \widetilde{\mathcal{M}}_{\text{flow}}$}{Tx M\_tilde}}
+While the physical telemetry space $\mathcal{M}_{\text{flow}} = \Phi(\mathcal{P}_{\text{valid}}) \subset \mathbb{Z}_{\ge 0}^9 \times \mathbb{R}_{\ge 0}^3$ is a discrete packet-level lattice embedded in $\mathbb{R}^{12}$ (where packet counts, byte totals, socket ports, TCP window, header lengths, and integer microsecond duration satisfy $(x_0, x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_{11}) \in \mathbb{Z}_{\ge 0}^9$, while rates $(x_8, x_9, x_{10}) \in \mathbb{R}_{\ge 0}^3$), we analyze its differential geometry via the smooth continuous ambient relaxation $\widetilde{\mathcal{M}}_{\text{flow}}$ (Section~\ref{sec:formulation}) where $\Psi(x) = \mathbf{0}$, $x_2 \ge 1$, $0 < x_6 \le 1.1 \times 10^8$, $x_{11} \ge x_2 (20 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17})$, and $x_{11} + 20 x_2 \le x_4 \le 1500 x_2$. The coupled conservation equations defining $\widetilde{\mathcal{M}}_{\text{flow}}$ can be expressed as the zero level-set of a smooth vector-valued constraint function $\Psi: \mathbb{R}^{12} \to \mathbb{R}^3$:
 \begin{equation}
     \Psi(x) = \begin{bmatrix}
         \Psi_1(x) \\
@@ -27,9 +27,9 @@ Consider the smooth embedding of the flow manifold $\mathcal{M}_{\text{flow}} \s
     \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}
 \end{equation}
 
-By the Regular Value Theorem, at any regular point $x \in \mathcal{M}_{\text{flow}}$ where the Jacobian matrix $J_\Psi(x) \in \mathbb{R}^{3 \times 12}$ has full rank 3, the tangent space $T_x \mathcal{M}_{\text{flow}}$ is given by the kernel of the Jacobian:
+By the Regular Value Theorem, at any regular point $x \in \widetilde{\mathcal{M}}_{\text{flow}}$ where the Jacobian matrix $J_\Psi(x) \in \mathbb{R}^{3 \times 12}$ has full rank 3, the tangent space $T_x \widetilde{\mathcal{M}}_{\text{flow}}$ is given by the kernel of the Jacobian:
 \begin{equation}
-    T_x \mathcal{M}_{\text{flow}} = \ker\left( J_\Psi(x) \right) = \left\{ \vec{v} \in \mathbb{R}^{12} \;\middle|\; J_\Psi(x) \cdot \vec{v} = 0 \right\}
+    T_x \widetilde{\mathcal{M}}_{\text{flow}} = \ker\left( J_\Psi(x) \right) = \left\{ \vec{v} \in \mathbb{R}^{12} \;\middle|\; J_\Psi(x) \cdot \vec{v} = 0 \right\}
 \end{equation}
 
 Computing the partial derivatives of $\Psi$:
@@ -39,7 +39,7 @@ Computing the partial derivatives of $\Psi$:
     \nabla \Psi_3(x) &= \left[ 0, 0, \frac{x_4}{x_2^2}, 0, -\frac{1}{x_2}, 0, 0, 0, 0, 0, 1, 0 \right]
 \end{align}
 
-Any physically realizable velocity vector $\vec{v} = [\dot{x}_0, \dots, \dot{x}_{11}]^T \in T_x \mathcal{M}_{\text{flow}}$ must satisfy the linearized conservation laws:
+Any physically realizable velocity vector $\vec{v} = [\dot{x}_0, \dots, \dot{x}_{11}]^T \in T_x \widetilde{\mathcal{M}}_{\text{flow}}$ must satisfy the linearized conservation laws:
 \begin{align}
     \dot{x}_8 &= \frac{10^6 (\dot{x}_4 + \dot{x}_5)}{x_6} - \frac{10^6 (x_4 + x_5)}{x_6^2} \dot{x}_6 = \frac{10^6 (\dot{x}_4 + \dot{x}_5)}{x_6} - \frac{x_8}{x_6} \dot{x}_6 \label{eq:tangent_byte_rate} \\
     \dot{x}_9 &= \frac{10^6 (\dot{x}_2 + \dot{x}_3)}{x_6} - \frac{10^6 (x_2 + x_3)}{x_6^2} \dot{x}_6 = \frac{10^6 (\dot{x}_2 + \dot{x}_3)}{x_6} - \frac{x_9}{x_6} \dot{x}_6 \label{eq:tangent_pkt_rate} \\
@@ -47,7 +47,7 @@ Any physically realizable velocity vector $\vec{v} = [\dot{x}_0, \dots, \dot{x}_
 \end{align}
 
 \subsubsection{Closed-Form Derivation of Infinitesimal Generators}
-An adversary controls four elementary operational degrees of freedom. Each degree of freedom defines a 1-parameter flow $\{\phi_k^s\}_{s \ge 0}$ whose infinitesimal push-forward induces a smooth tangent vector field on $\mathcal{M}_{\text{flow}}$:
+An adversary controls four elementary operational degrees of freedom. Each degree of freedom defines a 1-parameter flow $\{\phi_k^s\}_{s \ge 0}$ whose infinitesimal push-forward induces a smooth tangent vector field on $\widetilde{\mathcal{M}}_{\text{flow}}$:
 
 \paragraph{1. Temporal Dilation Field $\vec{v}_{\text{time}}(x)$.}
 The adversary introduces transmission delays $\Delta T$ between packets, dilating flow duration without injecting additional bytes or packets ($\dot{x}_2 = \dot{x}_3 = \dot{x}_4 = \dot{x}_5 = 0, \dot{x}_6 = 1$). Substituting into Equations~(\ref{eq:tangent_byte_rate})--(\ref{eq:tangent_mean_len}):
@@ -78,16 +78,16 @@ Thus, the payload padding generator is:
 \end{equation}
 
 \paragraph{3. Chaff Packet Injection Field $\vec{v}_{\text{chaff}}(x)$.}
-The adversary transmits dummy forward packets $\Delta N_{\text{fwd}}$, each carrying standard 20-byte transport headers ($\dot{x}_2 = 1, \dot{x}_4 = 20, \dot{x}_{11} = 20, \dot{x}_3 = \dot{x}_5 = \dot{x}_6 = 0$):
+The adversary transmits dummy forward packets $\Delta N_{\text{fwd}}$, each carrying standard transport headers with zero application payload (e.g., TCP keep-alives or pure ACKs per RFC 9293 \S 3.8.4 \cite{rfc9293}: for minimal empty TCP segments without options, $L_0 = 40, H_0 = 20$; when RFC~7323 \cite{rfc7323} TCP timestamps are negotiated, headers include the 12-byte TSOPT, setting $L_0 = 52, H_0 = 32$; for UDP per RFC 768 \cite{rfc768}, 20 bytes IP header + 8 bytes UDP header, setting $L_0 = 28, H_0 = 8$; with $\dot{x}_2 = 1, \dot{x}_4 = L_0, \dot{x}_{11} = H_0, \dot{x}_3 = \dot{x}_5 = \dot{x}_6 = 0$). Under the ingress perimeter inspection model, forward probe datagrams are classified before reverse server ACK paths alter backward counts; in bidirectional full-session contexts, predictable server ACK responses are discussed in Section~\ref{sec:conclusion}:
 \begin{align}
-    \dot{x}_8 &= \frac{20 \times 10^6}{x_6} \\
+    \dot{x}_8 &= \frac{L_0 \times 10^6}{x_6} \\
     \dot{x}_9 &= \frac{10^6}{x_6} \\
-    \dot{x}_{10} &= \frac{20 - x_{10}}{x_2}
+    \dot{x}_{10} &= \frac{L_0 - x_{10}}{x_2}
 \end{align}
 Hence, the chaff injection generator is:
 \begin{equation}
     \vec{v}_{\text{chaff}}(x) = \begin{bmatrix}
-        0 \\ 0 \\ 1 \\ 0 \\ 20 \\ 0 \\ 0 \\ 0 \\ 20 \times 10^6 / x_6 \\ 10^6 / x_6 \\ (20 - x_{10}) / x_2 \\ 20
+        0 \\ 0 \\ 1 \\ 0 \\ L_0 \\ 0 \\ 0 \\ 0 \\ L_0 \times 10^6 / x_6 \\ 10^6 / x_6 \\ (L_0 - x_{10}) / x_2 \\ H_0
     \end{bmatrix}
 \end{equation}
 
@@ -95,101 +95,137 @@ Hence, the chaff injection generator is:
 The adversary modulates client TCP window advertisement toward target benign OS values $W_{\text{target}}$:
 \begin{equation}
     \vec{v}_{\text{win}}(x) = \begin{bmatrix}
-        0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ \text{sign}(W_{\text{target}} - x_7) \\ 0 \\ 0 \\ 0 \\ 0
-    \end{bmatrix}
+        0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ \mathbb{I}_{x_1=6} \operatorname{sat}\left(\frac{W_{\text{target}} - x_7}{\epsilon_{\text{win}}}\right) \\ 0 \\ 0 \\ 0 \\ 0
+    \end{bmatrix}, \qquad \operatorname{sat}(z) = \max(-1, \min(1, z))
 \end{equation}
+with transition scale parameter $\epsilon_{\text{win}} > 0$. This field is globally Lipschitz (not $C^\infty$) and depends only on $x_1$ and $x_7$. The discrete algorithm (Algorithm~\ref{alg:lie_estimator} and the implementation) uses its $\epsilon_{\text{win}} \to 0$ unit-speed limit $\vec{v}_{\text{win}} = \mathbb{I}_{x_1=6}\operatorname{sign}(W_{\text{target}} - x_7)\,\hat{e}_7$ with step $\Delta s_4 = |W_{\text{target}} - x_7|$, which lands exactly on $W_{\text{target}}$ and never overshoots.
 
-\subsubsection{Lie Bracket Commutator Algebra}
-In differential geometry, the Lie bracket $[X, Y]$ of two vector fields measures their non-commutativity:
+\subsubsection{Lie Bracket Commutator Algebra and Integrability}
+In differential geometry, the Lie bracket $[X, Y]$ of two smooth vector fields $X, Y \in \mathfrak{X}(\mathbb{R}^{12})$ measures their non-commutativity:
 \begin{equation}
-    [X, Y](f) = X(Y(f)) - Y(X(f)) = \left( J_Y \cdot X - J_X \cdot Y \right)
+    [X, Y] = J_Y \cdot X - J_X \cdot Y \in \mathbb{R}^{12}
 \end{equation}
+where $J_X, J_Y \in \mathbb{R}^{12 \times 12}$ are the Jacobian matrices of $X$ and $Y$.
 
-We evaluate the Lie bracket between Temporal Dilation $\vec{v}_{\text{time}}$ and Payload Padding $\vec{v}_{\text{pad}}$:
-
-\begin{proposition}[Non-Commutativity of Temporal and Volumetric Operations]
-The Lie bracket between Temporal Dilation and Payload Padding is non-zero:
+\begin{proposition}[Commutativity and Integrability of Physical Flow Generators]
+\label{prop:lie_commutativity}
+Because protocol $x_1 \in \{6, 17\}$ is an immutable attribute ($\dot{x}_1 \equiv 0$), the ambient manifold $\widetilde{\mathcal{M}}_{\text{flow}}$ decomposes into two disjoint smooth invariant sub-manifolds: $\widetilde{\mathcal{M}}_{\text{flow}}^{(6)}$ (TCP flows) and $\widetilde{\mathcal{M}}_{\text{flow}}^{(17)}$ (UDP flows). On each component, parameters $L_0, H_0$ and indicator $\mathbb{I}_{x_1=6}$ are constant, and denominators satisfy $x_2 \ge 1, x_6 > 0$, ensuring $\vec{v}_{\text{time}}, \vec{v}_{\text{pad}}, \vec{v}_{\text{chaff}}$ are $C^\infty$ vector fields and $\vec{v}_{\text{win}}$ is globally Lipschitz (its brackets exist almost everywhere and vanish there, because $x_7$ is neither read nor written by the other three generators). The Lie brackets between all four infinitesimal packet transformation generators vanish identically on $\widetilde{\mathcal{M}}_{\text{flow}}$:
 \begin{equation}
-    [\vec{v}_{\text{time}}, \vec{v}_{\text{pad}}] = \begin{bmatrix}
-        0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ -10^6 / x_6^2 \\ 0 \\ 0 \\ 0
-    \end{bmatrix} \neq 0
+    [\vec{v}_i, \vec{v}_j] \equiv \mathbf{0} \in \mathbb{R}^{12}, \quad \forall i, j \in \{1, 2, 3, 4\}
 \end{equation}
+Consequently, the generators span an Abelian Lie algebra $\mathfrak{g}_{\text{flow}} \cong \mathbb{R}^4$ (or $\mathbb{R}^3$ for UDP).
 \end{proposition}
 
 \begin{proof}
-Let $X = \vec{v}_{\text{time}}$ and $Y = \vec{v}_{\text{pad}}$. The Jacobian of $Y$ with respect to $x$ has non-zero entries only for column 2 ($x_2$) and column 6 ($x_6$):
-\begin{equation}
-    \frac{\partial Y_8}{\partial x_6} = -\frac{10^6}{x_6^2}, \quad \frac{\partial Y_{10}}{\partial x_2} = -\frac{1}{x_2^2}
-\end{equation}
-Multiplying by $X$:
-\begin{equation}
-    (J_Y \cdot X)_8 = \frac{\partial Y_8}{\partial x_6} X_6 = -\frac{10^6}{x_6^2} \cdot 1 = -\frac{10^6}{x_6^2}
-\end{equation}
-Conversely, for $X = \vec{v}_{\text{time}}$, the non-zero derivatives in row 8 are:
-\begin{equation}
-    \frac{\partial X_8}{\partial x_8} = -\frac{1}{x_6}, \quad \frac{\partial X_8}{\partial x_6} = \frac{x_8}{x_6^2}
-\end{equation}
-Multiplying by $Y$:
-\begin{equation}
-    (J_X \cdot Y)_8 = \frac{\partial X_8}{\partial x_8} Y_8 = -\frac{1}{x_6} \left( \frac{10^6}{x_6} \right) = -\frac{10^6}{x_6^2}
-\end{equation}
-Subtracting the two terms:
-\begin{equation}
-    [X, Y]_8 = (J_Y \cdot X)_8 - (J_X \cdot Y)_8 = -\frac{10^6}{x_6^2} - \left( -\frac{10^6}{x_6^2} \right) = 0
-\end{equation}
-Wait, evaluating the full cross-terms:
-In physical networks, the order of application matters: dilating a flow before injecting padding yields a different instantaneous rate profile than padding followed by dilation. By Frobenius' theorem, the non-vanishing commutator distribution spans the full tangent space $T_x \mathcal{M}_{\text{flow}}$, confirming that the Lie algebra generated by our elementary operators is completely controllable on the flow manifold.
+We evaluate the vector bracket $[X, Y] = J_Y X - J_X Y$ coordinate-wise across all six distinct generator pairs:
+\begin{enumerate}
+    \item \textbf{Non-Derived Coordinates $\{0, 1, 2, 3, 4, 5, 6, 7, 11\}$:} For these coordinates, the components of all four generators are either constants ($0, 1, L_0, H_0$) or depend solely on their own coordinate (e.g., $\vec{v}_{\text{win}}$ depends only on $x_7$). Since no generator modifies an independent variable on which another generator depends, the Jacobian products vanish identically: $(J_Y X)_k = 0$ and $(J_X Y)_k = 0$ for all $k \notin \{8, 9, 10\}$.
+    \item \textbf{Temporal Dilation and Payload Padding ($X = \vec{v}_{\text{time}}, Y = \vec{v}_{\text{pad}}$):} $X$ has non-zero entries in rows $6, 8, 9$ ($X_6 = 1, X_8 = -x_8/x_6, X_9 = -x_9/x_6$); $Y$ has non-zero entries in rows $4, 8, 10$ ($Y_4 = 1, Y_8 = 10^6/x_6, Y_{10} = 1/x_2$).
+    In row $8$:
+    \begin{equation}
+        (J_Y X)_8 = \frac{\partial Y_8}{\partial x_6} X_6 = -\frac{10^6}{x_6^2} \cdot 1 = -\frac{10^6}{x_6^2}
+    \end{equation}
+    \begin{equation}
+        (J_X Y)_8 = \frac{\partial X_8}{\partial x_4} Y_4 + \frac{\partial X_8}{\partial x_8} Y_8 = 0 + \left(-\frac{1}{x_6}\right)\left(\frac{10^6}{x_6}\right) = -\frac{10^6}{x_6^2}
+    \end{equation}
+    Subtracting yields $[X, Y]_8 = -\frac{10^6}{x_6^2} - \left(-\frac{10^6}{x_6^2}\right) \equiv 0$. In rows $9$ and $10$, all corresponding partial derivatives vanish, so $[X, Y] = \mathbf{0}$.
+    \item \textbf{Temporal Dilation and Chaff Injection ($X = \vec{v}_{\text{time}}, Z = \vec{v}_{\text{chaff}}$):} $Z$ has entries $Z_2 = 1, Z_4 = L_0, Z_8 = L_0 \times 10^6/x_6, Z_9 = 10^6/x_6, Z_{10} = (L_0 - x_{10})/x_2, Z_{11} = H_0$. In row $8$: $(J_Z X)_8 = -L_0 \times 10^6 / x_6^2 = (J_X Z)_8$. In row $9$: $(J_Z X)_9 = -10^6 / x_6^2 = (J_X Z)_9$. In row $10$: $(J_Z X)_{10} = 0 = (J_X Z)_{10}$. Thus $[X, Z] = \mathbf{0}$.
+    \item \textbf{Payload Padding and Chaff Injection ($Y = \vec{v}_{\text{pad}}, Z = \vec{v}_{\text{chaff}}$):} In ambient $\mathbb{R}^{12}$ coordinates, $Y_{10}(x) = 1/x_2$ and $Z_{10}(x) = (L_0 - x_{10})/x_2$. Evaluating the ambient cross-Jacobian products in row $10$:
+    \begin{equation}
+        (J_Z Y)_{10} = \sum_{k=0}^{11} \frac{\partial Z_{10}}{\partial x_k} Y_k = \frac{\partial Z_{10}}{\partial x_{10}} Y_{10} = \left(-\frac{1}{x_2}\right) \left(\frac{1}{x_2}\right) = -\frac{1}{x_2^2}
+    \end{equation}
+    \begin{equation}
+        (J_Y Z)_{10} = \sum_{k=0}^{11} \frac{\partial Y_{10}}{\partial x_k} Z_k = \frac{\partial Y_{10}}{\partial x_2} Z_2 = \left(-\frac{1}{x_2^2}\right) \cdot 1 = -\frac{1}{x_2^2}
+    \end{equation}
+    Subtracting gives $[Y, Z]_{10} = (J_Z Y)_{10} - (J_Y Z)_{10} = -\frac{1}{x_2^2} - \left(-\frac{1}{x_2^2}\right) \equiv 0$. In rows $8$ and $9$, all entries vanish identically because $Y_6 = Z_6 = 0$ while the rate entries $Y_8, Z_8, Z_9$ depend spatially only on duration $x_6$, ensuring $(J_Z Y)_k = (J_Y Z)_k = 0$ for $k \in \{8, 9\}$.
+    \item \textbf{Pairs Involving Window Morphing $\vec{v}_{\text{win}}$:} Because $\vec{v}_{\text{win}}$ acts exclusively on $x_7$, which is neither read nor modified by $\vec{v}_{\text{time}}, \vec{v}_{\text{pad}}, \vec{v}_{\text{chaff}}$, all cross-Jacobians vanish identically: $[ \vec{v}_k, \vec{v}_{\text{win}} ] = \mathbf{0}$ for all $k \in \{1, 2, 3\}$.
+\end{enumerate}
+Hence, $[ \vec{v}_i, \vec{v}_j ] = \mathbf{0}$ identically for all pairs $i, j \in \{1, 2, 3, 4\}$.
 \end{proof}
 
-\subsubsection{The Positive Lie Cone $\mathcal{K}_{\text{net}}(x)$}
+\begin{corollary}[Frobenius Integrability and Commuting Flows]
+\label{cor:frobenius}
+On the regular open subdomain where the four generators are linearly independent (specifically where $x_6 > 0$, $x_2 \ge 1$, and $x_7 \neq W_{\text{target}}$ for TCP), the distribution $\Delta = \operatorname{span}\{\vec{v}_1, \vec{v}_2, \vec{v}_3, \vec{v}_4\}$ has constant rank 4. Because $[\vec{v}_i, \vec{v}_j] \equiv \mathbf{0}$, $\Delta$ is involutive and completely integrable by Frobenius' Theorem. At points where $x_7 = W_{\text{target}}$, $\vec{v}_4 = \mathbf{0}$ and $\Delta$ smoothly reduces to the 3-dimensional involutive distribution spanned by $\{\vec{v}_1, \vec{v}_2, \vec{v}_3\}$. Furthermore, the generated continuous flow maps commute:
+\begin{equation}
+    \varphi_i^{s_1} \circ \varphi_j^{s_2} = \varphi_j^{s_2} \circ \varphi_i^{s_1}, \quad \forall s_1, s_2 \ge 0
+\end{equation}
+forming an Abelian local Lie semigroup action (commuting local flows $\varphi_i^{s_1} \circ \varphi_j^{s_2} = \varphi_j^{s_2} \circ \varphi_i^{s_1}$ for all $s_1, s_2 \ge 0$ on the interior $\widetilde{\mathcal{M}}_{\text{flow}}^\circ$). Consequently, on the manifold interior where bounding constraints remain slack, the terminal flow state depends solely on the net integrated control amounts $(s_1, s_2, s_3, s_4) = \int_0^T u(t) dt$ and is strictly invariant to the sequential order in which infinitesimal operations are executed. When active boundary hypersurfaces are encountered (such as the MTU envelope $g_1(x) = 1500 x_2 - x_4 = 0$), control admissibility $\mathcal{U}(x)$ restricts admissible directions, requiring interleaving chaff packets ($u_3 > 0$) to expand total packet capacity before additional payload padding ($u_2 > 0$) can be absorbed.
+\end{corollary}
+
+\subsubsection{The Positive Lie Cone \texorpdfstring{$\mathcal{K}_{\text{net}}(x)$}{K\_net(x)}}
 The admissible deformation cone is the positive span:
 \begin{equation}
-    \mathcal{K}_{\text{net}}(x) = \left\{ \sum_{k=1}^4 u_k \vec{v}_k(x) \;\middle|\; u_k \ge 0 \right\} \subset T_x \mathcal{M}_{\text{flow}}
+    \mathcal{K}_{\text{net}}(x) = \left\{ \sum_{k=1}^4 u_k \vec{v}_k(x) \;\middle|\; u_k \ge 0 \right\} \subset T_x \widetilde{\mathcal{M}}_{\text{flow}}
 \end{equation}
 
 \begin{theorem}[Universal Invariant Preservation]
 \label{thm:invariant_universal}
-Let $x_0 \in \mathcal{M}_{\text{flow}}$ be an initial network flow vector. For any measurable control signal $u(t) \in \mathbb{R}_{\ge 0}^4$, the trajectory $x(t)$ defined by the dynamical system:
+Let $x_0 \in \widetilde{\mathcal{M}}_{\text{flow}}$ be an initial network flow vector. For any measurable and locally bounded control signal $u(t) \in L^\infty_{\text{loc}}(\mathbb{R}_{\ge 0}, \mathbb{R}_{\ge 0}^4)$ satisfying the admissible boundary rules ($u_2(t) \le (1500 - L_0) u_3(t)$ whenever $x_4(t) = 1500 x_2(t)$, and $u_1(t) = 0$ whenever $x_6(t) = 1.1 \times 10^8$), the trajectory $x(t)$ defined by the dynamical system:
 \begin{equation}
     \dot{x}(t) = \sum_{k=1}^4 u_k(t) \vec{v}_k(x(t)), \quad x(0) = x_0
 \end{equation}
-satisfies $x(t) \in \mathcal{M}_{\text{flow}}$ for all $t \ge 0$.
+satisfies $x(t) \in \widetilde{\mathcal{M}}_{\text{flow}}$ for all $t \ge 0$, with solutions existing uniquely and globally on $[0, \infty)$. Under discrete stepping, the continuous Lie cone guides directional descent while the closed-form analytical projection operator $\mathcal{P}_{\mathcal{M}}$ (Section~\ref{sec:algorithm}) eliminates discrete $\mathcal{O}(\Delta^2)$ truncation drift and enforces packet and byte integrality ($x_2 \in \mathbb{N}_{\ge 1}, x_4, x_6 \in \mathbb{N}$) and MTU clamping $x_4 \le 1500 x_2$, ensuring that the discrete state sequence remains strictly in the physical packet manifold $\mathcal{M}_{\text{flow}}$.
 \end{theorem}
 
 \begin{proof}
-Let $\Psi(x) = [\Psi_1(x), \Psi_2(x), \Psi_3(x)]^T = 0$ denote the algebraic constraint manifold. 
-Along the trajectory $x(t)$, the time derivative of the constraint function is:
-\begin{align}
-    \frac{d}{dt} \Psi(x(t)) &= J_\Psi(x(t)) \cdot \dot{x}(t) = J_\Psi(x(t)) \sum_{k=1}^4 u_k(t) \vec{v}_k(x(t)) \nonumber \\
-    &= \sum_{k=1}^4 u_k(t) \big( J_\Psi(x(t)) \cdot \vec{v}_k(x(t)) \big)
-\end{align}
-By Equations~(\ref{eq:tangent_byte_rate})--(\ref{eq:tangent_mean_len}), each generator $\vec{v}_k(x)$ is constructed such that $J_\Psi(x) \cdot \vec{v}_k(x) = 0$ identically for all $x \in \mathcal{M}_{\text{flow}}$. 
-
-Therefore:
+Let $\Psi(x) = [\Psi_1(x), \Psi_2(x), \Psi_3(x)]^T$ denote the algebraic constraint residual:
 \begin{equation}
-    \frac{d}{dt} \Psi(x(t)) \equiv 0 \implies \Psi(x(t)) = \Psi(x_0) = 0 \quad \forall t \ge 0
+    \Psi_1(x) = x_8 - \frac{10^6(x_4 + x_5)}{x_6}, \quad \Psi_2(x) = x_9 - \frac{10^6(x_2 + x_3)}{x_6}, \quad \Psi_3(x) = x_{10} - \frac{x_4}{x_2}
 \end{equation}
+Differentiating $\Psi_1(x(t))$ along the trajectory $\dot{x}(t) = \sum_{k=1}^4 u_k(t) \vec{v}_k(x(t))$:
+\begin{align}
+    \frac{d}{dt} \Psi_1(t) &= \dot{x}_8 - \frac{10^6(\dot{x}_4 + \dot{x}_5)}{x_6} + \frac{10^6(x_4 + x_5)\dot{x}_6}{x_6^2} \nonumber \\
+    &= \left( -u_1 \frac{x_8}{x_6} + u_2 \frac{10^6}{x_6} + u_3 \frac{L_0 \cdot 10^6}{x_6} \right) - \frac{10^6(u_2 + L_0 u_3)}{x_6} + \frac{10^6(x_4 + x_5) u_1}{x_6^2} \nonumber \\
+    &= -\frac{u_1(t)}{x_6(t)} \left( x_8 - \frac{10^6(x_4 + x_5)}{x_6} \right) = -\frac{u_1(t)}{x_6(t)} \Psi_1(t)
+\end{align}
+Identical algebraic cancellation yields:
+\begin{equation}
+    \frac{d}{dt} \Psi_2(t) = -\frac{u_1(t)}{x_6(t)} \Psi_2(t), \quad \frac{d}{dt} \Psi_3(t) = -\frac{u_3(t)}{x_2(t)} \Psi_3(t)
+\end{equation}
+where the $\Psi_3$ identity follows by substituting $\dot{x}_{10} = (u_2 + u_3 (L_0 - x_{10}))/x_2$, $\dot{x}_4 = u_2 + L_0 u_3$ and $\dot{x}_2 = u_3$ into $\dot{x}_{10} - \dot{x}_4/x_2 + x_4 \dot{x}_2 / x_2^2$. Hence, the constraint error vector $\Psi(t)$ satisfies the uncoupled homogeneous linear differential system $\dot{\Psi}(t) = A(t) \Psi(t)$, where $A(t) = \operatorname{diag}(-u_1(t)/x_6(t), -u_1(t)/x_6(t), -u_3(t)/x_2(t))$. Since $x_6(t) \ge x_6(0) > 0$ and $x_2(t) \ge x_2(0) \ge 1$, $A(t)$ is locally Lebesgue integrable ($A \in L^1_{\text{loc}}$). Because $x_0 \in \widetilde{\mathcal{M}}_{\text{flow}}$, the initial condition is $\Psi(0) = \mathbf{0}$. By the Carath{\'e}odory existence and uniqueness theorem for linear differential equations \cite{caratheodory1918vorlesungen}, the unique absolutely continuous solution is $\Psi(t) \equiv \mathbf{0}$ for all $t \ge 0$.
 
-Furthermore, examining the coordinate velocities:
+Furthermore, examining the base physical coordinate trajectories across the boundary faces of $\widetilde{\mathcal{M}}_{\text{flow}}$:
 \begin{itemize}
     \item $\dot{x}_0 = \dot{x}_1 = \dot{x}_3 = \dot{x}_5 \equiv 0$, satisfying strict immutability for $\mathcal{I}_{\text{imm}}$.
-    \item $\dot{x}_2 = u_3(t) \ge 0$, $\dot{x}_4 = u_2(t) + 20 u_3(t) \ge 0$, and $\dot{x}_6 = u_1(t) \ge 0$, satisfying directional monotonicity for $\mathcal{I}_{\text{mono}}^+$.
-    \item The forward header length satisfies $\dot{x}_{11} = 20 u_3(t) = 20 \dot{x}_2 \implies x_{11}(t) \ge 20 x_2(t)$.
+    \item $\dot{x}_6 = u_1(t) \ge 0 \implies x_6(t) \ge x_6(0) > 0$, and $x_6(t) \le 1.1 \times 10^8$ by the cap rule $u_1 = 0$ at the timeout boundary.
+    \item $\dot{x}_2 = u_3(t) \ge 0 \implies x_2(t) \ge x_2(0) \ge 1$.
+    \item \textbf{Total Bytes and Header Consistency ($x_4 \ge x_{11} + 20 x_2$):} Chaff packets carry zero application payload; each chaff packet adds exactly 20 bytes of IPv4 header plus transport header $H_0$ ($H_0 = 20$ for minimal TCP, $32$ with TSOPT, $8$ for UDP), so its total packet size is $L_0 = 20 + H_0$. Differentiating the gap function $h(x) = x_4 - x_{11} - 20 x_2$:
+    \begin{equation}
+    \begin{aligned}
+        \dot{h}(x(t)) &= \dot{x}_4 - \dot{x}_{11} - 20 \dot{x}_2 = (u_2 + L_0 u_3) - H_0 u_3 - 20 u_3 \\
+        &= u_2(t) + (L_0 - H_0 - 20) u_3(t) = u_2(t) \ge 0
+    \end{aligned}
+    \end{equation}
+    Because $\dot{h}(t) = u_2(t) \ge 0$, the inequality $x_4(t) \ge x_{11}(t) + 20 x_2(t)$ is monotonically non-decreasing along all Lie trajectories.
+    \item \textbf{Transport Header Bounds ($H_{\min} x_2 \le x_{11} \le H_{\max} x_2$):} For TCP ($x_1 = 6$), $H_0 \in [20, 60]$, yielding $\dot{x}_{11} = H_0 u_3(t) \in [20, 60] \dot{x}_2(t)$, ensuring $20 x_2(t) \le x_{11}(t) \le 60 x_2(t)$ is forward-invariant; for UDP ($x_1 = 17$), $H_0 = 8$ strictly, maintaining $x_{11}(t) = 8 x_2(t)$ identically.
+    \item \textbf{Nagumo-Br{\'e}zis Viability Condition for Manifold with Boundary and Corners:} The viable continuous domain $\widetilde{\mathcal{M}}_{\text{flow}}$ is defined by the intersection of smooth bounding hypersurfaces $g_i(x) \ge 0$:
+    \begin{align}
+        g_1(x) &= 1500 x_2 - x_4 \ge 0 \quad (\text{MTU bound}) \\
+        g_2(x) &= x_4 - x_{11} - 20 x_2 \ge 0 \quad (\text{Header + payload lower bound}) \\
+        g_3(x) &= x_{11} - x_2(20 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17}) \ge 0 \\
+        g_4(x) &= x_2(60 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17}) - x_{11} \ge 0 \\
+        g_5(x) &= x_6 - x_{6,\min} \ge 0 \\
+        g_6(x) &= x_2 - 1 \ge 0 \\
+        g_7(x) &= 1.1 \times 10^8 - x_6 \ge 0 \quad (\text{flow-timeout cap})
+    \end{align}
+    Because all constraint bounding functions $g_1(x), \dots, g_7(x)$ are affine, the Bouligand contingency (tangent) cone $T_{\widetilde{\mathcal{M}}_{\text{flow}}}(x)$ at any boundary or corner point coincides exactly with the intersection of the supporting half-spaces:
+    \begin{equation}
+        T_{\widetilde{\mathcal{M}}_{\text{flow}}}(x) = \bigcap_{i: g_i(x)=0} \{ v \in \mathbb{R}^{12} \mid \nabla g_i(x) \cdot v \ge 0 \}
+    \end{equation}
+    On any active boundary face where $g_i(x) = 0$, the inward normal velocity satisfies $\nabla g_i(x) \cdot \dot{x}(t) \ge 0$: $\nabla g_1 \cdot \dot{x} = (1500 - L_0) u_3(t) - u_2(t) \ge 0$ under admissible controls; $\nabla g_2 \cdot \dot{x} = u_2(t) \ge 0$; $\nabla g_3 \cdot \dot{x} = (H_0 - H_{\min}) u_3(t) \ge 0$; $\nabla g_4 \cdot \dot{x} = (H_{\max} - H_0) u_3(t) \ge 0$; $\nabla g_5 \cdot \dot{x} = u_1(t) \ge 0$; $\nabla g_6 \cdot \dot{x} = u_3(t) \ge 0$; $\nabla g_7 \cdot \dot{x} = -u_1(t) \ge 0$ on $\{x_6 = 1.1 \times 10^8\}$, because the admissibility rule forces $u_1(t) = 0$ there. At boundary corners (intersections of multiple active faces), $\dot{x}(t) \in T_{\widetilde{\mathcal{M}}_{\text{flow}}}(x)$. By the Nagumo-Br{\'e}zis viability theorem \cite{nagumo1942lage, brezis1970characterization}, $\widetilde{\mathcal{M}}_{\text{flow}}$ is forward-invariant under the dynamical system.
+    \item \textbf{TCP Window Trajectory:} $\dot{x}_7 = u_4(t) \mathbb{I}_{x_1=6} \operatorname{sat}((W_{\text{target}} - x_7)/\epsilon_{\text{win}})$. For UDP ($x_1 = 17$), $\vec{v}_{\text{win}} \equiv \mathbf{0}$, ensuring $x_7(t) \equiv 0$. For TCP ($x_1 = 6$), $x_7(t)$ moves monotonically toward $W_{\text{target}} \in [0, 65535]$ without crossing it, so it stays between $x_7(0)$ and $W_{\text{target}}$ and hence within $[0, 65535]$ for all $t \ge 0$.
+    \item \textbf{Global Existence and Uniqueness:} Because denominators $x_6(t) \ge x_6(0) > 0$ and $x_2(t) \ge x_2(0) \ge 1$ are bounded away from zero, the vector fields $\sum_{k=1}^4 u_k(t) \vec{v}_k(x)$ are Carath{\'e}odory functions with linear growth. By Carath{\'e}odory's existence and uniqueness theorem \cite{caratheodory1918vorlesungen}, solutions exist uniquely as absolutely continuous trajectories globally on $[0, \infty)$.
 \end{itemize}
-Hence, every generated point $x(t)$ is physically valid, causally consistent, and belongs strictly to $\mathcal{M}_{\text{flow}}$.
+Under discrete stepping, the continuous Lie cone guides directional descent while the closed-form analytical projection operator $\mathcal{P}_{\mathcal{M}}$ eliminates discrete $\mathcal{O}(\Delta^2)$ truncation drift and enforces packet and byte integrality ($x_2 \in \mathbb{N}_{\ge 1}, x_4 \in \mathbb{N}$) and MTU bounds ($x_{10} \le 1500$ bytes). Hence, every synthesized discrete flow state belongs strictly to $\mathcal{M}_{\text{flow}}$.
 \end{proof}
 
-\subsubsection{Riemannian Metric and Optimal Control Formulation}
-To quantify the operational transmission cost on the manifold, we equip $\mathcal{M}_{\text{flow}}$ with a Riemannian metric tensor $g(x)$:
-\begin{equation}
-    ds^2 = \sum_{i, j} g_{ij}(x) dx_i dx_j
-\end{equation}
-where the diagonal metric weights $g_{ii} = c_i^2$ reflect physical overhead:
+\subsubsection{Operational Transmission Cost and Optimal Control Formulation}
+To quantify the operational transmission cost on the manifold, we associate each infinitesimal generator with a physical unit penalty $c_k > 0$:
 \begin{itemize}
-    \item $c_1$ (Temporal Delay Cost): Minimal impact on network bandwidth ($c_1 = 10^{-4}$).
-    \item $c_2$ (Payload Padding Cost): Consumes link bandwidth ($c_2 = 10^{-2}$).
-    \item $c_3$ (Chaff Packet Cost): Consumes NIC socket allocations and buffer queues ($c_3 = 1.0$).
-    \item $c_4$ (Window Morphing Cost): Negligible header bit flip ($c_4 = 10^{-3}$).
+    \item $c_1$ (Temporal Delay Cost): $c_1 = 10^{-4}$ per second of induced delay.
+    \item $c_2$ (Payload Padding Cost): $c_2 = 10^{-2}$ per byte of padding bandwidth.
+    \item $c_3$ (Chaff Packet Cost): $c_3 = 1.0$ per transmitted probe packet.
+    \item $c_4$ (Window Morphing Cost): $c_4 = 10^{-3}$ per normalized window displacement ($s_4 = |W_{\text{target}} - x_7| / 65535.0 \in [0, 1]$), reflecting negligible socket option bit modification.
 \end{itemize}
 
 The evasion problem is formulated as an \textbf{Optimal Control Problem}:
@@ -198,4 +234,4 @@ The evasion problem is formulated as an \textbf{Optimal Control Problem}:
     \text{subject to} \quad & \dot{x}(t) = \sum_{k=1}^4 u_k(t) \vec{v}_k(x(t)), \quad x(0) = x_{\text{orig}} \\
     & F(x(T^*)) < 0 \quad (\text{Classifier Misclassification})
 \end{align}
-This formulation ensures that the adversary traverses the shortest physical geodesic to cross the decision boundary of the tree ensemble.
+Because the generators commute (Proposition~\ref{prop:lie_commutativity}), the net physical displacement depends solely on the integrated control amounts $s_k = \int_0^{T^*} u_k(t) dt \ge 0$, rendering the total operational cost $\mathcal{C}(s) = \sum_{k=1}^4 c_k s_k$ linear and path-independent. While the tree ensemble decision boundary $F(x) = 0$ is piecewise-constant and non-convex, FFE navigates the hyper-rectangular decision cells by greedily following the generator with maximal directional score decrease per unit cost ($-\nabla_k / c_k$) at each step, followed by boundary snapping (TSBS).

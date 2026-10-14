@@ -1,0 +1,299 @@
+{
+  "cohort_size": 100,
+  "budget": {
+    "1": {
+      "n": 100,
+      "asr": 41.0,
+      "pfr": 100.0,
+      "real_asr": 41.0,
+      "avg_queries": 5.5,
+      "avg_cost_l1": 0.13696688536262702,
+      "mean_delay_ms": 152.14922,
+      "total_time_s": 0.5732212066650391,
+      "dominant_generator": "win",
+      "dominant_share": 73.86363636363636
+    },
+    "2": {
+      "n": 100,
+      "asr": 48.0,
+      "pfr": 100.0,
+      "real_asr": 48.0,
+      "avg_queries": 7.95,
+      "avg_cost_l1": 0.18313791656796036,
+      "mean_delay_ms": 254.78358,
+      "total_time_s": 0.7455368041992188,
+      "dominant_generator": "win",
+      "dominant_share": 47.794117647058826
+    },
+    "3": {
+      "n": 100,
+      "asr": 64.0,
+      "pfr": 100.0,
+      "real_asr": 64.0,
+      "avg_queries": 9.94,
+      "avg_cost_l1": 0.2057385885856198,
+      "mean_delay_ms": 337.19093,
+      "total_time_s": 1.0179269313812256,
+      "dominant_generator": "time",
+      "dominant_share": 42.22222222222222
+    },
+    "5": {
+      "n": 100,
+      "asr": 95.0,
+      "pfr": 100.0,
+      "real_asr": 95.0,
+      "avg_queries": 11.49,
+      "avg_cost_l1": 0.21794452148861407,
+      "mean_delay_ms": 391.23747000000003,
+      "total_time_s": 0.9946789741516113,
+      "dominant_generator": "time",
+      "dominant_share": 51.94805194805195
+    },
+    "10": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.64,
+      "avg_cost_l1": 0.21811477905056934,
+      "mean_delay_ms": 396.0415700000001,
+      "total_time_s": 1.0063352584838867,
+      "dominant_generator": "time",
+      "dominant_share": 52.96610169491525
+    },
+    "20": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.64,
+      "avg_cost_l1": 0.21811477905056934,
+      "mean_delay_ms": 396.0415700000001,
+      "total_time_s": 1.0095722675323486,
+      "dominant_generator": "time",
+      "dominant_share": 52.96610169491525
+    },
+    "50": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.64,
+      "avg_cost_l1": 0.21811477905056934,
+      "mean_delay_ms": 396.0415700000001,
+      "total_time_s": 2.0678937435150146,
+      "dominant_generator": "time",
+      "dominant_share": 52.96610169491525
+    }
+  },
+  "generators": {
+    "Temporal Dilation Only": {
+      "n": 100,
+      "asr": 67.0,
+      "pfr": 100.0,
+      "real_asr": 67.0,
+      "avg_queries": 25.87,
+      "avg_cost_l1": 0.341852786944793,
+      "mean_delay_ms": 32525.56539,
+      "total_time_s": 8.90537428855896,
+      "dominant_generator": "time",
+      "dominant_share": 100.0
+    },
+    "Payload Padding Only": {
+      "n": 100,
+      "asr": 22.0,
+      "pfr": 100.0,
+      "real_asr": 22.0,
+      "avg_queries": 4.4,
+      "avg_cost_l1": 0.040496997359301116,
+      "mean_delay_ms": 0.0,
+      "total_time_s": 2.234821319580078,
+      "dominant_generator": "pad",
+      "dominant_share": 100.0
+    },
+    "Chaff Injection Only": {
+      "n": 100,
+      "asr": 23.0,
+      "pfr": 100.0,
+      "real_asr": 23.0,
+      "avg_queries": 4.74,
+      "avg_cost_l1": 0.09699588273161971,
+      "mean_delay_ms": 0.0,
+      "total_time_s": 2.524050235748291,
+      "dominant_generator": "chaff",
+      "dominant_share": 100.0
+    },
+    "Window Morphing Only": {
+      "n": 100,
+      "asr": 40.0,
+      "pfr": 100.0,
+      "real_asr": 40.0,
+      "avg_queries": 2.43,
+      "avg_cost_l1": 0.14584712511066994,
+      "mean_delay_ms": 0.0,
+      "total_time_s": 1.2675487995147705,
+      "dominant_generator": "win",
+      "dominant_share": 100.0
+    },
+    "Time + Padding": {
+      "n": 100,
+      "asr": 76.0,
+      "pfr": 100.0,
+      "real_asr": 76.0,
+      "avg_queries": 32.35,
+      "avg_cost_l1": 0.2832090876912552,
+      "mean_delay_ms": 24648.521500000003,
+      "total_time_s": 16.608985900878906,
+      "dominant_generator": "time",
+      "dominant_share": 93.73040752351098
+    },
+    "Time + Chaff": {
+      "n": 100,
+      "asr": 82.0,
+      "pfr": 100.0,
+      "real_asr": 82.0,
+      "avg_queries": 31.5,
+      "avg_cost_l1": 0.26374647446983823,
+      "mean_delay_ms": 16190.102819999998,
+      "total_time_s": 16.59720206260681,
+      "dominant_generator": "time",
+      "dominant_share": 88.14159292035399
+    },
+    "Padding + Chaff": {
+      "n": 100,
+      "asr": 43.0,
+      "pfr": 100.0,
+      "real_asr": 43.0,
+      "avg_queries": 7.75,
+      "avg_cost_l1": 0.1309292409641991,
+      "mean_delay_ms": 0.0,
+      "total_time_s": 4.02300500869751,
+      "dominant_generator": "chaff",
+      "dominant_share": 63.559322033898304
+    },
+    "Complete Lie Cone": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.64,
+      "avg_cost_l1": 0.21811477905056934,
+      "mean_delay_ms": 396.0415700000001,
+      "total_time_s": 6.1449525356292725,
+      "dominant_generator": "time",
+      "dominant_share": 52.96610169491525
+    }
+  },
+  "costs": {
+    "A (Default / Balanced)": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.64,
+      "avg_cost_l1": 0.21811477905056934,
+      "mean_delay_ms": 396.0415700000001,
+      "total_time_s": 5.987864255905151,
+      "dominant_generator": "time",
+      "dominant_share": 52.96610169491525
+    },
+    "B (Latency-Sensitive)": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.35,
+      "avg_cost_l1": 0.2455020155408202,
+      "mean_delay_ms": 132.91332999999997,
+      "total_time_s": 6.087679862976074,
+      "dominant_generator": "time",
+      "dominant_share": 43.91304347826087
+    },
+    "C (Unconstrained Delay)": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.55,
+      "avg_cost_l1": 0.22308376307850494,
+      "mean_delay_ms": 396.0522200000001,
+      "total_time_s": 6.312354803085327,
+      "dominant_generator": "time",
+      "dominant_share": 52.36051502145923
+    },
+    "D (Uniform / Flat)": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.51,
+      "avg_cost_l1": 0.2372467211591226,
+      "mean_delay_ms": 214.19523999999998,
+      "total_time_s": 6.496530771255493,
+      "dominant_generator": "time",
+      "dominant_share": 47.391304347826086
+    }
+  },
+  "epsilon": {
+    "0.0": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.64,
+      "avg_cost_l1": 0.21811477905056934,
+      "mean_delay_ms": 396.0415700000001,
+      "total_time_s": 5.946625471115112,
+      "dominant_generator": "time",
+      "dominant_share": 52.96610169491525
+    },
+    "1e-06": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.64,
+      "avg_cost_l1": 0.21811477905056934,
+      "mean_delay_ms": 396.0415700000001,
+      "total_time_s": 5.662671327590942,
+      "dominant_generator": "time",
+      "dominant_share": 52.96610169491525
+    },
+    "0.0001": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.64,
+      "avg_cost_l1": 0.21811477905056934,
+      "mean_delay_ms": 396.0415700000001,
+      "total_time_s": 5.883240461349487,
+      "dominant_generator": "time",
+      "dominant_share": 52.96610169491525
+    },
+    "0.01": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.64,
+      "avg_cost_l1": 0.21811477905056934,
+      "mean_delay_ms": 396.0415700000001,
+      "total_time_s": 5.751570224761963,
+      "dominant_generator": "time",
+      "dominant_share": 52.96610169491525
+    },
+    "1.0": {
+      "n": 100,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 11.45,
+      "avg_cost_l1": 0.21805070375489852,
+      "mean_delay_ms": 394.0623300000001,
+      "total_time_s": 6.059021711349487,
+      "dominant_generator": "time",
+      "dominant_share": 51.94805194805195
+    }
+  }
+}

@@ -19,25 +19,25 @@ where $t_i \in \mathbb{R}_{\ge 0}$ represents the physical transmission timestam
     0 \le t_1 \le t_2 \le \dots \le t_m
 \end{equation}
 
-\subsubsection{The Space of Valid Packet Streams $\mathcal{P}_{\text{valid}}$}
+\subsubsection{The Space of Valid Packet Streams \texorpdfstring{$\mathcal{P}_{\text{valid}}$}{P\_valid}}
 Not all arbitrary bit sequences are admissible in real-world networking. We denote by $\mathcal{P}_{\text{valid}} \subset (\Omega \times \mathbb{R}_{\ge 0})^*$ the set of packet streams that satisfy three mandatory physical constraints:
 \begin{enumerate}
-    \item \textbf{Syntactic RFC Compliance:} Every packet $p_i$ must have valid header fields, matching total length declarations, and correct Internet Checksums:
+    \item \textbf{Syntactic RFC Compliance:} Every packet $p_i$ must have valid protocol header fields, matching length declarations, and correct Internet Checksums (RFC 791 \cite{rfc791} IPv4 header checksum, RFC 1071 \cite{rfc1071} checksum calculation, and RFC 9293 \cite{rfc9293} TCP / RFC 768 \cite{rfc768} UDP checksums; for UDP over IPv4, the transport checksum is either computed or legitimately zero):
     \begin{equation}
-        \text{Checksum}(p_i) = \text{RFC791}(\text{hdr}_{\text{net}}) = 0
+        \text{ValidChecksum}_{\text{IP}}(p_i) = \text{True}, \quad \text{ValidChecksum}_{\text{Transport}}(p_i) = \text{True}
     \end{equation}
-    Packets with corrupted checksums are discarded at the physical NIC layer by intermediate routers before reaching an intrusion detection sensor.
-    \item \textbf{Transport State Machine Consistency:} For TCP traffic, packets must respect the TCP finite state machine (RFC 793): sequence numbers ($seq$) and acknowledgment numbers ($ack$) must advance monotonically consistent with the number of transmitted payload bytes:
+    Packets with corrupted checksums are discarded upon ingress by standard network stacks and intermediate middleboxes before reaching an intrusion detection sensor.
+    \item \textbf{Transport State Machine Consistency:} For TCP traffic, packets must respect the TCP finite state machine (RFC 9293 \cite{rfc9293}): for consecutive in-order forward segments without retransmission, sequence numbers ($seq$) and acknowledgment numbers ($ack$) advance according to transmitted payload bytes and handshake flags:
     \begin{equation}
-        seq_{i+1} = seq_i + \text{Len}(\text{payload}_i)
+        seq_{i+1} = seq_i + \text{Len}(\text{payload}_i) + \mathbb{I}_{\text{SYN/FIN}}
     \end{equation}
-    \item \textbf{Maximum Transmission Unit (MTU) Bounds:} The total length of any single physical packet cannot exceed the link-layer MTU (typically 1,500 bytes for standard Ethernet):
+    \item \textbf{Maximum Transmission Unit (MTU) Bounds:} The total length of any single physical IP packet $\text{Len}_{\text{IP}}(p_i)$ (including IP header, transport header, and payload) cannot exceed the network interface IP MTU ($1,500$ bytes for standard Ethernet per RFC 894 \cite{rfc894} and RFC 791 \cite{rfc791}, corresponding to link-layer frame size $\le 1514$ bytes):
     \begin{equation}
-        \forall i \in \{1, \dots, m\}, \quad \text{Len}(p_i) \le \text{MTU} = 1500 \text{ bytes}
+        \forall i \in \{1, \dots, m\}, \quad \text{Len}_{\text{IP}}(p_i) \le \text{MTU}_{\text{IP}} = 1500 \text{ bytes}
     \end{equation}
 \end{enumerate}
 
-\subsection{Flow-Based Telemetry Feature Mapping $\Phi$}
+\subsection{Flow-Based Telemetry Feature Mapping \texorpdfstring{$\Phi$}{Phi}}
 A network flow is defined as a bidirectional sequence of packets sharing a common 5-tuple socket identifier:
 \begin{equation}
     \text{FlowID} = (\text{IP}_{\text{src}}, \text{IP}_{\text{dst}}, \text{Port}_{\text{src}}, \text{Port}_{\text{dst}}, \text{Proto})
@@ -65,16 +65,18 @@ To formulate our analysis concretely, we focus on a representative, standardized
         x_2 = |\{ p_i \in P \mid \text{Dir}(p_i) = \text{Fwd} \}|
     \end{equation}
     \item[$x_3$:] \textbf{Total Backward Packets ($N_{\text{bwd}}$):} The total number of response packets received from the server.
-    \item[$x_4$:] \textbf{Total Length of Forward Packets ($B_{\text{fwd}}$):} Total bytes transmitted in the forward direction:
+    \item[$x_4$:] \textbf{Total Length of Forward Packets ($B_{\text{fwd}}$):} Total cumulative wire bytes (IP packet lengths including IP/transport headers and payload) transmitted in the forward direction:
     \begin{equation}
         x_4 = \sum_{p_i \in P_{\text{fwd}}} \text{Len}(p_i)
     \end{equation}
+    We note that while some CICFlowMeter releases record application payload bytes exclusively for this attribute, $x_4$ in our schema adheres to IPFIX/NetFlow wire-level standards by measuring total IP-layer forward bytes (inclusive of IP and transport headers), providing an algebraically consistent physical conservation foundation with header length ($x_{11}$).
     \item[$x_5$:] \textbf{Total Length of Backward Packets ($B_{\text{bwd}}$):} Total bytes received in the backward direction.
+
     \item[$x_6$:] \textbf{Flow Duration ($T$):} Total elapsed time of the flow in microseconds:
     \begin{equation}
         x_6 = (t_m - t_1) \times 10^6 \quad (\mu\text{s})
     \end{equation}
-    \item[$x_7$:] \textbf{Initial Forward Window Bytes ($W_{\text{fwd}}$):} TCP receive window size advertised in the initial SYN/ACK handshake packet ($0 \le x_7 \le 65535$).
+    \item[$x_7$:] \textbf{Initial Forward Window Bytes ($W_{\text{fwd}}$):} TCP receive window size advertised in the initial client forward SYN packet ($0 \le x_7 \le 65535$ for TCP flows with $x_1=6$; for UDP flows with $x_1=17$, $x_7 \equiv 0$ as UDP is connectionless).
     \item[$x_8$:] \textbf{Flow Bytes/s ($R_B$):} The overall transmission rate in bytes per second:
     \begin{equation}
         x_8 = \frac{x_4 + x_5}{x_6 \times 10^{-6}} = \frac{10^6 \cdot (x_4 + x_5)}{x_6}
@@ -87,75 +89,95 @@ To formulate our analysis concretely, we focus on a representative, standardized
     \begin{equation}
         x_{10} = \frac{x_4}{\max(1, x_2)}
     \end{equation}
-    \item[$x_{11}$:] \textbf{Forward Header Length ($H_{\text{fwd}}$):} Cumulative size of transport headers in the forward direction. Because the minimum IPv4 header is 20 bytes and minimum TCP header is 20 bytes (without options):
+    \item[$x_{11}$:] \textbf{Forward Header Length ($H_{\text{fwd}}$):} Cumulative size of transport headers in the forward direction. Because minimum transport header sizes are 20 bytes for TCP ($x_1=6$) and 8 bytes for UDP ($x_1=17$):
     \begin{equation}
-        x_{11} \ge x_2 \times 20 \text{ bytes}
+        x_{11} \ge x_2 \times (20 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17}) \text{ bytes}
+    \end{equation}
+    Similarly, forward packet bytes $x_4$ include the 20-byte IPv4 header plus transport header and payload, bounded by the physical Ethernet Maximum Transmission Unit (IP MTU $\le 1500$ bytes, equating to link-layer frame size $\le 1514$ bytes):
+    \begin{equation}
+        x_2 \times (40 \cdot \mathbb{I}_{x_1=6} + 28 \cdot \mathbb{I}_{x_1=17}) \le x_4 \le 1500 x_2 \text{ bytes}
     \end{equation}
 \end{enumerate}
 
 \subsection{Formal Categorization of Feature Invariants}
-We formally partition the feature index set $\mathcal{D} = \{0, 1, \dots, 11\}$ into four disjoint sets based on physical network semantics:
+We categorize the feature indices $\mathcal{D} = \{0, 1, \dots, 11\}$ into five operational constraint classes based on physical network semantics:
 
-\subsubsection{1. Immutable Features $\mathcal{I}_{\text{imm}} = \{0, 1, 3, 5\}$}
-These attributes are strictly fixed. Destination port ($x_0$) and protocol ($x_1$) cannot be changed without redirecting the attack to an unintended service. Backward packets ($x_3$) and backward bytes ($x_5$) are generated by the target server; an external client cannot directly control server responses. Thus:
+\subsubsection{Immutable Features \texorpdfstring{$\mathcal{I}_{\text{imm}} = \{0, 1, 3, 5\}$}{I\_imm = \{0, 1, 3, 5\}}}
+These attributes are strictly fixed. Destination port ($x_0 \in \{1, \dots, 65535\}$) and protocol ($x_1 \in \{6, 17\}$) cannot be changed without redirecting the attack to an unintended service. Backward packets ($x_3$) and backward bytes ($x_5$) are generated by the target server; an external client cannot directly control server responses. Thus:
 \begin{equation}
     \forall i \in \mathcal{I}_{\text{imm}}, \quad \Delta x_i = 0
 \end{equation}
 
-\subsubsection{2. Monotonically Non-Decreasing Features $\mathcal{I}_{\text{mono}}^+ = \{2, 4, 6\}$}
-An attacker can inject dummy packets ($\Delta N_{\text{fwd}} \ge 0$), pad payloads with null bytes ($\Delta B_{\text{fwd}} \ge 0$), or delay transmissions ($\Delta T \ge 0$). However, an attacker cannot subtract payload bytes required to deliver their malicious shellcode, nor can they transmit negative packets:
+\subsubsection{Monotonically Non-Decreasing Features \texorpdfstring{$\mathcal{I}_{\text{mono}}^+ = \{2, 4, 6, 11\}$}{I\_mono+ = \{2, 4, 6, 11\}}}
+An attacker can inject dummy packets ($\Delta N_{\text{fwd}} \ge 0$, incrementing packet count $x_2$ and header length $x_{11}$ by $H_0 \Delta N_{\text{fwd}}$), pad payloads with null bytes ($\Delta B_{\text{fwd}} \ge 0$, incrementing forward byte volume $x_4$), or delay transmissions ($\Delta T \ge 0$, dilating duration $x_6$). However, an attacker cannot subtract payload bytes required to deliver their malicious shellcode, nor can they transmit negative packets:
 \begin{equation}
     \forall j \in \mathcal{I}_{\text{mono}}^+, \quad \Delta x_j \ge 0
 \end{equation}
 
-\subsubsection{3. Bounded Continuous Features $\mathcal{I}_{\text{bound}} = \{7\}$}
-The TCP receive window size $x_7$ can be modulated within operating system protocol limits:
+\subsubsection{Bounded Continuous Features \texorpdfstring{$\mathcal{I}_{\text{bound}} = \{7\}$}{I\_bound = \{7\}}}
+The TCP receive window size $x_7$ can be modulated within operating system protocol limits for TCP flows ($0 \le x_7 + \Delta x_7 \le 65535$ if $x_1 = 6$; for UDP flows with $x_1 = 17$, $x_7 \equiv 0$ is fixed):
 \begin{equation}
-    0 \le x_7 + \Delta x_7 \le 65535
+    0 \le x_7 + \Delta x_7 \le 65535 \cdot \mathbb{I}_{x_1=6}
 \end{equation}
 
-\subsubsection{4. Coupled Features $\mathcal{I}_{\text{dep}} = \{8, 9, 10, 11\}$}
-Features $x_8, x_9, x_{10}, x_{11}$ are deterministic, non-linear algebraic functions of base metrics:
+\subsubsection{Equality-Coupled Derived Features \texorpdfstring{$\mathcal{I}_{\text{dep}} = \{8, 9, 10\}$}{I\_dep = \{8, 9, 10\}}}
+Features $x_8, x_9, x_{10}$ are deterministic, non-linear algebraic functions of base metrics:
 \begin{align}
     x_8 &= g_8(x_4, x_5, x_6) = \frac{10^6 \cdot (x_4 + x_5)}{x_6} \\
     x_9 &= g_9(x_2, x_3, x_6) = \frac{10^6 \cdot (x_2 + x_3)}{x_6} \\
-    x_{10} &= g_{10}(x_4, x_2) = \frac{x_4}{x_2} \\
-    x_{11} &= g_{11}(x_2, x_{11}) = \max(x_2 \times 20, x_{11})
+    x_{10} &= g_{10}(x_4, x_2) = \frac{x_4}{\max(1, x_2)}
 \end{align}
 
-\subsection{The Flow Manifold $\mathcal{M}_{\text{flow}}$}
-The image of $\mathcal{P}_{\text{valid}}$ under $\Phi$ defines an intrinsic, non-convex, semi-algebraic sub-manifold:
+\subsubsection{Structural Inequality Invariants \texorpdfstring{$\mathcal{I}_{\text{ineq}} = \{4, 11\}$}{I\_ineq = \{4, 11\}}}
+Features $x_4$ and $x_{11}$ satisfy protocol bounding inequalities: $x_{11} \ge x_2 \times (20 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17})$, $x_4 \ge x_{11} + 20 x_2 \ge x_2 \times (40 \cdot \mathbb{I}_{x_1=6} + 28 \cdot \mathbb{I}_{x_1=17})$, with MTU ceiling $x_4 \le 1500 x_2$. Note that operational degrees of freedom may couple multiple categories: for instance, forward byte volume $x_4$ is both monotonically non-decreasing ($\Delta x_4 \ge 0$) and bounded by structural MTU inequalities ($L_0 x_2 \le x_4 \le 1500 x_2$), while forward header bytes $x_{11}$ is monotonically non-decreasing ($\Delta x_{11} \ge 0$) under chaff injection. In Algorithm~\ref{alg:tsbs}, $\mathcal{I}_{\text{mono}}^+ = \{2, 4, 6, 11\}$ represents the mutable monotonic features.
+
+\subsection{The Flow Manifold \texorpdfstring{$\mathcal{M}_{\text{flow}}$}{M\_flow} and Ambient Relaxation \texorpdfstring{$\widetilde{\mathcal{M}}_{\text{flow}}$}{M\_tilde}}
+The physical packet-level flow space is defined as the discrete image of valid packet streams under the telemetry exporter:
 \begin{equation}
-    \mathcal{M}_{\text{flow}} = \left\{ x \in \mathbb{R}^{12} \;\middle|\; \exists P \in \mathcal{P}_{\text{valid}} \text{ s.t. } \Phi(P) = x \right\}
+    \mathcal{M}_{\text{flow}} = \left\{ x \in \mathbb{R}^{12} \;\middle|\; \exists P \in \mathcal{P}_{\text{valid}} \text{ s.t. } \Phi(P) = x \right\} \subset \mathbb{Z}_{\ge 0}^9 \times \mathbb{R}_{\ge 0}^3
 \end{equation}
-Equivalently, $\mathcal{M}_{\text{flow}}$ is the algebraic intersection:
+where discrete coordinates $(x_0, x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_{11})$ satisfy integrality (with packet counts $x_2 \in \mathbb{N}_{\ge 1}, x_3 \in \mathbb{N}_{\ge 0}$, duration in integer microseconds $1 \le x_6 \le 1.1 \times 10^8\,\mu\text{s}$ bounded below the 120-second exporter timeout), rates $(x_8, x_9, x_{10}) \in \mathbb{R}_{\ge 0}^3$, and packet lengths comply with interface MTU restrictions ($x_4 \le 1500 x_2$). All formal definitions and evaluations focus on IPv4 ($L_{\text{IPv4}} = 20$ bytes) and standard Ethernet MTU per RFC~791 and RFC~894 \cite{rfc791, rfc894}.
+
+To enable continuous differential geometric optimization, we define the \emph{continuous ambient flow manifold} $\widetilde{\mathcal{M}}_{\text{flow}} \subset \mathbb{R}^{12}$ by relaxing packet counts and duration to positive reals ($x_2 \ge 1, x_6 > 0$), with transport header limits $H_{\min}(x_1) = 20 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17}$ and $H_{\max}(x_1) = 60 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17}$:
 \begin{equation}
-    \mathcal{M}_{\text{flow}} = \left\{ x \in \mathbb{R}^{12} \;\middle|\; 
+    \widetilde{\mathcal{M}}_{\text{flow}} = \left\{ x \in \mathbb{R}^{12} \;\middle|\; 
     \begin{aligned}
-        &x_0 \in \mathbb{Z}_{\ge 1}, \quad x_1 \in \{6, 17\}, \quad x_2 \ge 1, \quad x_4 \ge x_2 \times 20, \\
-        &x_6 > 0, \quad 0 \le x_7 \le 65535, \\
-        &x_8 = \frac{10^6 (x_4 + x_5)}{x_6}, \quad x_9 = \frac{10^6 (x_2 + x_3)}{x_6}, \quad x_{10} = \frac{x_4}{x_2}
+        &x_0 \in [1, 65535], \quad x_1 \in \{6, 17\}, \quad x_2 \ge 1, \quad x_3, x_5 \ge 0, \\
+        &H_{\min}(x_1) x_2 \le x_{11} \le H_{\max}(x_1) x_2, \\
+        &x_{11} + 20 x_2 \le x_4 \le 1500 x_2, \quad 0 < x_6 \le 1.1 \times 10^8, \\
+        &0 \le x_7 \le 65535 \cdot \mathbb{I}_{x_1=6}, \quad x_{10} = x_4 / x_2, \\
+        &x_8 = 10^6 (x_4 + x_5)/x_6, \quad x_9 = 10^6 (x_2 + x_3)/x_6
     \end{aligned}
     \right\}
 \end{equation}
+Continuous vector field flows are formulated on $\widetilde{\mathcal{M}}_{\text{flow}}$, while discrete execution snaps continuous trajectories back to $\mathcal{M}_{\text{flow}}$ via the closed-form projection operator $\mathcal{P}_{\mathcal{M}}$ (Section~\ref{sec:algorithm}).
 
 \subsection{Formal Threat Model}
 We formalize the attacker's operational game under standard adversarial machine learning criteria:
 
 \begin{itemize}
-    \item \textbf{Adversary's Goal:} Given a malicious flow $x_{\text{orig}} = \Phi(P) \in \mathcal{M}_{\text{flow}}$ classified as an attack ($P(\text{Malicious} \mid x_{\text{orig}}) \ge 0.5$), synthesize a modified flow $x^* = \Phi(P^*) \in \mathcal{M}_{\text{flow}}$ such that:
+    \item \textbf{Adversary's Goal:} Given a malicious flow $x_{\text{orig}} = \Phi(P) \in \mathcal{M}_{\text{flow}}$ classified as an attack ($P(\text{Malicious} \mid x_{\text{orig}}) \ge 0.5 \iff F(x_{\text{orig}}) \ge 0$), synthesize a modified flow $x^* = \Phi(P^*) \in \mathcal{M}_{\text{flow}}$ such that:
     \begin{equation}
-        P(\text{Malicious} \mid x^*) < 0.5
+        P(\text{Malicious} \mid x^*) < 0.5 \iff F(x^*) < 0
     \end{equation}
-    \item \textbf{Adversary's Knowledge:} We assume grey-box or black-box query access: the adversary can submit candidate flow features $x$ (or transmit probe traffic) and observe the soft classification probability $p = P(\text{Malicious} \mid x) \in [0, 1]$.
+    \item \textbf{Adversary's Knowledge (Two-Tier Model):} We evaluate two operational threat tiers:
+    \begin{enumerate}
+        \item \emph{Tier 1 (White-Box Tree Access):} The adversary has full access to the ensemble architecture, leaf weights, and split thresholds $\Theta_j$, enabling exact Tree-Split Boundary Snapping (TSBS). The primary comparative benchmark (Section~\ref{sec:results}) evaluates this tier.
+        \item \emph{Tier 2 (Black-Box Transfer / Query Access):} The adversary lacks internal access to target model structures; evasion trajectories are synthesized either via black-box directional exploratory probes or crafted on a local surrogate tree ensemble and transferred zero-knowledge to unseen target architectures. The cross-architecture transferability benchmark (Table~\ref{tab:transferability}) evaluates this tier.
+    \end{enumerate}
     \item \textbf{Functionality Preservation:} The transformed packet trace $P^*$ must preserve the original malicious semantics:
     \begin{equation}
         \mathcal{S}(P^*) = \mathcal{S}(P)
     \end{equation}
-    meaning exploit delivery, shellcode execution, or denial-of-service degradation must succeed on the victim target.
+    meaning exploit delivery, shellcode execution, authentication cracking, or target service degradation must succeed on the victim target. Under Pierazzi's problem-space formulation, malicious utility preservation $\mathcal{S}(P^*) = \mathcal{S}(P)$ operates across two regimes:
+    \begin{itemize}
+        \item \emph{Discrete Payload Exploits (SSH Brute Force, Web attacks, Infiltration):} Payload padding ($\vec{v}_{\text{pad}}$) appends non-executable trailing bytes or protocol-compliant padding (e.g., \texttt{SSH\_MSG\_IGNORE} per RFC 4253 \cite{rfc4253}) without modifying exploit byte sequences or credentials, guaranteeing exact functional execution.
+        \item \emph{Volumetric Attacks (DoS/DDoS, UDP floods):} Temporal dilation ($\vec{v}_{\text{time}}$) spreads packet transmissions over an expanded duration; while this trades peak instantaneous bandwidth flooding for persistent evasion, all packets reach the target service, consuming connection table slots, server memory, and thread pool resources (analogous to low-and-slow DoS attacks like Slowloris), preserving service degradation capability while evading volumetric rate filters.
+    \end{itemize}
+    \item \textbf{Deployment Architecture (Ingress Perimeter Biflow Inspection):} In alignment with enterprise boundary defense deployments, the NIDS operates as a bidirectional telemetry inspection sensor (e.g., NetFlow~v9 / IPFIX biflow collector per RFC~5103 at an enterprise border router or DMZ firewall) that monitors aggregated flow records. While the sensor aggregates both transmission directions into the flow record, the adversary only controls the client-side attack endpoint. Consequently, the adversary actively manipulates forward flow parameters ($x_2, x_4, x_6, x_7, x_{11}$) and the resulting coupled rates ($x_8, x_9, x_{10}$) via inline proxy mechanics or endpoint socket options, while backward attributes ($x_3, x_5$) reflect autonomous external server responses and are treated as strictly immutable ($\mathcal{I}_{\text{imm}}$). Forward chaff packets are transmitted as unidirectional forward pure ACKs carrying zero application payload, current sequence number $\text{seq} = \text{SND.NXT}$, and valid acknowledgment $\text{ack} = \text{RCV.NXT}$. Under RFC~9293 \S 3.8.1, a TCP endpoint must never generate an acknowledgment in response to receiving a pure ACK (preventing infinite ACK loops), guaranteeing that forward pure ACKs elicit strictly zero backward packets or bytes ($\Delta x_3 = 0, \Delta x_5 = 0$). Furthermore, to avoid triggering peer fast retransmit or spurious loss recovery under RFC~5681 \S 3.2 \cite{rfc5681} (which requires three duplicate ACKs), forward chaff segments are bounded or interleaved with forward payload segments, window updates, or spaced beyond duplicate ACK thresholds. Window morphing ($\vec{v}_{\text{win}}$) specifically modifies the initial SYN packet header window field (synchronized with RFC 7323 \cite{rfc7323} WSCALE) prior to transmission. For protocols involving application-layer encryption (such as SSH), application payload padding (e.g., RFC 4253 \S 11.2 \cite{rfc4253} \texttt{SSH\_MSG\_IGNORE}) is applied at the client application/socket layer prior to cryptographic encapsulation.
     \item \textbf{Minimal Transmission Cost:} The adversary seeks to minimize operational transmission overhead:
     \begin{equation}
-        \min \quad \mathcal{C}(x^*, x_{\text{orig}}) = \sum_{i=0}^{11} w_i |x_i^* - x_i^{\text{orig}}|
+        \min \quad \mathcal{C}(x^*, x_{\text{orig}}) = \sum_{k=1}^4 c_k s_k
     \end{equation}
-    where $w_i$ denotes the physical cost associated with metric $i$ (e.g., bandwidth inflation, transmission latency, memory socket allocation).
+    where $c_k$ denotes the physical operational unit cost of executing generator $k$ (e.g., transmission latency, bandwidth expansion, socket buffer allocation).
 \end{itemize}

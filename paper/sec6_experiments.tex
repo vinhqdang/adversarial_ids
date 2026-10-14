@@ -4,19 +4,19 @@
 \subsection{Experimental Benchmark Setup \& Methodology}
 \label{sec:experiments}
 
-This section details the empirical methodology employed to validate Flow-Field Evasion. We formalize the multi-dataset benchmark suite spanning three heterogeneous network environments (CSE-CIC-IDS2018, UNSW-NB15, and CIDDS-002), describe the evaluated attack families, outline the GPU hardware environment, specify the target tree ensemble architectures, and define the implementations of five competitive baseline evasion algorithms from the 2025--2026 literature.
+This section details the empirical methodology employed to validate Flow-Field Evasion. We formalize the multi-dataset benchmark suite spanning three heterogeneous network environments (CSE-CIC-IDS2018, UNSW-NB15, and CIDDS-001), describe the evaluated attack families, outline the GPU hardware environment, specify the target tree ensemble architectures, and define the implementations of five competitive baseline evasion algorithms from the literature.
 
 \subsubsection{Multi-Dataset Benchmark Suite: Rationale \& Architecture}
-A pervasive limitation in published adversarial intrusion detection research is the reliance on a single benchmark dataset. As established by Apruzzese et al.~\cite{apruzzese2022role, apruzzese2023modeling} and Dang~\cite{dang2022detecting, dang2023learning}, evaluations confined to a single testbed introduce severe threats to external validity. Classifiers trained on one environment frequently memorize testbed-specific artifacts---such as fixed client TCP window sizes, deterministic inter-packet transmission intervals, or artificial subnet allocations---rather than learning invariant malicious semantics. Furthermore, empirical studies by Dang~\cite{dang2022studying, dang2023learning} demonstrated that detection models suffer acute performance degradation when transferring knowledge across heterogeneous network environments.
+A pervasive limitation in published adversarial intrusion detection research is the reliance on a single benchmark dataset. As established by Apruzzese et al.~\cite{apruzzese2022modeling, apruzzese2023real, apruzzese2024evaluating} and Dang~\cite{dang2022detecting, dang2023learning, dang2025towards}, evaluations confined to a single testbed introduce severe threats to external validity. Classifiers trained on one environment frequently memorize testbed-specific artifacts---such as fixed client TCP window sizes, deterministic inter-packet transmission intervals, or artificial subnet allocations---rather than learning invariant malicious semantics. Furthermore, empirical studies by Dang~\cite{dang2022detecting, dang2023learning} demonstrated that detection models suffer acute performance degradation when transferring knowledge across heterogeneous network environments.
 
 To guarantee that Flow-Field Evasion's effectiveness stems from fundamental physical flow conservation laws rather than dataset-specific quirks, we benchmark across \textbf{three diverse, widely cited NIDS datasets}:
 \begin{enumerate}
-    \item \textbf{CSE-CIC-IDS2018 (Enterprise Infrastructure) \cite{sharafaldin2018toward}:} Captured within an enterprise infrastructure of 420 victim hosts, 33 servers, and a dedicated attack network over 10 operating days. Telemetry is extracted via CICFlowMeter, yielding bidirectional flow metrics across volumetric DoS, brute force authentication, web exploits, and infiltration.
+    \item \textbf{CSE-CIC-IDS2018 (Enterprise Infrastructure) \cite{sharafaldin2018toward}:} Captured within an enterprise infrastructure of 420 victim hosts, 30 servers, and a dedicated attack network over 10 operating days. Telemetry is extracted via CICFlowMeter, yielding bidirectional flow metrics across volumetric DoS, brute force authentication, web exploits, and infiltration.
     \item \textbf{UNSW-NB15 (Contemporary Hybrid Testbed) \cite{moustafa2015unsw}:} Generated in the Cyber Range Lab of the Australian Centre for Cyber Security using IXIA PerfectStorm. It blends real modern normal activities with diverse modern low-footprint attack categories (Fuzzers, Analysis, Backdoors, DoS, Exploits, Generic, Reconnaissance, Shellcode, Worms) across 49 features extracted via Argus and Bro-IDS.
-    \item \textbf{CIDDS-002 / CIDDS-001 (Cloud OpenStack Environment) \cite{ring2017flow}:} Captured within an OpenStack cloud environment with realistic background communication between cloud clients and external servers. Extensively analyzed by Dang~\cite{dang2021evaluating, dang2022studying} for machine learning evaluation and attack detection, CIDDS provides unidirectional and bidirectional NetFlow records with realistic cloud noise and varied attack patterns (DoS, Brute Force, Port Scans, and Ping Scans).
+    \item \textbf{CIDDS-001 (Cloud OpenStack Environment) \cite{ring2017flow}:} Captured within an OpenStack cloud environment with realistic background communication between cloud clients and external servers. Extensively analyzed by Dang~\cite{dang2021evaluating, dang2022studying} for machine learning evaluation and attack detection, CIDDS-001 provides flow records with realistic cloud noise and varied attack patterns.
 \end{enumerate}
 
-For each benchmark, we construct a representative evaluation corpus of 12,000 flows ($75\%$ benign background, $25\%$ malicious intrusions) maintaining identical temporal and volumetric distributions to the original raw packet captures. In the primary CSE-CIC-IDS2018 enterprise testbed:
+For each benchmark environment, we construct a statistically calibrated evaluation corpus of 12,000 flows ($75\%$ benign background, $25\%$ malicious intrusions) parameterized to replicate the empirical marginal distributions, duration dynamics, and volumetric profiles of the published testbeds. Consistent with the threat model (Section~\ref{sec:formulation}), the testbed models an \emph{ingress perimeter inspection architecture} where an enterprise edge gateway evaluates incoming forward telemetry in real time before bidirectional session termination. In the primary CSE-CIC-IDS2018 enterprise testbed:
 \begin{itemize}
     \item \textbf{Benign Background Telemetry ($75\%$, $9,000$ flows):} Synthesized to reflect realistic enterprise communication patterns:
     \begin{itemize}
@@ -37,12 +37,12 @@ We evaluate evasion across five distinct cyberattack categories representing dis
     \item \textbf{Family 1: Volumetric DoS SYN Flood ($1,000$ flows):}
     \begin{itemize}
         \item \emph{Mechanics:} Rapid transmission of high-frequency TCP SYN packets targeting port 80 without completing the 3-way handshake.
-        \item \emph{Profile:} Forward packet counts between $20$ and $300$; server backward responses are negligible ($0$ to $2$ packets); forward bytes consist purely of 40--70 byte SYN packets; flow duration is extremely compressed ($100$ to $50,000 \mu$s, under $50$ ms); botnet window sizes are small ($1,024$, $2,048$, or $4,096$).
+        \item \emph{Profile:} Forward packet counts between $20$ and $300$; server backward responses are negligible ($0$ to $2$ packets); forward bytes consist purely of 40--70 byte SYN packets; flow duration is extremely compressed ($100$ to $50,000 \mu$s, under $50$ ms).
     \end{itemize}
     \item \textbf{Family 2: UDP Volumetric Flood ($500$ flows):}
     \begin{itemize}
         \item \emph{Mechanics:} High-rate UDP datagram flooding targeting arbitrary open ports, overwhelming network link bandwidth.
-        \item \emph{Profile:} Forward packet counts between $100$ and $500$; zero backward responses ($N_{\text{bwd}} = 0, B_{\text{bwd}} = 0$); extreme byte rate ($R_B > 5 \times 10^7$ bytes/s); flow duration $< 20$ ms.
+        \item \emph{Profile:} Forward packet counts between $100$ and $500$; zero backward responses ($N_{\text{bwd}} = 0, B_{\text{bwd}} = 0$); high byte rate ($R_B > 2.5 \times 10^7$ bytes/s); flow duration $< 25$ ms.
     \end{itemize}
     \item \textbf{Family 3: Brute Force Authentication ($700$ flows):}
     \begin{itemize}
@@ -57,7 +57,7 @@ We evaluate evasion across five distinct cyberattack categories representing dis
     \item \textbf{Family 5: Low-and-Slow Infiltration ($300$ flows):}
     \begin{itemize}
         \item \emph{Mechanics:} Covert command-and-control (C2) beaconing and periodic exfiltration designed to mimic normal human interaction.
-        \item \emph{Profile:} Low packet counts ($4$ to $12$ packets); elongated flow durations ($5$ to $30$ seconds); low byte rates ($R_B < 1,000$ bytes/s).
+        \item \emph{Profile:} Low packet counts ($4$ to $12$ packets); elongated flow durations ($5$ to $30$ seconds); low byte rates ($R_B < 1,000$ bytes/s); non-standard client window sizes ($1,024$ or $2,048$) that distinguish automated beacons from standard OS client browsers.
     \end{itemize}
 \end{enumerate}
 
@@ -66,18 +66,18 @@ The complete dataset is partitioned into Training ($8,000$ flows, $66.7\%$), Val
 \subsubsection{Hardware and Software Computational Environment}
 To reflect modern GPU-accelerated machine learning pipelines, all training and evaluation experiments were executed on an enterprise mobile workstation equipped with:
 \begin{itemize}
-    \item \textbf{GPU:} NVIDIA RTX 5000 Ada Generation Laptop GPU equipped with 16 GB GDDR6 ECC VRAM, 7,680 CUDA cores, and 240 Tensor cores.
-    \item \textbf{Host System:} Intel Core i9 processor, 32 GB DDR5 RAM, Windows 11 Enterprise (64-bit).
-    \item \textbf{Software Stack:} Conda environment \texttt{py313} executing Python 3.13.11, PyTorch 2.6.0 with CUDA 12.4 support, XGBoost 3.4.1 (compiled with native CUDA histogram tree builder \texttt{device='cuda'}), LightGBM 4.7.0, CatBoost 1.2.10, and scikit-learn 1.8.0.
+    \item \textbf{GPU:} NVIDIA RTX 5000 Ada Generation Laptop GPU equipped with 16 GB GDDR6 ECC VRAM, 9,728 CUDA cores, and 304 Tensor cores.
+    \item \textbf{Host System:} Intel Core i9 processor, 32 GB DDR5 RAM, Windows 11 (64-bit).
+    \item \textbf{Software Stack:} Conda environment \texttt{py313} executing Python 3.13.11, PyTorch 2.6.0 with CUDA 12.4 support, XGBoost 3.4.1 (compiled with native CUDA histogram tree builder \texttt{device='cuda'}), LightGBM 4.7.0, and scikit-learn 1.8.0 (with CatBoost 1.2.10 utilized in an auxiliary reference environment for ensemble validation).
 \end{itemize}
 
 \subsubsection{Target Tree Ensemble Architectures}
 We train and benchmark four distinct decision tree ensemble architectures:
 \begin{enumerate}
-    \item \textbf{XGBoost (CUDA Hist):} 60 gradient boosted decision trees, maximum tree depth 6, learning rate $\eta = 0.1$, exact histogram building on CUDA (\texttt{device='cuda'}, \texttt{tree\_method='hist'}), logistic loss objective.
+    \item \textbf{XGBoost (CUDA Hist):} 60 gradient boosted decision trees, maximum tree depth 6, learning rate $\eta = 0.1$, GPU histogram tree building on CUDA (\texttt{device='cuda'}, \texttt{tree\_method='hist'}), logistic loss objective.
     \item \textbf{LightGBM:} 60 leaf-wise gradient boosted trees, maximum depth 6, learning rate $\eta = 0.1$, exclusive feature bundling enabled.
     \item \textbf{CatBoost:} 60 symmetric (oblivious) decision trees, maximum depth 6, learning rate $\eta = 0.1$, border count 254.
-    \item \textbf{Random Forest:} 100 fully grown bagging trees, Gini impurity splitting, maximum depth 12.
+    \item \textbf{Random Forest:} 100 bagging trees \cite{breiman2001random}, Gini impurity splitting, maximum tree depth 12.
 \end{enumerate}
 
 \subsubsection{Competitive Baseline Attack Implementations}
@@ -85,8 +85,8 @@ We benchmark Flow-Field Evasion against five competitive baseline evasion method
 \begin{enumerate}
     \item \textbf{Unconstrained Feature-Space Baseline (Naive):} Standard numerical coordinate descent in $\mathbb{R}^d$. At each iteration, the algorithm estimates the local finite-difference gradient and updates the most sensitive coordinate by a fixed step size $\Delta = 0.05 \cdot \sigma_f$. Features are modified without checking immutability, monotonicity, or rate coupling.
     \item \textbf{ZOO-NIDS (Chen et al.~\cite{chen2017zoo}):} Zeroth-Order Optimization adapted for tabular flow metrics. Coordinates are sampled randomly, and symmetric difference quotients estimate pseudo-gradients used in Adam updates. Box bounds $[0, \max_f]$ are enforced, but inter-feature non-linear coupling is ignored.
-    \item \textbf{HopSkipJump-NIDS (Alajaji et al.~\cite{alajaji2026feature}):} A boundary-following decision-based attack that initializes with a benign flow and performs geometric binary line searches to identify the classification boundary, followed by spherical coordinate perturbations.
-    \item \textbf{CAA / MOEVA (Simonetto et al.~\cite{simonetto2021constrained}):} The Multi-Objective Evolutionary Adversarial Attack based on NSGA-II. Population size is set to 50, maximum generations to 25. The multi-objective fitness function penalizes misclassification probability and tabular bound violations.
-    \item \textbf{Traffic Manipulator PSO (Han et al. \cite{han2021traffic}):} Particle Swarm Optimization mutating packet intervals and forward dummy bytes. Swarm size is set to 20, maximum iterations to 30.
+    \item \textbf{HopSkipJump-NIDS (Chen et al.~\cite{chen2020hopskipjump}):} A boundary-following decision-based attack that initializes with a benign flow and performs geometric binary line searches to identify the classification boundary, followed by spherical coordinate perturbations.
+    \item \textbf{CAA / MOEVA (Simonetto et al.~\cite{simonetto2024constrained}, Ghamizi et al.~\cite{ghamizi2020moeva}):} The Multi-Objective Evolutionary Adversarial Attack based on R-NSGA-III. Population size is set to 50, maximum generations to 25. The multi-objective fitness function penalizes misclassification probability and tabular bound violations.
+    \item \textbf{Traffic Manipulator PSO (Han et al. \cite{han2021traffic}):} Particle Swarm Optimization mutating packet intervals and forward dummy bytes. Swarm size is set to 50, maximum iterations to 37 (yielding up to 1,850 queries).
     \item \textbf{Flow-Field Evasion (FFE - Ours):} The proposed Lie vector field steering algorithm (Algorithms~\ref{alg:ffe_master}--\ref{alg:tsbs}) with step budget $M = 20$.
 \end{enumerate}

@@ -2,39 +2,214 @@
   "baseline_models": [
     [
       "XGBoost (CUDA)",
-      "99.73%",
-      "99.44%",
-      "99.44%",
-      "99.44%",
-      "100.00%",
-      "0.71s"
+      "99.70%",
+      "99.04%",
+      "99.72%",
+      "99.38%",
+      "99.99%",
+      "0.59s"
     ],
     [
       "LightGBM",
-      "99.80%",
-      "99.72%",
-      "99.44%",
-      "99.58%",
-      "100.00%",
-      "2.71s"
+      "99.63%",
+      "99.17%",
+      "99.31%",
+      "99.24%",
+      "99.99%",
+      "5.39s"
     ]
   ],
-  "evasion_results": [
+  "master_evasion_results": [
     [
       "Unconstrained Feature-Space (Naive)",
       "0.0%",
-      "92.0%",
-      "31.0",
-      "2.98",
-      "7.23s"
+      "94.0%",
+      "0.0%",
+      "32.8",
+      "204.605",
+      "6.00s"
     ],
     [
-      "Flow-Field Evasion (FFE - Ours Novel)",
+      "Flow-Field Evasion (FFE - Ours)",
       "100.0%",
       "100.0%",
-      "9.1",
-      "28681.94",
-      "2.80s"
+      "100.0%",
+      "12.9",
+      "0.251",
+      "4.37s"
+    ]
+  ],
+  "family_breakdown_results": [
+    [
+      "Family 1: Volumetric DoS SYN Flood",
+      "100.0%",
+      "100.0%",
+      "20.1",
+      "92.2 ms"
+    ],
+    [
+      "Family 2: UDP Volumetric Flood",
+      "100.0%",
+      "100.0%",
+      "14.0",
+      "72.2 ms"
+    ],
+    [
+      "Family 3: Brute Force Authentication",
+      "100.0%",
+      "100.0%",
+      "5.2",
+      "30.5 ms"
+    ],
+    [
+      "Family 4: Web Application Exploits",
+      "100.0%",
+      "100.0%",
+      "13.7",
+      "72.4 ms"
+    ],
+    [
+      "Family 5: Low-and-Slow Infiltration",
+      "100.0%",
+      "100.0%",
+      "5.0",
+      "31.2 ms"
+    ]
+  ],
+  "multidataset_results": [
+    {
+      "dataset": "CSE-CIC-IDS2018",
+      "model": "XGBoost (CUDA)",
+      "clean_acc": 99.7,
+      "clean_auc": 99.98911666208635,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 12.94,
+      "latency_ms": 57.42509126663208
+    },
+    {
+      "dataset": "CSE-CIC-IDS2018",
+      "model": "LightGBM",
+      "clean_acc": 99.63333333333333,
+      "clean_auc": 99.9905150798071,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 15.8,
+      "latency_ms": 13.222672939300537
+    },
+    {
+      "dataset": "UNSW-NB15",
+      "model": "XGBoost (CUDA)",
+      "clean_acc": 99.66666666666667,
+      "clean_auc": 99.99628937822547,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 14.27,
+      "latency_ms": 65.96967935562134
+    },
+    {
+      "dataset": "UNSW-NB15",
+      "model": "LightGBM",
+      "clean_acc": 99.76666666666667,
+      "clean_auc": 99.99772574794466,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 17.84,
+      "latency_ms": 15.760421752929688
+    },
+    {
+      "dataset": "CIDDS-001",
+      "model": "XGBoost (CUDA)",
+      "clean_acc": 99.93333333333332,
+      "clean_auc": 99.99963959093571,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 6.84,
+      "latency_ms": 24.400124549865723
+    },
+    {
+      "dataset": "CIDDS-001",
+      "model": "LightGBM",
+      "clean_acc": 99.96666666666667,
+      "clean_auc": 99.99975972729047,
+      "asr": 100.0,
+      "pfr": 100.0,
+      "real_asr": 100.0,
+      "avg_queries": 9.31,
+      "latency_ms": 8.384456634521484
+    }
+  ],
+  "multidataset_table": [
+    [
+      "CSE-CIC-IDS2018",
+      "XGBoost (CUDA)",
+      "99.70%",
+      "99.99%",
+      "100.0%",
+      "100.0%",
+      "100.0%",
+      "12.9",
+      "57.4 ms"
+    ],
+    [
+      "CSE-CIC-IDS2018",
+      "LightGBM",
+      "99.63%",
+      "99.99%",
+      "100.0%",
+      "100.0%",
+      "100.0%",
+      "15.8",
+      "13.2 ms"
+    ],
+    [
+      "UNSW-NB15",
+      "XGBoost (CUDA)",
+      "99.67%",
+      "100.00%",
+      "100.0%",
+      "100.0%",
+      "100.0%",
+      "14.3",
+      "66.0 ms"
+    ],
+    [
+      "UNSW-NB15",
+      "LightGBM",
+      "99.77%",
+      "100.00%",
+      "100.0%",
+      "100.0%",
+      "100.0%",
+      "17.8",
+      "15.8 ms"
+    ],
+    [
+      "CIDDS-001",
+      "XGBoost (CUDA)",
+      "99.93%",
+      "100.00%",
+      "100.0%",
+      "100.0%",
+      "100.0%",
+      "6.8",
+      "24.4 ms"
+    ],
+    [
+      "CIDDS-001",
+      "LightGBM",
+      "99.97%",
+      "100.00%",
+      "100.0%",
+      "100.0%",
+      "100.0%",
+      "9.3",
+      "8.4 ms"
     ]
   ]
 }

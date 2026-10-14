@@ -2,7 +2,7 @@
 Model training and tree ensemble split extraction for XGBoost, LightGBM, and CatBoost.
 """
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Tuple
 import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 from xgboost import XGBClassifier
@@ -79,3 +79,52 @@ class NIDSEnsembleTrainer:
         if X.ndim == 1:
             X = X.reshape(1, -1)
         return self.model.predict_proba(X)
+
+    def get_split_thresholds(self, feature_names: List[str] = None) -> List[Tuple[int, float]]:
+        splits = []
+        try:
+            if self.model_type == 'xgboost':
+                booster = self.model.get_booster()
+                dump = booster.get_dump(dump_format='text')
+                for tree_text in dump:
+                    for line in tree_text.splitlines():
+                        line = line.strip()
+                        if '<' in line and '[' in line and ']' in line:
+                            bracket_content = line[line.find('[') + 1:line.find(']')]
+                            parts = bracket_content.split('<')
+                            if len(parts) == 2:
+                                feat_str = parts[0].strip()
+                                try:
+                                    if feat_str.startswith('f') and feat_str[1:].isdigit():
+                                        f_idx = int(feat_str[1:])
+                                    elif feature_names and feat_str in feature_names:
+                                        f_idx = feature_names.index(feat_str)
+                                    else:
+                                        continue
+                                    thresh = float(parts[1].strip())
+                                    splits.append((f_idx, thresh))
+                                except ValueError:
+                                    pass
+            elif self.model_type == 'lightgbm':
+                dump = self.model.booster_.dump_model()
+                def recurse_tree(node):
+                    if 'split_feature' in node and 'threshold' in node:
+                        feat = node['split_feature']
+                        thresh = float(node['threshold'])
+                        if isinstance(feat, int):
+                            splits.append((feat, thresh))
+                        elif isinstance(feat, str):
+                            if feat.startswith('Column_') and feat[7:].isdigit():
+                                splits.append((int(feat[7:]), thresh))
+                            elif feature_names and feat in feature_names:
+                                splits.append((feature_names.index(feat), thresh))
+                        if 'left_child' in node:
+                            recurse_tree(node['left_child'])
+                        if 'right_child' in node:
+                            recurse_tree(node['right_child'])
+                for tree_info in dump.get('tree_info', []):
+                    if 'tree_structure' in tree_info:
+                        recurse_tree(tree_info['tree_structure'])
+        except Exception:
+            pass
+        return splits

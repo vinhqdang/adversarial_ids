@@ -1,0 +1,168 @@
+\documentclass[preprint,12pt]{elsarticle}
+
+%% Packages
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{listings}
+\usepackage{bm}
+\usepackage{enumitem}
+\usepackage{placeins}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\usepackage{lineno}
+% \linenumbers % Uncomment if the journal editor/reviewers request line numbers
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+%% Theorem environments
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\journal{Computers \& Security}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Steering Through the Trees: Physical Lie Vector Field Evasion of Tree Ensembles in Network Intrusion Detection}
+
+\author[inst1]{Anonymous Authors\corref{cor1}}
+\cortext[cor1]{Corresponding author}
+\ead{anonymous@institution.org}
+\affiliation[inst1]{organization={Anonymous Institution(s)}}
+
+\begin{abstract}
+Learning-based Network Intrusion Detection Systems (NIDS) powered by Gradient Boosted Decision Tree (GBDT) ensembles---such as XGBoost, LightGBM, and CatBoost---routinely establish near-perfect clean classification metrics (accuracies between $99.67\%$ and $99.87\%$ for GBDTs and $99.53\%$ for Random Forest, with ROC-AUC scores reaching up to $99.99\%$ and $\ge 99.95\%$) on standard benchmark environments calibrated to enterprise datasets like CSE-CIC-IDS2018 (while achieving $98.42\%$--$99.25\%$ on hybrid and cloud environments like UNSW-NB15 and CIDDS-001). However, recent literature indicates that this empirical superiority largely stems from shortcut learning on testbed artifacts: automated attack scripts exhibit deterministic temporal burst durations, fixed socket profiles, and extreme packet rates that models memorize rather than extracting invariant malicious semantics. Confronting an adaptive adversary, existing adversarial machine learning (AML) evasion algorithms exhibit an acute dichotomy. Unconstrained feature-space attacks (e.g., zeroth-order coordinate descent and boundary random walks) treat network telemetry as arbitrary Cartesian coordinates in $\mathbb{R}^d$, producing invalid flow records that violate physical conservation laws and protocol state machines (yielding Physical Feasibility Rates as low as $17.8\%$--$25.0\%$ and Real Attack Success Rates down to $0.0\%$--$8.0\%$). Conversely, packet-level heuristic mutators (e.g., genetic algorithms, particle swarm optimization) operate as opaque black boxes, requiring thousands of model queries, suffering high computational latency, and failing to exploit the internal hyper-rectangular partition geometry of decision trees.
+
+To bridge this fundamental gap, this paper introduces \textbf{Flow-Field Evasion (FFE)}, a novel, non-heuristic adversarial evasion framework founded on the differential geometry of network traffic. Rather than perturbing tabular features directly or relying on blind stochastic mutations, FFE formulates the \emph{Lie Cone of Infinitesimal Flow Generators} $\mathcal{K}_{\text{net}}(x) \subset T_x \widetilde{\mathcal{M}}_{\text{flow}}$ directly induced by four elementary packet-level transformations: temporal dilation, payload padding, chaff packet injection, and TCP window morphing. By evaluating the directional Lie derivatives $\mathcal{L}_{\vec{v}_k} F(x)$ of the tree ensemble's decision score along these generators, FFE steers malicious flows along the physical path of steepest descent into the benign classification region. We prove that integrating along the Lie Cone strictly preserves physical network conservation invariants and rate-coupling identities by mathematical construction. 
+
+Evaluated across three heterogeneous benchmark corpora calibrated to empirical marginal distributions of enterprise (CSE-CIC-IDS2018), contemporary hybrid (UNSW-NB15), and cloud OpenStack (CIDDS-001) environments---against CUDA-accelerated XGBoost and CPU-multithreaded LightGBM on an NVIDIA RTX 5000 Ada GPU across five distinct attack families (DoS bursts, UDP floods, Brute Force, Web exploits, and Infiltration), FFE consistently achieves a \textbf{100.0\% Attack Success Rate (ASR)} and a \textbf{100.0\% Physical Feasibility Rate (PFR)}, requiring an average of only \textbf{6.8--17.8 queries} per flow (including tree-split snapping evaluations) and an average latency under \textbf{70 ms}---outperforming existing state-of-the-art baselines by orders of magnitude while strictly preserving TCP/IP semantics. Finally, we analyze defensive hardening, demonstrating that Malleability-Penalized Tree Splitting (MPS) and Lie-Guided Adversarial Training (LGAT) reduce evasion rates from $100.0\%$ down to $32.0\%$ (MPS alone), $18.0\%$ (LGAT alone), and $11.0\%$ under joint defense.
+\end{abstract}
+
+%% Research Highlights (Required by Elsevier journals like Computers & Security)
+\begin{highlights}
+\item Formulates Lie Cone generators of physical packet transformations for NIDS evasion.
+\item Proves universal physical conservation invariant preservation on flow manifolds.
+\item Achieves 100\% Attack Success Rate and 100\% Physical Feasibility across 3 benchmarks.
+\item Operates in under 18 queries and 70 ms against CUDA XGBoost and LightGBM models.
+\item Introduces Malleability-Penalized Splitting and Lie-Guided Adversarial Training.
+\end{highlights}
+
+\begin{keyword}
+Adversarial Machine Learning \sep Network Intrusion Detection \sep Tree Ensembles \sep XGBoost \sep Problem-Space Constraints \sep Lie Algebra \sep Evasion Attacks \sep Robust Machine Learning
+\end{keyword}
+
+\end{frontmatter}
+
+% =========================================================================
+% SECTION 1: INTRODUCTION
+% =========================================================================
+\input{sec1_introduction.tex}
+
+% =========================================================================
+% SECTION 2: RELATED WORK
+% =========================================================================
+\input{sec2_related_work.tex}
+\FloatBarrier
+
+% =========================================================================
+% SECTION 3: PROBLEM FORMULATION & THREAT MODEL
+% =========================================================================
+\input{sec3_problem_formulation.tex}
+\FloatBarrier
+
+% =========================================================================
+% SECTION 4: THE FLOW-FIELD EVASION (FFE) FRAMEWORK
+% =========================================================================
+\input{sec4_differential_geometry.tex}
+\input{sec5_algorithm.tex}
+\FloatBarrier
+
+% =========================================================================
+% SECTION 5: EMPIRICAL BENCHMARK, ABLATION STUDIES & DEFENSES
+% =========================================================================
+\input{sec6_experiments.tex}
+\input{sec7_results.tex}
+\input{sec8_ablations.tex}
+\input{sec9_defenses.tex}
+\FloatBarrier
+
+% =========================================================================
+% SECTION 6: DISCUSSION, REAL-WORLD DEPLOYMENT & CONCLUSION
+% =========================================================================
+\section{Discussion, Real-World Deployment, and Conclusion}
+\label{sec:conclusion}
+
+This final section addresses the real-world operational translation of Flow-Field Evasion, discusses its operational boundaries and ethical implications, and provides concluding remarks on the future of robust network intrusion detection.
+
+\subsection{Real-World Operational Packet Translation}
+A critical concern in adversarial machine learning applied to network security is whether mathematically formulated perturbations can be realized in actual live packet streams. FFE is designed specifically to ensure a deterministic packet synthesizer $\Phi^{-1}$ that maps the perturbed manifold state $x^*$ into a concrete wire-level packet sequence $\mathcal{P}^*$ satisfying $\Phi(\mathcal{P}^*) = x^*$:
+
+\subsubsection{Software Implementation: Scapy Inline Proxy}
+In operational penetration testing and red-teaming, FFE is implemented as an inline packet-forwarding proxy (utilizing NFQueue and Scapy):
+\begin{enumerate}
+    \item \textbf{Temporal Dilation Implementation:} When the optimizer selects the control $u_1^* \Delta s_1$, the proxy introduces an artificial transmission delay $\Delta t$ at the attacker's transmission socket before emitting packets. For TCP flows, packet pacing smooths inter-arrival intervals and dilutes instantaneous byte/packet rates while preserving TCP congestion control dynamics and retransmission timers (RFC 6298 \cite{rfc6298}).
+    \item \textbf{Payload Padding Implementation:} When the optimizer selects the control $u_2^* \Delta s_2$, the adversary injects $\Delta B$ padding bytes in protocol-compliant contexts: for unencrypted framing (HTTP/1.1 and HTTP/2), utilizing updated \texttt{Content-Length} headers or HTTP/2 \texttt{PADDED} frames (RFC 9113 \S 6.1 \cite{rfc9113}); for encrypted SSH sessions (Family 3: SSH Brute Force), injecting credential whitespace padding or application-layer \texttt{SSH\_MSG\_IGNORE} packets per RFC 4253 \S 11.2 \cite{rfc4253} at the client endpoint socket before SSH transport-layer encryption, which the target SSH daemon silently discards without corrupting session cryptographic state or authentication handshakes; and for FTP, utilizing benign \texttt{NOOP} commands (RFC 959 \cite{rfc959}) or whitespace padding. When implemented as an inline translation proxy for transport-layer streams, the proxy maintains bidirectional sequence and acknowledgment number offsets (NAT/ALG-style sequence mapping) and handles unencrypted framing, so that payload expansion does not desynchronize victim TCP sequence space.
+    \item \textbf{Chaff Injection Implementation:} When the control $u_3^* \Delta s_3$ is selected, the proxy or endpoint emits $\Delta N$ protocol-compliant probe chaff segments---specifically zero-payload TCP keep-alives or pure ACKs per RFC 9293 \S 3.8.4 \cite{rfc9293} (which carry no application payload and do not disrupt established socket streams; when TCP timestamps are negotiated per RFC 7323 \cite{rfc7323}, chaff headers include the 12-byte TSOPT, setting $H_0 = 32$ and $L_0 = 52$ bytes, while standard bare TCP headers set $H_0 = 20, L_0 = 40$ bytes) or zero-length/probe UDP datagrams ($L_0 = 28, H_0 = 8$) for connectionless streams per RFC 768 \cite{rfc768}. Under the ingress perimeter inspection model, forward probe segments are classified before reverse server ACK paths alter backward counts; in bidirectional full sessions, server pure ACKs would increment backward metrics ($x_3, x_5$), which can be factored into multi-flow models.
+    \item \textbf{TCP Window Morphing Implementation:} When the control $u_4^* \Delta s_4$ is selected, the proxy modulates the 16-bit Window advertisement field in TCP SYN / SYN-ACK or ongoing ACK segments toward $W_{\text{target}}$. To ensure middlebox transparency when RFC 7323 \cite{rfc7323} Window Scale (WSCALE) options are active, the proxy adjusts the initial SYN window and/or WSCALE factor during the 3-way handshake so that the scaled receive window matches the target operating system signature without inducing TCP buffer starvation.
+    \item \textbf{Checksum and Sequence Synchronization:} After any packet modification, the proxy automatically updates the IP identification field, advances TCP sequence numbers ($seq$), and recalculates IPv4 header checksums (RFC 791 \cite{rfc791}, RFC 1071 \cite{rfc1071}) and TCP/UDP transport checksums (RFC 9293 \cite{rfc9293}, RFC 768 \cite{rfc768}).
+\end{enumerate}
+
+\subsubsection{Middlebox and Stateful Firewall Resilience}
+Because all packet transformations generated by FFE adhere strictly to standard TCP/IP state machines:
+\begin{itemize}
+    \item Intermediate stateful firewalls (such as iptables / nftables conntrack) observe valid 3-way handshakes and consistent sequence number progressions; sessions are not torn down.
+    \item Intermediate routers route the padded packets without IP fragmentation, provided individual packet sizes remain below the link-layer MTU ($1,500$ bytes).
+    \item Network flow telemetry extractors (such as CICFlowMeter, Argus, or Zeek) aggregate the physical wire traffic into invariant-compliant flow telemetry within the perimeter inspection scope described in Section~\ref{sec:formulation}.
+\end{itemize}
+
+\subsection{Limitations and Operational Boundaries}
+While Flow-Field Evasion achieves near-perfect evasion across multiple benchmarks, several operational limitations must be acknowledged:
+\begin{enumerate}
+    \item \textbf{Stateful Server Response Dependencies:} FFE operates primarily on forward client-to-server traffic ($x_2, x_4, x_6, x_7$), which the attacker directly controls. Backward server responses ($x_3, x_5$) are generated by the target server stack. In interactive bidirectional protocols, large changes in client traffic timing or payload may elicit server ACKs or retransmissions that alter backward features; our model targets ingress perimeter NIDS that inspect traffic at enterprise gateways where backward server responses are treated as immutable external responses.
+    \item \textbf{Semantic Functionality Preservation:} The threat model requires $\mathcal{S}(P^*) = \mathcal{S}(P)$. For application exploits (SQLi, brute force), executable byte sequences are preserved byte-for-byte inside payloads. For volumetric denial-of-service floods, rate dilution trades peak attack burst intensity for evasion stealth; while a dilated flood evades rate thresholds, it requires prolonged connection persistence to exhaust server socket resources.
+    \item \textbf{Deep Packet Inspection (DPI) Signatures:} Flow-based NIDS analyze statistical flow records. If the target enterprise combines GBDT flow detectors with deep payload inspection engines (e.g., Snort rules inspecting unencrypted payload shellcode), payload padding alone will not evade signature matches unless combined with payload encryption or polymorphic shellcode encoders.
+    \item \textbf{Benchmark Calibration Scope:} As detailed in Section~\ref{sec:experiments}, evaluations are performed on standardized corpora statistically calibrated to published intrusion benchmark distributions. In live networks, protocol corner cases (e.g., active middlebox normalization or conntrack flow timeouts) represent important real-world engineering constraints for inline deployment.
+    \item \textbf{Verification Scope \& High-Throughput Replay:} Physical Feasibility Rate (PFR) in our benchmark measures rigorous algebraic compliance with flow conservation invariants ($\Psi(x) = \mathbf{0}$), MTU bounds ($\text{Len} \le 1500$ bytes), and non-decreasing monotonicities under software proxy emulation (Scapy / NFQueue). While proof-of-concept inline stream translation confirms protocol and stack validity, line-rate end-to-end hardware replay across multi-gigabit hardware switching fabrics is left for future engineering work.
+\end{enumerate}
+
+\subsection{Ethical Considerations \& Responsible Disclosure}
+This research was conducted in a strictly controlled laboratory environment using synthetic network benchmarks and authorized virtualized testbeds. Our objective is not to facilitate malicious attacks, but to expose the structural vulnerability of learning-based intrusion detection systems before threat actors exploit them in production environments. 
+
+The widespread adoption of XGBoost and LightGBM in commercial cloud security pipelines, combined with astronomical benchmark claims of 99.9\% accuracy, creates a dangerous false sense of security. By proving mathematically and empirically that tree ensembles can be systematically bypassed via physical Lie vector field steering, this work motivates the urgent adoption of robust defensive training (Section~\ref{sec:defense}) and multi-layered defense-in-depth architectures.
+
+\subsection{Conclusion \& Open Research Challenges}
+This article has demonstrated that the near-perfect accuracy (up to $99.87\%$, and $\ge 98.4\%$ across all environments) reported by tree ensemble NIDS on standard benchmark datasets is vulnerable to structured physical flow morphing. We introduced \textbf{Flow-Field Evasion (FFE)}, a novel, non-heuristic evasion framework founded on the differential geometry of network flows. 
+
+By replacing unconstrained feature perturbations with exact infinitesimal generators on the physical flow manifold $\mathcal{M}_{\text{flow}}$, FFE preserves physical flow invariants and conservation laws by mathematical construction. Evaluated across three diverse datasets against CUDA-accelerated XGBoost and CPU-multithreaded LightGBM models across five attack families, FFE achieved a $100.0\%$ Attack Success Rate and a \textbf{100.0\% Physical Feasibility Rate}, requiring an average of only \textbf{6.8--17.8 model queries} and under \textbf{70 ms} per flow. Furthermore, we demonstrated that combining Malleability-Penalized Tree Splitting with Lie-Guided Adversarial Training reduces evasion success from $100.0\%$ down to $32.0\%$ (MPS), $18.0\%$ (LGAT), and $11.0\%$ under joint defense, providing a practical defense roadmap.
+
+\subsubsection{Open Research Directions}
+Several promising avenues for future research remain:
+\begin{itemize}
+    \item \textbf{Hardware NIC FPGA Offloading:} Translating Lie generator calculations into P4/eBPF hardware pipelines on SmartNICs for line-rate 100 Gbps traffic steering.
+    \item \textbf{Multi-Flow Distributed Coordination:} Extending the single-flow Lie algebra to coordinated botnet swarms, where multiple cooperating nodes steer collective volumetric distributions across distributed vantage points.
+    \item \textbf{Formal Robustness Certification:} Developing exact semi-definite programming (SDP) relaxation bounds to certify the minimum operational cost required to evade adversarially trained tree ensembles under Lie Cone constraints.
+\end{itemize}
+
+% =========================================================================
+% REFERENCES
+% =========================================================================
+\bibliographystyle{elsarticle-num}
+\bibliography{references}
+
+\end{document}

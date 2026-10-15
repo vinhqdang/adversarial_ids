@@ -41,10 +41,12 @@
 
 \title{Steering Through the Trees: Physical Lie Vector Field Evasion of Tree Ensembles in Network Intrusion Detection}
 
-\author[inst1]{Anonymous Authors\corref{cor1}}
+\author[inst1]{Quang-Vinh Dang\corref{cor1}}
 \cortext[cor1]{Corresponding author}
-\ead{anonymous@institution.org}
-\affiliation[inst1]{organization={Anonymous Institution(s)}}
+\ead{vinh.dq4@buv.edu.vn}
+\affiliation[inst1]{organization={School of Innovative and Computing Sciences, British University Vietnam},
+            city={Hung Yen},
+            country={Vietnam}}
 
 \begin{abstract}
 Learning-based Network Intrusion Detection Systems (NIDS) powered by Gradient Boosted Decision Tree (GBDT) ensembles---such as XGBoost, LightGBM, and CatBoost---routinely establish near-perfect clean classification metrics (accuracies between $99.67\%$ and $99.87\%$ for GBDTs and $99.53\%$ for Random Forest, with ROC-AUC scores reaching up to $99.99\%$ and $\ge 99.95\%$) on standard benchmark environments calibrated to enterprise datasets like CSE-CIC-IDS2018 (while achieving $98.42\%$--$99.25\%$ on hybrid and cloud environments like UNSW-NB15 and CIDDS-001). However, recent literature indicates that this empirical superiority largely stems from shortcut learning on testbed artifacts: automated attack scripts exhibit deterministic temporal burst durations, fixed socket profiles, and extreme packet rates that models memorize rather than extracting invariant malicious semantics. Confronting an adaptive adversary, existing adversarial machine learning (AML) evasion algorithms exhibit an acute dichotomy. Unconstrained feature-space attacks (e.g., zeroth-order coordinate descent and boundary random walks) treat network telemetry as arbitrary Cartesian coordinates in $\mathbb{R}^d$, producing invalid flow records that violate physical conservation laws and protocol state machines (yielding Physical Feasibility Rates as low as $17.8\%$--$25.0\%$ and Real Attack Success Rates down to $0.0\%$--$8.0\%$). Conversely, packet-level heuristic mutators (e.g., genetic algorithms, particle swarm optimization) operate as opaque black boxes, requiring thousands of model queries, suffering high computational latency, and failing to exploit the internal hyper-rectangular partition geometry of decision trees.

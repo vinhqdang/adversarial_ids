@@ -16,12 +16,12 @@ Algorithm~\ref{alg:ffe_master} outlines the primary execution loop of Flow-Field
 \STATE $x \leftarrow \text{ProjectManifoldInvariants}(x_0, \mathcal{S})$
 \STATE $f_{\text{curr}} \leftarrow F(x)$ \COMMENT{Initial model evaluation}
 \IF{$f_{\text{curr}} < \tau$}
-    \STATE \RETURN $x, \text{SUCCESS}$ \COMMENT{Flow already classified as Benign}
+    \RETURN $x, \text{SUCCESS}$ \COMMENT{Flow already classified as Benign}
 \ENDIF
 \STATE $\text{queries} \leftarrow 1$
 \FOR{$\text{step} = 1$ \TO $M$}
     \IF{$f_{\text{curr}} < \tau$}
-        \STATE \RETURN $x, \text{SUCCESS}$ \COMMENT{Benign classification reached; no snapping needed}
+        \RETURN $x, \text{SUCCESS}$ \COMMENT{Benign classification reached; no snapping needed}
     \ENDIF
     \STATE $\mathcal{D}, q_{\text{used}} \leftarrow \text{EstimateLieDerivatives}(F, x, \mathcal{S})$
     \STATE $\text{queries} \leftarrow \text{queries} + q_{\text{used}}$
@@ -53,9 +53,9 @@ Algorithm~\ref{alg:ffe_master} outlines the primary execution loop of Flow-Field
     \ENDIF
 \ENDFOR
 \IF{$f_{\text{curr}} < \tau$}
-    \STATE \RETURN $x, \text{SUCCESS}$
+    \RETURN $x, \text{SUCCESS}$
 \ELSE
-    \STATE \RETURN $x, \text{FAILURE}$
+    \RETURN $x, \text{FAILURE}$
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
@@ -110,7 +110,7 @@ Algorithm~\ref{alg:lie_estimator} details the numerical estimation of the direct
         \STATE $q \leftarrow q + 1$
     \ENDIF
 \ENDIF
-\STATE \RETURN $\mathcal{D}, q$
+\RETURN $\mathcal{D}, q$
 \end{algorithmic}
 \end{algorithm}
 
@@ -146,12 +146,12 @@ Algorithm~\ref{alg:manifold_proj} specifies the closed-form projection operator 
 \STATE $x_{\text{proj}}[8] \leftarrow B_{\text{tot}} / T_{\text{sec}}$ \COMMENT{Flow Bytes/s}
 \STATE $x_{\text{proj}}[9] \leftarrow N_{\text{tot}} / T_{\text{sec}}$ \COMMENT{Flow Packets/s}
 \STATE $x_{\text{proj}}[10] \leftarrow x_{\text{proj}}[4] / x_{\text{proj}}[2]$ \COMMENT{Forward Packet Length Mean}
-\STATE \RETURN $x_{\text{proj}}$
+\RETURN $x_{\text{proj}}$
 \end{algorithmic}
 \end{algorithm}
 
 \subsubsection{Tree-Split Boundary Snapping (TSBS)}
-Algorithm~\ref{alg:tsbs} implements Tree-Split Boundary Snapping. While Lie derivative integration moves the sample into the general vicinity of the decision boundary, the piecewise-constant nature of GBDT trees means that the classification score drops in discrete steps as the sample crosses decision thresholds $\{x_j = \theta_j\}$. In Tier~1 white-box settings, TSBS extracts the ensemble's split thresholds ($	ext{ExtractActiveSplits}$ returns every threshold used by any tree, and TSBS retains, per feature, the closest one on the benign side of the current value) and evaluates candidate boundary crossings ($x_j \leftarrow \theta_j + \epsilon_j$), retaining the candidate that strictly minimizes the classification score $F$ while strictly preserving manifold constraints via $\mathcal{P}_{\mathcal{M}}$. 
+Algorithm~\ref{alg:tsbs} implements Tree-Split Boundary Snapping, with its candidate generator given in Algorithm~\ref{alg:tsbs_candidates}. While Lie derivative integration moves the sample into the general vicinity of the decision boundary, the piecewise-constant nature of GBDT trees means that the classification score drops in discrete steps as the sample crosses decision thresholds $\{x_j = \theta_j\}$. In Tier~1 white-box settings, TSBS extracts the ensemble's split thresholds ($\text{ExtractActiveSplits}$ returns every threshold used by any tree, and TSBS retains, per feature, the closest one on the benign side of the current value) and evaluates candidate boundary crossings ($x_j \leftarrow \theta_j + \epsilon_j$), retaining the candidate that strictly minimizes the classification score $F$ while strictly preserving manifold constraints via $\mathcal{P}_{\mathcal{M}}$. 
 
 Importantly, GBDTs frequently split on non-linear coupled telemetry features: byte rate ($x_8$), packet rate ($x_9$), and forward mean packet length ($x_{10}$). TSBS inverts these coupled constraints in closed form into admissible infinitesimal generator controls:
 \begin{enumerate}
@@ -174,54 +174,9 @@ Importantly, GBDTs frequently split on non-linear coupled telemetry features: by
 \begin{algorithmic}[1]
 \REQUIRE Classifier $F$, flow candidate $x \in \mathcal{M}_{\text{flow}}$ with $F(x) \ge \tau$ (still flagged malicious), feature schema $\mathcal{S}$, tolerance $\epsilon_{\text{rel}}$
 \ENSURE Snapped flow $x^* \in \mathcal{M}_{\text{flow}}$
-\STATE $x^* \leftarrow \text{copy}(x)$; $\mathcal{C} \leftarrow \emptyset$ \COMMENT{Candidate boundary-crossing pool}
+\STATE $x^* \leftarrow \text{copy}(x)$
 \STATE $\text{active\_splits} \leftarrow \text{ExtractActiveSplits}(F, x^*)$
-\STATE \COMMENT{1. Monotonic features: closest split strictly above $x^*[j]$}
-\FOR{\textbf{each } $j \in \mathcal{I}_{\text{mono}}^+$}
-    \STATE $\theta_j^* \leftarrow \min\{\theta_j \mid (j, \theta_j) \in \text{active\_splits} \;\land\; \theta_j > x^*[j]\}$
-    \IF{$\theta_j^*$ exists}
-        \IF{$j = 11$ \AND $x^*[1] = 17$}
-            \STATE \textbf{continue} \COMMENT{UDP transport header immutable at 8B}
-        \ENDIF
-        \STATE $\epsilon_j \leftarrow \mathbf{if}\; j \in \{2, 4, 11\} \;\mathbf{then}\; 1.0 \;\mathbf{else}\; \text{round}(\epsilon_{\text{rel}} \cdot \max(1.0, |\theta_j^*|))$
-        \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[j] \leftarrow \theta_j^* + \epsilon_j$
-        \IF{$j = 11$}
-            \STATE $x_{\text{c}}[11] \leftarrow \min(60.0 \cdot x_{\text{c}}[2], x_{\text{c}}[11])$
-            \STATE $x_{\text{c}}[4] \leftarrow \min(1500.0 \cdot x_{\text{c}}[2], \max(x_{\text{c}}[4], x_{\text{c}}[11] + 20.0 \cdot x_{\text{c}}[2]))$
-        \ENDIF
-        \STATE $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
-    \ENDIF
-\ENDFOR
-\STATE \COMMENT{2. Invert coupled rate splits ($x_8, x_9$) into duration dilation}
-\STATE $\theta_8^* \leftarrow \max\{\theta_8 \mid (8, \theta_8) \in \text{active\_splits} \;\land\; 0 < \theta_8 < x^*[8]\}$
-\IF{$\theta_8^*$ exists}
-    \STATE $d \leftarrow (10^6 \cdot (x^*[4] + x^*[5]) / \theta_8^*) + 10.0$
-    \IF{$d \le 1.1 \times 10^8$}
-        \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[6] \leftarrow d$; $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
-    \ENDIF
-\ENDIF
-\STATE $\theta_9^* \leftarrow \max\{\theta_9 \mid (9, \theta_9) \in \text{active\_splits} \;\land\; 0 < \theta_9 < x^*[9]\}$
-\IF{$\theta_9^*$ exists}
-    \STATE $d \leftarrow (10^6 \cdot (x^*[2] + x^*[3]) / \theta_9^*) + 10.0$
-    \IF{$d \le 1.1 \times 10^8$}
-        \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[6] \leftarrow d$; $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
-    \ENDIF
-\ENDIF
-\STATE \COMMENT{3. Invert coupled packet length splits ($x_{10}$) into chaff packet injection}
-\STATE $H_0 \leftarrow \mathbf{if}\; (x^*[1] = 6 \;\land\; x^*[11]/x^*[2] \ge 26.0) \;\mathbf{then}\; 32.0 \;\mathbf{else}\; (\mathbf{if}\; x^*[1]=6 \;\mathbf{then}\; 20.0 \;\mathbf{else}\; 8.0)$
-\STATE $L_0 \leftarrow 20.0 + H_0$ \COMMENT{RFC 7323 options compliance: 52B/40B for TCP, 28B for UDP}
-\STATE $\theta_{10}^* \leftarrow \max\{\theta_{10} \mid (10, \theta_{10}) \in \text{active\_splits} \;\land\; L_0 < \theta_{10} < x^*[10]\}$
-\IF{$\theta_{10}^*$ exists}
-    \STATE $N \leftarrow \lfloor (x^*[4] - \theta_{10}^* x^*[2]) / (\theta_{10}^* - L_0) \rfloor + 1$
-    \IF{$N \le 1000$}
-    \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[2] \leftarrow x^*[2] + N$; $x_{\text{c}}[4] \leftarrow x^*[4] + N \cdot L_0$; $x_{\text{c}}[11] \leftarrow x^*[11] + N \cdot H_0$
-    \STATE $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$ \COMMENT{Chaff budget cap: $N \le 1000$ packets}
-    \ENDIF
-\ENDIF
-\STATE \COMMENT{4. TCP Window morphing to benign OS baseline}
-\IF{$x^*[1] = 6$ \AND $x^*[7] \neq 64240.0$}
-    \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[7] \leftarrow 64240.0$; $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
-\ENDIF
+\STATE $\mathcal{C} \leftarrow \text{GenerateCandidates}(x^*, \text{active\_splits}, \epsilon_{\text{rel}})$ \COMMENT{Boundary-crossing pool (Algorithm~\ref{alg:tsbs_candidates})}
 \STATE \COMMENT{Evaluate projected candidates and retain best partition crossing}
 \STATE $x_{\text{best}} \leftarrow x^*$; $s_{\text{best}} \leftarrow F(x^*)$
 \FOR{\textbf{each } $x_{\text{c}} \in \mathcal{C}$}
@@ -233,7 +188,56 @@ Importantly, GBDTs frequently split on non-linear coupled telemetry features: by
         \ENDIF
     \ENDIF
 \ENDFOR
-\STATE \RETURN $x_{\text{best}}$
+\RETURN $x_{\text{best}}$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[htbp]
+\caption{TSBS Candidate Generation ($\text{GenerateCandidates}$)}
+\label{alg:tsbs_candidates}
+\footnotesize
+\begin{algorithmic}[1]
+\REQUIRE Current flow $x^* \in \mathcal{M}_{\text{flow}}$, active splits $\text{active\_splits}$ (pairs $(j, \theta_j)$), tolerance $\epsilon_{\text{rel}}$
+\ENSURE Candidate boundary-crossing pool $\mathcal{C}$ (before manifold projection)
+\STATE $\mathcal{C} \leftarrow \emptyset$
+\STATE \COMMENT{1. Monotonic features: closest split strictly above $x^*[j]$; UDP header $x_{11}$ is immutable at 8B}
+\FOR{\textbf{each } $j \in \mathcal{I}_{\text{mono}}^+$ \textbf{with} NOT $(j = 11 \land x^*[1] = 17)$}
+    \STATE $\theta_j^* \leftarrow \min\{\theta_j \mid (j, \theta_j) \in \text{active\_splits} \;\land\; \theta_j > x^*[j]\}$
+    \IF{$\theta_j^*$ exists}
+        \STATE $\epsilon_j \leftarrow 1.0$ \textbf{if} $j \in \{2, 4, 11\}$ \textbf{else} $\text{round}(\epsilon_{\text{rel}} \cdot \max(1.0, |\theta_j^*|))$
+        \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[j] \leftarrow \theta_j^* + \epsilon_j$
+        \IF{$j = 11$}
+            \STATE $x_{\text{c}}[11] \leftarrow \min(60.0 \cdot x_{\text{c}}[2],\, x_{\text{c}}[11])$
+            \STATE $x_{\text{c}}[4] \leftarrow \min(1500.0 \cdot x_{\text{c}}[2],\, \max(x_{\text{c}}[4],\, x_{\text{c}}[11] + 20.0 \cdot x_{\text{c}}[2]))$
+        \ENDIF
+        \STATE $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
+    \ENDIF
+\ENDFOR
+\STATE \COMMENT{2. Invert coupled rate splits ($x_8, x_9$) into duration dilation}
+\FOR{\textbf{each } $(r, a, b) \in \{(8, x^*[4], x^*[5]),\, (9, x^*[2], x^*[3])\}$}
+    \STATE $\theta_r^* \leftarrow \max\{\theta_r \mid (r, \theta_r) \in \text{active\_splits} \;\land\; 0 < \theta_r < x^*[r]\}$
+    \IF{$\theta_r^*$ exists \AND $d \leftarrow 10^6 (a + b) / \theta_r^* + 10.0$ satisfies $d \le 1.1 \times 10^8$}
+        \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[6] \leftarrow d$; $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
+    \ENDIF
+\ENDFOR
+\STATE \COMMENT{3. Invert coupled packet length splits ($x_{10}$) into chaff packet injection}
+\STATE $H_0 \leftarrow 32.0$ \textbf{if} $(x^*[1] = 6 \land x^*[11]/x^*[2] \ge 26.0)$ \textbf{else} $20.0$ \textbf{if} $x^*[1] = 6$ \textbf{else} $8.0$
+\STATE $L_0 \leftarrow 20.0 + H_0$ \COMMENT{52B/40B TCP (with/without RFC 7323 options), 28B UDP}
+\STATE $\theta_{10}^* \leftarrow \max\{\theta_{10} \mid (10, \theta_{10}) \in \text{active\_splits} \;\land\; L_0 < \theta_{10} < x^*[10]\}$
+\IF{$\theta_{10}^*$ exists}
+    \STATE $N \leftarrow \lfloor (x^*[4] - \theta_{10}^* x^*[2]) / (\theta_{10}^* - L_0) \rfloor + 1$
+    \IF{$N \le 1000$}
+        \STATE \COMMENT{Chaff budget cap: $N \le 1000$ packets}
+        \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[2] \leftarrow x^*[2] + N$
+        \STATE $x_{\text{c}}[4] \leftarrow x^*[4] + N \cdot L_0$; $x_{\text{c}}[11] \leftarrow x^*[11] + N \cdot H_0$
+        \STATE $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
+    \ENDIF
+\ENDIF
+\STATE \COMMENT{4. TCP window morphing to benign OS baseline}
+\IF{$x^*[1] = 6 \;\land\; x^*[7] \neq 64240.0$}
+    \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[7] \leftarrow 64240.0$; $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
+\ENDIF
+\RETURN $\mathcal{C}$
 \end{algorithmic}
 \end{algorithm}
 

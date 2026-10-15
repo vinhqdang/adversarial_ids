@@ -82,7 +82,7 @@ Algorithm~\ref{alg:lgat} outlines the adversarial training loop for tree ensembl
     \STATE Fit tree $f_t$ using robust split scoring $\text{Gain}_{\text{robust}}$
     \STATE $F_t(x) \leftarrow F_{t-1}(x) + \eta \cdot f_t(x)$
 \ENDFOR
-\STATE \RETURN $F_T$
+\RETURN $F_T$
 \end{algorithmic}
 \end{algorithm}
 

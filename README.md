@@ -4,7 +4,7 @@
 [![CUDA Accelerated](https://img.shields.io/badge/CUDA-XGBoost%2012.8-green.svg)](https://developer.nvidia.com/cuda-toolkit)
 [![Tests Passing](https://img.shields.io/badge/pytest-55%2F55%20passed-brightgreen.svg)](tests/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
-[![Target Journal](https://img.shields.io/badge/Journal-Elsevier%20Computers%20%26%20Security-orange.svg)](https://www.sciencedirect.com/journal/computers-and-security)
+[![Target Journal](https://img.shields.io/badge/Journal-Elsevier%20Computer%20Networks-orange.svg)](https://www.sciencedirect.com/journal/computer-networks)
 
 Official research repository and reference implementation for **Flow-Field Evasion (FFE)**, a differential geometric framework for physical adversarial evasion of Gradient Boosted Decision Tree (GBDT) and Random Forest ensembles in Network Intrusion Detection Systems (NIDS).
 
@@ -123,7 +123,7 @@ To mitigate Lie cone evasion, this repository provides reference implementations
 ```
 adversarial_ids/
 ├── paper/                                  # Complete Academic Submission Packages
-│   ├── elsevier_manuscript.tex             # Target: Elsevier Computers & Security (elsarticle)
+│   ├── elsevier_manuscript.tex             # Target: Elsevier Computer Networks (elsarticle)
 │   ├── elsevier_manuscript.pdf             # Compiled PDF (81 pages, review layout, 0 errors)
 │   ├── cover_letter_cose.tex               # Cover Letter to Editor-in-Chief (Computers & Security)
 │   ├── cover_letter_cose.pdf               # Compiled Cover Letter PDF
@@ -211,7 +211,7 @@ python paper/generate_figures.py
 ```bash
 cd paper
 
-# Compile Elsevier Computers & Security manuscript
+# Compile Elsevier Computer Networks manuscript
 pdflatex -interaction=nonstopmode elsevier_manuscript.tex
 bibtex elsevier_manuscript
 pdflatex -interaction=nonstopmode elsevier_manuscript.tex
@@ -225,7 +225,7 @@ pdflatex -interaction=nonstopmode cover_letter_cose.tex
 
 ## 7. Journal Submission Status
 
-* **Target Journal:** *Computers & Security* (Elsevier, Q1, Impact Factor 5.6, CiteScore 10.5).
+* **Target Journal:** *Computer Networks* (Elsevier). Previously submitted to *Computers & Security*, which returned it without review under its AI/ML moratorium.
 * **Publishing Model:** Traditional Subscription Route (**$0 APC / Free Publication**).
 * **Submission Package:**
   * Manuscript: [`paper/elsevier_manuscript.pdf`](paper/elsevier_manuscript.pdf) (81 pages review layout, 0 errors, 57 verified citations).

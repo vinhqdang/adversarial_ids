@@ -124,12 +124,10 @@ To mitigate Lie cone evasion, this repository provides reference implementations
 adversarial_ids/
 ├── paper/                                  # Complete Academic Submission Packages
 │   ├── elsevier_manuscript.tex             # Target: Elsevier Computers & Security (elsarticle)
-│   ├── elsevier_manuscript.pdf             # Compiled PDF (80 pages, review layout, 0 errors)
+│   ├── elsevier_manuscript.pdf             # Compiled PDF (81 pages, review layout, 0 errors)
 │   ├── cover_letter_cose.tex               # Cover Letter to Editor-in-Chief (Computers & Security)
 │   ├── cover_letter_cose.pdf               # Compiled Cover Letter PDF
-│   ├── springer_manuscript.tex             # Alternative Target: Springer sn-jnl template
-│   ├── springer_manuscript.pdf             # Compiled Springer PDF (61 pages)
-│   ├── references.bib                      # 55 fully certified bibtex citations
+│   ├── references.bib                      # 57 fully certified bibtex citations
 │   ├── generate_figures.py                 # Vector figure generator script
 │   ├── figures/                            # Publication-grade vector PDF/PNG figures (Figs 1-5)
 │   └── sec1_introduction.tex ... sec9_defenses.tex # Modular manuscript sections
@@ -230,10 +228,9 @@ pdflatex -interaction=nonstopmode cover_letter_cose.tex
 * **Target Journal:** *Computers & Security* (Elsevier, Q1, Impact Factor 5.6, CiteScore 10.5).
 * **Publishing Model:** Traditional Subscription Route (**$0 APC / Free Publication**).
 * **Submission Package:**
-  * Manuscript: [`paper/elsevier_manuscript.pdf`](paper/elsevier_manuscript.pdf) (80 pages review layout, 0 errors, 55 verified citations).
+  * Manuscript: [`paper/elsevier_manuscript.pdf`](paper/elsevier_manuscript.pdf) (81 pages review layout, 0 errors, 57 verified citations).
   * Source LaTeX: [`paper/elsevier_manuscript.tex`](paper/elsevier_manuscript.tex) with standard `elsarticle` frontmatter, research highlights, and keywords.
   * Cover Letter: [`paper/cover_letter_cose.pdf`](paper/cover_letter_cose.pdf) addressed to the Editor-in-Chief.
-  * Alternative format: Springer Nature [`paper/springer_manuscript.pdf`](paper/springer_manuscript.pdf).
 
 ---
 

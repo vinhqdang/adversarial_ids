@@ -43,7 +43,7 @@ However, as subsequent security analyses revealed, these evaluations were fundam
 \end{itemize}
 
 \subsection{Phase II: The Problem-Space Paradigm Shift}
-In their landmark 2020 paper, \emph{``Intriguing Properties of Adversarial ML Attacks in the Problem Space''}, Pierazzi et al. \cite{pierazzi2020intrusion} formalized the mathematical framework required to evaluate adversarial attacks in security domains. They demonstrated that an adversarial perturbation is an operational illusion unless it is mapped from the \textbf{Problem Space} $\mathcal{Z}$ to the \textbf{Feature Space} $\mathcal{X}$.
+In their landmark 2020 paper, \emph{``Intriguing Properties of Adversarial ML Attacks in the Problem Space''}, Pierazzi et al.~\cite{pierazzi2020intrusion} and Verkerken et al.~\cite{verkerken2026problem} \cite{pierazzi2020intrusion} formalized the mathematical framework required to evaluate adversarial attacks in security domains. They demonstrated that an adversarial perturbation is an operational illusion unless it is mapped from the \textbf{Problem Space} $\mathcal{Z}$ to the \textbf{Feature Space} $\mathcal{X}$.
 
 \subsubsection{The Pierazzi Framework}
 Let $z \in \mathcal{Z}$ denote a real physical object (e.g., an executable binary, a PDF document, or a sequence of network packets). The feature extraction pipeline is a deterministic mapping:
@@ -74,7 +74,7 @@ A problem-space adversarial attack is formally defined as finding a transformati
 \end{enumerate}
 
 \subsubsection{Empirical Audits by Apruzzese et al.}
-Following the formalization of Pierazzi et al., Apruzzese et al.~\cite{apruzzese2022modeling, apruzzese2023real, apruzzese2024evaluating} critically examined the adversarial NIDS literature, establishing that the vast majority of published feature-space attacks rely on unfeasible threat models:
+Following the formalization of Pierazzi et al.~\cite{pierazzi2020intrusion} and Verkerken et al.~\cite{verkerken2026problem}, Apruzzese et al.~\cite{apruzzese2022modeling, apruzzese2023real, he2023adversarial, vitorino2023sok} critically examined the adversarial NIDS literature, establishing that the vast majority of published feature-space attacks rely on unfeasible threat models:
 \begin{itemize}
     \item Standard feature-space perturbations routinely generate feature vectors that cannot be realized via valid network packets under RFC protocol specifications.
     \item Real-world network telemetry is extracted by stateful network parsers; unconstrained coordinate displacements that disregard flow conservation laws fail to survive physical feature extraction.
@@ -128,7 +128,7 @@ To circumvent mathematical feature-space abstractions entirely, security practit
 \begin{itemize}
     \item \textbf{Traffic Manipulator (Han et al. \cite{han2021traffic}):} Uses Particle Swarm Optimization (PSO) to mutate raw PCAP files. It perturbs packet transmission intervals, injects dummy payload bytes, and introduces chaff packets.
     \item \textbf{Adversarial Feature Generation (Lin et al. \cite{lin2022idsgan}):} Employs Wasserstein Generative Adversarial Networks (IDSGAN) to synthesize adversarial tabular flow records approximating benign distributions in feature space.
-    \item \textbf{Deep Traffic Detection under Packet Morphing:} Evaluated how deep and tree-based traffic anomaly detectors are vulnerable to timing and volumetric morphing under realistic problem-space constraints (e.g., Apruzzese et al.~\cite{apruzzese2022modeling, apruzzese2023real, apruzzese2024evaluating}).
+    \item \textbf{Deep Traffic Detection under Packet Morphing:} Evaluated how deep and tree-based traffic anomaly detectors are vulnerable to timing and volumetric morphing under realistic problem-space constraints (e.g., Apruzzese et al.~\cite{apruzzese2022modeling, apruzzese2023real, he2023adversarial, vitorino2023sok}).
 \end{itemize}
 
 While packet mutation frameworks guarantee physical routability by operating directly on packets, their optimization engines treat the target classifier as an opaque black box. Because Genetic Algorithms and PSO randomly mutate parameters without knowing which tree splits are active, they require hundreds to thousands of queries ($1,240$--$1,850$ queries for evolutionary and swarm optimizers, and $680$ queries for HopSkipJump in our benchmark, taking up to several seconds per flow and minutes per batch).
@@ -147,7 +147,7 @@ Table~\ref{tab:sota_taxonomy_expanded} summarizes representative evasion, verifi
 \textbf{Kantchelian et al.} \cite{kantchelian2016evasion} & GBDT / Random Forest & Mixed-Integer Linear Program (MILP) & Zero (White-Box) & Unconstrained (Feature Space) & 2016 \\
 \textbf{Carlini \& Wagner} \cite{carlini2017towards} & Deep Neural Networks & Lagrangian $L_2/L_\infty$ Optimization & $O(N_{\text{iter}})$ & Unconstrained (Feature Space) & 2017 \\
 \textbf{Chen et al. (ZOO)} \cite{chen2017zoo} & Black-Box Classifiers & Zeroth-Order Coordinate Descent & $O(d \cdot N_{\text{iter}})$ & 25.0\% (Empirical Benchmark) & 2017 \\
-\textbf{Pierazzi et al.} \cite{pierazzi2020intrusion} & Android / Problem Space & Problem-Space Formalization & Analytic & Formally Defined & 2020 \\
+\textbf{Pierazzi et al.~\cite{pierazzi2020intrusion} and Verkerken et al.~\cite{verkerken2026problem}} \cite{pierazzi2020intrusion} & Android / Problem Space & Problem-Space Formalization & Analytic & Formally Defined & 2020 \\
 \textbf{Hashemi \& Keller} \cite{hashemi2020enhancing} & Neural NIDS & Adversarial Retraining / RePO & $O(N_{\text{train}})$ & Unconstrained (Feature Space) & 2020 \\
 \textbf{Chen et al. (HSJ)} \cite{chen2020hopskipjump} & Black-Box Decision & Boundary Random Walk & $O(10^3)$ & 17.8\% (Empirical Benchmark) & 2020 \\
 \textbf{Zhang et al. (LT-Attack)} \cite{zhang2020efficient} & Tree Ensembles & Continuous Leaf Approximation & $O(N_{\text{iter}})$ & Unconstrained (Feature Space) & 2020 \\

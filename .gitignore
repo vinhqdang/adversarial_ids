@@ -235,6 +235,10 @@ __marimo__/
 *.toc
 *.blg
 *.bbl
+*.spl
+*.nav
+*.snm
+*.vrb
 
 
 orcid_*.json

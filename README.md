@@ -125,8 +125,6 @@ adversarial_ids/
 ├── paper/                                  # Complete Academic Submission Packages
 │   ├── elsevier_manuscript.tex             # Target: Elsevier Computer Networks (elsarticle)
 │   ├── elsevier_manuscript.pdf             # Compiled PDF (81 pages, review layout, 0 errors)
-│   ├── cover_letter_cose.tex               # Cover Letter to Editor-in-Chief (Computers & Security)
-│   ├── cover_letter_cose.pdf               # Compiled Cover Letter PDF
 │   ├── references.bib                      # 57 fully certified bibtex citations
 │   ├── generate_figures.py                 # Vector figure generator script
 │   ├── figures/                            # Publication-grade vector PDF/PNG figures (Figs 1-5)
@@ -217,8 +215,6 @@ bibtex elsevier_manuscript
 pdflatex -interaction=nonstopmode elsevier_manuscript.tex
 pdflatex -interaction=nonstopmode elsevier_manuscript.tex
 
-# Compile Cover Letter
-pdflatex -interaction=nonstopmode cover_letter_cose.tex
 ```
 
 ---
@@ -228,9 +224,8 @@ pdflatex -interaction=nonstopmode cover_letter_cose.tex
 * **Target Journal:** *Computer Networks* (Elsevier). Previously submitted to *Computers & Security*, which returned it without review under its AI/ML moratorium.
 * **Publishing Model:** Traditional Subscription Route (**$0 APC / Free Publication**).
 * **Submission Package:**
-  * Manuscript: [`paper/elsevier_manuscript.pdf`](paper/elsevier_manuscript.pdf) (81 pages review layout, 0 errors, 57 verified citations).
+  * Manuscript: [`paper/elsevier_manuscript.pdf`](paper/elsevier_manuscript.pdf) (80 pages review layout, 0 errors, 57 verified citations).
   * Source LaTeX: [`paper/elsevier_manuscript.tex`](paper/elsevier_manuscript.tex) with standard `elsarticle` frontmatter, research highlights, and keywords.
-  * Cover Letter: [`paper/cover_letter_cose.pdf`](paper/cover_letter_cose.pdf) addressed to the Editor-in-Chief.
 
 ---
 

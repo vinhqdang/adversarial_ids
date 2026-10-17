@@ -15,6 +15,12 @@ from typing import Tuple, Dict, List, Optional
 import numpy as np
 import pandas as pd
 from .schema import get_cicids_schema, project_network_invariants
+from .real_data_loader import (
+    load_real_cicids_traffic,
+    load_real_attack_family_cohorts,
+    load_real_unsw_traffic,
+    load_real_cicids2017_traffic
+)
 
 
 def _generate_single_flow(
@@ -46,12 +52,19 @@ def _generate_single_flow(
 def generate_cicids_traffic(
     n_samples: int = 12000,
     attack_ratio: float = 0.25,
-    random_state: int = 42
+    random_state: int = 42,
+    use_real: bool = True
 ) -> Tuple[np.ndarray, np.ndarray, pd.DataFrame]:
     """
-    Generates a realistic network flow dataset respecting physical flow dependencies.
-    Models 5 intrusion families alongside diverse benign background traffic.
+    Loads realistic network flow dataset respecting physical flow dependencies.
+    Defaults to 100% real CSE-CIC-IDS2018 flows from AWS S3 repository.
     """
+    if use_real:
+        try:
+            return load_real_cicids_traffic(n_samples=n_samples, attack_ratio=attack_ratio, random_state=random_state)
+        except Exception as e:
+            print(f"[Warning] Failed to load real CSE-CIC-IDS2018 ({e}), falling back to synthetic generator.")
+
     rng = np.random.RandomState(random_state)
     schema = get_cicids_schema()
     
@@ -225,12 +238,27 @@ def generate_cicids_traffic(
 
 def generate_attack_family_cohorts(
     n_per_family: int = 100,
-    random_state: int = 42
+    random_state: int = 42,
+    use_real: bool = True
 ) -> Dict[str, np.ndarray]:
     """
     Generates isolated cohorts for each of the 5 attack families (N=100 per family)
     for exact attack family breakdown and ablation evaluations.
+    Defaults to 100% real flows from CSE-CIC-IDS2018.
     """
+    if use_real:
+        try:
+            real_cohorts = load_real_attack_family_cohorts(n_per_family=n_per_family, random_state=random_state)
+            return {
+                'Family 1: Volumetric DoS SYN Flood': real_cohorts['DoS'],
+                'Family 2: UDP Volumetric Flood': real_cohorts['DDoS'],
+                'Family 3: Brute Force Authentication': real_cohorts['BruteForce'],
+                'Family 4: Web Application Exploits': real_cohorts['WebExploit'],
+                'Family 5: Low-and-Slow Infiltration': real_cohorts['InfiltrationBeacon']
+            }
+        except Exception as e:
+            print(f"[Warning] Failed to load real attack cohorts ({e}), falling back to synthetic.")
+
     rng = np.random.RandomState(random_state)
     schema = get_cicids_schema()
     cohorts = {}
@@ -304,13 +332,18 @@ def generate_attack_family_cohorts(
 def generate_unsw_traffic(
     n_samples: int = 12000,
     attack_ratio: float = 0.25,
-    random_state: int = 42
+    random_state: int = 42,
+    use_real: bool = True
 ) -> Tuple[np.ndarray, np.ndarray, pd.DataFrame]:
     """
-    Generates synthetic network telemetry calibrated to UNSW-NB15 empirical distributions:
-    Blends modern hybrid normal activities with subtler modern low-footprint attack categories
-    (Fuzzers, Analysis, Backdoors, DoS, Exploits, Generic, Reconnaissance, Shellcode, Worms).
+    Loads real UNSW-NB15 network telemetry mapped into 12-feature schema.
     """
+    if use_real:
+        try:
+            return load_real_unsw_traffic(n_samples=n_samples, attack_ratio=attack_ratio, random_state=random_state)
+        except Exception as e:
+            print(f"[Warning] Failed to load real UNSW-NB15 ({e}), falling back to synthetic.")
+
     rng = np.random.RandomState(random_state)
     schema = get_cicids_schema()
     n_attack = int(n_samples * attack_ratio)
@@ -376,12 +409,18 @@ def generate_unsw_traffic(
 def generate_cidds_traffic(
     n_samples: int = 12000,
     attack_ratio: float = 0.25,
-    random_state: int = 42
+    random_state: int = 42,
+    use_real: bool = True
 ) -> Tuple[np.ndarray, np.ndarray, pd.DataFrame]:
     """
-    Generates synthetic network telemetry calibrated to CIDDS-001 OpenStack cloud distributions:
-    Models OpenStack tenant virtual machines and perimeter biflow collector telemetry.
+    Loads real CIC-IDS2017 network telemetry mapped into 12-feature schema.
     """
+    if use_real:
+        try:
+            return load_real_cicids2017_traffic(n_samples=n_samples, attack_ratio=attack_ratio, random_state=random_state)
+        except Exception as e:
+            print(f"[Warning] Failed to load real CIC-IDS2017 ({e}), falling back to synthetic.")
+
     rng = np.random.RandomState(random_state)
     schema = get_cicids_schema()
     n_attack = int(n_samples * attack_ratio)

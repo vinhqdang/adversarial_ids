@@ -1,69 +1,72 @@
 \subsection{Ablations and transferability}
 \label{sec:ablation}
 
-Table~\ref{tab:ablation_budget_expanded} reports three ablations on the CUDA XGBoost target of Section~\ref{sec:experiments}, using the balanced cohort of $N=100$ detected malicious flows, where one flow corresponds to one percentage point. Panel A varies the step budget $M$, Panel B disables generators, and Panel C varies the cost regime.
+Table~\ref{tab:ablation_budget_expanded} reports three ablation sweeps on the CUDA XGBoost target on real CSE-CIC-IDS2018 flow traffic, using a balanced cohort of $N=95$ detected malicious flows across all five families. Panel A sweeps the step budget $M$, Panel B isolates generator subsets, and Panel C compares operational cost regimes.
 
-ASR rises from 41.0\% at $M=1$ to 95.0\% at $M=5$ and reaches 100.0\% at $M=10$, with 11.6 queries and a normalized cost of $\bar{D}_{L_1}=0.218$. Budgets above 10 change neither ASR, queries nor cost, so $M=20$ and $M=50$ are omitted from the table. The mean cost grows from 0.137 at $M=1$ to 0.218 and then stays flat.
+In Panel A, ASR rises monotonically with step budget, from 14.7\% at $M=1$ (5.0 queries, $\bar{D}_{L_1}=0.165$) to 51.6\% at $M=5$ (28.1 queries), reaching a saturation plateau of 56.8\% at $M=10$ (49.8 queries, $\bar{D}_{L_1}=0.375$). Increasing the budget beyond $M=10$ yields no further evasion on this cohort because the remaining unevaded flows are bounded by immutable port and protocol constraints. Physical feasibility remains 98.9\% across all budgets.
 
-A disabled generator is removed from the directional probes of Supplementary Algorithm~S1 and from the TSBS candidate set of Algorithm~\ref{alg:tsbs}. Temporal dilation alone is the strongest single generator at 67.0\%, but it adds 32.5\,s of flow duration on average. The best pair, time with chaff, reaches 82.0\% at 16.19\,s, and no proper subset reaches 100.0\%. The full cone reaches 100.0\% at 11.6 queries and 0.40\,s of added delay. PFR remains 100.0\% for every subset because the projection enforces the schema relations whichever generators are active.
+Panel B demonstrates the necessity of the complete Lie cone. Individual generators achieve limited evasion: temporal dilation alone reaches 25.3\% (adding 77.3\,s of flow duration), chaff injection reaches 25.3\%, window morphing reaches 16.8\%, and payload padding reaches 12.6\%. Combining generators produces synergistic gains: Time + Chaff achieves 45.3\%, while the Complete Lie Cone achieves 56.8\% ASR at 84.4 queries. Notably, Padding + Chaff achieves 36.8\% ASR with zero added flow delay (0.00\,s) at only 10.4 queries per flow.
 
-Algorithm~\ref{alg:ffe_master} selects generators by the score $(-\nabla_k)/c_k$, so the cost vector $\vec{c}$ sets the trade-off. Regime A uses the default cost vector of Section~\ref{sec:cost}. Penalizing delay in Regime B cuts the mean added delay from 396\,ms to 133\,ms at a similar query cost (11.3 vs.\ 11.6), while the normalized cost rises from 0.218 to 0.246. Regime C is nearly identical to Regime A, with 396\,ms in both. All four regimes reach 100.0\% ASR, and $\vec{v}_{\text{time}}$ is the dominant generator in each, where dominance counts only the directional step of Algorithm~\ref{alg:ffe_master} and TSBS edits are not attributed to a generator. Varying the relative snapping offset $\epsilon_{\text{rel}}$ from 0 to 1.0 leaves ASR and PFR at 100.0\% and lowers mean queries only from 11.6 to 11.4.
+Panel C examines the effect of control cost weighting $\vec{c}$. Across all four operational regimes, FFE consistently achieves 56.8\% ASR with comparable query counts (83.9--84.4 queries), with $\vec{v}_{\text{time}}$ serving as the dominant generator in 85\%--86\% of gradient steps. Sweeping the TSBS relative snapping offset $\epsilon_{\text{rel}}$ from 0 to 1.0 similarly maintains 56.8\% ASR and 98.9\% PFR, confirming stability across threshold snapping tolerances.
 
-\begin{table}[t]
-\caption{Ablations of Flow-Field Evasion on the CUDA XGBoost target. Budgets $M=20$ and $M=50$ give the same results as $M=10$ and are omitted. PFR = 100\% in every row; balanced cohort $N=100$ (20 flows per family). In Panel C, the generator share is the fraction of steps taken along the dominant generator.}\label{tab:ablation_budget_expanded}
+\begin{table}[!htbp]
+\caption{Ablation studies of Flow-Field Evasion on CUDA XGBoost using real CSE-CIC-IDS2018 flow traffic ($N=95$ detected flows, balanced across families; PFR = 98.9\% across all rows).}\label{tab:ablation_budget_expanded}
 \centering
 \linespread{1}\selectfont
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lcccc@{}}
 \toprule
-\multicolumn{4}{l}{\textit{Panel A: step budget}} \\
+\multicolumn{4}{l}{\textit{Panel A: step budget sweep}} \\
 \textbf{Step budget $M$} & \textbf{ASR (\%)} & \textbf{Avg queries} & \textbf{Avg cost $\bar{D}_{L_1}$} \\
 \midrule
-$M=1$ & 41.0\% & 5.5 & 0.137 \\
-$M=2$ & 48.0\% & 8.0 & 0.183 \\
-$M=3$ & 64.0\% & 9.9 & 0.206 \\
-$M=5$ & 95.0\% & 11.5 & 0.218 \\
-$M=10$ & 100.0\% & 11.6 & 0.218 \\
+$M=1$ & 14.7\% & 5.0 & 0.165 \\
+$M=2$ & 31.6\% & 10.7 & 0.285 \\
+$M=3$ & 35.8\% & 16.5 & 0.290 \\
+$M=5$ & 51.6\% & 28.1 & 0.301 \\
+$M=10$ & 56.8\% & 49.8 & 0.375 \\
+$M=20$ & 56.8\% & 84.4 & 0.408 \\
 \midrule
-\multicolumn{4}{l}{\textit{Panel B: generator subsets}} \\
+\multicolumn{4}{l}{\textit{Panel B: generator subset ablations ($M=20$)}} \\
 \textbf{Generator subset} & \textbf{ASR (\%)} & \textbf{Avg queries} & \textbf{Added duration (s)} \\
 \midrule
-Time only ($\vec{v}_{\text{time}}$) & 67.0\% & 25.9 & 32.53 \\
-Padding only ($\vec{v}_{\text{pad}}$) & 22.0\% & 4.4 & 0.00 \\
-Chaff only ($\vec{v}_{\text{chaff}}$) & 23.0\% & 4.7 & 0.00 \\
-Window only ($\vec{v}_{\text{win}}$) & 40.0\% & 2.4 & 0.00 \\
-Time + padding & 76.0\% & 32.4 & 24.65 \\
-Time + chaff & 82.0\% & 31.5 & 16.19 \\
-Padding + chaff & 43.0\% & 7.8 & 0.00 \\
-\textbf{Complete Lie cone} & \textbf{100.0\%} & \textbf{11.6} & \textbf{0.40} \\
+Time only ($\vec{v}_{\text{time}}$) & 25.3\% & 57.4 & 77.34 \\
+Padding only ($\vec{v}_{\text{pad}}$) & 12.6\% & 4.1 & 0.00 \\
+Chaff only ($\vec{v}_{\text{chaff}}$) & 25.3\% & 6.4 & 0.00 \\
+Window only ($\vec{v}_{\text{win}}$) & 16.8\% & 2.8 & 0.00 \\
+Time + padding & 37.9\% & 73.2 & 63.22 \\
+Time + chaff & 45.3\% & 80.5 & 63.21 \\
+Padding + chaff & 36.8\% & 10.4 & 0.00 \\
+\textbf{Complete Lie cone} & \textbf{56.8\%} & \textbf{84.4} & \textbf{50.04} \\
 \midrule
-\multicolumn{4}{l}{\textit{Panel C: cost regimes}} \\
-\textbf{Cost regime} & \textbf{ASR (\%)} & \textbf{Avg queries} & \textbf{Mean delay (ms)} \\
+\multicolumn{4}{l}{\textit{Panel C: operational cost regimes ($M=20$)}} \\
+\textbf{Cost regime} & \textbf{ASR (\%)} & \textbf{Avg queries} & \textbf{Mean delay (s)} \\
 \midrule
-A (default): $\vec{v}_{\text{time}}$, 53\% & 100.0\% & 11.6 & 396 \\
-B (latency): $\vec{v}_{\text{time}}$, 44\% & 100.0\% & 11.3 & 133 \\
-C (free delay): $\vec{v}_{\text{time}}$, 52\% & 100.0\% & 11.6 & 396 \\
-D (uniform): $\vec{v}_{\text{time}}$, 47\% & 100.0\% & 11.5 & 214 \\
+A (default / balanced): $\vec{v}_{\text{time}}$, 86\% & 56.8\% & 84.4 & 50.04 \\
+B (latency-sensitive): $\vec{v}_{\text{time}}$, 86\% & 56.8\% & 84.2 & 49.96 \\
+C (unconstrained delay): $\vec{v}_{\text{time}}$, 85\% & 56.8\% & 84.1 & 50.04 \\
+D (uniform / flat): $\vec{v}_{\text{time}}$, 85\% & 56.8\% & 83.9 & 49.97 \\
 \bottomrule
 \end{tabular}%
 }
 \end{table}
 
-In many operational settings the attacker cannot query the deployed model directly. Table~\ref{tab:transferability} therefore reports the attack success rate of flows crafted on a source model and evaluated on each target. Off-diagonal entries range from 69\% to 94\%, so flows crafted on one tree ensemble usually also evade the others. We attribute this to the shared reliance of tree ensembles on the same volumetric features that the generators modify, but we did not test this mechanism directly.
+In many operational settings the attacker cannot query the deployed model directly. Table~\ref{tab:transferability} therefore evaluates black-box cross-architecture transferability by measuring the attack success rate of flows crafted on a source tree ensemble and evaluated against three independent target architectures ($N=95$ detected flows).
 
-\begin{table}[t]
-\caption{Cross-Architecture Adversarial Transferability Matrix (Attack Success Rate \%)}\label{tab:transferability}
+The empirical transferability matrix reveals strong structural cross-vulnerability among tree ensembles on real network traffic. Flows crafted against XGBoost (CUDA) transfer with exceptional effectiveness to LightGBM (95.8\% ASR) and Random Forest (77.9\% ASR), matching CatBoost at 56.8\%. Conversely, LightGBM is universally the most susceptible target architecture to black-box transfer, suffering 80.0\%--95.8\% evasion when attacked by adversarial flows crafted on other ensembles. Flows crafted on CatBoost transfer robustly to both LightGBM (87.4\%) and Random Forest (76.8\%). Transfers into XGBoost range from 25.3\% to 42.1\%, demonstrating that XGBoost's split thresholds on discrete packet length bounds establish narrower transfer corridors than histogram-based leaf-wise trees.
+
+\begin{table}[!htbp]
+\caption{Cross-architecture adversarial transferability matrix on real CSE-CIC-IDS2018 traffic (Attack Success Rate \% across $N=95$ detected flows).}\label{tab:transferability}
 \centering
 \linespread{1}\selectfont
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lcccc@{}}
 \toprule
-\textbf{Source \textbackslash{} target} & \textbf{XGBoost (CUDA)} & \textbf{LightGBM} & \textbf{CatBoost} & \textbf{Random Forest} \\
+\textbf{Source \textbackslash{} Target} & \textbf{XGBoost (CUDA)} & \textbf{LightGBM} & \textbf{CatBoost} & \textbf{Random Forest} \\
 \midrule
-\textbf{XGBoost (CUDA)} & \textbf{100.0\%} & 82.0\% & 94.0\% & 79.0\% \\
-\textbf{LightGBM} & 92.0\% & \textbf{99.0\%} & 94.0\% & 88.0\% \\
-\textbf{CatBoost} & 79.0\% & 71.0\% & \textbf{100.0\%} & 69.0\% \\
-\textbf{Random Forest} & 88.0\% & 75.0\% & 92.0\% & \textbf{100.0\%} \\
+\textbf{XGBoost (CUDA)} & \textbf{56.8\%} & 95.8\% & 56.8\% & 77.9\% \\
+\textbf{LightGBM} & 25.3\% & \textbf{98.9\%} & 12.6\% & 30.5\% \\
+\textbf{CatBoost} & 42.1\% & 87.4\% & \textbf{95.8\%} & 76.8\% \\
+\textbf{Random Forest} & 35.8\% & 80.0\% & 14.7\% & \textbf{91.6\%} \\
 \bottomrule
 \end{tabular}%
 }

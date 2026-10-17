@@ -1,29 +1,29 @@
 {
-  "cohort_size": 100,
+  "cohort_size": 95,
   "models": {
     "Baseline XGBoost (Undefended)": {
-      "clean_accuracy": 99.72,
-      "clean_roc_auc": 99.99,
-      "robust_recall": 5.0,
-      "ffe_asr": 95.0
+      "clean_accuracy": 98.62,
+      "clean_roc_auc": 99.88,
+      "robust_recall": 48.4,
+      "ffe_asr": 51.6
     },
     "MPS-Hardened XGBoost": {
-      "clean_accuracy": 97.8,
-      "clean_roc_auc": 99.81,
-      "robust_recall": 23.0,
-      "ffe_asr": 77.0
+      "clean_accuracy": 98.67,
+      "clean_roc_auc": 99.85,
+      "robust_recall": 1.1,
+      "ffe_asr": 98.9
     },
     "LGAT-Hardened XGBoost": {
-      "clean_accuracy": 99.25,
-      "clean_roc_auc": 99.97,
-      "robust_recall": 12.0,
-      "ffe_asr": 88.0
+      "clean_accuracy": 98.72,
+      "clean_roc_auc": 99.85,
+      "robust_recall": 74.7,
+      "ffe_asr": 25.3
     },
     "Dual-Hardened (MPS + LGAT)": {
-      "clean_accuracy": 97.3,
-      "clean_roc_auc": 99.69,
-      "robust_recall": 44.0,
-      "ffe_asr": 56.0
+      "clean_accuracy": 98.67,
+      "clean_roc_auc": 99.84,
+      "robust_recall": 94.7,
+      "ffe_asr": 5.3
     }
   }
 }

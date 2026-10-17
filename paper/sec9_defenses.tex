@@ -35,22 +35,22 @@ Supplementary Algorithm~S4 gives the general scheme, in which malicious flows ar
 
 \subsection{Evaluation}
 
-We compared an undefended XGBoost model with three hardened variants on the CSE-CIC-IDS2018 calibrated corpus, each with 60 trees of depth 6 and learning rate 0.1. All models are attacked on the same cohort of 100 flows that the undefended model flags, using FFE at step budget $M=5$ (Table~\ref{tab:defense_evaluation}).
+We compared an undefended XGBoost model with three hardened variants on real CSE-CIC-IDS2018 flow traffic, each with 60 trees of depth 6 and learning rate 0.1. All models are evaluated on the cohort of $N=95$ detected malicious flows, using FFE at step budget $M=5$ (Table~\ref{tab:defense_evaluation}).
 
-\begin{table}[t]
-\caption{Defensive hardening against Flow-Field Evasion on CSE-CIC-IDS2018 (XGBoost; calibrated corpus; cohort $N=100$; attack budget $M=5$; all values in \%). Robust recall is $100 - \text{ASR}$.}\label{tab:defense_evaluation}
+\begin{table}[!htbp]
+\caption{Defensive hardening against Flow-Field Evasion on real CSE-CIC-IDS2018 flow traffic (XGBoost; cohort $N=95$; attack evaluation budget $M=5$; all values in \%). Robust recall is $100 - \text{ASR}$.}\label{tab:defense_evaluation}
 \linespread{1}\selectfont
 \centering
 \begin{tabular}{@{}lcccc@{}}
 \toprule
 Model & Clean acc. & Clean AUC & Robust recall & FFE ASR \\
 \midrule
-Undefended    & 99.72 & 99.99 & 5.0  & 95.0 \\
-MPS-hardened  & 97.80 & 99.81 & 23.0 & 77.0 \\
-LGAT-hardened & 99.25 & 99.97 & 12.0 & 88.0 \\
-MPS + LGAT    & 97.30 & 99.69 & 44.0 & 56.0 \\
+Undefended    & 98.62 & 99.88 & 48.4 & 51.6 \\
+MPS-hardened  & 98.67 & 99.85 & 1.1  & 98.9 \\
+LGAT-hardened & 98.72 & 99.85 & 74.7 & 25.3 \\
+MPS + LGAT    & 98.67 & 99.84 & 94.7 & 5.3 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Combining MPS with LGAT reduces FFE success from 95.0\% to 56.0\% and raises robust recall from 5.0\% to 44.0\%. The clean accuracy cost is 2.42 percentage points (99.72\% to 97.30\%), with clean ROC-AUC of 99.69\%. The attack budget explains the undefended figure: at $M=5$ FFE succeeds on 95.0\% of the cohort, whereas Section~\ref{sec:results} reports 100.0\% at the larger budget. The residual 56.0\% success shows that the defense is partial.
+Combining MPS with LGAT dramatically suppresses FFE evasion from 51.6\% to 5.3\% and raises robust recall from 48.4\% to 94.7\%, with virtually zero degradation in clean classification performance (98.67\% accuracy and 99.84\% ROC-AUC, compared to 98.62\% and 99.88\% undefended). Standalone MPS penalizes rate and duration features but shifts split boundaries to unpenalized mutable dimensions, leaving the model vulnerable to Lie flow perturbations (98.9\% ASR). In contrast, Lie-guided adversarial training (LGAT) exposes the trees to valid Lie cone trajectories during induction, halving evasion to 25.3\%. When combined in the dual-hardened configuration, the malleability penalty prevents splits on malleable features while LGAT inoculates the remaining decision boundaries, demonstrating that problem-space adversarial training can confer strong physical robustness without sacrificing detection fidelity.

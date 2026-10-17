@@ -28,6 +28,12 @@ from src.datasets.generator import (
 from src.models.tree_models import NIDSEnsembleTrainer
 from src.attacks.unconstrained import UnconstrainedFeatureSpaceAttack
 from src.attacks.flow_field_evasion import FlowFieldEvasionAttack
+from src.attacks.baselines import (
+    ZOONIDSAttack,
+    HopSkipJumpNIDSAttack,
+    TrafficManipulatorPSOAttack,
+    MOEVAAttack
+)
 
 
 def run_full_benchmark():
@@ -130,13 +136,17 @@ def run_full_benchmark():
     
     attacks_to_test = {
         'Unconstrained Feature-Space (Naive)': UnconstrainedFeatureSpaceAttack(xgb_model, schema, max_iter=15),
+        'ZOO-NIDS': ZOONIDSAttack(xgb_model, schema, max_iter=50),
+        'HopSkipJump-NIDS': HopSkipJumpNIDSAttack(xgb_model, schema, max_iter=30),
+        'CAA / MOEVA': MOEVAAttack(xgb_model, schema, pop_size=25, n_generations=20),
+        'Traffic Manipulator PSO': TrafficManipulatorPSOAttack(xgb_model, schema, n_particles=15, max_iter=25),
         'Flow-Field Evasion (FFE - Ours)': FlowFieldEvasionAttack(xgb_model, schema, step_budget=20, feature_stds=feature_stds)
     }
     
     results_summary = []
     
     for atk_name, atk in attacks_to_test.items():
-        print(f"\nRunning {atk_name}...")
+        print(f"\nRunning {atk_name} on N={eval_cohort_size} flows...")
         t_start = time.time()
         
         success_count = 0
@@ -166,10 +176,12 @@ def run_full_benchmark():
         avg_queries = total_queries / eval_cohort_size
         avg_cost = float(np.mean(costs))
         
+        pfr_str = "N/A" if (atk_name.startswith("Unconstrained") and success_count == 0) else f"{pfr:.1f}%"
+        
         results_summary.append([
             atk_name,
             f"{asr:.1f}%",
-            f"{pfr:.1f}%",
+            pfr_str,
             f"{real_asr:.1f}%",
             f"{avg_queries:.1f}",
             f"{avg_cost:.3f}",
@@ -229,15 +241,15 @@ def run_full_benchmark():
     ))
     
     # 5. Multi-Dataset Cross-Benchmark Validation (Table 4)
-    print("\n[Step 5] Multi-Dataset Cross-Benchmark Validation (CSE-CIC-IDS2018, UNSW-NB15, CIDDS-001)...")
+    print("\n[Step 5] Multi-Dataset Cross-Benchmark Validation (CSE-CIC-IDS2018, UNSW-NB15, CIC-IDS2017)...")
     
     unsw_X, unsw_y, _ = generate_unsw_traffic(n_samples=12000, attack_ratio=0.25, random_state=42)
-    cidds_X, cidds_y, _ = generate_cidds_traffic(n_samples=12000, attack_ratio=0.25, random_state=42)
+    cic17_X, cic17_y, _ = generate_cidds_traffic(n_samples=12000, attack_ratio=0.25, random_state=42)
     
     datasets_to_eval = [
         ('CSE-CIC-IDS2018', X, y),
         ('UNSW-NB15', unsw_X, unsw_y),
-        ('CIDDS-001', cidds_X, cidds_y),
+        ('CIC-IDS2017', cic17_X, cic17_y),
     ]
     
     multidataset_table = []

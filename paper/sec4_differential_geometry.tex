@@ -13,7 +13,7 @@ Figure~\ref{fig:system_architecture} summarizes the framework.
 \subsection{Geometry of the Flow Manifold and Its Generators}
 \label{sec:geometry}
 
-The physical flow set $\mathcal{M}_{\text{flow}} = \Phi(\mathcal{P}_{\text{valid}})$ is a discrete lattice in $\mathbb{R}^{12}$. Its differential geometry is analyzed through the smooth relaxation $\widetilde{\mathcal{M}}_{\text{flow}}$ (Section~\ref{sec:formulation}), defined as the zero set of the conservation residual $\Psi$ below, subject to $x_2 \ge 1$, $0 < x_6 \le 1.1 \times 10^8$, $x_{11} \ge x_2 (20 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17})$ and $x_{11} + 20 x_2 \le x_4 \le 1500 x_2$.
+The physical flow set $\mathcal{M}_{\text{flow}} = \Phi(\mathcal{P}_{\text{valid}})$ is a discrete lattice in $\mathbb{R}^{12}$. Its differential geometry is analyzed through the smooth relaxation $\widetilde{\mathcal{M}}_{\text{flow}}$ (Section~\ref{sec:formulation}), defined as the zero set of the conservation residual $\Psi$ below, subject to $x_2 \ge 1$, $0 < x_6 \le 1.1 \times 10^8$, $x_{11} \ge x_2 (20 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17})$ and $0 \le x_4 \le 1500 x_2$.
 \begin{equation}
     \Psi(x) = \begin{bmatrix}
         x_8 - \dfrac{10^6 (x_4 + x_5)}{x_6} \\[8pt]

@@ -28,7 +28,7 @@ The indices $\mathcal{D}=\{0,\dots,11\}$ fall into five constraint classes deriv
     \item $\mathcal{I}_{\text{mono}}^+=\{2,4,6,11\}$: an attacker may add packets, pad payloads or delay transmissions, but cannot remove bytes the payload needs, so $\Delta x_j\ge 0$.
     \item $\mathcal{I}_{\text{bound}}=\{7\}$: the window stays within $0\le x_7+\Delta x_7\le 65535\cdot\mathbb{I}_{x_1=6}$.
     \item $\mathcal{I}_{\text{dep}}=\{8,9,10\}$: these features are the deterministic functions $g_8,g_9,g_{10}$ of the base metrics given above.
-    \item $\mathcal{I}_{\text{ineq}}=\{4,11\}$: $x_{11}\ge x_2(20\,\mathbb{I}_{x_1=6}+8\,\mathbb{I}_{x_1=17})$ and $x_{11}+20x_2\le x_4\le 1500x_2$.
+    \item $\mathcal{I}_{\text{ineq}}=\{4,11\}$: $x_{11}\ge x_2(20\,\mathbb{I}_{x_1=6}+8\,\mathbb{I}_{x_1=17})$ and $0 \le x_4\le 1500x_2$.
 \end{itemize}
 Feature $x_4$ is both monotone and MTU bounded. The set $\mathcal{I}_{\text{mono}}^+$ gives the mutable monotone features that Algorithm~\ref{alg:tsbs} modifies.
 
@@ -45,7 +45,7 @@ To enable continuous differential geometric optimization, we define the \emph{co
     \begin{aligned}
         &x_0 \in [1, 65535], \quad x_1 \in \{6, 17\}, \quad x_2 \ge 1, \quad x_3, x_5 \ge 0, \\
         &H_{\min}(x_1) x_2 \le x_{11} \le H_{\max}(x_1) x_2, \\
-        &x_{11} + 20 x_2 \le x_4 \le 1500 x_2, \quad 0 < x_6 \le 1.1 \times 10^8, \\
+        &0 \le x_4 \le 1500 x_2, \quad 0 < x_6 \le 1.1 \times 10^8, \\
         &0 \le x_7 \le 65535 \cdot \mathbb{I}_{x_1=6}, \quad x_{10} = x_4 / x_2, \\
         &x_8 = 10^6 (x_4 + x_5)/x_6, \quad x_9 = 10^6 (x_2 + x_3)/x_6
     \end{aligned}

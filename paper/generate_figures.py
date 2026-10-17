@@ -355,22 +355,53 @@ def create_figure_2():
     fig = plt.figure(figsize=(11, 7.5))
     gs = GridSpec(2, 2, figure=fig, hspace=0.35, wspace=0.25)
 
-    methods = ['Unconstrained\nFeature-Space', 'ZOO-NIDS\n[Chen 17]', 'HopSkipJump\n[Chen 20]', 
-               'CAA / MOEVA\n[Simonetto 24]', 'Traffic Manip.\nPSO [Han 21]', 'Flow-Field\nEvasion (Ours)']
+    method_keys = [
+        'Unconstrained Feature-Space (Naive)',
+        'ZOO-NIDS',
+        'HopSkipJump-NIDS',
+        'CAA / MOEVA',
+        'Traffic Manipulator PSO',
+        'Flow-Field Evasion (FFE - Ours)'
+    ]
+    methods = [
+        'Unconstrained\nFeature-Space',
+        'ZOO-NIDS\n[Chen 17]',
+        'HopSkipJump\n[Chen 20]',
+        'CAA / MOEVA\n[Simonetto 24]',
+        'Traffic Manip.\nPSO [Han 21]',
+        'Flow-Field\nEvasion (Ours)'
+    ]
     
     # Colors
     c_base = '#94a3b8'
     c_ours = '#0284c7'
     palette = [c_base, c_base, c_base, c_base, '#f59e0b', c_ours]
 
+    master = _master_rows()
+    asr_vals = []
+    pfr_vals = []
+    real_asr = []
+    queries = []
+    times = []
+    for k in method_keys:
+        if k in master:
+            row = master[k]
+            asr_vals.append(float(row[1].rstrip('%')))
+            pfr_vals.append(0.0 if row[2] == 'N/A' else float(row[2].rstrip('%')))
+            real_asr.append(float(row[3].rstrip('%')))
+            queries.append(float(row[4]))
+            times.append(float(row[6].rstrip('s')))
+        else:
+            asr_vals.append(0.0)
+            pfr_vals.append(0.0)
+            real_asr.append(0.0)
+            queries.append(1.0)
+            times.append(1.0)
+
     # Panel A: Real ASR vs PFR
     ax_a = fig.add_subplot(gs[0, 0])
     x = np.arange(len(methods))
     width = 0.35
-
-    asr_vals = [0.0, 12.0, 45.0, 78.0, 82.0, 100.0]
-    pfr_vals = [0.0, 25.0, 17.8, 61.5, 100.0, 100.0]
-    real_asr = [0.0, 3.0, 8.0, 48.0, 82.0, 100.0]
 
     bars1 = ax_a.bar(x - width/2, asr_vals, width, label='Theoretical ASR (%)', color='#93c5fd', edgecolor='#1e40af')
     bars2 = ax_a.bar(x + width/2, real_asr, width, label='Real ASR (%) [Admissible]', color=palette, edgecolor='#0f172a', hatch='//')
@@ -388,36 +419,34 @@ def create_figure_2():
 
     # Panel B: Average Model Queries (Log Scale)
     ax_b = fig.add_subplot(gs[0, 1])
-    master = _master_rows()
-    ffe_row = master['Flow-Field Evasion (FFE - Ours)']
-    naive_row = master['Unconstrained Feature-Space (Naive)']
-    ffe_queries = float(ffe_row[4])
-    queries = [float(naive_row[4]), 142.5, 680.0, 1240.0, 1850.0, ffe_queries]
+    ffe_queries = queries[-1]
+    pso_queries = queries[4]
     bars_q = ax_b.bar(x, queries, color=palette, edgecolor='#0f172a', width=0.55)
     ax_b.set_yscale('log')
     ax_b.set_ylabel('Model Queries (Log Scale)')
     ax_b.set_title('(b) Query Complexity per Evaluated Flow', weight='bold')
     ax_b.set_xticks(x)
     ax_b.set_xticklabels(methods, rotation=25, ha='right', fontsize=8)
-    ax_b.set_ylim(1, 10000)
+    ax_b.set_ylim(1, max(queries) * 4)
     for bar, q in zip(bars_q, queries):
         ax_b.annotate(f'{q:.1f}', xy=(bar.get_x() + bar.get_width()/2, q * 1.2),
                       ha='center', va='bottom', fontsize=8, weight='bold')
-    ax_b.annotate(f'{1850.0 / ffe_queries:.0f}x Reduction\nvs. PSO', xy=(5, ffe_queries), xytext=(4.3, 100),
-                  arrowprops=dict(facecolor='#dc2626', shrink=0.08, width=1.5, headwidth=6),
-                  fontsize=8.5, weight='bold', color='#dc2626', ha='center')
+    if pso_queries > ffe_queries > 0:
+        reduction = pso_queries / ffe_queries
+        ax_b.annotate(f'{reduction:.0f}x Reduction\nvs. PSO', xy=(5, ffe_queries), xytext=(4.3, max(10.0, ffe_queries * 4)),
+                      arrowprops=dict(facecolor='#dc2626', shrink=0.08, width=1.5, headwidth=6),
+                      fontsize=8.5, weight='bold', color='#dc2626', ha='center')
 
     # Panel C: Execution Latency (seconds for 100 flows)
     ax_c = fig.add_subplot(gs[1, 0])
-    times = [float(naive_row[6].rstrip('s')), 34.12, 145.80, 310.50, 420.15, float(ffe_row[6].rstrip('s'))]
     bars_t = ax_c.bar(x, times, color=palette, edgecolor='#0f172a', width=0.55)
     ax_c.set_ylabel('Total Time for 100 Flows (s)')
     ax_c.set_title('(c) Computational Execution Latency', weight='bold')
     ax_c.set_xticks(x)
     ax_c.set_xticklabels(methods, rotation=25, ha='right', fontsize=8)
-    ax_c.set_ylim(0, 480)
+    ax_c.set_ylim(0, max(times) * 1.25)
     for bar, t in zip(bars_t, times):
-        ax_c.annotate(f'{t:.1f}s', xy=(bar.get_x() + bar.get_width()/2, t + 10),
+        ax_c.annotate(f'{t:.1f}s', xy=(bar.get_x() + bar.get_width()/2, t + max(1.0, max(times)*0.02)),
                       ha='center', va='bottom', fontsize=8, weight='bold')
 
     # Panel D: Attack Family Dominant Generators
@@ -470,15 +499,27 @@ def create_figure_2():
 def create_figure_3():
     fig, axes = plt.subplots(1, 3, figsize=(12, 4.2))
 
-    datasets = ['CSE-CIC-IDS2018\n(Enterprise)', 'UNSW-NB15\n(Contemporary)', 'CIDDS-001\n(Cloud OpenStack)']
-    x = np.arange(len(datasets))
-    width = 0.35
-
     bench_data = load_benchmark_data()
     if bench_data and 'multidataset_results' in bench_data:
         try:
             rec_map = {(r['dataset'], r['model']): r for r in bench_data['multidataset_results']}
-            d_keys = ['CSE-CIC-IDS2018', 'UNSW-NB15', 'CIDDS-001']
+            d_keys = []
+            for candidate in ['CSE-CIC-IDS2018', 'UNSW-NB15', 'CIC-IDS2017', 'CIDDS-001']:
+                if (candidate, 'XGBoost (CUDA)') in rec_map and candidate not in d_keys:
+                    d_keys.append(candidate)
+            if not d_keys:
+                d_keys = list(dict.fromkeys(r['dataset'] for r in bench_data['multidataset_results']))
+
+            label_map = {
+                'CSE-CIC-IDS2018': 'CSE-CIC-IDS2018\n(Enterprise)',
+                'UNSW-NB15': 'UNSW-NB15\n(Contemporary)',
+                'CIC-IDS2017': 'CIC-IDS2017\n(Canadian Cybersec)',
+                'CIDDS-001': 'CIDDS-001\n(Cloud OpenStack)'
+            }
+            datasets = [label_map.get(k, k) for k in d_keys]
+            x = np.arange(len(datasets))
+            width = 0.35
+
             xgb_acc = [float(rec_map[(k, 'XGBoost (CUDA)')]['clean_acc']) for k in d_keys]
             lgb_acc = [float(rec_map[(k, 'LightGBM')]['clean_acc']) for k in d_keys]
             xgb_asr = [float(rec_map[(k, 'XGBoost (CUDA)')]['real_asr']) for k in d_keys]
@@ -569,7 +610,7 @@ def create_figure_4():
     ax_a.set_xlabel('Maximum Step Budget $M$')
     ax_a.set_ylabel('Attack Success Rate (%)', color='#2563eb')
     ax_a.tick_params(axis='y', labelcolor='#2563eb')
-    ax_a.set_ylim(20, 108)
+    ax_a.set_ylim(0, max(asr_m) * 1.35)
     ax_a.set_title('(a) Evasion Convergence vs. Budget $M$', weight='bold')
 
     ax_a2 = ax_a.twinx()
@@ -582,7 +623,7 @@ def create_figure_4():
     # Highlight saturation (first budget reaching the final ASR)
     m_sat = next(m for m, a in zip(m_budgets, asr_m) if a >= asr_m[-1])
     ax_a.axvline(x=m_sat, color='#64748b', linestyle=':', lw=1.5)
-    ax_a.annotate(f'Convergence\nSaturation ($M={m_sat}$)', xy=(m_sat, 100), xytext=(28, 80),
+    ax_a.annotate(f'Convergence\nSaturation ($M={m_sat}$)', xy=(m_sat, asr_m[-1]), xytext=(max(m_sat + 5, 25), asr_m[-1] * 0.7),
                   arrowprops=dict(facecolor='#64748b', shrink=0.05, width=1, headwidth=4),
                   fontsize=8, ha='center', weight='bold')
 
@@ -627,7 +668,7 @@ def create_figure_4():
     l_eps = ax_c2.plot(x_eps + width/2, asr_eps, color='#059669', marker='o', lw=2, label='ASR (%)')
     ax_c2.set_ylabel('Attack Success Rate (%)', color='#059669')
     ax_c2.tick_params(axis='y', labelcolor='#059669')
-    ax_c2.set_ylim(min(85.0, min(asr_eps) - 5.0), 105)
+    ax_c2.set_ylim(0, max(asr_eps) * 1.35)
     ax_c2.grid(False)
 
     for b, c in zip(b_j, cost_eps):
@@ -655,7 +696,7 @@ def create_figure_4():
             [88.0, 75.0, 92.0, 100.0]
         ])
 
-    vmin = max(50, int(np.min(transfer_matrix) // 5 * 5))
+    vmin = max(0, int(np.min(transfer_matrix) // 5 * 5))
     im = ax_d.imshow(transfer_matrix, cmap='Blues', vmin=vmin, vmax=100)
     ax_d.set_title('(d) Cross-Model Transferability Matrix (ASR %)', weight='bold')
     ax_d.set_xticks(np.arange(len(models)))
@@ -669,7 +710,7 @@ def create_figure_4():
     for i in range(len(models)):
         for j in range(len(models)):
             val = transfer_matrix[i, j]
-            text_color = 'white' if val > 88 else 'black'
+            text_color = 'white' if val > 65 else 'black'
             ax_d.text(j, i, f'{val:.1f}%', ha='center', va='center',
                       color=text_color, weight='bold', fontsize=8.5)
 

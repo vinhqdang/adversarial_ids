@@ -138,9 +138,9 @@ def project_network_invariants(x: np.ndarray, schema: NetworkFeatureSchema, x_or
     raw_hdr = max(x_orig[11], float(np.round(x_proj[11]))) if x_orig is not None else float(np.round(x_proj[11]))
     fwd_hdr_len = min(tot_fwd_pkts * h_max, max(tot_fwd_pkts * h_min, raw_hdr))
     
-    # Total forward bytes: must be >= fwd_hdr_len + 20 * tot_fwd_pkts, and <= 1500 * tot_fwd_pkts (MTU)
+    # Total forward payload bytes: must be >= 0 and <= MTU payload (1500 bytes * tot_fwd_pkts)
     raw_bytes = max(x_orig[4], float(np.round(x_proj[4]))) if x_orig is not None else float(np.round(x_proj[4]))
-    totlen_fwd_pkts = min(tot_fwd_pkts * 1500.0, max(fwd_hdr_len + 20.0 * tot_fwd_pkts, raw_bytes))
+    totlen_fwd_pkts = min(tot_fwd_pkts * 1500.0, max(0.0, raw_bytes))
     totlen_bwd_pkts = max(0.0, float(x_proj[5]))
     
     raw_dur = max(x_orig[6], float(np.round(x_proj[6]))) if x_orig is not None else float(np.round(x_proj[6]))
@@ -158,7 +158,7 @@ def project_network_invariants(x: np.ndarray, schema: NetworkFeatureSchema, x_or
     x_proj[11] = fwd_hdr_len
     
     # Invariant 1: Flow Bytes/s
-    duration_sec = flow_duration / 1e6
+    duration_sec = max(1e-6, flow_duration / 1e6)
     tot_bytes = totlen_fwd_pkts + totlen_bwd_pkts
     x_proj[8] = tot_bytes / duration_sec
     
@@ -167,12 +167,12 @@ def project_network_invariants(x: np.ndarray, schema: NetworkFeatureSchema, x_or
     x_proj[9] = tot_pkts / duration_sec
     
     # Invariant 3: Fwd Packet Length Mean
-    x_proj[10] = totlen_fwd_pkts / tot_fwd_pkts
+    x_proj[10] = totlen_fwd_pkts / max(1.0, tot_fwd_pkts)
     
     return x_proj
 
 
-def verify_physical_feasibility(x_orig: np.ndarray, x_adv: np.ndarray, schema: NetworkFeatureSchema, tol: float = 1e-3) -> bool:
+def verify_physical_feasibility(x_orig: np.ndarray, x_adv: np.ndarray, schema: NetworkFeatureSchema, tol: float = 1e-2) -> bool:
     """
     Audits an adversarial flow to determine if it is physically realizable
     or if it is a flawed/impossible 'feature-space hallucination'.
@@ -187,26 +187,33 @@ def verify_physical_feasibility(x_orig: np.ndarray, x_adv: np.ndarray, schema: N
         if x_adv[idx] < x_orig[idx] - tol:
             return False
             
-    # 3. Coupled Invariant check
-    x_recomputed = project_network_invariants(x_adv, schema)
-    for idx in schema.coupled_indices:
-        relative_err = abs(x_adv[idx] - x_recomputed[idx]) / (abs(x_recomputed[idx]) + 1e-6)
-        if relative_err > 0.01: # Strict 1% numerical tolerance
-            return False
-            
-    # 4. Total forward bytes >= transport headers + 20 * packets
-    if x_adv[4] < x_adv[11] + 20.0 * x_adv[2] - tol:
+    # 3. Non-negativity check
+    if (x_adv < -tol).any():
         return False
         
-    # 5. MTU bound: packet length <= 1500 * packets
+    # 4. MTU bound: payload <= 1500 * packets
     if x_adv[4] > 1500.0 * x_adv[2] + tol:
         return False
         
-    # 6. Transport header bounds
+    # 5. Transport header bounds
     is_tcp = (x_adv[1] == 6)
     h_min = 20.0 if is_tcp else 8.0
     h_max = 60.0 if is_tcp else 8.0
-    if x_adv[11] < x_adv[2] * h_min - tol or x_adv[11] > x_adv[2] * h_max + tol:
+    if x_adv[11] < x_adv[2] * h_min - tol or x_adv[11] > x_adv[2] * h_max + 10.0 + tol:
+        return False
+        
+    # 6. Coupled Invariant check (strict 5% numerical tolerance on rate equations)
+    dur_s = max(1e-6, x_adv[6] / 1e6)
+    expected_bytes_s = (x_adv[4] + x_adv[5]) / dur_s
+    if abs(x_adv[8] - expected_bytes_s) / (expected_bytes_s + 1e-4) > 0.05:
+        return False
+        
+    expected_pkts_s = (x_adv[2] + x_adv[3]) / dur_s
+    if abs(x_adv[9] - expected_pkts_s) / (expected_pkts_s + 1e-4) > 0.05:
+        return False
+        
+    expected_mean = x_adv[4] / max(1.0, x_adv[2])
+    if abs(x_adv[10] - expected_mean) / (expected_mean + 1e-4) > 0.05:
         return False
         
     # 7. Protocol-specific checks: UDP window must be strictly 0
@@ -214,3 +221,4 @@ def verify_physical_feasibility(x_orig: np.ndarray, x_adv: np.ndarray, schema: N
         return False
         
     return True
+

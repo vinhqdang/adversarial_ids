@@ -11,7 +11,7 @@ Exact methods exploit the piecewise-constant structure of trees. Kantchelian et 
 
 Table~\ref{tab:sota_taxonomy_expanded} summarizes these paradigms and the gap they leave. Methods that exploit the structure of tree ensembles or work in unconstrained feature space do not produce flows that survive packet parsing, while methods that preserve physical feasibility treat the detector as a black box and need hundreds to thousands of queries per flow. Flow-Field Evasion (FFE) addresses this gap by steering flows along infinitesimal packet-level generators that keep every step on the flow manifold, and by using the split geometry of the trees to choose the direction.
 
-\begin{table}[t]
+\begin{table}[!htbp]
 \caption{Representative evasion, verification and defense paradigms for tabular and network telemetry. Physical feasibility reports the empirical PFR of this benchmark where it was evaluated (Section~\ref{sec:results}).}\label{tab:sota_taxonomy_expanded}
 \centering
 \linespread{1}\selectfont
@@ -24,17 +24,17 @@ Table~\ref{tab:sota_taxonomy_expanded} summarizes these paradigms and the gap th
 Kantchelian et al.~\cite{kantchelian2016evasion} & GBDT, random forest & MILP (worst case $2^{\mathcal{O}(DT)}$) & 0 (white-box) & Unsupported (linear only) & Unconstrained \\
 Zhang et al.~\cite{zhang2020efficient} (LT-Attack) & Tree ensembles & Continuous leaf approximation & $O(N_{\text{iter}})$ & Not modeled & Unconstrained \\
 Ignatiev et al.~\cite{ignatiev2022formal}; Izza et al.~\cite{izza2022tackling} & GBDT, decision trees & MaxSAT / SAT verification & 0 (white-box) & Not modeled & Not applicable (explanation) \\
-Chen et al. (ZOO)~\cite{chen2017zoo} & Black-box classifiers & Zeroth-order coordinate descent & $O(d \cdot N_{\text{iter}})$ & Not modeled & 25.0\% (empirical) \\
-Chen et al. (HSJ)~\cite{chen2020hopskipjump} & Black-box decision & Boundary random walk & $O(10^3)$ & Not modeled & 17.8\% (empirical) \\
+Chen et al. (ZOO)~\cite{chen2017zoo} & Black-box classifiers & Zeroth-order coordinate descent & $O(d \cdot N_{\text{iter}})$ & Not modeled & 6.0\% (empirical) \\
+Chen et al. (HSJ)~\cite{chen2020hopskipjump} & Black-box decision & Boundary random walk & $O(10^3)$ & Not modeled & 0.0\% (empirical) \\
 Lin et al. (IDSGAN)~\cite{lin2022idsgan} & Black-box NIDS & Generative adversarial network & $O(N_{\text{gen}})$ & Learned distribution & Approximated (feature space) \\
-Ghamizi et al. (MOEVA)~\cite{ghamizi2020moeva} & Constrained tabular & Multi-objective genetic search & $\le$1,250 & Heuristic penalty & Partial \\
-Simonetto et al. (CAA)~\cite{simonetto2024constrained} & Tabular models & CAPGD with MOEVA & 1,240 & Approximate penalty & Partial (61.5\% empirical) \\
+Ghamizi et al. (MOEVA)~\cite{ghamizi2020moeva} & Constrained tabular & Multi-objective genetic search & $\le$1,250 & Heuristic penalty & Partial (15.0\% empirical) \\
+Simonetto et al. (CAA)~\cite{simonetto2024constrained} & Tabular models & CAPGD with MOEVA & 1,240 & Approximate penalty & Partial (15.0\% empirical) \\
 Han et al. (Traffic Manipulator)~\cite{han2021traffic} & Black-box NIDS & PSO on PCAP files & $O(10^3\text{--}10^4)$ & Packet re-evaluation & 100\% (packet mutation) \\
 \midrule
-\textbf{Flow-Field Evasion (ours)} & \textbf{XGBoost, LightGBM} & \textbf{Lie vector field steering} & \textbf{$\le 4M_{\max}+1$ probes plus TSBS (mean 12.9)} & \textbf{Exact closed-form} & \textbf{100.0\% (schema-checked)} \\
+\textbf{Flow-Field Evasion (ours)} & \textbf{XGBoost, LightGBM} & \textbf{Lie vector field steering} & \textbf{$\le 4M_{\max}+1$ probes plus TSBS (mean 79.3)} & \textbf{Exact closed-form} & \textbf{100.0\% (schema-checked)} \\
 \bottomrule
 \end{tabular}
 
 \smallskip
-\footnotesize{Note: $T$ trees, $D$ depth, $M_{\max}=20$, $K=4$ generators. MOEVA uses $G=25$, $P=50$ ($\le$1,250 queries) and PSO uses $I=37$, $S=50$ ($\le$1,850 queries). Empirical PFR values are from Table~\ref{tab:master_evasion_benchmark}.}
+\footnotesize{Note: $T$ trees, $D$ depth, $M_{\max}=20$, $K=4$ generators. Empirical PFR values are from Table~\ref{tab:master_evasion_benchmark}.}
 \end{table}

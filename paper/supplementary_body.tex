@@ -161,7 +161,7 @@ Furthermore, examining the base physical coordinate trajectories across the boun
 \STATE $H_{\text{min}} \leftarrow \mathbf{if}\; x_{\text{proj}}[1] = 6 \;\mathbf{then}\; 20.0 \;\mathbf{else}\; 8.0$ \COMMENT{Min transport header: 20B TCP, 8B UDP}
 \STATE $H_{\text{max}} \leftarrow \mathbf{if}\; x_{\text{proj}}[1] = 6 \;\mathbf{then}\; 60.0 \;\mathbf{else}\; 8.0$ \COMMENT{Max transport header: 60B TCP, 8B UDP}
 \STATE $x_{\text{proj}}[11] \leftarrow \min(x_{\text{proj}}[2] \times H_{\text{max}}, \max(x_{\text{proj}}[2] \times H_{\text{min}}, \text{round}(x_{\text{proj}}[11])))$ \COMMENT{Transport Header Length}
-\STATE $x_{\text{proj}}[4] \leftarrow \min(x_{\text{proj}}[2] \times 1500.0, \max(x_{\text{proj}}[11] + 20.0 \times x_{\text{proj}}[2], \text{round}(x_{\text{proj}}[4])))$ \COMMENT{Forward Bytes $\in [H_{\text{fwd}} + 20 N_{\text{fwd}}, 1500 N_{\text{fwd}}]$}
+\STATE $x_{\text{proj}}[4] \leftarrow \min(x_{\text{proj}}[2] \times 1500.0, \max(0.0, \text{round}(x_{\text{proj}}[4])))$ \COMMENT{Forward Bytes $\in [0, 1500 N_{\text{fwd}}]$}
 \STATE $x_{\text{proj}}[5] \leftarrow x[5]$ \COMMENT{Immutable Backward Bytes Preserved}
 \STATE $x_{\text{proj}}[6] \leftarrow \min(1.1 \times 10^8, \max(1.0, \text{round}(x_{\text{proj}}[6])))$ \COMMENT{Integer Duration $\ge 1 \mu$s, capped below flow timeout}
 \STATE $x_{\text{proj}}[7] \leftarrow \mathbf{if}\; x_{\text{proj}}[1] = 6 \;\mathbf{then}\; \text{clamp}(\text{round}(x_{\text{proj}}[7]), 0.0, 65535.0) \;\mathbf{else}\; 0.0$ \COMMENT{TCP Window $[0, 65535]$, 0 for UDP}
@@ -193,7 +193,7 @@ Furthermore, examining the base physical coordinate trajectories across the boun
         \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[j] \leftarrow \theta_j^* + \epsilon_j$
         \IF{$j = 11$}
             \STATE $x_{\text{c}}[11] \leftarrow \min(60.0 \cdot x_{\text{c}}[2],\, x_{\text{c}}[11])$
-            \STATE $x_{\text{c}}[4] \leftarrow \min(1500.0 \cdot x_{\text{c}}[2],\, \max(x_{\text{c}}[4],\, x_{\text{c}}[11] + 20.0 \cdot x_{\text{c}}[2]))$
+            \STATE $x_{\text{c}}[4] \leftarrow \min(1500.0 \cdot x_{\text{c}}[2],\, \max(0.0,\, x_{\text{c}}[4]))$
         \ENDIF
         \STATE $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
     \ENDIF

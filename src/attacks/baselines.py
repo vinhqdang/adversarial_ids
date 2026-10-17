@@ -216,6 +216,108 @@ class TrafficManipulatorPSOAttack(BaseNIDSAttack):
         )
 
 
-class MOEVAAttack(TrafficManipulatorPSOAttack):
-    """Multi-Objective Evolutionary Adversarial Attack baseline (inherits population dynamics)."""
-    pass
+class MOEVAAttack(BaseNIDSAttack):
+    """
+    Multi-Objective Evolutionary Adversarial Attack (MOEVA) (Simonetto et al. 2024, Ghamizi et al. 2020).
+    Evolves a population of candidate adversarial flows using multi-objective optimization:
+      Objective 1: Minimize classifier malicious probability P(Malicious | x)
+      Objective 2: Minimize normalized perturbation cost D_L1(x, x_orig)
+    Applies box constraints and domain bounds without closed-form Lie manifold projection,
+    allowing empirical evaluation of physical admissibility (PFR) under feature-space evolution.
+    """
+    def __init__(
+        self,
+        model,
+        schema: NetworkFeatureSchema,
+        pop_size: int = 25,
+        n_generations: int = 20,
+        mutation_rate: float = 0.25,
+        **kwargs
+    ):
+        super().__init__(model, schema)
+        self.pop_size = kwargs.get('n_particles', pop_size)
+        self.n_generations = kwargs.get('max_iter', n_generations)
+        self.mutation_rate = mutation_rate
+
+    def attack_sample(self, x: np.ndarray) -> AttackResult:
+        self.query_count = 0
+        x_orig = x.copy()
+
+        init_prob = self.predict_malicious_prob(x_orig)
+        if init_prob < 0.5:
+            return AttackResult(
+                x_original=x_orig, x_adversarial=x_orig, success=True, physically_valid=True,
+                queries_used=self.query_count, weighted_cost=0.0, feature_shifts=np.zeros_like(x_orig)
+            )
+
+        n_features = len(x_orig)
+        stds = np.maximum(np.abs(x_orig) * 0.1, 1.0)
+
+        # Initialize population around x_orig with slight random mutations on non-immutable features
+        population = []
+        for _ in range(self.pop_size):
+            ind = x_orig.copy()
+            for j in range(n_features):
+                if j not in self.schema.immutable_indices:
+                    delta = np.random.randn() * stds[j] * 0.1
+                    if j in self.schema.monotonic_increasing_indices:
+                        ind[j] = max(x_orig[j], ind[j] + max(0.0, delta))
+                    else:
+                        ind[j] = max(0.0, ind[j] + delta)
+            population.append(ind)
+
+        best_ind = x_orig.copy()
+        best_prob = init_prob
+        best_cost = 0.0
+
+        for gen in range(self.n_generations):
+            scores = []
+            costs = []
+            for ind in population:
+                prob = self.predict_malicious_prob(ind)
+                cost = float(np.sum(self.schema.perturbation_costs * np.abs(ind - x_orig)))
+                scores.append(prob)
+                costs.append(cost)
+
+                if prob < 0.5:
+                    if best_prob >= 0.5 or cost < best_cost:
+                        best_ind = ind.copy()
+                        best_prob = prob
+                        best_cost = cost
+                elif best_prob >= 0.5 and prob < best_prob:
+                    best_ind = ind.copy()
+                    best_prob = prob
+                    best_cost = cost
+
+            if best_prob < 0.5:
+                break
+
+            # Selection and mutation
+            new_pop = []
+            for _ in range(self.pop_size):
+                i1, i2 = np.random.randint(0, self.pop_size, size=2)
+                parent = population[i1] if scores[i1] < scores[i2] else population[i2]
+                child = parent.copy()
+
+                for j in range(n_features):
+                    if j not in self.schema.immutable_indices and np.random.rand() < self.mutation_rate:
+                        step = np.random.randn() * stds[j] * 0.15
+                        if j in self.schema.monotonic_increasing_indices:
+                            child[j] = max(x_orig[j], child[j] + max(0.0, step))
+                        else:
+                            child[j] = max(0.0, child[j] + step)
+
+                new_pop.append(child)
+            population = new_pop
+
+        final_prob = self.predict_malicious_prob(best_ind)
+        success = (final_prob < 0.5)
+        phys_valid = verify_physical_feasibility(x_orig, best_ind, self.schema)
+        cost = float(np.sum(self.schema.perturbation_costs * np.abs(best_ind - x_orig)))
+
+        return AttackResult(
+            x_original=x_orig, x_adversarial=best_ind, success=success,
+            physically_valid=phys_valid, queries_used=self.query_count,
+            weighted_cost=cost, feature_shifts=best_ind - x_orig
+        )
+

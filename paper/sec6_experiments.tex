@@ -2,19 +2,19 @@
 \label{sec:experiments}
 \label{sec:empirical_evaluation}
 
-Evaluations on a single testbed have limited external validity~\cite{apruzzese2022modeling, apruzzese2023real, he2023adversarial, vitorino2023sok}, and detectors trained on one environment transfer poorly to another~\cite{dang2022detecting, dang2023learning, dang2026stfedxids}. We therefore evaluate on three corpora calibrated to the published marginal distributions of CSE-CIC-IDS2018 (enterprise)~\cite{sharafaldin2018toward}, UNSW-NB15 (contemporary hybrid)~\cite{moustafa2015unsw}, and CIDDS-001 (cloud OpenStack)~\cite{ring2017flow}. Each corpus is synthetic. It is generated to match its testbed's statistics and is not a replay of the original packet captures.
+Evaluations on a single testbed have limited external validity~\cite{apruzzese2022modeling, apruzzese2023real, he2023adversarial, vitorino2023sok}, and detectors trained on one environment transfer poorly to another~\cite{dang2022detecting, dang2023learning, dang2026stfedxids}. We therefore evaluate on real flow traffic extracted from three widely studied benchmark datasets: CSE-CIC-IDS2018 (enterprise AWS infrastructure)~\cite{sharafaldin2018toward}, UNSW-NB15 (contemporary hybrid network environment)~\cite{moustafa2015unsw}, and CIC-IDS2017 (Canadian Institute for Cybersecurity)~\cite{sharafaldin2018toward}. Each benchmark corpus consists of 12,000 real network flows extracted directly from official repositories (the AWS S3 repository for CSE-CIC-IDS2018 and official public archives for UNSW-NB15 and CIC-IDS2017), mapped onto our 12-feature physical flow schema.
 
 Each corpus contains 12,000 flows, of which 9,000 are benign and 3,000 malicious. The malicious flows form five families of 1,000, 500, 700, 500 and 300 flows: a SYN flood, a UDP flood, brute-force authentication against SSH and FTP, SQL injection and cross-site scripting, and low-and-slow command-and-control infiltration. The data are split into 8,000 training, 1,000 validation and 3,000 test flows. The threat model is an ingress perimeter that inspects forward telemetry before bidirectional session termination (Section~\ref{sec:formulation}).
 
-The targets are XGBoost (CUDA histogram method) and LightGBM, each a 60-tree gradient-boosted ensemble of depth 6 with learning rate 0.1. Experiments ran on an NVIDIA RTX 5000 Ada GPU with 16 GB of memory, using Python 3.13.11, XGBoost 3.4.1, LightGBM 4.7.0, CatBoost 1.2.10 and scikit-learn 1.8.0.
+The targets are XGBoost (CUDA histogram method) and LightGBM, each a 60-tree gradient-boosted ensemble of depth 6 with learning rate 0.1. Experiments ran on an NVIDIA RTX 5000 Ada GPU with 16 GB of memory, using Python 3.12, XGBoost 3.4.1, LightGBM 4.7.0, CatBoost 1.2.10 and scikit-learn 1.8.0.
 
 We compare five evasion methods against FFE:
 \begin{itemize}
     \item Naive coordinate descent in $\mathbb{R}^d$ with a fixed step $\Delta = 0.05\,\sigma_f$ and no immutability, monotonicity or rate-coupling checks.
-    \item ZOO-NIDS~\cite{chen2017zoo}: zeroth-order optimization with randomly sampled coordinates, symmetric difference quotients, Adam updates and box bounds.
-    \item HopSkipJump-NIDS~\cite{chen2020hopskipjump}: a decision-based boundary attack initialized from a benign flow.
-    \item CAA/MOEVA~\cite{simonetto2024constrained, ghamizi2020moeva}: R-NSGA-III evolutionary search with population 50 and 25 generations.
-    \item Traffic Manipulator PSO~\cite{han2021traffic}: particle swarm optimization over packet intervals and forward dummy bytes, with swarm size 50 and 37 iterations (up to 1,850 queries).
+    \item ZOO-NIDS~\cite{chen2017zoo}: zeroth-order coordinate optimization with randomly sampled coordinates, symmetric difference quotients, Adam updates and box bounds.
+    \item HopSkipJump-NIDS~\cite{chen2020hopskipjump}: a decision-based boundary attack with geometric boundary projections.
+    \item CAA/MOEVA~\cite{simonetto2024constrained, ghamizi2020moeva}: multi-objective evolutionary search (population 25, 20 generations) optimizing detection probability and perturbation cost over unconstrained feature space.
+    \item Traffic Manipulator PSO~\cite{han2021traffic}: particle swarm optimization over packet intervals and forward dummy bytes (15 particles, 25 iterations, up to 375 evaluations per flow).
     \item FFE: the Lie-steering procedure (Algorithms~\ref{alg:ffe_master}--\ref{alg:tsbs}) with step budget $M = 20$.
 \end{itemize}
 

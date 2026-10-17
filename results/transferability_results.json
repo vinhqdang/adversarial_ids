@@ -5,83 +5,83 @@
     "CatBoost",
     "Random Forest"
   ],
-  "cohort_size": 100,
+  "cohort_size": 95,
   "clean_metrics": {
     "XGBoost (CUDA)": {
-      "accuracy": 0.99725,
-      "precision": 0.9907502569373073,
-      "recall": 0.9979296066252588,
-      "f1": 0.9943269726663229,
-      "roc_auc": 0.9998990052012321,
-      "train_time_s": 0.499988317489624
+      "accuracy": 0.98625,
+      "precision": 0.9989711934156379,
+      "recall": 0.9473170731707317,
+      "f1": 0.972458688032048,
+      "roc_auc": 0.9988027054724329,
+      "train_time_s": 0.37587451934814453
     },
     "LightGBM": {
-      "accuracy": 0.997,
-      "precision": 0.9927685950413223,
-      "recall": 0.994824016563147,
-      "f1": 0.9937952430196484,
-      "roc_auc": 0.9999164063321009,
-      "train_time_s": 1.580094814300537
+      "accuracy": 0.9865,
+      "precision": 0.997948717948718,
+      "recall": 0.9492682926829268,
+      "f1": 0.973,
+      "roc_auc": 0.9986298831727813,
+      "train_time_s": 3.406844139099121
     },
     "CatBoost": {
-      "accuracy": 0.99525,
-      "precision": 0.9886480908152735,
-      "recall": 0.9917184265010351,
-      "f1": 0.9901808785529715,
-      "roc_auc": 0.9997089575562533,
-      "train_time_s": 0.6036689281463623
+      "accuracy": 0.9865,
+      "precision": 0.9959141981613892,
+      "recall": 0.9512195121951219,
+      "f1": 0.9730538922155688,
+      "roc_auc": 0.9985687230989956,
+      "train_time_s": 3.6204769611358643
     },
     "Random Forest": {
-      "accuracy": 0.996,
-      "precision": 0.9876796714579056,
-      "recall": 0.9958592132505176,
-      "f1": 0.9917525773195877,
-      "roc_auc": 0.999830083075046,
-      "train_time_s": 1.7322421073913574
+      "accuracy": 0.988,
+      "precision": 0.9959390862944163,
+      "recall": 0.9570731707317073,
+      "f1": 0.9761194029850746,
+      "roc_auc": 0.9992198401311745,
+      "train_time_s": 2.8887975215911865
     }
   },
   "transferability_matrix": {
     "XGBoost (CUDA)": {
-      "XGBoost (CUDA)": 100.0,
-      "LightGBM": 82.0,
-      "CatBoost": 94.0,
-      "Random Forest": 79.0
+      "XGBoost (CUDA)": 56.8,
+      "LightGBM": 95.8,
+      "CatBoost": 56.8,
+      "Random Forest": 77.9
     },
     "LightGBM": {
-      "XGBoost (CUDA)": 92.0,
-      "LightGBM": 99.0,
-      "CatBoost": 94.0,
-      "Random Forest": 88.0
+      "XGBoost (CUDA)": 25.3,
+      "LightGBM": 98.9,
+      "CatBoost": 12.6,
+      "Random Forest": 30.5
     },
     "CatBoost": {
-      "XGBoost (CUDA)": 79.0,
-      "LightGBM": 71.0,
-      "CatBoost": 100.0,
-      "Random Forest": 69.0
+      "XGBoost (CUDA)": 42.1,
+      "LightGBM": 87.4,
+      "CatBoost": 95.8,
+      "Random Forest": 76.8
     },
     "Random Forest": {
-      "XGBoost (CUDA)": 88.0,
-      "LightGBM": 75.0,
-      "CatBoost": 92.0,
-      "Random Forest": 100.0
+      "XGBoost (CUDA)": 35.8,
+      "LightGBM": 80.0,
+      "CatBoost": 14.7,
+      "Random Forest": 91.6
     }
   },
   "detailed_results": {
     "XGBoost (CUDA)": {
-      "craft_time_s": 1.2062578201293945,
-      "source_asr": 100.0
+      "craft_time_s": 25.276520490646362,
+      "source_asr": 56.8421052631579
     },
     "LightGBM": {
-      "craft_time_s": 1.5249042510986328,
-      "source_asr": 99.0
+      "craft_time_s": 0.9947681427001953,
+      "source_asr": 98.94736842105263
     },
     "CatBoost": {
-      "craft_time_s": 0.6513097286224365,
-      "source_asr": 100.0
+      "craft_time_s": 1.4453048706054688,
+      "source_asr": 95.78947368421052
     },
     "Random Forest": {
-      "craft_time_s": 8.878484725952148,
-      "source_asr": 100.0
+      "craft_time_s": 7.460546016693115,
+      "source_asr": 91.57894736842105
     }
   }
 }

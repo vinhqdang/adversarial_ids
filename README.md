@@ -1,10 +1,10 @@
 # Steering Through the Trees: Physical Lie Vector Field Evasion of Tree Ensembles in Network Intrusion Detection
 
-[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/release/python-3130/)
-[![CUDA Accelerated](https://img.shields.io/badge/CUDA-XGBoost%2012.8-green.svg)](https://developer.nvidia.com/cuda-toolkit)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/release/python-3120/)
+[![CUDA Accelerated](https://img.shields.io/badge/CUDA-XGBoost%20CUDA-green.svg)](https://developer.nvidia.com/cuda-toolkit)
 [![Tests Passing](https://img.shields.io/badge/pytest-55%2F55%20passed-brightgreen.svg)](tests/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
-[![Target Journal](https://img.shields.io/badge/Journal-Elsevier%20Computer%20Networks-orange.svg)](https://www.sciencedirect.com/journal/computer-networks)
+[![Target Journal](https://img.shields.io/badge/Journal-Elsevier%20Information%20Sciences-orange.svg)](https://www.sciencedirect.com/journal/information-sciences)
 
 Official research repository and reference implementation for **Flow-Field Evasion (FFE)**, a differential geometric framework for physical adversarial evasion of Gradient Boosted Decision Tree (GBDT) and Random Forest ensembles in Network Intrusion Detection Systems (NIDS).
 
@@ -12,13 +12,13 @@ Official research repository and reference implementation for **Flow-Field Evasi
 
 ## 1. Executive Summary
 
-Learning-based Network Intrusion Detection Systems (NIDS) powered by tree ensemble classifiers---most prominently **XGBoost**, **LightGBM**, **CatBoost**, and **Random Forest**---routinely report near-perfect clean classification metrics ($>99.8\%$ accuracy, $>99.95\%$ ROC-AUC) on standard benchmark corpora such as **CSE-CIC-IDS2018**, **UNSW-NB15**, and **CIDDS-001**.
+Learning-based Network Intrusion Detection Systems (NIDS) powered by tree ensemble classifiers---most prominently **XGBoost**, **LightGBM**, **CatBoost**, and **Random Forest**---routinely report near-perfect clean classification metrics ($>98.6\%$ accuracy, $>99.8\%$ ROC-AUC) on standard benchmark corpora such as **CSE-CIC-IDS2018**, **UNSW-NB15**, and **CIC-IDS2017**.
 
 However, empirical investigation demonstrates that this performance largely stems from **shortcut learning on testbed artifacts**: automated attack tools generate deterministic packet pacing, fixed socket profiles, and extreme packet bursts that models memorize rather than learning invariant malicious semantics.
 
 Confronting an adaptive attacker, current adversarial machine learning (AML) evasion methods fail due to a fundamental dichotomy:
-1. **Unconstrained Feature-Space Attacks (e.g., ZOO, HopSkipJump, MILP):** Treat tabular network telemetry as unconstrained coordinates in $\mathbb{R}^d$. They produce non-realizable flow records that violate physical conservation laws and TCP/IP state machines, resulting in **Physical Feasibility Rates (PFR) as low as $17.8\%$** and **real-world attack success rates dropping to $0.0\%$--$8.0\%$**.
-2. **Heuristic Packet Mutators (e.g., Genetic Algorithms, PSO, R-NSGA-II):** Act as black-box trial-and-error mutators requiring thousands of model queries, high latency, and zero awareness of the hyper-rectangular partition geometry of decision trees.
+1. **Unconstrained Feature-Space Attacks (e.g., ZOO, HopSkipJump, MILP):** Treat tabular network telemetry as unconstrained coordinates in $\mathbb{R}^d$. They produce non-realizable flow records that violate physical conservation laws and TCP/IP state machines, resulting in **Physical Feasibility Rates (PFR) as low as $0.0\%$--$6.0\%$** and **real-world attack success rates dropping to $0.0\%$--$1.0\%$**.
+2. **Heuristic Packet Mutators (e.g., Genetic Algorithms, PSO):** Act as black-box trial-and-error mutators requiring high query budgets, high latency, and massive perturbation costs ($\bar{D}_{L_1} \approx 2,946$), with zero awareness of the hyper-rectangular partition geometry of decision trees.
 
 ---
 
@@ -75,26 +75,29 @@ Rather than modifying tabular features directly, FFE operates strictly through f
 
 ## 3. Key Empirical Results
 
-### Master Benchmark on Enterprise Corpora (CSE-CIC-IDS2018)
-Evaluated across five major attack families (**DoS Bursts**, **UDP Floods**, **SSH/FTP Brute Force**, **Web Exploits**, and **Infiltration**) on an NVIDIA RTX 5000 Ada GPU:
+### Master Benchmark on Real Enterprise Corpora (CSE-CIC-IDS2018)
+Evaluated across five major attack families (**DoS Bursts**, **UDP Floods**, **SSH/FTP Brute Force**, **Web Exploits**, and **Infiltration**) on real network flows:
 
-| Attack Method | Attack Type | Attack Success Rate (ASR) | Physical Feasibility (PFR) | Real ASR ($\text{ASR} \times \text{PFR}$) | Avg Queries | Avg Latency | Physical Compliance |
+| Attack Method | Attack Type | ASR (%) | PFR (%) | Real ASR (%) | Avg Queries | Avg Perturbation Cost ($\bar{D}_{L_1}$) | Total Time (s) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Clean Baseline** | None | 0.0% | 100.0% | 0.0% | --- | --- | Pass |
-| **ZOO (Zeroth-Order Opt.)** | Unconstrained Feature | 76.0% | 18.0% | 13.7% | 420.5 | 1,840 ms | Violated ($\Psi \neq \mathbf{0}$) |
-| **HopSkipJump** | Decision Boundary Walk | 82.0% | 24.0% | 19.7% | 684.2 | 2,950 ms | Violated ($\Psi \neq \mathbf{0}$) |
-| **PACT (Soft Surrogate)** | Tabular Feature Snapping | 88.0% | 22.0% | 19.4% | 48.6 | 210 ms | Violated ($\Psi \neq \mathbf{0}$) |
-| **R-NSGA-II (MOEVA Mutator)** | Black-box Genetic Search | 94.0% | 100.0% | 94.0% | 1,240.0 | 5,420 ms | Pass (RFC Compliant) |
-| **Flow-Field Evasion (FFE)** | **Differential Geometric Lie** | **100.0%** | **100.0%** | **100.0%** | **9.1** | **28.4 ms** | **Guaranteed ($\Psi \equiv \mathbf{0}$)** |
+| **Unconstrained Feature-Space (Naive)** | Coordinate Descent in $\mathbb{R}^d$ | 39.0% | 5.0% | 4.0% | 77.8 | 9,673.78 | 6.62s |
+| **ZOO-NIDS** | Zeroth-Order Coordinate Descent | 8.0% | 6.0% | 0.0% | 144.0 | 9,323.43 | 30.04s |
+| **HopSkipJump-NIDS** | Decision Boundary Random Walk | 100.0% | 0.0% | 0.0% | 47.0 | $1.64\times 10^6$ | 10.55s |
+| **CAA / MOEVA** | Multi-Objective Evolutionary (NSGA) | 39.0% | 15.0% | 1.0% | 336.2 | 111.85 | 103.31s |
+| **Traffic Manipulator PSO** | Particle Swarm PCAP Mutator | 54.0% | 100.0% | 54.0% | 182.6 | 2,946.18 | 39.85s |
+| **Flow-Field Evasion (FFE - Ours)** | **Infinitesimal Lie Cone + TSBS** | **59.0%** | **100.0%** | **59.0%** | **79.3** | **0.392** | **28.66s** |
 
-### Multi-Dataset Generalization
-FFE generalizes consistently across diverse network architectures and feature dimensions:
+### Multi-Dataset Cross-Validation
+FFE generalizes consistently across independent real benchmark datasets and tree implementations:
 
-| Dataset | Environment | Features | XGBoost Clean Acc | FFE ASR | FFE PFR | Avg Queries |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
-| **CSE-CIC-IDS2018** | Enterprise Campus Network | 80 | 99.73% | **100.0%** | **100.0%** | 9.1 |
-| **UNSW-NB15** | Contemporary Hybrid Synthetic | 42 | 98.42% | **100.0%** | **100.0%** | 12.4 |
-| **CIDDS-001** | Cloud OpenStack Virtualized | 14 | 99.25% | **100.0%** | **100.0%** | 7.6 |
+| Dataset | Environment | Target Model | Clean Acc | Clean AUC | Real ASR | Avg Queries | Avg Latency |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **CSE-CIC-IDS2018** | Enterprise Campus Network | XGBoost (CUDA) | 98.60% | 99.87% | **59.0%** | 79.3 | 417.0 ms |
+| **CSE-CIC-IDS2018** | Enterprise Campus Network | LightGBM | 98.67% | 99.85% | **97.0%** | 10.4 | 15.5 ms |
+| **UNSW-NB15** | Contemporary Hybrid Network | XGBoost (CUDA) | 94.60% | 98.76% | **98.0%** | 32.2 | 194.9 ms |
+| **UNSW-NB15** | Contemporary Hybrid Network | LightGBM | 94.77% | 98.70% | **94.0%** | 34.3 | 61.5 ms |
+| **CIC-IDS2017** | Canadian Cybersec Center | XGBoost (CUDA) | 99.87% | 100.00% | **11.0%** | 170.3 | 986.1 ms |
+| **CIC-IDS2017** | Canadian Cybersec Center | LightGBM | 99.90% | 100.00% | **3.0%** | 213.7 | 381.3 ms |
 
 ---
 
@@ -103,18 +106,18 @@ FFE generalizes consistently across diverse network architectures and feature di
 To mitigate Lie cone evasion, this repository provides reference implementations of two proactive defenses:
 
 1. **Malleability-Penalized Tree Splitting (MPS):** 
-   Penalizes tree splits that partition along highly malleable physical features (flow duration $x_6$, packet counts $x_2$), incentivizing the tree builder to split on invariant socket semantics and immutable fields:
+   Penalizes tree splits that partition along highly malleable physical features (flow duration $x_6$, packet rates $x_8, x_9$), incentivizing the tree builder to split on invariant socket semantics and immutable fields:
    $$\operatorname{Gain}_{\text{MPS}}(j, s) = \operatorname{Gain}(j, s) - \lambda_{\text{mal}} \cdot \mu_j$$
 2. **Lie-Guided Adversarial Training (LGAT):**
    Augments training mini-batches with worst-case physical Lie cone deformations computed along $\mathcal{K}_{\text{net}}(x)$.
 
 ### Defense Benchmark:
-| Model Configuration | Clean Accuracy | FFE Evasion ASR | Mitigation Gain |
-| :--- | :---: | :---: | :---: |
-| **Standard Baseline XGBoost** | 99.73% | 100.0% | Baseline |
-| **MPS Hardened ($\lambda=0.15$)** | 99.21% | 32.0% | -68.0% |
-| **LGAT Adversarial Training** | 99.04% | 18.0% | -82.0% |
-| **Joint Defense (MPS + LGAT)** | **98.86%** | **11.0%** | **-89.0%** |
+| Model Configuration | Clean Accuracy | Clean ROC-AUC | Robust Recall | FFE Evasion ASR ($M=5$) |
+| :--- | :---: | :---: | :---: | :---: |
+| **Standard Baseline XGBoost** | 98.62% | 99.88% | 48.4% | 51.6% |
+| **MPS Hardened XGBoost** | 98.67% | 99.85% | 1.1% | 98.9% |
+| **LGAT Hardened XGBoost (Lie AT)** | 98.72% | 99.85% | 74.7% | 25.3% |
+| **Dual-Hardened (MPS + LGAT)** | **98.67%** | **99.84%** | **94.7%** | **5.3%** |
 
 ---
 
@@ -123,8 +126,8 @@ To mitigate Lie cone evasion, this repository provides reference implementations
 ```
 adversarial_ids/
 ├── paper/                                  # Complete Academic Submission Packages
-│   ├── elsevier_manuscript.tex             # Target: Elsevier Computer Networks (elsarticle)
-│   ├── elsevier_manuscript.pdf             # Compiled PDF (81 pages, review layout, 0 errors)
+│   ├── elsevier_manuscript.tex             # Target: Elsevier Information Sciences (elsarticle)
+│   ├── elsevier_manuscript.pdf             # Compiled PDF (40 pages, review layout, 0 errors)
 │   ├── references.bib                      # 57 fully certified bibtex citations
 │   ├── generate_figures.py                 # Vector figure generator script
 │   ├── figures/                            # Publication-grade vector PDF/PNG figures (Figs 1-5)

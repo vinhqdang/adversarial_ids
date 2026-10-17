@@ -1,24 +1,11 @@
-\subsection{Defensive Countermeasures \& Model Hardening}
+\section{Defenses}
 \label{sec:defense}
 
-Having demonstrated the acute vulnerability of standard tree ensembles to Flow-Field Evasion, this section explores the dual defensive perspective. We formulate two complementary defense mechanisms: (i) Malleability-Penalized Tree Splitting (MPS) and (ii) Lie-Guided Adversarial Training (LGAT), and evaluate their defensive efficacy against adaptive flow steering.
+Standard boosting chooses split features by training-loss reduction alone, so features that separate the classes widely in the synthetic corpora, such as duration and the rates, sit near the root although an attacker can shift them by delaying or padding packets. We evaluate malleability-penalized splitting (MPS), which discourages splits on malleable features, and Lie-guided adversarial training (LGAT), which trains on flows generated along the Lie generators.
 
-\subsubsection{Vulnerability Root Cause: Feature Malleability Asymmetry}
-Standard GBDT training algorithms (such as XGBoost's exact greedy split finder or LightGBM's histogram binning) evaluate split candidates $s = (j, \theta)$ purely on empirical training loss reduction:
-\begin{equation}
-    \Delta \mathcal{L}(j, \theta) = \frac{1}{2} \left[ \frac{G_L^2}{H_L + \lambda} + \frac{G_R^2}{H_R + \lambda} - \frac{(G_L + G_R)^2}{H_L + H_R + \lambda} \right] - \gamma
-\end{equation}
-where $G_L, H_L$ and $G_R, H_R$ represent the first- and second-order gradient statistics of the left and right child subsets.
+\subsection{Malleability-penalized tree splitting}
 
-In network telemetry, features exhibit a severe \textbf{malleability asymmetry}:
-\begin{itemize}
-    \item \textbf{High-Malleability Features:} Metrics such as Flow Duration ($x_6$), Flow Bytes/s ($x_8$), and Flow Packets/s ($x_9$) have large Lie generator magnitudes ($\|\vec{v}_1(x)\| \gg 0$) and can be shifted arbitrarily by delaying packets.
-    \item \textbf{Low-Malleability Features:} Attributes such as Destination Port ($x_0$), Protocol ($x_1$), and Server Response Bytes ($x_5$) have zero generator magnitudes ($\|\vec{v}_k(x)_i\| = 0$) and cannot be modified by the attacker.
-\end{itemize}
-Because high-malleability features exhibit wide statistical separation in synthetic testbeds, boosting algorithms greedily place them at the top root nodes of decision trees, creating widespread evasion vulnerability.
-
-\subsubsection{Defense 1: Malleability-Penalized Tree Splitting (MPS)}
-To force the ensemble to learn robust, invariant representations, we introduce Malleability-Penalized Tree Splitting. Expanding on robust tree split formulation principles established by Chen et al.~\cite{chen2019robust} and Calzavara et al.~\cite{calzavara2020treant}, the impurity gain score for splitting along feature $j$ during tree construction is regularized by its maximum physical Lie generator norm:
+Following the robust split formulations of Chen et al.~\cite{chen2019robust} and Calzavara et al.~\cite{calzavara2020treant}, the split score for feature $j$ is regularized by its physical malleability index.
 
 \begin{definition}[Feature Physical Malleability Index]
 The physical malleability index $M_{\text{mal}}(j)$ of feature $j$ is defined as the empirical expectation over the training distribution of the maximum dimensionless variation induced by the Lie Cone $\mathcal{K}_{\text{net}}$:
@@ -28,104 +15,42 @@ The physical malleability index $M_{\text{mal}}(j)$ of feature $j$ is defined as
 where $\sigma_j$ is the empirical standard deviation of feature $j$ across the training corpus $\mathcal{D}_{\text{train}}$, and $\delta s_k$ denotes the characteristic single-step perturbation scale for generator $k$ ($\delta s_1 = 10^4\,\mu\text{s}, \delta s_2 = 100\,\text{B}, \delta s_3 = 1\,\text{pkt}, \delta s_4 = 10^3\,\text{B}$).
 \end{definition}
 
-The robust split selection objective becomes:
+The robust split selection objective is
 \begin{equation}
     \text{Gain}_{\text{robust}}(j, \theta) = \Delta \mathcal{L}(j, \theta) - \alpha_{\text{mal}} \cdot \overline{\Delta \mathcal{L}} \cdot M_{\text{mal}}(j)
 \end{equation}
-where $\overline{\Delta \mathcal{L}}$ is the baseline mean impurity gain across candidate splits at the node, ensuring dimensional consistency, and $\alpha_{\text{mal}} \ge 0$ is a dimensionless hyperparameter governing the trade-off between clean training loss and adversarial malleability robustness. In production GBDTs, this objective can be implemented via custom split finding routines or simulated via feature-subsampling weights (\texttt{colsample\_bytree}) inversely proportional to $M_{\text{mal}}(j)$.
+where $\Delta \mathcal{L}(j, \theta)$ is the impurity gain of split $(j, \theta)$, $\overline{\Delta \mathcal{L}}$ is the baseline mean impurity gain across candidate splits at the node, ensuring dimensional consistency, and $\alpha_{\text{mal}} \ge 0$ is a dimensionless hyperparameter governing the trade-off between clean training loss and malleability robustness.
 
-\paragraph{Theoretical Impact of MPS.}
-When $\alpha_{\text{mal}} > 0$:
-\begin{itemize}
-    \item Splits along Duration ($x_6$) and derived rate features ($x_8, x_9$) incur substantial penalties due to high dimensional responsiveness ($M_{\text{mal}}(j) \gg 0$).
-    \item Splits along immutable protocol headers (Destination Port $x_0$, Protocol $x_1$) incur strictly zero penalty ($M_{\text{mal}}(j) = 0$).
-    \item The boosting algorithm is biased toward decision paths dominated by non-malleable protocol attributes. Consequently, an attacker attempting evasion via temporal dilation alone cannot easily flip the tree leaf assignments.
-\end{itemize}
+The experiments do not optimize this objective. The MPS model instead masks duration ($x_6$) and the two rate features ($x_8$, $x_9$) to zero in the training, test and attack inputs, which is the $\alpha_{\text{mal}} \to \infty$ limit for those features. The mask is fixed by hand rather than computed from $M_{\text{mal}}$, and other features are unpenalized. Because the masked columns are constant, trees cannot split on them, so the attacker affects MPS models only through unmasked features.
 
-\subsubsection{Defense 2: Lie-Guided Adversarial Training (LGAT)}
-While MPS regularizes the tree topology, model robustness can be further hardened through adversarial training. Standard adversarial training formulations (e.g., Madry et al. \cite{madry2018towards}) assume an $L_p$ perturbation ball $\mathcal{B}_\epsilon(x) = \{x + \delta \mid \|\delta\|_p \le \epsilon\}$. In network security, this generates physically invalid training samples that degrade clean accuracy \cite{hashemi2020enhancing, apruzzese2022modeling}.
+\subsection{Lie-guided adversarial training}
 
-We formulate \textbf{Lie-Guided Adversarial Training (LGAT)} as a saddle-point min-max game restricted to the physical flow manifold:
+Standard adversarial training assumes an $L_p$ ball around each input~\cite{madry2018towards}, which in network security generates physically invalid samples that degrade clean accuracy~\cite{hashemi2020enhancing, apruzzese2022modeling}. LGAT instead restricts the inner maximization to the physical flow manifold, solving
 \begin{equation}
     \min_{\Theta} \frac{1}{N} \sum_{i=1}^N \max_{u \in \mathcal{U}_{\text{budget}}} \mathcal{L}\left( F_\Theta\left( \mathcal{A}_{\text{cone}}\left( x_i, u \right) \right), y_i \right)
 \end{equation}
-where the inner maximization searches along the integral curves of the Lie generators:
-\begin{equation}
-    \mathcal{A}_{\text{cone}}(x_i, u) = x_i + \int_0^{T_{\text{max}}} \sum_{k=1}^4 u_k(\tau) \vec{v}_k(x(\tau)) d\tau \in \mathcal{M}_{\text{flow}}
-\end{equation}
-and the control budget is bounded by:
-\begin{equation}
-    \mathcal{U}_{\text{budget}} = \left\{ u \in \mathbb{R}_{\ge 0}^4 \;\middle|\; \sum_{k=1}^4 c_k \int_0^{T_{\text{max}}} u_k(\tau) d\tau \le \Gamma \right\}
-\end{equation}
+where $\mathcal{A}_{\text{cone}}(x, u)$ is the flow reached from $x$ along the integral curves of the Lie generators under the control $u$, and $\mathcal{U}_{\text{budget}}$ is the set of nonnegative controls whose cost $\sum_{k=1}^4 c_k \int_0^{T_{\max}} u_k(\tau)\, d\tau$ does not exceed $\Gamma$.
 
-\paragraph{Algorithmic Realization of LGAT.}
-Algorithm~\ref{alg:lgat} outlines the adversarial training loop for tree ensembles. At round $t=1$, the base tree is initialized on clean data. At each subsequent boosting iteration $t \ge 2$, the training batch is augmented with adversarial flows synthesized by running FFE for step budget $M_{\text{train}} = 5$ against the active ensemble $F_{t-1}$.
+Supplementary Algorithm~S4 gives the general scheme, in which malicious flows are replaced by FFE outputs at step budget $M_{\text{train}} = 5$ in every boosting round, with $\beta = 0.5$. The experiments use a single-round instance: adversarial examples are generated once, against the undefended model, for a random 50\% of the malicious training flows and appended to the training set, and the ensemble uses standard split scoring.
 
-\begin{algorithm}[htbp]
-\caption{Lie-Guided Adversarial Training (LGAT) for Tree Ensembles}
-\label{alg:lgat}
-\begin{algorithmic}[1]
-\REQUIRE Training set $\mathcal{D}_{\text{train}} = \{(x_i, y_i)\}_{i=1}^N$, number of boosting rounds $T$, adversarial ratio $\beta = 0.5$, step budget $M_{\text{train}} = 5$
-\ENSURE Robust tree ensemble $F_T(x)$
-\STATE Initialize base tree $F_0 \leftarrow \text{FitCleanBaseTree}(\mathcal{D}_{\text{train}})$
-\FOR{$t = 1$ \TO $T$}
-    \STATE $\mathcal{D}_{\text{aug}} \leftarrow \emptyset$
-    \FOR{\textbf{each } $(x_i, y_i) \in \mathcal{D}_{\text{train}}$}
-        \IF{$y_i = 1$ \AND $\text{Uniform}(0, 1) < \beta$}
-            \STATE $x_{\text{adv}} \leftarrow \text{FFE}(F_{t-1}, x_i, \text{budget}=M_{\text{train}})$
-            \STATE Add $(x_{\text{adv}}, 1)$ to $\mathcal{D}_{\text{aug}}$
-        \ELSE
-            \STATE Add $(x_i, y_i)$ to $\mathcal{D}_{\text{aug}}$
-        \ENDIF
-    \ENDFOR
-    \STATE Compute negative gradients $g_i$ and Hessians $h_i$ on $\mathcal{D}_{\text{aug}}$
-    \STATE Fit tree $f_t$ using robust split scoring $\text{Gain}_{\text{robust}}$
-    \STATE $F_t(x) \leftarrow F_{t-1}(x) + \eta \cdot f_t(x)$
-\ENDFOR
-\RETURN $F_T$
-\end{algorithmic}
-\end{algorithm}
+\subsection{Evaluation}
 
-\subsubsection{Empirical Defense Validation}
-We evaluated one undefended baseline and three defensively hardened XGBoost models on CSE-CIC-IDS2018:
-\begin{enumerate}
-    \item \textbf{Standard XGBoost (Undefended):} Baseline histogram booster.
-    \item \textbf{MPS-Hardened XGBoost:} Trained with Malleability Penalty $\alpha_{\text{mal}} = 0.5$.
-    \item \textbf{LGAT-Hardened XGBoost:} Adversarially trained with $50\%$ Lie trajectory augmentation ($\beta = 0.5$).
-    \item \textbf{Dual-Hardened (MPS + LGAT):} Both defenses enabled simultaneously.
-\end{enumerate}
+We compared an undefended XGBoost model with three hardened variants on the CSE-CIC-IDS2018 calibrated corpus, each with 60 trees of depth 6 and learning rate 0.1. All models are attacked on the same cohort of 100 flows that the undefended model flags, using FFE at step budget $M=5$ (Table~\ref{tab:defense_evaluation}).
 
-Figure~\ref{fig:defense_evaluation} and Table~\ref{tab:defense_evaluation} report the clean test accuracy and robust adversarial resistance under active FFE attack.
-
-\begin{figure*}[t]
+\begin{table}[t]
+\caption{Defensive hardening against Flow-Field Evasion on CSE-CIC-IDS2018 (XGBoost; calibrated corpus; cohort $N=100$; attack budget $M=5$; all values in \%). Robust recall is $100 - \text{ASR}$.}\label{tab:defense_evaluation}
+\linespread{1}\selectfont
 \centering
-\includegraphics[width=\textwidth]{figures/fig5_defenses.pdf}
-\caption{Defensive hardening trade-offs and adversarial suppression on CSE-CIC-IDS2018 (reproduced by \texttt{experiments/run\_defenses.py}). (a) Clean test accuracy versus robust recall ($1 - \text{ASR}$) under active FFE attack across undefended, MPS-hardened, LGAT-hardened, and dual-hardened XGBoost models. (b) Flow-Field Evasion suppression, showing an attack deflection down to 56\% with a controlled clean accuracy trade-off of 2.42 percentage points ($\ge 97.30\%$ clean accuracy).}
-\label{fig:defense_evaluation}
-\end{figure*}
-
-\begin{table*}[htbp]
-\caption{Defensive Hardening Evaluation Against Flow-Field Evasion on CSE-CIC-IDS2018 (Calibrated Benchmark Corpus)}\label{tab:defense_evaluation}%
-\centering
-\resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}lcccc@{}}
 \toprule
-\textbf{Model Configuration} & \textbf{Clean Acc. (\%)} & \textbf{Clean ROC-AUC (\%)} & \textbf{Robust Recall (\%)} & \textbf{FFE ASR (\%)} \\
+Model & Clean acc. & Clean AUC & Robust recall & FFE ASR \\
 \midrule
-\textbf{Baseline XGBoost (Undefended)} & 99.72\% & 99.99\%  & 5.0\%   & 95.0\% \\
-\textbf{MPS-Hardened XGBoost}          & 97.80\% & 99.81\%  & 23.0\%  & 77.0\% \\
-\textbf{LGAT-Hardened XGBoost}         & 99.25\% & 99.97\%  & 12.0\%  & 88.0\% \\
-\textbf{Dual-Hardened (MPS + LGAT)}    & \textbf{97.30\%} & \textbf{99.69\%} & \textbf{44.0\%} & \textbf{56.0\%} \\
+Undefended    & 99.72 & 99.99 & 5.0  & 95.0 \\
+MPS-hardened  & 97.80 & 99.81 & 23.0 & 77.0 \\
+LGAT-hardened & 99.25 & 99.97 & 12.0 & 88.0 \\
+MPS + LGAT    & 97.30 & 99.69 & 44.0 & 56.0 \\
 \bottomrule
-\end{tabular}%
-}
-\smallskip
-\footnotesize\\
-Robust Recall (\%) denotes the true positive detection rate on malicious flows under active FFE evasion ($1 - \text{ASR}$). All metrics are directly reproduced by \texttt{experiments/run\_defenses.py}.
-\end{table*}
+\end{tabular}
+\end{table}
 
-\paragraph{Analysis of Defensive Hardening.}
-\begin{enumerate}
-    \item \textbf{Mitigation of Flow-Field Evasion:} Combining Malleability-Penalized Splitting with Lie-Guided Adversarial Training substantially suppresses adaptive evasion, reducing the Attack Success Rate of FFE from \textbf{95.0\% down to 56.0\%} and boosting robust true-positive detection under adaptive physical Lie perturbation from \textbf{5.0\% to 44.0\%}.
-    \item \textbf{Controlled Clean Accuracy Trade-Off:} Dual hardening incurs a modest clean accuracy reduction of $2.42$ percentage points ($99.72\% \to 97.30\%$), preserving a clean ROC-AUC of \textbf{99.69\%}. This demonstrates that penalizing easily malleable duration and rate features forces the tree ensemble to rely on structural protocol attributes, establishing a grounded defense against adaptive problem-space evasion.
-\end{enumerate}
+Combining MPS with LGAT reduces FFE success from 95.0\% to 56.0\% and raises robust recall from 5.0\% to 44.0\%. The clean accuracy cost is 2.42 percentage points (99.72\% to 97.30\%), with clean ROC-AUC of 99.69\%. The attack budget explains the undefended figure: at $M=5$ FFE succeeds on 95.0\% of the cohort, whereas Section~\ref{sec:results} reports 100.0\% at the larger budget. The residual 56.0\% success shows that the defense is partial.

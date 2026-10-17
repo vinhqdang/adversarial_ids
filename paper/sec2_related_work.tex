@@ -1,178 +1,40 @@
 \section{Related Work}
 \label{sec:sota}
 
-The intersection of adversarial machine learning (AML), network security, and decision tree verification has undergone intensive development over the past decade. To contextualize the theoretical and empirical contributions of Flow-Field Evasion (FFE), this section analyzes existing paradigms, tracing their evolution from early unconstrained attacks through problem-space formalisms, exact formal verification solvers, and modern constraint-aware benchmarks.
+Gradient-boosted decision trees (GBDTs), including XGBoost \cite{chen2016xgboost}, LightGBM \cite{ke2017lightgbm} and CatBoost \cite{prokhorenkova2018catboost}, are the standard choice for flow-based network intrusion detection on benchmarks such as CSE-CIC-IDS2018 \cite{sharafaldin2018toward}, UNSW-NB15 \cite{moustafa2015unsw} and CIDDS-001 \cite{ring2017flow}. Comprehensive empirical studies support this choice \cite{dang2022using, dang2023multilayer, apruzzese2022modeling}. Their split rules depend only on the rank order of feature values and are cheap to evaluate, which makes them attractive for deployment. Learned detectors have long been questioned for operation outside the closed world of their training data \cite{sommer2010outside}, but robustness to realistic evasion has received less attention.
 
-\subsection{Foundations: Machine Learning for Network Telemetry}
-The application of statistical machine learning to network intrusion detection originated with the realization that signature-based detection engines (such as Snort and Suricata) cannot detect novel, zero-day exploits or polymorphism \cite{sommer2010outside}. Early systems explored unsupervised anomaly detection and shallow classifiers (such as Support Vector Machines, Naive Bayes, and shallow Multi-Layer Perceptrons) trained on legacy corpora like KDD Cup 1999 and NSL-KDD. However, these early models suffered from high false alarm rates, poor scalability, and severe feature representation artifacts \cite{sommer2010outside, dang2019studying}.
+Early adversarial attacks on NIDS were transplanted from image classification. Szegedy et al.~\cite{szegedy2014intriguing}, Goodfellow et al.~\cite{goodfellow2015explaining} and Papernot et al.~\cite{papernot2016limitations} showed that gradient-based perturbations fool deep networks, and optimizers such as the Carlini-Wagner $L_2$ attack \cite{carlini2017towards} were then applied to tabular flow features. These studies reported high success rates, but the perturbed vectors were not network flows. Continuous optimization in Euclidean space assigns fractional values to integer packet counts, modifies immutable fields such as destination port, produces negative durations, and breaks the conservation between byte totals and packet counts. A feature vector that no valid packet sequence can produce says nothing about the deployed detector.
 
-The introduction of modern high-throughput flow extractors (such as CICFlowMeter \cite{sharafaldin2018toward}, Zeek, and YAF) coupled with the publication of realistic benchmark datasets---most prominently CSE-CIC-IDS2018 \cite{sharafaldin2018toward}, UNSW-NB15 \cite{moustafa2015unsw}, and CIDDS-001/CIDDS-002 \cite{dang2021evaluating, dang2022studying}---shifted the community toward Gradient Boosted Decision Tree (GBDT) ensembles. Comprehensive empirical studies on ML-based IDS \cite{dang2022using, dang2023multilayer, apruzzese2022modeling} established that tree ensembles---specifically XGBoost \cite{chen2016xgboost}, LightGBM \cite{ke2017lightgbm}, and CatBoost \cite{prokhorenkova2018catboost}---represent the de facto gold standard for tabular network telemetry. Their popularity stems from several distinct structural advantages:
-\begin{enumerate}
-    \item \textbf{Handling Mixed Tabular Types:} Flow records naturally blend continuous metrics (inter-arrival duration, byte rates) with discrete counts (packet totals, header lengths) and categorical attributes (TCP flags, protocols). Decision trees partition continuous and discrete variables natively without requiring complex embedding layers or continuous scaling.
-    \item \textbf{Invariance to Monotonic Transformations:} Unlike deep neural networks, whose linear combinations are sensitive to feature scales and outliers, decision tree split points depend solely on the rank ordering of feature values.
-    \item \textbf{Sub-Millisecond Inference Latency:} A trained tree ensemble can evaluate incoming flow records using simple nested conditional statements (branch comparisons), enabling wire-speed packet classification on standard commodity CPU and GPU hardware.
-\end{enumerate}
+The problem-space view corrects this. Pierazzi et al.~\cite{pierazzi2020intrusion} showed that an adversarial perturbation is meaningful only when it is realized as a transformation of the physical object, such as a binary or a packet sequence, and that the transformation must preserve functionality and survive the feature extractor. Verkerken et al.~\cite{verkerken2026problem} apply this view to defining host-space adversarial perturbations against NIDS. Surveys and audits of this literature~\cite{apruzzese2022modeling, apruzzese2023real, he2023adversarial, vitorino2023sok} argue that many feature-space attacks assume threat models that cannot be realized with valid packets under RFC protocol specifications, so their success rates overstate the risk once evaluated against true packet parsers and middleboxes. Constrained tabular attacks address feasibility only in part. CAA \cite{simonetto2024constrained} combines a gradient-based attack (CAPGD) with MOEVA \cite{ghamizi2020moeva}, a multi-objective genetic search whose constraint penalties are heuristic and whose population search receives no directional guidance. TabularBench \cite{simonetto2024tabularbench} standardizes such evaluations across deep and tree models. Packet-level tools avoid these problems by operating on real traffic. Traffic Manipulator \cite{han2021traffic} uses particle swarm optimization to mutate PCAP files by perturbing inter-packet intervals, adding payload bytes and injecting chaff packets. IDSGAN \cite{lin2022idsgan} generates adversarial flow records with generative adversarial networks, but its feasibility is only approximated in feature space.
 
-\subsection{Phase I: Naive Feature-Space Transfer}
-Following the discovery of adversarial examples in deep neural networks by Szegedy et al.~\cite{szegedy2014intriguing}, Goodfellow et al.~\cite{goodfellow2015explaining}, and Papernot et al.~\cite{papernot2016limitations}, a wave of initial studies investigated the vulnerability of machine learning-based NIDS to evasion attacks. 
+Exact methods exploit the piecewise-constant structure of trees. Kantchelian et al.~\cite{kantchelian2016evasion} cast minimal evasion against tree ensembles as a mixed-integer linear program. The formulation is exact but NP-hard in general and accepts only linear constraints, so it cannot express the nonlinear rate relations between bytes and duration that flow records obey. SAT and MaxSAT encodings of tree ensembles \cite{ignatiev2022formal, izza2022tackling} provide formal explanations and robustness checks, and LT-Attack \cite{zhang2020efficient} attacks tree ensembles through continuous leaf approximations. The MILP and LT-Attack operate in unconstrained feature space and do not enforce coupled network invariants. Robust training of tree ensembles \cite{chen2019robust, andriushchenko2019provably, calzavara2020treant} and adversarial retraining of neural NIDS \cite{hashemi2020enhancing} improve robustness within the same feature-space threat model. Black-box query methods such as ZOO \cite{chen2017zoo} and HopSkipJump \cite{chen2020hopskipjump} estimate the decision boundary by sampling the classifier's output, and population or swarm searches mutate parameters without knowing which splits are active.
 
-Early works directly applied continuous gradient-based adversarial methods to tabular feature vectors:
-\begin{itemize}
-    \item \textbf{Fast Gradient Sign Method (FGSM):}
-    \begin{equation}
-        x_{\text{adv}} = x + \epsilon \cdot \text{sign}\left( \nabla_x \mathcal{L}(f(x), y) \right)
-    \end{equation}
-    \item \textbf{Projected Gradient Descent (PGD):}
-    \begin{equation}
-        x^{(t+1)} = \Pi_{x + \mathcal{S}} \left( x^{(t)} + \alpha \cdot \text{sign}\left( \nabla_x \mathcal{L}(f(x^{(t)}), y) \right) \right)
-    \end{equation}
-    \item \textbf{Carlini-Wagner (C\&W) $L_2$ Optimization \cite{carlini2017towards}:}
-    \begin{equation}
-        \min_{\delta} \|\delta\|_2^2 + c \cdot \max\left( \max_{i \neq t} Z(x + \delta)_i - Z(x + \delta)_t, -\kappa \right)
-    \end{equation}
-\end{itemize}
+Table~\ref{tab:sota_taxonomy_expanded} summarizes these paradigms and the gap they leave. Methods that exploit the structure of tree ensembles or work in unconstrained feature space do not produce flows that survive packet parsing, while methods that preserve physical feasibility treat the detector as a black box and need hundreds to thousands of queries per flow. Flow-Field Evasion (FFE) addresses this gap by steering flows along infinitesimal packet-level generators that keep every step on the flow manifold, and by using the split geometry of the trees to choose the direction.
 
-These early studies reported extraordinary attack success rates, frequently exceeding $95\%$, leading to widespread claims that ML-based NIDS were fundamentally brittle. 
-
-However, as subsequent security analyses revealed, these evaluations were fundamentally flawed. By optimizing perturbations $\delta \in \mathbb{R}^d$ inside continuous Euclidean space, the algorithms produced feature vectors that had no physical meaning:
-\begin{itemize}
-    \item They assigned fractional values to discrete count metrics (e.g., $23.47$ forward packets).
-    \item They perturbed immutable attributes (e.g., changing Destination Port from 80 to 22.3).
-    \item They produced negative inter-arrival times and negative durations.
-    \item They violated physical conservation laws: forward payload byte counts were reduced below the minimum 20-byte TCP header size, or packet counts were increased while byte totals remained zero.
-\end{itemize}
-
-\subsection{Phase II: The Problem-Space Paradigm Shift}
-In their landmark 2020 paper, \emph{``Intriguing Properties of Adversarial ML Attacks in the Problem Space''}, Pierazzi et al.~\cite{pierazzi2020intrusion} and Verkerken et al.~\cite{verkerken2026problem} \cite{pierazzi2020intrusion} formalized the mathematical framework required to evaluate adversarial attacks in security domains. They demonstrated that an adversarial perturbation is an operational illusion unless it is mapped from the \textbf{Problem Space} $\mathcal{Z}$ to the \textbf{Feature Space} $\mathcal{X}$.
-
-\subsubsection{The Pierazzi Framework}
-Let $z \in \mathcal{Z}$ denote a real physical object (e.g., an executable binary, a PDF document, or a sequence of network packets). The feature extraction pipeline is a deterministic mapping:
-\begin{equation}
-    \phi: \mathcal{Z} \to \mathcal{X}
-\end{equation}
-An adversary cannot manipulate feature vectors directly; they can only apply physical transformations $T \in \mathcal{T}$ in the problem space:
-\begin{equation}
-    z^* = T(z)
-\end{equation}
-A problem-space adversarial attack is formally defined as finding a transformation $T$ that satisfies four joint criteria:
-\begin{enumerate}
-    \item \textbf{Available Transformations:}
-    \begin{equation}
-        T \in \mathcal{T}
-    \end{equation}
-    representing the real-world manipulation primitives available to the attacker (e.g., packet injection, payload padding, timing dilation).
-    \item \textbf{Classifier Evasion:}
-    \begin{equation}
-        f(\phi(T(z))) \neq y_{\text{true}}
-    \end{equation}
-    \item \textbf{Semantic Preservation:}
-    \begin{equation}
-        \mathcal{S}(T(z)) = \mathcal{S}(z)
-    \end{equation}
-    meaning the malicious utility, exploit payload, or botnet command-and-control functionality must execute successfully on the target system.
-    \item \textbf{Plausibility and Robustness to Preprocessing:} $T(z)$ must adhere to valid protocol syntax and format specifications (e.g., valid IP/TCP checksums, routable packet headers) so that intermediate networking devices (routers, firewalls, middleboxes) do not drop or normalize the transmission before it reaches the NIDS sensor.
-\end{enumerate}
-
-\subsubsection{Empirical Audits by Apruzzese et al.}
-Following the formalization of Pierazzi et al.~\cite{pierazzi2020intrusion} and Verkerken et al.~\cite{verkerken2026problem}, Apruzzese et al.~\cite{apruzzese2022modeling, apruzzese2023real, he2023adversarial, vitorino2023sok} critically examined the adversarial NIDS literature, establishing that the vast majority of published feature-space attacks rely on unfeasible threat models:
-\begin{itemize}
-    \item Standard feature-space perturbations routinely generate feature vectors that cannot be realized via valid network packets under RFC protocol specifications.
-    \item Real-world network telemetry is extracted by stateful network parsers; unconstrained coordinate displacements that disregard flow conservation laws fail to survive physical feature extraction.
-    \item Consequently, when evaluated against true packet parsers and physical middlebox filters, the reported attack success rates of conventional feature-space AML attacks degrade catastrophically.
-\end{itemize}
-
-\subsubsection{Tabular Constrained Benchmarks: CAA and TabularBench}
-To address these limitations within tabular domains, Simonetto et al. \cite{simonetto2024constrained} introduced the \textbf{Constrained Adaptive Attack (CAA)}, which combined two complementary engines:
-\begin{enumerate}
-    \item \textbf{CAPGD (Constrained Adaptive PGD):} A parameter-free gradient attack that projects continuous perturbations onto user-defined hyper-rectangular bounding boxes $[x_i^{\min}, x_i^{\max}]$ and enforces feature immutability.
-    \item \textbf{MOEVA (Multi-Objective Evolutionary Adversarial Attack \cite{ghamizi2020moeva}):} A genetic algorithm based on R-NSGA-III that optimizes a multi-objective fitness function penalizing both classifier detection confidence and constraint violation penalties.
-\end{enumerate}
-
-Subsequently, Simonetto et al. \cite{simonetto2024tabularbench} formalized these methods into \textbf{TabularBench}, establishing a standardized benchmark across deep learning and tree ensembles. While CAA represented significant progress over unconstrained PGD, it exhibited practical limitations in network telemetry:
-\begin{itemize}
-    \item While MOEVA's domain-specific constraint language allows formulating non-linear penalties, genetic optimization on coupled rational conservation laws ($\text{Rate} = \frac{\text{Bytes}}{\text{Duration}}$) requires dense stochastic population exploration without directional derivative guidance, resulting in frequent intermediate invariant violations and prohibitive query complexity ($>1,000$ queries per sample).
-    \item CAPGD relies on axis-aligned hyper-rectangular clipping $[x_i^{\min}, x_i^{\max}]$, which cannot preserve non-linear hyperbolic surfaces ($\Psi(x) = \mathbf{0}$) where coordinate changes must be tightly coupled at every step.
-\end{itemize}
-
-\subsection{Phase III: Tree Ensemble Solvers and Formal Verification}
-Because Gradient Boosted Decision Trees are piecewise-constant, researchers sought exact mathematical representations of tree decision boundaries.
-
-\subsubsection{Kantchelian's Exact MILP Evasion}
-In their foundational paper, Kantchelian et al. \cite{kantchelian2016evasion} formulated adversarial evasion against tree ensembles as a Mixed-Integer Linear Program (MILP). 
-
-Given an ensemble of $T$ trees, where each tree $t$ has leaves $L_t$, a binary indicator variable $z_{t, l} \in \{0, 1\}$ is defined for each leaf node $l \in L_t$. Each leaf corresponds to a hyper-rectangular cell defined by split predicates:
-\begin{equation}
-    x_j \le \theta_{j} \quad \text{or} \quad x_j > \theta_{j}
-\end{equation}
-The exact minimal $L_1$ or $L_0$ perturbation is found by solving:
-\begin{align}
-    \min_{x^*, z} \quad & \|x^* - x_0\|_p \\
-    \text{subject to} \quad & \sum_{t=1}^T \sum_{l \in L_t} w_{t, l} z_{t, l} < \tau \\
-    & \sum_{l \in L_t} z_{t, l} = 1, \quad \forall t \in \{1, \dots, T\} \\
-    & z_{t, l} = 1 \implies x^* \in \text{Box}(l)
-\end{align}
-
-While mathematically exact, Kantchelian's MILP formulation suffers from severe practical limitations:
-\begin{enumerate}
-    \item \textbf{Combinatorial Complexity:} The number of binary variables scales with the total number of leaves across all trees $\sum_{t=1}^T |L_t| \approx T \cdot 2^D$. For modern production ensembles with $T = 100$ trees and depth $D = 8$, the solver must reason over $25,600$ integer variables. The problem is NP-hard with worst-case complexity $2^{\mathcal{O}(D \cdot T)}$, and standard solvers (such as Gurobi or CPLEX) frequently timeout or exhaust system memory.
-    \item \textbf{Linearity Restriction:} MILP solvers natively accept only linear constraints. When non-linear network flow invariants are introduced (such as non-linear rate equations relating bytes and duration), the formulation becomes a Mixed-Integer Non-Linear Program (MINLP), which is generally intractable.
-\end{enumerate}
-
-\subsubsection{SAT, SMT, and Continuous Leaf Tree Attacks}
-Since the early 2020s, researchers adapted Boolean Satisfiability (SAT) and Satisfiability Modulo Theories (SMT) to formally verify and explain GBDT ensembles. Ignatiev et al.~\cite{ignatiev2022formal} and Izza et al.~\cite{izza2022tackling} encode tree ensemble splits into propositional Horn and MaxSAT clauses to synthesize minimal, non-redundant formal explanations and analyze robustness properties for decision trees and ensembles. In parallel, Zhang et al.~\cite{zhang2020efficient} introduced LT-Attack, an efficient white-box attack against tree ensembles based on continuous leaf approximations, while Chen et al.~\cite{chen2019robust}, Andriushchenko \& Hein~\cite{andriushchenko2019provably}, and Calzavara et al.~\cite{calzavara2020treant} proposed robust tree training objectives.
-
-However, formal SMT verification encounters the same fundamental barrier: reasoning over large ensembles requires massive combinatorial state exploration, and non-linear rational constraints (such as rate equations $x_8 = B_{\text{tot}} / T_{\text{sec}}$) exceed the practical scalability of non-linear real arithmetic (NRA) solvers. Meanwhile, continuous leaf approximations (LT-Attack) operate in unconstrained Euclidean space, ignoring coupled network conservation laws and protocol feasibility.
-
-\subsection{Phase IV: Black-Box Heuristic Traffic Mutation}
-To circumvent mathematical feature-space abstractions entirely, security practitioners developed packet-level mutation engines:
-\begin{itemize}
-    \item \textbf{Traffic Manipulator (Han et al. \cite{han2021traffic}):} Uses Particle Swarm Optimization (PSO) to mutate raw PCAP files. It perturbs packet transmission intervals, injects dummy payload bytes, and introduces chaff packets.
-    \item \textbf{Adversarial Feature Generation (Lin et al. \cite{lin2022idsgan}):} Employs Wasserstein Generative Adversarial Networks (IDSGAN) to synthesize adversarial tabular flow records approximating benign distributions in feature space.
-    \item \textbf{Deep Traffic Detection under Packet Morphing:} Evaluated how deep and tree-based traffic anomaly detectors are vulnerable to timing and volumetric morphing under realistic problem-space constraints (e.g., Apruzzese et al.~\cite{apruzzese2022modeling, apruzzese2023real, he2023adversarial, vitorino2023sok}).
-\end{itemize}
-
-While packet mutation frameworks guarantee physical routability by operating directly on packets, their optimization engines treat the target classifier as an opaque black box. Because Genetic Algorithms and PSO randomly mutate parameters without knowing which tree splits are active, they require hundreds to thousands of queries ($1,240$--$1,850$ queries for evolutionary and swarm optimizers, and $680$ queries for HopSkipJump in our benchmark, taking up to several seconds per flow and minutes per batch).
-
-\subsection{Taxonomic Comparison of Evasion and Verification Paradigms}
-Table~\ref{tab:sota_taxonomy_expanded} summarizes representative evasion, verification, and defense methods developed across the literature, comparing target architectures, optimization mechanisms, query complexities, and problem-space feasibility.
-
-\begin{table*}[!htbp]
-\caption{Taxonomic Comparison of Representative Adversarial Evasion and Verification Paradigms for Tabular and Network Telemetry (Empirical PFR percentages denote evaluation results on calibrated network flow telemetry; see Section~\ref{sec:results})}\label{tab:sota_taxonomy_expanded}%
+\begin{table}[t]
+\caption{Representative evasion, verification and defense paradigms for tabular and network telemetry. Physical feasibility reports the empirical PFR of this benchmark where it was evaluated (Section~\ref{sec:results}).}\label{tab:sota_taxonomy_expanded}
 \centering
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}lccccc@{}}
+\linespread{1}\selectfont
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}p{2.0cm}p{1.6cm}p{2.4cm}p{1.9cm}p{2.1cm}p{2.1cm}@{}}
 \toprule
-\textbf{Paper / Method} & \textbf{Target Model} & \textbf{Optimization Engine} & \textbf{Query Complexity} & \textbf{Physical Feasibility} & \textbf{Year} \\
+\textbf{Method} & \textbf{Target model} & \textbf{Engine} & \textbf{Queries} & \textbf{Coupled invariants} & \textbf{Physical feasibility} \\
 \midrule
-\textbf{Kantchelian et al.} \cite{kantchelian2016evasion} & GBDT / Random Forest & Mixed-Integer Linear Program (MILP) & Zero (White-Box) & Unconstrained (Feature Space) & 2016 \\
-\textbf{Carlini \& Wagner} \cite{carlini2017towards} & Deep Neural Networks & Lagrangian $L_2/L_\infty$ Optimization & $O(N_{\text{iter}})$ & Unconstrained (Feature Space) & 2017 \\
-\textbf{Chen et al. (ZOO)} \cite{chen2017zoo} & Black-Box Classifiers & Zeroth-Order Coordinate Descent & $O(d \cdot N_{\text{iter}})$ & 25.0\% (Empirical Benchmark) & 2017 \\
-\textbf{Pierazzi et al.~\cite{pierazzi2020intrusion} and Verkerken et al.~\cite{verkerken2026problem}} \cite{pierazzi2020intrusion} & Android / Problem Space & Problem-Space Formalization & Analytic & Formally Defined & 2020 \\
-\textbf{Hashemi \& Keller} \cite{hashemi2020enhancing} & Neural NIDS & Adversarial Retraining / RePO & $O(N_{\text{train}})$ & Unconstrained (Feature Space) & 2020 \\
-\textbf{Chen et al. (HSJ)} \cite{chen2020hopskipjump} & Black-Box Decision & Boundary Random Walk & $O(10^3)$ & 17.8\% (Empirical Benchmark) & 2020 \\
-\textbf{Zhang et al. (LT-Attack)} \cite{zhang2020efficient} & Tree Ensembles & Continuous Leaf Approximation & $O(N_{\text{iter}})$ & Unconstrained (Feature Space) & 2020 \\
-\textbf{Ghamizi et al. (MOEVA)} \cite{ghamizi2020moeva} & Constrained Tabular & Multi-Objective Genetic Search & $O(10^3)$ & Partial (Heuristic Penalty) & 2020 \\
-\textbf{Han et al. (Traffic Manipulator)} \cite{han2021traffic} & Black-Box NIDS & Particle Swarm Optimization (PCAP) & $O(10^3 - 10^4)$ & 100\% (Packet Mutation) & 2021 \\
-\textbf{Lin et al. (IDSGAN)} \cite{lin2022idsgan} & Black-Box NIDS & Generative Adversarial Network & $O(N_{\text{gen}})$ & Approximated (Feature Space) & 2022 \\
-\textbf{Apruzzese et al.} \cite{apruzzese2022modeling, apruzzese2023real} & Learning-Based NIDS & Problem-Space Adversary Audits & Empirical Audit & Real Testbed / Packets & 2022/2023 \\
-\textbf{Ignatiev et al.} \cite{ignatiev2022formal} & GBDT Ensembles & Boolean MaxSAT / SMT Verification & Zero (White-Box) & Formal Explanation & 2022 \\
-\textbf{Izza et al.} \cite{izza2022tackling} & Decision Trees & MaxSAT Explanation Redundancy & Zero (White-Box) & Formal Explanation & 2022 \\
-\textbf{Simonetto et al. (CAA)} \cite{simonetto2024constrained} & Tabular Models & CAPGD + Heuristic Snapping & $O(10^3)$ & Partial (61.5\% Empirical) & 2024 \\
-\textbf{Simonetto et al. (TabularBench)} \cite{simonetto2024tabularbench} & Tabular Benchmarks & Standardized Robustness Framework & $O(10^3)$ & Partial (Bounded Domain) & 2024 \\
+Kantchelian et al.~\cite{kantchelian2016evasion} & GBDT, random forest & MILP (worst case $2^{\mathcal{O}(DT)}$) & 0 (white-box) & Unsupported (linear only) & Unconstrained \\
+Zhang et al.~\cite{zhang2020efficient} (LT-Attack) & Tree ensembles & Continuous leaf approximation & $O(N_{\text{iter}})$ & Not modeled & Unconstrained \\
+Ignatiev et al.~\cite{ignatiev2022formal}; Izza et al.~\cite{izza2022tackling} & GBDT, decision trees & MaxSAT / SAT verification & 0 (white-box) & Not modeled & Not applicable (explanation) \\
+Chen et al. (ZOO)~\cite{chen2017zoo} & Black-box classifiers & Zeroth-order coordinate descent & $O(d \cdot N_{\text{iter}})$ & Not modeled & 25.0\% (empirical) \\
+Chen et al. (HSJ)~\cite{chen2020hopskipjump} & Black-box decision & Boundary random walk & $O(10^3)$ & Not modeled & 17.8\% (empirical) \\
+Lin et al. (IDSGAN)~\cite{lin2022idsgan} & Black-box NIDS & Generative adversarial network & $O(N_{\text{gen}})$ & Learned distribution & Approximated (feature space) \\
+Ghamizi et al. (MOEVA)~\cite{ghamizi2020moeva} & Constrained tabular & Multi-objective genetic search & $\le$1,250 & Heuristic penalty & Partial \\
+Simonetto et al. (CAA)~\cite{simonetto2024constrained} & Tabular models & CAPGD with MOEVA & 1,240 & Approximate penalty & Partial (61.5\% empirical) \\
+Han et al. (Traffic Manipulator)~\cite{han2021traffic} & Black-box NIDS & PSO on PCAP files & $O(10^3\text{--}10^4)$ & Packet re-evaluation & 100\% (packet mutation) \\
 \midrule
-\textbf{Flow-Field Evasion (Ours)} & \textbf{XGBoost / LightGBM} & \textbf{Lie Vector Field Steering} & \textbf{12.9 (Low)} & \textbf{100.0\% (Guaranteed)} & \textbf{2026} \\
+\textbf{Flow-Field Evasion (ours)} & \textbf{XGBoost, LightGBM} & \textbf{Lie vector field steering} & \textbf{$\le 4M_{\max}+1$ probes plus TSBS (mean 12.9)} & \textbf{Exact closed-form} & \textbf{100.0\% (schema-checked)} \\
 \bottomrule
-\end{tabular}%
-}
-\end{table*}
+\end{tabular}
 
-\subsection{The Critical Unresolved Gap}
-As evidenced by Table~\ref{tab:sota_taxonomy_expanded}, the existing literature leaves a profound gap in the scientific landscape:
-\begin{enumerate}
-    \item Methods that exploit mathematical structure (MILP, SMT, unconstrained AML) operate in unconstrained feature space, generating non-routable perturbations that cause Real ASR to collapse (down to 0.0\% to 8.0\% Real ASR across unconstrained baselines).
-    \item Methods that preserve physical feasibility (Traffic Manipulator, live packet mutators) treat the classifier as an opaque black box, resulting in elevated query complexities ($680 - 1,850$ queries in our benchmark) and multi-second latencies.
-\end{enumerate}
-
-\textbf{Flow-Field Evasion (FFE)} resolves this dilemma. By deriving the exact infinitesimal tangent vector fields directly from elementary physical packet operations, FFE conducts gradient-like directed search on tree decision scores while remaining mathematically confined to the physical flow manifold $\mathcal{M}_{\text{flow}}$ at every step.
-
-\FloatBarrier
+\smallskip
+\footnotesize{Note: $T$ trees, $D$ depth, $M_{\max}=20$, $K=4$ generators. MOEVA uses $G=25$, $P=50$ ($\le$1,250 queries) and PSO uses $I=37$, $S=50$ ($\le$1,850 queries). Empirical PFR values are from Table~\ref{tab:master_evasion_benchmark}.}
+\end{table}

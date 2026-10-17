@@ -1,182 +1,61 @@
 \subsection{Algorithmic Realization of Flow-Field Evasion}
 \label{sec:algorithm}
 
-This section details the algorithmic realization of Flow-Field Evasion (FFE). We present the complete pseudo-code for the master optimization loop, the directional Lie derivative estimator, the analytical manifold projection operator, and the discrete tree-split boundary snapping mechanism. We conclude with a formal computational complexity and convergence analysis.
+Algorithm~\ref{alg:ffe_master} gives the master loop of Flow-Field Evasion (FFE). Starting from a flagged flow $x_0 \in \mathcal{M}_{\text{flow}}$ with $F(x_0) \ge 0$, each iteration probes the four generators, takes the admissible step with the largest score reduction per unit cost, and falls back to boundary snapping or temporal dilation when no generator lowers the score.
 
-\subsubsection{Master Optimization Loop}
-Algorithm~\ref{alg:ffe_master} outlines the primary execution loop of Flow-Field Evasion. Given an attack flow $x_0 \in \mathcal{M}_{\text{flow}}$ flagged by the tree ensemble ($F(x_0) \ge 0$), FFE iteratively selects the infinitesimal generator that maximizes the reduction in malicious classification score per unit of physical operational cost.
-
-\begin{algorithm}[htbp]
+\begin{algorithm}[!t]
+\footnotesize\linespread{1}\selectfont
 \caption{Flow-Field Evasion (FFE) Master Optimization Loop}
 \label{alg:ffe_master}
-\footnotesize
 \begin{algorithmic}[1]
-\REQUIRE Classifier $F: \mathbb{R}^d \to \mathbb{R}$, initial flow $x_0 \in \mathcal{M}_{\text{flow}}$, feature schema $\mathcal{S}$, step budget $M$, cost vector $\vec{c} = [c_1, c_2, c_3, c_4]^T$, target threshold $\tau = 0.0$
-\ENSURE Evasive flow $x^* \in \mathcal{M}_{\text{flow}}$ with $F(x^*) < \tau$, or failure flag
-\STATE $x \leftarrow \text{ProjectManifoldInvariants}(x_0, \mathcal{S})$
-\STATE $f_{\text{curr}} \leftarrow F(x)$ \COMMENT{Initial model evaluation}
-\IF{$f_{\text{curr}} < \tau$}
-    \RETURN $x, \text{SUCCESS}$ \COMMENT{Flow already classified as Benign}
-\ENDIF
-\STATE $\text{queries} \leftarrow 1$
-\FOR{$\text{step} = 1$ \TO $M$}
-    \IF{$f_{\text{curr}} < \tau$}
-        \RETURN $x, \text{SUCCESS}$ \COMMENT{Benign classification reached; no snapping needed}
-    \ENDIF
-    \STATE $\mathcal{D}, q_{\text{used}} \leftarrow \text{EstimateLieDerivatives}(F, x, \mathcal{S})$
-    \STATE $\text{queries} \leftarrow \text{queries} + q_{\text{used}}$
-    \STATE $k^* \leftarrow \text{null}$; $\text{max\_eff} \leftarrow 0.0$
-    \FOR{\textbf{each } $(k, \nabla_k, \vec{v}_k, \Delta s_k, f_k) \in \mathcal{D}$}
-        \IF{$\nabla_k < 0$}
-            \STATE $\text{eff} \leftarrow (-\nabla_k) / c_k$ \COMMENT{Derivative is negative (score decreases)}
-            \IF{$\text{eff} > \text{max\_eff}$}
-                \STATE $\text{max\_eff} \leftarrow \text{eff}$; $k^* \leftarrow (\vec{v}_k, \Delta s_k, f_k)$
-            \ENDIF
-        \ENDIF
-    \ENDFOR
+\REQUIRE Classifier $F$, initial flow $x_0 \in \mathcal{M}_{\text{flow}}$, schema $\mathcal{S}$, step budget $M$, costs $\vec{c}=[c_1,\dots,c_4]^T$, threshold $\tau=0$
+\ENSURE Evasive flow $x^* \in \mathcal{M}_{\text{flow}}$ with $F(x^*)<\tau$, or FAILURE
+\STATE $x \leftarrow \mathcal{P}_{\mathcal{M}}(x_0)$; $f \leftarrow F(x)$; $q \leftarrow 1$
+\FOR{$\text{step}=1$ \TO $M$}
+    \IF{$f<\tau$} \RETURN $(x,\text{SUCCESS})$ \ENDIF
+    \STATE $\mathcal{D}, q_{\text{used}} \leftarrow \text{EstimateLieDerivatives}(F,x,\mathcal{S})$; $q \leftarrow q+q_{\text{used}}$ \COMMENT{Supplementary Algorithm~S1}
+    \STATE $k^* \leftarrow$ first maximizer of $(-\nabla_k)/c_k$ over $(k,\nabla_k,\vec{v}_k,\Delta s_k,f_k)\in\mathcal{D}$ with $\nabla_k<0$; null if none
     \IF{$k^* \neq \text{null}$}
-        \STATE $(\vec{v}, \Delta s, f_{k^*}) \leftarrow k^*$
-        \STATE $x \leftarrow \text{ProjectManifoldInvariants}(x + \Delta s \cdot \vec{v}, \mathcal{S})$
-        \STATE $f_{\text{curr}} \leftarrow f_{k^*}$ \COMMENT{Score cached from the candidate probe (no extra query)}
+        \STATE $x \leftarrow \mathcal{P}_{\mathcal{M}}(x+\Delta s_{k^*}\,\vec{v}_{k^*})$; $f \leftarrow f_{k^*}$ \COMMENT{Cached probe, no extra query}
     \ELSE
-        \STATE \COMMENT{Stagnation: all probed derivatives are non-negative}
-        \STATE $x_{\text{snap}} \leftarrow \text{TreeBoundarySnap}(F, x, \mathcal{S})$; $f_{\text{snap}} \leftarrow F(x_{\text{snap}})$
-        \IF{$f_{\text{snap}} < f_{\text{curr}}$}
-            \STATE $x \leftarrow x_{\text{snap}}$; $f_{\text{curr}} \leftarrow f_{\text{snap}}$
+        \STATE $x_{\text{snap}} \leftarrow \text{TSBS}(F,x,\mathcal{S})$
+        \IF{$F(x_{\text{snap}})<f$}
+            \STATE $x \leftarrow x_{\text{snap}}$; $f \leftarrow F(x_{\text{snap}})$
         \ELSE
-            \STATE \COMMENT{Fallback Trajectory: Low-and-Slow Temporal Dilation (capped below 120s exporter timeout)}
-            \STATE $\vec{v}_t \leftarrow \vec{v}_{\text{time}}(x)$
-            \STATE $\Delta t \leftarrow \min(1.1 \times 10^8, \max(50000.0, x_6 \cdot 1.5))$
-            \STATE $x \leftarrow \text{ProjectManifoldInvariants}(x + \Delta t \cdot \vec{v}_t, \mathcal{S})$
-            \STATE $f_{\text{curr}} \leftarrow F(x)$; $\text{queries} \leftarrow \text{queries} + 1$
+            \STATE $\Delta t \leftarrow \min(1.1\times10^8,\max(5\times10^4,1.5\,x_6))$ \COMMENT{Fallback dilation; projection clamps duration at the $1.1\times10^8\,\mu$s timeout}
+            \STATE $x \leftarrow \mathcal{P}_{\mathcal{M}}(x+\Delta t\,\vec{v}_{\text{time}}(x))$; $f \leftarrow F(x)$; $q \leftarrow q+1$
         \ENDIF
     \ENDIF
 \ENDFOR
-\IF{$f_{\text{curr}} < \tau$}
-    \RETURN $x, \text{SUCCESS}$
-\ELSE
-    \RETURN $x, \text{FAILURE}$
-\ENDIF
+\IF{$f<\tau$} \RETURN $(x,\text{SUCCESS})$ \ELSE \RETURN $(x,\text{FAILURE})$ \ENDIF
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Adaptive Lie Derivative Numerical Estimator}
-Algorithm~\ref{alg:lie_estimator} details the numerical estimation of the directional Lie derivative $\mathcal{L}_{\vec{v}_k} F(x)$ across the non-differentiable step boundaries of the tree ensemble. Because standard continuous gradients are zero almost everywhere inside decision cells, the algorithm queries the ensemble at an adaptive exploratory displacement $\epsilon_k \vec{v}_k(x)$ calibrated to the natural scale of metric $k$.
-
-\begin{algorithm}[htbp]
-\caption{Adaptive Directional Lie Derivative Estimator}
-\label{alg:lie_estimator}
-\footnotesize
-\begin{algorithmic}[1]
-\REQUIRE Classifier $F$, current flow state $x$, feature schema $\mathcal{S}$
-\ENSURE List of candidate evaluation tuples $\mathcal{D} = \{(k, \nabla_k, \vec{v}_k, \Delta s_k, f_k)\}_{k=1}^4$ (with $f_k = F(x_{\text{test}})$ the probed score), total exploratory queries $q$
-\STATE $\mathcal{D} \leftarrow \emptyset$
-\STATE $q \leftarrow 0$ \COMMENT{Counter for candidate exploratory probes}
-
-\STATE \COMMENT{1. Evaluate Temporal Dilation Generator}
-\STATE $\vec{v}_1 \leftarrow \vec{v}_{\text{time}}(x)$
-\STATE $\Delta s_1 \leftarrow \max(1000.0, x_6 \cdot 0.50)$ \COMMENT{Adaptive temporal displacement in $\mu$s}
-\STATE $x_{\text{test}} \leftarrow \text{ProjectManifoldInvariants}(x + \Delta s_1 \cdot \vec{v}_1, \mathcal{S})$
-\STATE $\Delta t_1 \leftarrow \Delta s_1 / 10^6$ \COMMENT{Convert duration step to seconds}
-\STATE $f_1 \leftarrow F(x_{\text{test}})$; $\nabla_1 \leftarrow (f_1 - F(x)) / \Delta t_1$ \COMMENT{Derivative per second of delay}
-\STATE Append $(1, \nabla_1, \vec{v}_1, \Delta s_1, f_1)$ to $\mathcal{D}$
-\STATE $q \leftarrow q + 1$
-
-\STATE \COMMENT{2. Evaluate Payload Padding Generator}
-\STATE $\vec{v}_2 \leftarrow \vec{v}_{\text{pad}}(x)$
-\STATE $\Delta s_2 \leftarrow \max(50.0, x_4 \cdot 0.25)$ \COMMENT{Adaptive forward byte padding step}
-\STATE $x_{\text{test}} \leftarrow \text{ProjectManifoldInvariants}(x + \Delta s_2 \cdot \vec{v}_2, \mathcal{S})$
-\STATE $f_2 \leftarrow F(x_{\text{test}})$; $\nabla_2 \leftarrow (f_2 - F(x)) / \Delta s_2$
-\STATE Append $(2, \nabla_2, \vec{v}_2, \Delta s_2, f_2)$ to $\mathcal{D}$
-\STATE $q \leftarrow q + 1$
-
-\STATE \COMMENT{3. Evaluate Chaff Packet Injection Generator}
-\STATE $\vec{v}_3 \leftarrow \vec{v}_{\text{chaff}}(x)$
-\STATE $\Delta s_3 \leftarrow \max(1.0, \text{round}(x_2 \cdot 0.50))$ \COMMENT{Adaptive chaff packet injection count}
-\STATE $x_{\text{test}} \leftarrow \text{ProjectManifoldInvariants}(x + \Delta s_3 \cdot \vec{v}_3, \mathcal{S})$
-\STATE $f_3 \leftarrow F(x_{\text{test}})$; $\nabla_3 \leftarrow (f_3 - F(x)) / \Delta s_3$
-\STATE Append $(3, \nabla_3, \vec{v}_3, \Delta s_3, f_3)$ to $\mathcal{D}$
-\STATE $q \leftarrow q + 1$
-
-\STATE \COMMENT{4. Evaluate TCP Window Morphing Generator}
-\IF{$x[1] = 6$}
-    \STATE \COMMENT{TCP flows only; window size is inapplicable to UDP}
-    \STATE $\vec{v}_4 \leftarrow \vec{v}_{\text{win}}(x)$
-    \STATE $\Delta s_4 \leftarrow |64240.0 - x[7]|$
-    \IF{$\Delta s_4 > 0$}
-        \STATE $x_{\text{test}} \leftarrow \text{ProjectManifoldInvariants}(x + \Delta s_4 \cdot \vec{v}_4, \mathcal{S})$
-        \STATE $f_4 \leftarrow F(x_{\text{test}})$; $\nabla_4 \leftarrow (f_4 - F(x)) / (\Delta s_4 / 65535.0)$ \COMMENT{Normalized window gradient}
-        \STATE Append $(4, \nabla_4, \vec{v}_4, \Delta s_4, f_4)$ to $\mathcal{D}$
-        \STATE $q \leftarrow q + 1$
-    \ENDIF
-\ENDIF
-\RETURN $\mathcal{D}, q$
-\end{algorithmic}
-\end{algorithm}
-
-\subsubsection{Analytical Manifold Projection Operator \texorpdfstring{$\mathcal{P}_{\mathcal{M}}$}{P\_M}}
-Algorithm~\ref{alg:manifold_proj} specifies the closed-form projection operator $\mathcal{P}_{\mathcal{M}}: \mathbb{R}^{12} \to \mathcal{M}_{\text{flow}}$. This operator ensures that discrete count boundaries, protocol packet and header length inequalities, and coupled rate equations are strictly satisfied after any continuous displacement.
-
-\begin{algorithm}[htbp]
-\caption{Analytical Manifold Projection Operator $\mathcal{P}_{\mathcal{M}}$}
-\label{alg:manifold_proj}
-\begin{algorithmic}[1]
-\REQUIRE Perturbed vector $x \in \mathbb{R}^{12}$, feature schema $\mathcal{S}$, optional baseline flow $x_{\text{orig}}$
-\ENSURE Projected flow vector $x_{\text{proj}} \in \mathcal{M}_{\text{flow}}$
-\STATE $x_{\text{proj}} \leftarrow \text{copy}(x)$
-\IF{$x_{\text{orig}}$ is provided}
-    \STATE $x_{\text{proj}}[j] \leftarrow x_{\text{orig}}[j]$ for all $j \in \mathcal{I}_{\text{immut}}$ \COMMENT{Preserve immutable features}
-    \STATE $x_{\text{proj}}[j] \leftarrow \max(x_{\text{orig}}[j], x_{\text{proj}}[j])$ for all $j \in \mathcal{I}_{\text{mono}}^+$ \COMMENT{Enforce monotonicity lower bounds}
-\ENDIF
-\STATE \COMMENT{Enforce discrete bounds and protocol-dependent packet/header sizes}
-\STATE $x_{\text{proj}}[2] \leftarrow \max(1.0, \text{round}(x_{\text{proj}}[2]))$ \COMMENT{Integer Forward Packets}
-\STATE $x_{\text{proj}}[3] \leftarrow x[3]$ \COMMENT{Immutable Backward Packets Preserved}
-\STATE $H_{\text{min}} \leftarrow \mathbf{if}\; x_{\text{proj}}[1] = 6 \;\mathbf{then}\; 20.0 \;\mathbf{else}\; 8.0$ \COMMENT{Min transport header: 20B TCP, 8B UDP}
-\STATE $H_{\text{max}} \leftarrow \mathbf{if}\; x_{\text{proj}}[1] = 6 \;\mathbf{then}\; 60.0 \;\mathbf{else}\; 8.0$ \COMMENT{Max transport header: 60B TCP, 8B UDP}
-\STATE $x_{\text{proj}}[11] \leftarrow \min(x_{\text{proj}}[2] \times H_{\text{max}}, \max(x_{\text{proj}}[2] \times H_{\text{min}}, \text{round}(x_{\text{proj}}[11])))$ \COMMENT{Transport Header Length}
-\STATE $x_{\text{proj}}[4] \leftarrow \min(x_{\text{proj}}[2] \times 1500.0, \max(x_{\text{proj}}[11] + 20.0 \times x_{\text{proj}}[2], \text{round}(x_{\text{proj}}[4])))$ \COMMENT{Forward Bytes $\in [H_{\text{fwd}} + 20 N_{\text{fwd}}, 1500 N_{\text{fwd}}]$}
-\STATE $x_{\text{proj}}[5] \leftarrow x[5]$ \COMMENT{Immutable Backward Bytes Preserved}
-\STATE $x_{\text{proj}}[6] \leftarrow \min(1.1 \times 10^8, \max(1.0, \text{round}(x_{\text{proj}}[6])))$ \COMMENT{Integer Duration $\ge 1 \mu$s, capped below flow timeout}
-\STATE $x_{\text{proj}}[7] \leftarrow \mathbf{if}\; x_{\text{proj}}[1] = 6 \;\mathbf{then}\; \text{clamp}(\text{round}(x_{\text{proj}}[7]), 0.0, 65535.0) \;\mathbf{else}\; 0.0$ \COMMENT{TCP Window $[0, 65535]$, 0 for UDP}
-
-\STATE \COMMENT{Analytically recalculate coupled non-linear flow rates}
-\STATE $T_{\text{sec}} \leftarrow x_{\text{proj}}[6] / 10^6$
-\STATE $B_{\text{tot}} \leftarrow x_{\text{proj}}[4] + x_{\text{proj}}[5]$
-\STATE $N_{\text{tot}} \leftarrow x_{\text{proj}}[2] + x_{\text{proj}}[3]$
-\STATE $x_{\text{proj}}[8] \leftarrow B_{\text{tot}} / T_{\text{sec}}$ \COMMENT{Flow Bytes/s}
-\STATE $x_{\text{proj}}[9] \leftarrow N_{\text{tot}} / T_{\text{sec}}$ \COMMENT{Flow Packets/s}
-\STATE $x_{\text{proj}}[10] \leftarrow x_{\text{proj}}[4] / x_{\text{proj}}[2]$ \COMMENT{Forward Packet Length Mean}
-\RETURN $x_{\text{proj}}$
-\end{algorithmic}
-\end{algorithm}
+Supplementary Algorithm~S1 estimates the directional derivatives by probing the ensemble once per generator, since $\nabla F$ vanishes almost everywhere. The probe steps are $\Delta s_1=\max(1000,\,0.5x_6)$ $\mu$s, $\Delta s_2=\max(50,\,0.25x_4)$ bytes, $\Delta s_3=\max(1,\,\text{round}(0.5x_2))$ packets and $\Delta s_4=|64240-x_7|$, and the derivatives are taken per second of delay, per byte, per packet and per window unit of $\Delta s_4/65{,}535$, respectively. Every displacement is followed by the closed-form projection $\mathcal{P}_{\mathcal{M}}$ of Supplementary Algorithm~S2, which restores immutable features, enforces monotonicity and integer counts, bounds header and packet lengths, and recomputes the coupled rates.
 
 \subsubsection{Tree-Split Boundary Snapping (TSBS)}
-Algorithm~\ref{alg:tsbs} implements Tree-Split Boundary Snapping, with its candidate generator given in Algorithm~\ref{alg:tsbs_candidates}. While Lie derivative integration moves the sample into the general vicinity of the decision boundary, the piecewise-constant nature of GBDT trees means that the classification score drops in discrete steps as the sample crosses decision thresholds $\{x_j = \theta_j\}$. In Tier~1 white-box settings, TSBS extracts the ensemble's split thresholds ($\text{ExtractActiveSplits}$ returns every threshold used by any tree, and TSBS retains, per feature, the closest one on the benign side of the current value) and evaluates candidate boundary crossings ($x_j \leftarrow \theta_j + \epsilon_j$), retaining the candidate that strictly minimizes the classification score $F$ while strictly preserving manifold constraints via $\mathcal{P}_{\mathcal{M}}$. 
+Algorithm~\ref{alg:tsbs} implements Tree-Split Boundary Snapping (TSBS), whose candidates are generated by Supplementary Algorithm~S3. Because the score is piecewise constant in each split feature, a small displacement cannot cross a split threshold. In Tier~1 white-box settings, TSBS therefore extracts the active split thresholds of the ensemble, keeps per feature the threshold closest to the benign side of the current value, and retains the projected candidate that most decreases $F$.
 
-Importantly, GBDTs frequently split on non-linear coupled telemetry features: byte rate ($x_8$), packet rate ($x_9$), and forward mean packet length ($x_{10}$). TSBS inverts these coupled constraints in closed form into admissible infinitesimal generator controls:
-\begin{enumerate}
-    \item \emph{Coupled Rate Inversion:} To cross an active byte rate threshold $x_8 < \theta_8$ or packet rate threshold $x_9 < \theta_9$, TSBS inverts the hyperbolic relation $x_8 = 10^6 (x_4 + x_5) / x_6$ to calculate the required duration dilation:
-    \begin{equation}
-        x_6^* = \frac{10^6 (x_4 + x_5)}{\theta_8} + \epsilon_6, \quad \text{or} \quad x_6^* = \frac{10^6 (x_2 + x_3)}{\theta_9} + \epsilon_6
-    \end{equation}
-    with $\epsilon_6 = 10\,\mu$s; since $\theta < x_8$ (resp.\ $x_9$), $x_6^* > x_6$ automatically, and the candidate is discarded if $x_6^*$ exceeds the $1.1 \times 10^8\,\mu$s timeout cap.
-    \item \emph{Coupled Packet Length Inversion:} To cross an active packet length threshold $x_{10} < \theta_{10}$ from above, TSBS inverts $x_{10} = (x_4 + N \cdot L_0) / (x_2 + N) < \theta_{10}$, yielding the minimal integer chaff packet count (the smallest integer strictly greater than $(x_4 - \theta_{10} x_2)/(\theta_{10} - L_0)$):
-    \begin{equation}
-        N_{\text{chaff}} = \left\lfloor \frac{x_4 - \theta_{10} x_2}{\theta_{10} - L_0} \right\rfloor + 1 \quad (\text{for } L_0 < \theta_{10} < x_{10})
-    \end{equation}
-    \item \emph{Window Advertisement Snapping:} For TCP flows with non-standard window advertisements, TSBS evaluates candidate snaps toward benign OS baselines ($x_7^* = 64,240$) and adjacent split partitions.
-\end{enumerate}
+GBDTs also split on coupled telemetry features, so TSBS inverts their constraints in closed form. To cross an active byte-rate threshold $\theta_8$ or packet-rate threshold $\theta_9$, it lengthens the flow duration to
+\begin{equation}
+    x_6^* = \frac{10^6 (x_4 + x_5)}{\theta_8} + \epsilon_6 \quad \text{or} \quad x_6^* = \frac{10^6 (x_2 + x_3)}{\theta_9} + \epsilon_6,
+\end{equation}
+with $\epsilon_6 = 10\,\mu$s; the candidate is discarded if $x_6^*$ exceeds the $1.1 \times 10^8\,\mu$s cap. To cross a forward mean packet length threshold $\theta_{10}$ from above, TSBS inverts $x_{10} = (x_4 + N L_0)/(x_2 + N)$ and adds the smallest integer chaff count that satisfies the inequality,
+\begin{equation}
+    N_{\text{chaff}} = \left\lfloor \frac{x_4 - \theta_{10} x_2}{\theta_{10} - L_0} \right\rfloor + 1 \qquad (L_0 < \theta_{10} < x_{10}).
+\end{equation}
+For TCP flows, TSBS also snaps the window advertisement toward the benign OS baseline $x_7^* = 64{,}240$ and toward adjacent split partitions.
 
-\begin{algorithm}[htbp]
+\begin{algorithm}[!t]
+\footnotesize\linespread{1}\selectfont
 \caption{Tree-Split Boundary Snapping (TSBS)}
 \label{alg:tsbs}
-\footnotesize
 \begin{algorithmic}[1]
 \REQUIRE Classifier $F$, flow candidate $x \in \mathcal{M}_{\text{flow}}$ with $F(x) \ge \tau$ (still flagged malicious), feature schema $\mathcal{S}$, tolerance $\epsilon_{\text{rel}}$
 \ENSURE Snapped flow $x^* \in \mathcal{M}_{\text{flow}}$
 \STATE $x^* \leftarrow \text{copy}(x)$
 \STATE $\text{active\_splits} \leftarrow \text{ExtractActiveSplits}(F, x^*)$
-\STATE $\mathcal{C} \leftarrow \text{GenerateCandidates}(x^*, \text{active\_splits}, \epsilon_{\text{rel}})$ \COMMENT{Boundary-crossing pool (Algorithm~\ref{alg:tsbs_candidates})}
+\STATE $\mathcal{C} \leftarrow \text{GenerateCandidates}(x^*, \text{active\_splits}, \epsilon_{\text{rel}})$ \COMMENT{Boundary-crossing pool (Supplementary Algorithm~S3)}
 \STATE \COMMENT{Evaluate projected candidates and retain best partition crossing}
 \STATE $x_{\text{best}} \leftarrow x^*$; $s_{\text{best}} \leftarrow F(x^*)$
 \FOR{\textbf{each } $x_{\text{c}} \in \mathcal{C}$}
@@ -192,89 +71,5 @@ Importantly, GBDTs frequently split on non-linear coupled telemetry features: by
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[htbp]
-\caption{TSBS Candidate Generation ($\text{GenerateCandidates}$)}
-\label{alg:tsbs_candidates}
-\footnotesize
-\begin{algorithmic}[1]
-\REQUIRE Current flow $x^* \in \mathcal{M}_{\text{flow}}$, active splits $\text{active\_splits}$ (pairs $(j, \theta_j)$), tolerance $\epsilon_{\text{rel}}$
-\ENSURE Candidate boundary-crossing pool $\mathcal{C}$ (before manifold projection)
-\STATE $\mathcal{C} \leftarrow \emptyset$
-\STATE \COMMENT{1. Monotonic features: closest split strictly above $x^*[j]$; UDP header $x_{11}$ is immutable at 8B}
-\FOR{\textbf{each } $j \in \mathcal{I}_{\text{mono}}^+$ \textbf{with} NOT $(j = 11 \land x^*[1] = 17)$}
-    \STATE $\theta_j^* \leftarrow \min\{\theta_j \mid (j, \theta_j) \in \text{active\_splits} \;\land\; \theta_j > x^*[j]\}$
-    \IF{$\theta_j^*$ exists}
-        \STATE $\epsilon_j \leftarrow 1.0$ \textbf{if} $j \in \{2, 4, 11\}$ \textbf{else} $\text{round}(\epsilon_{\text{rel}} \cdot \max(1.0, |\theta_j^*|))$
-        \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[j] \leftarrow \theta_j^* + \epsilon_j$
-        \IF{$j = 11$}
-            \STATE $x_{\text{c}}[11] \leftarrow \min(60.0 \cdot x_{\text{c}}[2],\, x_{\text{c}}[11])$
-            \STATE $x_{\text{c}}[4] \leftarrow \min(1500.0 \cdot x_{\text{c}}[2],\, \max(x_{\text{c}}[4],\, x_{\text{c}}[11] + 20.0 \cdot x_{\text{c}}[2]))$
-        \ENDIF
-        \STATE $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
-    \ENDIF
-\ENDFOR
-\STATE \COMMENT{2. Invert coupled rate splits ($x_8, x_9$) into duration dilation}
-\FOR{\textbf{each } $(r, a, b) \in \{(8, x^*[4], x^*[5]),\, (9, x^*[2], x^*[3])\}$}
-    \STATE $\theta_r^* \leftarrow \max\{\theta_r \mid (r, \theta_r) \in \text{active\_splits} \;\land\; 0 < \theta_r < x^*[r]\}$
-    \IF{$\theta_r^*$ exists \AND $d \leftarrow 10^6 (a + b) / \theta_r^* + 10.0$ satisfies $d \le 1.1 \times 10^8$}
-        \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[6] \leftarrow d$; $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
-    \ENDIF
-\ENDFOR
-\STATE \COMMENT{3. Invert coupled packet length splits ($x_{10}$) into chaff packet injection}
-\STATE $H_0 \leftarrow 32.0$ \textbf{if} $(x^*[1] = 6 \land x^*[11]/x^*[2] \ge 26.0)$ \textbf{else} $20.0$ \textbf{if} $x^*[1] = 6$ \textbf{else} $8.0$
-\STATE $L_0 \leftarrow 20.0 + H_0$ \COMMENT{52B/40B TCP (with/without RFC 7323 options), 28B UDP}
-\STATE $\theta_{10}^* \leftarrow \max\{\theta_{10} \mid (10, \theta_{10}) \in \text{active\_splits} \;\land\; L_0 < \theta_{10} < x^*[10]\}$
-\IF{$\theta_{10}^*$ exists}
-    \STATE $N \leftarrow \lfloor (x^*[4] - \theta_{10}^* x^*[2]) / (\theta_{10}^* - L_0) \rfloor + 1$
-    \IF{$N \le 1000$}
-        \STATE \COMMENT{Chaff budget cap: $N \le 1000$ packets}
-        \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[2] \leftarrow x^*[2] + N$
-        \STATE $x_{\text{c}}[4] \leftarrow x^*[4] + N \cdot L_0$; $x_{\text{c}}[11] \leftarrow x^*[11] + N \cdot H_0$
-        \STATE $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
-    \ENDIF
-\ENDIF
-\STATE \COMMENT{4. TCP window morphing to benign OS baseline}
-\IF{$x^*[1] = 6 \;\land\; x^*[7] \neq 64240.0$}
-    \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[7] \leftarrow 64240.0$; $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
-\ENDIF
-\RETURN $\mathcal{C}$
-\end{algorithmic}
-\end{algorithm}
-
-\subsubsection{Computational Complexity \& Comparison to MILP}
-Table~\ref{tab:complexity_comparison} compares the asymptotic time and space complexity of Flow-Field Evasion against exact MILP solvers \cite{kantchelian2016evasion} and heuristic black-box optimizers (MOEVA \cite{ghamizi2020moeva}, CAA \cite{simonetto2024constrained}, Traffic Manipulator \cite{han2021traffic}).
-
-\begin{table*}[htbp]
-\caption{Asymptotic Complexity Comparison of Evasion Algorithms for Tree Ensembles}\label{tab:complexity_comparison}%
-\centering
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}lccc@{}}
-\toprule
-\textbf{Algorithm} & \textbf{Time Complexity} & \textbf{Query Complexity} & \textbf{Coupled Invariants} \\
-\midrule
-\textbf{Kantchelian MILP} \cite{kantchelian2016evasion} & $2^{\mathcal{O}(D \cdot T)}$ (Worst Case) & $0$ (White-Box) & Unsupported (Linear Only) \\
-\textbf{MOEVA / CAA} \cite{simonetto2024constrained, ghamizi2020moeva}   & $\mathcal{O}(G \cdot P \cdot T \cdot D)$   & $\mathcal{O}(10^3 - 10^4)$ & Approximate Penalty \\
-\textbf{Traffic Manipulator} \cite{han2021traffic}    & $\mathcal{O}(I \cdot S \cdot T \cdot D)$   & $\mathcal{O}(10^3 - 10^4)$ & Packet Re-evaluation \\
-\midrule
-\textbf{Flow-Field Evasion (Ours)}                     & $\mathcal{O}(M \cdot K \cdot T \cdot D)$ & $\le 5M_{\max} + 1$ external (mean $12.9$ incl.\ TSBS) & \textbf{Exact Closed-Form} \\
-\bottomrule
-\end{tabular}%
-}
-\end{table*}
-
-Where:
-\begin{itemize}
-    \item $T$ is the number of trees in the ensemble (typically $50 - 100$).
-    \item $D$ is the maximum depth of each tree (typically $6 - 10$).
-    \item $M_{\max}$ is the maximum FFE iteration budget ($M_{\max} = 20$).
-    \item $K$ is the number of infinitesimal Lie generators ($K = 4$).
-    \item $G, P$ are the generations and population size in MOEVA ($G = 25, P = 50$, totaling $\le 1,250$ queries).
-    \item $I, S$ are the iterations and swarm size in PSO ($I = 37, S = 50$, totaling $\le 1,850$ queries).
-\end{itemize}
-
-\paragraph{Query Accounting Details.}
-In the worst case, executing all $M_{\max} = 20$ iterations without early termination requires $1$ baseline query plus up to $K = 4$ exploratory probes per iteration, giving an upper bound of $Q_{\max} \le 4 M_{\max} + 1 = 81$ model queries (or $\le 101$ queries if fallback dilation evaluations are triggered on stagnation). UDP flows ($x_1 = 17$) and TCP flows whose client window already equals the benign value skip window morphing, so such an iteration costs $q = 3$ probes instead of $4$. In practice, because FFE steers along the Lie generator with maximal score reduction per cost ($-\nabla_k / c_k$), the loop terminates far below the budget. On the $N = 100$ master-benchmark cohort the reference implementation consumes a mean of $12.9$ model queries per flow, of which $10.56$ are external queries (the baseline query, the Lie-derivative probes, and stagnation fallbacks) and $2.38$ are candidate evaluations inside the TSBS routine (Algorithm~\ref{alg:tsbs}).
-
-In Tier~1 white-box settings, TSBS extracts candidate thresholds directly from the adversary's local copy of the ensemble ($\text{ExtractActiveSplits}$), so its candidate evaluations could be executed offline against that copy. The reported figure of $12.9$ is deliberately conservative: the implementation routes every TSBS candidate evaluation through the same query counter, so it includes these $2.38$ evaluations. A strictly black-box adversary would instead have to pay them as true queries, which is how they are counted here.
-
-Because $K \le 4$ and $M \le 20$ are small constants, FFE requires only a linear number of simple tree evaluations $\mathcal{O}(T \cdot D)$. This completely avoids the exponential combinatorial explosion of MILP while requiring roughly $99\%$ fewer queries than genetic search ($12.9$ vs.\ $\le 1{,}250$) and PSO ($12.9$ vs.\ $\le 1{,}850$).
+\subsubsection{Query Accounting}
+Executing all $M_{\max}=20$ iterations without early termination costs at most $Q_{\max} \le 4M_{\max}+1 = 81$ model queries for the baseline query and Lie-derivative probes, or $\le 101$ if stagnation fallbacks fire, plus the TSBS candidate evaluations, which are not covered by this bound; UDP flows and TCP flows whose window already equals the benign value skip window morphing and cost $q=3$ probes per iteration. In practice the loop terminates far below this budget, and on the $N=100$ master cohort it consumes a mean of $12.9$ queries per flow, of which $10.56$ are external queries and $2.38$ are TSBS candidate evaluations. The $12.9$ figure is deliberately conservative: a Tier~1 adversary could run the TSBS evaluations offline on its local copy of the ensemble, but the implementation counts every one of them as a query, as a strictly black-box adversary would have to. Because $K \le 4$ and $M \le 20$ are constants, each iteration costs $\mathcal{O}(T \cdot D)$ tree evaluations, and Table~\ref{tab:sota_taxonomy_expanded} compares this asymptotic cost with exact MILP and heuristic search.

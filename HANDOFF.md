@@ -36,8 +36,9 @@ All baseline runs are executed on real data and archived in `results/benchmark_r
 - **HopSkipJump-NIDS (Chen et al., 2020):** 100.0% ASR, 0.0% PFR, 0.0% Real ASR, 47.0 queries, $\bar{D}_{L_1} = 1.64\times 10^6$, 10.55s.
 - **CAA / MOEVA (Simonetto / Ghamizi):** 39.0% ASR, 15.0% PFR, 1.0% Real ASR, 336.2 queries, $\bar{D}_{L_1} = 111.85$, 103.31s.
 - **Traffic Manipulator PSO (Han et al., 2021):** 54.0% ASR, 100.0% PFR, 54.0% Real ASR, 182.6 queries, $\bar{D}_{L_1} = 2,946.18$, 39.85s.
+  - *Constraint implementation note:* PSO in our benchmark is equipped with `project_network_invariants`, so its 100.0% PFR is enforced by this closed-form projection step (ensuring apples-to-apples constraint enforcement).
 - **Flow-Field Evasion (FFE - Ours):** **59.0% ASR, 100.0% PFR, 59.0% Real ASR, 79.3 queries, $\bar{D}_{L_1} = 0.392$, 28.66s.**
-  - *Key takeaway:* FFE matches PSO in evasion success (59.0% vs. 54.0%) while slashing perturbation cost by **$7,500\times$** ($\bar{D}_{L_1} = 0.392$ vs. $2,946.18$) and query complexity by **$2.3\times$** (79.3 vs. 182.6 queries) through Tree-Split Boundary Snapping (TSBS).
+  - *Key takeaway:* FFE achieves comparable nominal evasion to PSO (59.0% vs. 54.0%, which lies within overlapping 95% binomial confidence intervals, $p=0.48$ on $N=100$), but provides a decisive operational breakthrough: slashing perturbation cost by **$7,500\times$** ($\bar{D}_{L_1} = 0.392$ vs. $2,946.18$) and query complexity by **$2.3\times$** (79.3 vs. 182.6 queries) through Tree-Split Boundary Snapping (TSBS).
 
 ### 2.3. Multi-Dataset & Multi-Architecture Validation
 Evaluated across XGBoost (CUDA) and LightGBM across all three datasets (`results/benchmark_results.json`):
@@ -50,7 +51,7 @@ Evaluated across XGBoost (CUDA) and LightGBM across all three datasets (`results
 - **CIC-IDS2017:**
   - XGBoost: Clean Acc 99.87%, Real ASR 11.0%, PFR 93.0%, 170.3 queries, 986.1 ms.
   - LightGBM: Clean Acc 99.90%, Real ASR 3.0%, PFR 93.0%, 213.7 queries, 381.3 ms.
-  - *Topology explanation:* Benign and malicious flows in CIC-IDS2017 are cleanly separated by deep immutable splits (destination port, backward packet statistics), restricting forward Lie cone traversal to 3.0%–11.0% Real ASR.
+  - *Empirical split evidence:* Tree inspection reveals that 52 of 60 XGBoost trees root-split on immutable backward payload bytes (`totlen_bwd_pkts`, mean gain 781.1), with secondary depth-1 splits dominated by `tot_bwd_pkts` (49 splits) and `dst_port` (43 splits). Under an ingress perimeter model, forward Lie steering cannot bridge these root-level partitions.
 
 ### 2.4. Defensive Countermeasures & The "Malleability Penalty Trap"
 Evaluated on the detected malicious test cohort ($N=95$ flows) at attack budget $M=5$ (`results/defense_results.json`):
@@ -108,5 +109,6 @@ Currently 55/55 tests pass in ~15 seconds.
 ## 5. Known Limitations & Threats to Validity
 
 1. **Stratified Sampling:** 12,000-flow samples per dataset enable exhaustive multi-step heuristic baselines (e.g., MOEVA and PSO take >100s per flow). Scaling to full multi-gigabyte wire traces remains future work.
-2. **Fixed Random Seeds:** A single fixed seed ensures deterministic fairness across baselines. Multi-seed confidence intervals are identified as threats to validity.
-3. **Hardware Testbed:** Packet realization via Scapy/NFQueue proxy enforces protocol compliance at flow level; hardware line-rate FPGA/DPDK replay remains future work.
+2. **Duplicate Flows in Benchmark Captures:** Flow captures exhibit significant record duplication (14.6% in CSE-CIC-IDS2018, 28.3% in UNSW-NB15, 6.8% in CIC-IDS2017) characteristic of high-frequency automated attack bursts (e.g., SYN floods). Standard benchmarks preserve these across train/test splits, which inflates clean benchmark accuracy (~99%) while inducing rigid memorized splits that inhibit evasion for volumetric floods. Rigorous multi-seed deduplicated audits remain an essential future research direction.
+3. **Fixed Random Seeds:** A single fixed seed ensures deterministic fairness across baselines. Multi-seed confidence intervals are identified as threats to validity.
+4. **Hardware Testbed:** Packet realization via Scapy/NFQueue proxy enforces protocol compliance at flow level; hardware line-rate FPGA/DPDK replay remains future work.

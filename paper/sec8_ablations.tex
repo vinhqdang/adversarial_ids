@@ -3,12 +3,6 @@
 
 Table~\ref{tab:ablation_budget_expanded} reports three ablation sweeps on the CUDA XGBoost target on real CSE-CIC-IDS2018 flow traffic, using a balanced cohort of $N=95$ detected malicious flows across all five families. Panel A sweeps the step budget $M$, Panel B isolates generator subsets, and Panel C compares operational cost regimes.
 
-In Panel A, ASR rises monotonically with step budget, from 14.7\% at $M=1$ (5.0 queries, $\bar{D}_{L_1}=0.165$) to 51.6\% at $M=5$ (28.1 queries), reaching a saturation plateau of 56.8\% at $M=10$ (49.8 queries, $\bar{D}_{L_1}=0.375$). Increasing the budget beyond $M=10$ yields no further evasion on this cohort because the remaining unevaded flows are bounded by immutable port and protocol constraints. Physical feasibility remains 98.9\% across all budgets.
-
-Panel B demonstrates the necessity of the complete Lie cone. Individual generators achieve limited evasion: temporal dilation alone reaches 25.3\% (adding 77.3\,s of flow duration), chaff injection reaches 25.3\%, window morphing reaches 16.8\%, and payload padding reaches 12.6\%. Combining generators produces synergistic gains: Time + Chaff achieves 45.3\%, while the Complete Lie Cone achieves 56.8\% ASR at 84.4 queries. Notably, Padding + Chaff achieves 36.8\% ASR with zero added flow delay (0.00\,s) at only 10.4 queries per flow.
-
-Panel C examines the effect of control cost weighting $\vec{c}$. Across all four operational regimes, FFE consistently achieves 56.8\% ASR with comparable query counts (83.9--84.4 queries), with $\vec{v}_{\text{time}}$ serving as the dominant generator in 85\%--86\% of gradient steps. Sweeping the TSBS relative snapping offset $\epsilon_{\text{rel}}$ from 0 to 1.0 similarly maintains 56.8\% ASR and 98.9\% PFR, confirming stability across threshold snapping tolerances.
-
 \begin{table}[!htbp]
 \caption{Ablation studies of Flow-Field Evasion on CUDA XGBoost using real CSE-CIC-IDS2018 flow traffic ($N=95$ detected flows, balanced across families; PFR = 98.9\% across all rows).}\label{tab:ablation_budget_expanded}
 \centering
@@ -49,6 +43,12 @@ D (uniform / flat): $\vec{v}_{\text{time}}$, 85\% & 56.8\% & 83.9 & 49.97 \\
 \end{tabular}%
 }
 \end{table}
+
+In Panel A, ASR rises monotonically with step budget, from 14.7\% at $M=1$ (5.0 queries, $\bar{D}_{L_1}=0.165$) to 51.6\% at $M=5$ (28.1 queries), reaching a saturation plateau of 56.8\% at $M=10$ (49.8 queries, $\bar{D}_{L_1}=0.375$). Increasing the budget beyond $M=10$ yields no further evasion on this cohort because the remaining unevaded flows are bounded by immutable port and protocol constraints. Physical feasibility remains 98.9\% across all budgets.
+
+Panel B demonstrates the necessity of the complete Lie cone. Individual generators achieve limited evasion: temporal dilation alone reaches 25.3\% (adding 77.3\,s of flow duration), chaff injection reaches 25.3\%, window morphing reaches 16.8\%, and payload padding reaches 12.6\%. Combining generators produces synergistic gains: Time + Chaff achieves 45.3\%, while the Complete Lie Cone achieves 56.8\% ASR at 84.4 queries. Notably, Padding + Chaff achieves 36.8\% ASR with zero added flow delay (0.00\,s) at only 10.4 queries per flow.
+
+Panel C examines the effect of control cost weighting $\vec{c}$. Across all four operational regimes, FFE consistently achieves 56.8\% ASR with comparable query counts (83.9--84.4 queries), with $\vec{v}_{\text{time}}$ serving as the dominant generator in 85\%--86\% of gradient steps. Sweeping the TSBS relative snapping offset $\epsilon_{\text{rel}}$ from 0 to 1.0 similarly maintains 56.8\% ASR and 98.9\% PFR, confirming stability across threshold snapping tolerances.
 
 In many operational settings the attacker cannot query the deployed model directly. Table~\ref{tab:transferability} therefore evaluates black-box cross-architecture transferability by measuring the attack success rate of flows crafted on a source tree ensemble and evaluated against three independent target architectures ($N=95$ detected flows).
 

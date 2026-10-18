@@ -5,33 +5,23 @@ Standard boosting chooses split features by training-loss reduction alone, so fe
 
 \subsection{Malleability-penalized tree splitting}
 
-Following the robust split formulations of Chen et al.~\cite{chen2019robust} and Calzavara et al.~\cite{calzavara2020treant}, the split score for feature $j$ is regularized by its physical malleability index.
-
-\begin{definition}[Feature Physical Malleability Index]
-The physical malleability index $M_{\text{mal}}(j)$ of feature $j$ is defined as the empirical expectation over the training distribution of the maximum dimensionless variation induced by the Lie Cone $\mathcal{K}_{\text{net}}$:
+Following robust split formulations~\cite{chen2019robust, calzavara2020treant}, the split score for feature $j$ is regularized by its physical malleability index $M_{\text{mal}}(j)$:
 \begin{equation}
     M_{\text{mal}}(j) = \mathbb{E}_{x \sim \mathcal{D}_{\text{train}}} \left[ \max_{k \in \{1, \dots, 4\}} \frac{\delta s_k |\vec{v}_k(x)_j|}{\sigma_j} \right]
 \end{equation}
-where $\sigma_j$ is the empirical standard deviation of feature $j$ across the training corpus $\mathcal{D}_{\text{train}}$, and $\delta s_k$ denotes the characteristic single-step perturbation scale for generator $k$ ($\delta s_1 = 10^4\,\mu\text{s}, \delta s_2 = 100\,\text{B}, \delta s_3 = 1\,\text{pkt}, \delta s_4 = 10^3\,\text{B}$).
-\end{definition}
-
 The robust split selection objective is
 \begin{equation}
     \text{Gain}_{\text{robust}}(j, \theta) = \Delta \mathcal{L}(j, \theta) - \alpha_{\text{mal}} \cdot \overline{\Delta \mathcal{L}} \cdot M_{\text{mal}}(j)
 \end{equation}
-where $\Delta \mathcal{L}(j, \theta)$ is the impurity gain of split $(j, \theta)$, $\overline{\Delta \mathcal{L}}$ is the baseline mean impurity gain across candidate splits at the node, ensuring dimensional consistency, and $\alpha_{\text{mal}} \ge 0$ is a dimensionless hyperparameter governing the trade-off between clean training loss and malleability robustness.
-
-The experiments do not optimize this objective. The MPS model instead masks duration ($x_6$) and the two rate features ($x_8$, $x_9$) to zero in the training, test and attack inputs, which is the $\alpha_{\text{mal}} \to \infty$ limit for those features. The mask is fixed by hand rather than computed from $M_{\text{mal}}$, and other features are unpenalized. Because the masked columns are constant, trees cannot split on them, so the attacker affects MPS models only through unmasked features.
+where $\sigma_j$ is the feature standard deviation, $\delta s_k$ is the perturbation scale ($\delta s_1 = 10^4\,\mu\text{s}, \delta s_2 = 100\,\text{B}, \delta s_3 = 1\,\text{pkt}, \delta s_4 = 10^3\,\text{B}$), $\Delta \mathcal{L}(j, \theta)$ is the impurity gain, $\overline{\Delta \mathcal{L}}$ is the baseline mean gain, and $\alpha_{\text{mal}} \ge 0$ balances clean loss against malleability. The experiments evaluate the $\alpha_{\text{mal}} \to \infty$ limit by masking duration ($x_6$) and rates ($x_8, x_9$) to zero in training, test, and attack inputs.
 
 \subsection{Lie-guided adversarial training}
 
-Standard adversarial training assumes an $L_p$ ball around each input~\cite{madry2018towards}, which in network security generates physically invalid samples that degrade clean accuracy~\cite{hashemi2020enhancing, apruzzese2022modeling}. LGAT instead restricts the inner maximization to the physical flow manifold, solving
+Standard adversarial training assumes an $L_p$ ball around each input~\cite{madry2018towards}, which in network security generates physically invalid telemetry that degrades clean accuracy~\cite{hashemi2020enhancing, apruzzese2022modeling}. LGAT instead restricts the inner maximization to the physical flow manifold:
 \begin{equation}
     \min_{\Theta} \frac{1}{N} \sum_{i=1}^N \max_{u \in \mathcal{U}_{\text{budget}}} \mathcal{L}\left( F_\Theta\left( \mathcal{A}_{\text{cone}}\left( x_i, u \right) \right), y_i \right)
 \end{equation}
-where $\mathcal{A}_{\text{cone}}(x, u)$ is the flow reached from $x$ along the integral curves of the Lie generators under the control $u$, and $\mathcal{U}_{\text{budget}}$ is the set of nonnegative controls whose cost $\sum_{k=1}^4 c_k \int_0^{T_{\max}} u_k(\tau)\, d\tau$ does not exceed $\Gamma$.
-
-Supplementary Algorithm~S4 gives the general scheme, in which malicious flows are replaced by FFE outputs at step budget $M_{\text{train}} = 5$ in every boosting round, with $\beta = 0.5$. The experiments use a single-round instance: adversarial examples are generated once, against the undefended model, for a random 50\% of the malicious training flows and appended to the training set, and the ensemble uses standard split scoring.
+where $\mathcal{A}_{\text{cone}}(x, u)$ is the flow reached along Lie generator trajectories under control budget $\mathcal{U}_{\text{budget}}$. In our implementation (Supplementary Algorithm~S4), FFE adversarial examples ($M=5$) are generated against the undefended model for 50\% of malicious training flows and appended to the training set.
 
 \subsection{Evaluation}
 

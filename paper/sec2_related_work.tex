@@ -27,17 +27,17 @@ Table~\ref{tab:sota_taxonomy_expanded} summarizes these paradigms and the gap th
 Kantchelian et al.~\cite{kantchelian2016evasion} & GBDT, random forest & MILP (worst case $2^{\mathcal{O}(DT)}$) & 0 (white-box) & Unsupported (linear only) & Unconstrained \\
 Zhang et al.~\cite{zhang2020efficient} (LT-Attack) & Tree ensembles & Continuous leaf approximation & $O(N_{\text{iter}})$ & Not modeled & Unconstrained \\
 Ignatiev et al.~\cite{ignatiev2022formal}; Izza et al.~\cite{izza2022tackling} & GBDT, decision trees & MaxSAT / SAT verification & 0 (white-box) & Not modeled & Not applicable (explanation) \\
-Chen et al. (ZOO)~\cite{chen2017zoo} & Black-box classifiers & Zeroth-order coordinate descent & $O(d \cdot N_{\text{iter}})$ & Not modeled & 6.0\% (empirical) \\
-Chen et al. (HSJ)~\cite{chen2020hopskipjump} & Black-box decision & Boundary random walk & $O(10^3)$ & Not modeled & 0.0\% (empirical) \\
+Chen et al. (ZOO)~\cite{chen2017zoo} & Black-box classifiers & Zeroth-order coordinate descent & $\le 150$ (mean 144.0) & Not modeled & 6.0\% (empirical) \\
+Chen et al. (HSJ)~\cite{chen2020hopskipjump} & Black-box decision & Boundary binary walk & $\le 50$ (mean 47.0) & Not modeled & 0.0\% (empirical) \\
 Lin et al. (IDSGAN)~\cite{lin2022idsgan} & Black-box NIDS & Generative adversarial network & $O(N_{\text{gen}})$ & Learned distribution & Approximated (feature space) \\
-Ghamizi et al. (MOEVA)~\cite{ghamizi2020moeva} & Constrained tabular & Multi-objective genetic search & $\le$1,250 & Heuristic penalty & Partial (15.0\% empirical) \\
-Simonetto et al. (CAA)~\cite{simonetto2024constrained} & Tabular models & CAPGD with MOEVA & 1,240 & Approximate penalty & Partial (15.0\% empirical) \\
-Han et al. (Traffic Manipulator)~\cite{han2021traffic} & Black-box NIDS & PSO on PCAP files & $O(10^3\text{--}10^4)$ & Packet re-evaluation & 100\% (packet mutation) \\
+Ghamizi et al. (MOEVA)~\cite{ghamizi2020moeva} & Constrained tabular & Multi-objective genetic search & $\le 500$ (mean 336.2) & Heuristic penalty & Partial (15.0\% empirical) \\
+Simonetto et al. (CAA)~\cite{simonetto2024constrained} & Tabular models & CAPGD with MOEVA & $\le 500$ (mean 336.2) & Approximate penalty & Partial (15.0\% empirical) \\
+Han et al. (Traffic Manipulator)~\cite{han2021traffic} & Black-box NIDS & PSO on packet knobs & $\le 375$ (mean 182.6) & Invariant projection & 100.0\% (projected) \\
 \midrule
-\textbf{Flow-Field Evasion (ours)} & \textbf{XGBoost, LightGBM} & \textbf{Lie vector field steering} & \textbf{$\le 4M_{\max}+1$ probes plus TSBS (mean 79.3)} & \textbf{Exact closed-form} & \textbf{100.0\% (schema-checked)} \\
+\textbf{Flow-Field Evasion (ours)} & \textbf{XGBoost, LightGBM} & \textbf{Lie vector field steering} & \textbf{$\le 4M_{\max}+1$ probes + TSBS (mean 79.3)} & \textbf{Exact closed-form} & \textbf{93.0\%--100.0\% (schema)} \\
 \bottomrule
 \end{tabular}
 
 \smallskip
-\footnotesize{Note: $T$ trees, $D$ depth, $M_{\max}=20$, $K=4$ generators. Empirical PFR values are from Table~\ref{tab:master_evasion_benchmark}.}
+\footnotesize{Note: $T$ trees, $D$ depth, $M_{\max}=20$, $K=4$ generators. Empirical query counts and PFR values correspond to measured evaluations on real traffic (Table~\ref{tab:master_evasion_benchmark}).}
 \end{table}

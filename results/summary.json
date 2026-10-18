@@ -1,4 +1,256 @@
 {
+ "extra_pairwise_mcnemar": {
+  "insdn": {
+   "Unconstrained Feature-Space": {
+    "n": 1000,
+    "ffe_only": 810,
+    "baseline_only": 0,
+    "p": 2.9290953396399042e-244,
+    "ffe_real_asr_same_flows": 81.0,
+    "baseline_real_asr": 0.0,
+    "p_holm": 4.100733475495866e-243
+   },
+   "ZOO-NIDS": {
+    "n": 1000,
+    "ffe_only": 810,
+    "baseline_only": 0,
+    "p": 2.9290953396399042e-244,
+    "ffe_real_asr_same_flows": 81.0,
+    "baseline_real_asr": 0.0,
+    "p_holm": 4.100733475495866e-243
+   },
+   "HopSkipJump-NIDS": {
+    "n": 1000,
+    "ffe_only": 810,
+    "baseline_only": 0,
+    "p": 2.9290953396399042e-244,
+    "ffe_real_asr_same_flows": 81.0,
+    "baseline_real_asr": 0.0,
+    "p_holm": 4.100733475495866e-243
+   },
+   "CAA / MOEVA": {
+    "n": 200,
+    "ffe_only": 165,
+    "baseline_only": 0,
+    "p": 4.276423536147513e-50,
+    "ffe_real_asr_same_flows": 82.5,
+    "baseline_real_asr": 0.0,
+    "p_holm": 3.4211388289180104e-49
+   },
+   "Traffic Manipulator PSO": {
+    "n": 200,
+    "ffe_only": 2,
+    "baseline_only": 8,
+    "p": 0.109375,
+    "ffe_real_asr_same_flows": 82.5,
+    "baseline_real_asr": 85.5,
+    "p_holm": 0.4375
+   },
+   "CAPGD (surrogate transfer)": {
+    "n": 1000,
+    "ffe_only": 11,
+    "baseline_only": 0,
+    "p": 0.0009765625,
+    "ffe_real_asr_same_flows": 81.0,
+    "baseline_real_asr": 79.9,
+    "p_holm": 0.005859375
+   },
+   "NIDSGAN-style generator": {
+    "n": 1000,
+    "ffe_only": 423,
+    "baseline_only": 0,
+    "p": 9.232978617785736e-128,
+    "ffe_real_asr_same_flows": 81.0,
+    "baseline_real_asr": 38.7,
+    "p_holm": 1.015627647956431e-126
+   }
+  },
+  "usbids1": {
+   "Unconstrained Feature-Space": {
+    "n": 1000,
+    "ffe_only": 0,
+    "baseline_only": 992,
+    "p": 4.778309726736481e-299,
+    "ffe_real_asr_same_flows": 0.0,
+    "baseline_real_asr": 99.2,
+    "p_holm": 1.003445042614661e-297
+   },
+   "ZOO-NIDS": {
+    "n": 1000,
+    "ffe_only": 0,
+    "baseline_only": 953,
+    "p": 2.626903552830961e-287,
+    "ffe_real_asr_same_flows": 0.0,
+    "baseline_real_asr": 95.3,
+    "p_holm": 4.728426395095729e-286
+   },
+   "HopSkipJump-NIDS": {
+    "n": 1000,
+    "ffe_only": 0,
+    "baseline_only": 0,
+    "p": 1.0,
+    "ffe_real_asr_same_flows": 0.0,
+    "baseline_real_asr": 0.0,
+    "p_holm": 1.0
+   },
+   "CAA / MOEVA": {
+    "n": 200,
+    "ffe_only": 0,
+    "baseline_only": 197,
+    "p": 9.956824444577827e-60,
+    "ffe_real_asr_same_flows": 0.0,
+    "baseline_real_asr": 98.5,
+    "p_holm": 9.956824444577827e-59
+   },
+   "Traffic Manipulator PSO": {
+    "n": 200,
+    "ffe_only": 0,
+    "baseline_only": 0,
+    "p": 1.0,
+    "ffe_real_asr_same_flows": 0.0,
+    "baseline_real_asr": 0.0,
+    "p_holm": 1.0
+   },
+   "CAPGD (surrogate transfer)": {
+    "n": 1000,
+    "ffe_only": 0,
+    "baseline_only": 991,
+    "p": 9.556619453472961e-299,
+    "ffe_real_asr_same_flows": 0.0,
+    "baseline_real_asr": 99.1,
+    "p_holm": 1.9113238906945923e-297
+   },
+   "NIDSGAN-style generator": {
+    "n": 1000,
+    "ffe_only": 0,
+    "baseline_only": 991,
+    "p": 9.556619453472961e-299,
+    "ffe_real_asr_same_flows": 0.0,
+    "baseline_real_asr": 99.1,
+    "p_holm": 1.9113238906945923e-297
+   }
+  },
+  "cidds001": {
+   "Unconstrained Feature-Space": {
+    "n": 819,
+    "ffe_only": 814,
+    "baseline_only": 0,
+    "p": 1.8306845872749401e-245,
+    "ffe_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 0.6105006105006106,
+    "p_holm": 2.7460268809124102e-244
+   },
+   "ZOO-NIDS": {
+    "n": 819,
+    "ffe_only": 819,
+    "baseline_only": 0,
+    "p": 5.720889335234188e-247,
+    "ffe_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 0.0,
+    "p_holm": 9.72551186989812e-246
+   },
+   "HopSkipJump-NIDS": {
+    "n": 819,
+    "ffe_only": 819,
+    "baseline_only": 0,
+    "p": 5.720889335234188e-247,
+    "ffe_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 0.0,
+    "p_holm": 9.72551186989812e-246
+   },
+   "CAA / MOEVA": {
+    "n": 200,
+    "ffe_only": 186,
+    "baseline_only": 0,
+    "p": 2.039157646249539e-56,
+    "ffe_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 7.000000000000001,
+    "p_holm": 1.835241881624585e-55
+   },
+   "Traffic Manipulator PSO": {
+    "n": 200,
+    "ffe_only": 0,
+    "baseline_only": 0,
+    "p": 1.0,
+    "ffe_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 100.0,
+    "p_holm": 1.0
+   },
+   "CAPGD (surrogate transfer)": {
+    "n": 819,
+    "ffe_only": 107,
+    "baseline_only": 0,
+    "p": 1.232595164407831e-32,
+    "ffe_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 86.93528693528694,
+    "p_holm": 8.628166150854817e-32
+   },
+   "NIDSGAN-style generator": {
+    "n": 819,
+    "ffe_only": 7,
+    "baseline_only": 0,
+    "p": 0.015625,
+    "ffe_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 99.14529914529915,
+    "p_holm": 0.078125
+   }
+  }
+ },
+ "extra_dedup": {
+  "insdn": {
+   "raw_rows": 343889,
+   "valid_records": 151856,
+   "after_dedup": 130076,
+   "duplicates_removed": 21780,
+   "conflicting_label_records": 0,
+   "attacks": 71141,
+   "attempted_removed": 0,
+   "projection_changed_gt5pct": 0.034631492993362135,
+   "family_counts": {
+    "Benign": 58935,
+    "DoS": 37822,
+    "Probe": 31770,
+    "BruteForce": 1210,
+    "Botnet": 164,
+    "WebExploit": 158,
+    "U2R": 17
+   }
+  },
+  "usbids1": {
+   "raw_rows": 4815203,
+   "valid_records": 4809149,
+   "after_dedup": 3874467,
+   "duplicates_removed": 934682,
+   "conflicting_label_records": 0,
+   "attacks": 3576457,
+   "attempted_removed": 0,
+   "projection_changed_gt5pct": 0.001210401258102005,
+   "family_counts": {
+    "Hulk": 3267133,
+    "Benign": 298010,
+    "TCPFlood": 278904,
+    "Slowhttptest": 21875,
+    "Slowloris": 8545
+   }
+  },
+  "cidds001": {
+   "raw_rows": 31959174,
+   "valid_records": 13674942,
+   "after_dedup": 7084648,
+   "duplicates_removed": 6590294,
+   "conflicting_label_records": 372,
+   "attacks": 5560,
+   "attempted_removed": 0,
+   "projection_changed_gt5pct": 0.028614380960445756,
+   "family_counts": {
+    "Benign": 7079088,
+    "PortScan": 3171,
+    "BruteForce": 1329,
+    "DoS": 1000,
+    "PingScan": 60
+   }
+  }
+ },
  "pairwise_mcnemar": {
   "cse2018": {
    "Unconstrained Feature-Space": {

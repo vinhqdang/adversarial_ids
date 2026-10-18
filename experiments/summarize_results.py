@@ -21,6 +21,8 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 RES = os.path.join(ROOT, 'results')
 TAB = os.path.join(ROOT, 'paper', 'tables')
 DATASETS = [('cse2018', 'CSE-CIC-IDS2018'), ('cic2017', 'CIC-IDS2017'), ('unsw', 'UNSW-NB15')]
+EXTRA = [('insdn', 'InSDN'), ('usbids1', 'USB-IDS-1'), ('cidds001', 'CIDDS-001')]   # supplementary corpora
+ALL_DATASETS = DATASETS + EXTRA
 FFE = 'Flow-Field Evasion (FFE)'
 TSBS_OFF = 'FFE without TSBS'
 SHORT = {'Unconstrained Feature-Space': 'Unconstrained feature space', 'ZOO-NIDS': 'ZOO-NIDS',
@@ -87,7 +89,7 @@ def corpora_table() -> str:
     rows = [r'\begin{tabular}{@{}lrrrrrrr@{}}', r'\toprule',
             r'\textbf{Dataset} & \textbf{Raw rows} & \textbf{Valid} & \textbf{Duplicates} & '
             r'\textbf{Kept} & \textbf{Attacks} & \textbf{Train} & \textbf{Test} \\', r'\midrule']
-    for key, label in DATASETS:
+    for key, label in ALL_DATASETS:
         with open(os.path.join(ROOT, 'data', 'full', f'{key}_stats.json')) as fh:
             st = json.load(fh)
         split = load(f'full_{key}.json')['split_sizes']
@@ -234,10 +236,37 @@ def holm(pvals):
     return adj
 
 
-def pairwise(data: Dict[str, Dict]) -> Dict:
+def extra_table(data: Dict[str, Dict]) -> str:
+    """Real ASR and queries of every method on the supplementary corpora (XGBoost)."""
+    names = [n for n in SHORT] + [TSBS_OFF]
+    rows = [r'\begin{tabular}{@{}l' + 'cc' * len(EXTRA) + r'@{}}', r'\toprule',
+            r'\textbf{Method} & ' + ' & '.join(r'\multicolumn{2}{c}{\textbf{' + lab + '}}' for _, lab in EXTRA) + r' \\',
+            ' & ' + ' & '.join(r'Real ASR [95\% CI] & Queries' for _ in EXTRA) + r' \\', r'\midrule']
+    info = []
+    for key, _ in EXTRA:
+        d = data[key]['models']['xgboost']
+        c = d['clean']
+        info.append(f"{100 * c['accuracy']:.2f} / {100 * c['f1']:.2f} (cohort {len(d['cohort']['family'])})")
+    rows.append(r'XGBoost acc.\ / F1 (\%) & ' + ' & '.join(r'\multicolumn{2}{c}{' + i + '}' for i in info) + r' \\')
+    rows.append(r'\midrule')
+    for name in names:
+        label = SHORT.get(name, 'FFE without TSBS')
+        if name == FFE:
+            label = r'\textbf{FFE (ours)}'
+        cells = []
+        for key, _ in EXTRA:
+            a = data[key]['models']['xgboost']['attacks'][name]
+            lo, hi = a['real_asr_ci95']
+            cells.append(f"{a['real_asr']:.1f} [{lo:.1f}, {hi:.1f}] & {a['avg_queries']:.1f}")
+        rows.append(label + ' & ' + ' & '.join(cells) + r' \\')
+    rows += [r'\bottomrule', r'\end{tabular}']
+    return '\n'.join(rows)
+
+
+def pairwise(data: Dict[str, Dict], datasets=DATASETS) -> Dict:
     """Exact McNemar (two-sided binomial on discordant pairs) of FFE against every baseline."""
     out, flat = {}, []
-    for key, _ in DATASETS:
+    for key, _ in datasets:
         atk = data[key]['models']['xgboost']['attacks']
         out[key] = {}
         for name, a in atk.items():
@@ -301,7 +330,12 @@ def main() -> None:
     write('tab_ablation.tex', ablation_table(load('ablation_results.json')))
     write('tab_transfer.tex', transfer_table(load('transferability_results.json')))
     write('tab_defense.tex', defense_table(load('defense_results.json')))
-    summary = {'pairwise_mcnemar': pairwise(data), 'efficiency_ratios': efficiency_ratios(data),
+    extra = {k: load(f'full_{k}.json') for k, _ in EXTRA}
+    write('tab_extra.tex', extra_table(extra))
+    summary = {'extra_pairwise_mcnemar': pairwise(extra, EXTRA),
+               'extra_dedup': {k: json.load(open(os.path.join(ROOT, 'data', 'full', f'{k}_stats.json')))
+                               for k, _ in EXTRA},
+               'pairwise_mcnemar': pairwise(data), 'efficiency_ratios': efficiency_ratios(data),
                'seed_wins': seed_wins(),
                'root_splits': {k: root_splits(k) for k, _ in DATASETS},
                'dedup': {k: json.load(open(os.path.join(ROOT, 'data', 'full', f'{k}_stats.json')))

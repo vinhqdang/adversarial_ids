@@ -1,0 +1,17 @@
+{
+ "raw_rows": 31959174,
+ "valid_records": 13674942,
+ "after_dedup": 7084648,
+ "duplicates_removed": 6590294,
+ "conflicting_label_records": 372,
+ "attacks": 5560,
+ "attempted_removed": 0,
+ "projection_changed_gt5pct": 0.028614380960445756,
+ "family_counts": {
+  "Benign": 7079088,
+  "PortScan": 3171,
+  "BruteForce": 1329,
+  "DoS": 1000,
+  "PingScan": 60
+ }
+}

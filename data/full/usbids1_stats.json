@@ -1,0 +1,17 @@
+{
+ "raw_rows": 4815203,
+ "valid_records": 4809149,
+ "after_dedup": 3874467,
+ "duplicates_removed": 934682,
+ "conflicting_label_records": 0,
+ "attacks": 3576457,
+ "attempted_removed": 0,
+ "projection_changed_gt5pct": 0.001210401258102005,
+ "family_counts": {
+  "Hulk": 3267133,
+  "Benign": 298010,
+  "TCPFlood": 278904,
+  "Slowhttptest": 21875,
+  "Slowloris": 8545
+ }
+}

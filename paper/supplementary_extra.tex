@@ -46,11 +46,37 @@ Flows crafted by FFE against a source ensemble were scored by the three other ar
 
 \section*{S6. Corpus statistics}
 
-Table~S5 gives the record counts of the three corpora. Valid records pass the validity filter; Kept = Valid $-$ Duplicates, where duplicates are records with identical features and label after projection onto the flow manifold. Records with identical features but different labels are kept (149,526, 22 and 1,040).
+Table~S5 gives the record counts of the three main corpora and of the three additional corpora of Section~S7. Valid records pass the validity filter; Kept = Valid $-$ Duplicates, where duplicates are records with identical features and label after projection onto the flow manifold. Records with identical features but different labels are kept (149,526, 22 and 1,040).
 
 \begin{table}[!htbp]
 \centering
-\caption*{Table S5. Full-scale benchmark corpora.}
+\caption*{Table S5. Full-scale benchmark corpora (the last three are those of Section~S7).}
 \footnotesize
 \input{tables/tab_corpora.tex}
+\end{table}
+
+\section*{S7. Three additional public corpora}
+
+We ran the same pipeline (cleaning, projection, deduplication, 70/10/20 split, XGBoost and LightGBM with 60 trees of depth 6, a cohort of up to 1,000 detected flows, one seed) on three further public corpora. The builders are in \texttt{src/datasets/full\_data.py}; each needed dataset-specific decisions that we list because they bound what the results mean.
+
+\textbf{InSDN} (software-defined networking; three CSV files, 343,889 rows; CC BY-NC 4.0). The exporter wrote $-1$ as the TCP window of every row, so the window is the constant 0. Almost all DDoS flows (about 122,000) carry protocol 0, which is neither TCP nor UDP, and are removed by the validity filter, so the DDoS family is absent. After cleaning, 130,076 flows remain (58,935 benign, 37,822 DoS, 31,770 probe, 1,210 brute force, 164 botnet, 158 web, 17 U2R).
+
+\textbf{USB-IDS-1} (17 files: four DoS tools times four server defenses, plus regular traffic; 4,815,203 rows). After cleaning, 3,874,467 flows remain, of which 92\% are attacks (Hulk 84\% of all flows), because the corpus is built around DoS attacks. Both XGBoost and LightGBM reach 100.00\% accuracy.
+
+\textbf{CIDDS-001} (unidirectional NetFlow, OpenStack and external server, 31,959,174 rows). NetFlow records have no backward direction or TCP window, so backward packets and bytes are 0 and the window is 0 for every flow; payload bytes are the byte count minus 20 bytes of IP header and 20 (TCP) or 8 (UDP) bytes of transport header per packet. We keep the class \texttt{normal} as benign and \texttt{attacker} as attack; the \texttt{victim} flows (responses of the attacked host), \texttt{suspicious} and \texttt{unknown} are ambiguous and dropped. After cleaning, 7,084,648 flows remain, of which only 5,560 are attacks (0.08\%: port scan 3,171, brute force 1,329, DoS 1,000, ping scan 60). XGBoost reaches F1 94.4\% and LightGBM only 66.7\%; 819 of the 1,112 test attacks are detected by both models and form the cohort.
+
+Table~S6 gives Real ASR and mean queries against XGBoost. FFE is not uniformly the best method on these corpora.
+\begin{itemize}
+\item \textbf{InSDN.} FFE reaches 81.0\% (79.9\% for CAPGD, 85.5\% for PSO on 200 flows). FFE beats CAPGD (11 flows against none, Holm-adjusted $p=0.006$) but is not distinguishable from PSO on the 200 flows both attacked (82.5\% against 85.5\%; 2 against 8 discordant flows, adjusted $p=0.44$). Here snapping matters: FFE without TSBS reaches only 46.7\%.
+\item \textbf{USB-IDS-1.} FFE and PSO reach 0.0\%, whereas the unconstrained attack, ZOO, MOEVA, CAPGD and the generator reach 95.3\%--99.2\%. The target's score is the same for every attack flow we looked at (margin 8.57 for the first 5,000 test attacks), so score probes give FFE no direction. CAPGD's successful flows change four things at once (forward packets, duration, window, header length; in one example the window fell from 29,200 to 21,368), while FFE's window action only moves toward a fixed target. We did not isolate which of these limits FFE.
+\item \textbf{CIDDS-001.} FFE reaches 100.0\% with 6.2 queries; PSO also reaches 100.0\% (no discordant flow among 200), and the generator 99.1\% (7 flows against none, adjusted $p=0.08$). The attacks are few, the corpus is unidirectional, and nearly every method that repairs its output succeeds, so this corpus separates the methods little.
+\end{itemize}
+On these three corpora FFE therefore wins or ties on one, is statistically indistinguishable from the best baseline on one, and fails on one. The claim in the main text that FFE has the highest Real ASR applies to the three main corpora only.
+
+\begin{table}[!htbp]
+\centering
+\caption*{Table S6. Real ASR (\%, Wilson 95\% interval) and mean target queries against XGBoost on the additional corpora; MOEVA and PSO attack the first 200 flows of the cohort.}
+\resizebox{\textwidth}{!}{%
+\input{tables/tab_extra.tex}%
+}
 \end{table}

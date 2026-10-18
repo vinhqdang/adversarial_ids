@@ -28,15 +28,19 @@ FFE 99.5 / 99.2 / 57.6 % on CSE-CIC-IDS2018 / CIC-IDS2017 / UNSW-NB15 with 16.5 
 * Transfer (N=221 flows detected by all four architectures): 55.7-78.7% to non-CatBoost targets, 24.0% to CatBoost.
 * Defenses (CSE-CIC-IDS2018, FFE M=5 / M=20 / CAPGD): undefended 84.1 / 98.9 / 88.3; MPS 78.8 / 78.8 / 71.9; LGAT 46.5 / 80.3 / 74.3; MPS+LGAT 62.0 / 62.0 / 55.1. LGAT mainly protects against the attack it trained on. No clean-accuracy cost.
 
+### Additional corpora (supplementary S7; XGBoost; single seed; no five-seed repetition)
+
+FFE is **not uniformly best**: InSDN 81.0 (PSO 85.5 on 200 flows, not significantly different, CAPGD 79.9, TSBS off 46.7); USB-IDS-1 **0.0** for FFE and PSO vs 95-99 for CAPGD/generator/unconstrained/ZOO/MOEVA (the target's score is constant over the attack region; FFE's moves apparently do not reach a split; not fully diagnosed); CIDDS-001 100.0 (PSO 100.0, generator 99.1). Per-dataset choices: InSDN window = 0 (exporter wrote -1), DDoS family lost (protocol 0); USB-IDS-1 92% attacks; CIDDS-001 unidirectional (no backward traffic or window), only `attacker` counted as attack (5,560 flows, 0.08%), `victim`/`suspicious`/`unknown` dropped. The main-text claim "highest Real ASR" is restricted to the three main corpora.
+
 ## 3. Manuscript (`paper/`)
 
 Target: *Information Sciences*; review layout; **exactly 40 pages** including references (limit 40, no slack: any addition must be paid for by cutting text or moving material to the supplementary). Abstract 196 words (limit 200); highlights in `highlights.tex`.
-`supplementary.tex` (11 pages): proofs, auxiliary algorithms, plus `supplementary_extra.tex` (per-family, TSBS, ablation, transfer and corpus-statistics tables S1-S5). Discussion and conclusion are in `sec_discussion.tex`.
+`supplementary.tex` (12 pages): proofs, auxiliary algorithms, plus `supplementary_extra.tex` (per-family, TSBS, ablation, transfer and corpus-statistics tables S1-S6, section S7). Discussion and conclusion are in `sec_discussion.tex`.
 Build: `bash paper/build.sh`. Tests: `pytest` (all pass; new modules 93-98% covered).
 
 ## 4. Open items
 
-1. **More datasets.** The owner has CIDDS-001, USB-IDS-1, InSDN and others; none was found on this machine and no path was given. To add one: alias table in `ALIASES`, family mapping and builder branch in `full_data.py`, a row in `summarize_results.DATASETS`, rerun. New rows must go to the supplementary because of the page limit.
+1. **More datasets.** InSDN, USB-IDS-1 and CIDDS-001 were downloaded from their public sites and added (supplementary S6/S7, `summarize_results.EXTRA`). Further corpora: add an alias table in `ALIASES`, family mapping and builder branch in `full_data.py`, a row in `EXTRA`, rerun `run_full_benchmark.py --datasets <name>`; results must go to the supplementary because of the page limit.
 2. **Defenses** are evaluated on one corpus, one seed, FFE and CAPGD only; the attacker is not adaptive to the training procedure.
 3. **White-box tree attacks** (LT-Attack, Cascioli et al.) are cited, not run; the novelty claim against them is untested.
 4. **Packet-level validation**: feasibility is schema conformance only; replay with feature re-extraction is not done.

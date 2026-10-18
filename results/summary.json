@@ -199,32 +199,38 @@
  "efficiency_ratios": {
   "cse2018": {
    "CAA / MOEVA": {
-    "queries_x": 19.965225279709706,
-    "time_x": 15.986846894353262
+    "n": 200,
+    "ffe_queries_same_flows": 16.25,
+    "queries_x": 20.315384615384616
    },
    "Traffic Manipulator PSO": {
-    "queries_x": 11.06138494103417,
-    "time_x": 8.966222391426353
+    "n": 200,
+    "ffe_queries_same_flows": 16.25,
+    "queries_x": 11.255384615384616
    }
   },
   "cic2017": {
    "CAA / MOEVA": {
-    "queries_x": 15.496363885839736,
-    "time_x": 18.817296795308895
+    "n": 200,
+    "ffe_queries_same_flows": 14.805,
+    "queries_x": 15.256670043904087
    },
    "Traffic Manipulator PSO": {
-    "queries_x": 17.25096048298573,
-    "time_x": 19.040588418477938
+    "n": 200,
+    "ffe_queries_same_flows": 14.805,
+    "queries_x": 16.984126984126984
    }
   },
   "unsw": {
    "CAA / MOEVA": {
-    "queries_x": 4.747223674244444,
-    "time_x": 3.8089645288200327
+    "n": 200,
+    "ffe_queries_same_flows": 81.035,
+    "queries_x": 5.491454309866107
    },
    "Traffic Manipulator PSO": {
-    "queries_x": 2.4368192534590727,
-    "time_x": 1.8445712832302956
+    "n": 200,
+    "ffe_queries_same_flows": 81.035,
+    "queries_x": 2.8188437095082373
    }
   }
  },

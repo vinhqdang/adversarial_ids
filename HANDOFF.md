@@ -12,14 +12,14 @@ The earlier results came from **12,000-flow samples** (byte-range slices of a fe
 * Code review by independent agents found and we fixed: UDP flows were silently dropped from CSE-CIC-IDS2018; FFE's cost was normalised L1 while baselines used schema-weighted cost (the old "7,500x lower cost" was a unit mix-up); FFE silently had no TSBS against CatBoost; transfer was not conditioned on all models detecting the clean flow; the MPS defense zeroed columns (degenerate attack start state) instead of hiding them from the model; cohorts differed between XGBoost and LightGBM.
 * `src/attacks/cost.py`: the paper's operational cost (1e-4/s delay, 1e-2/byte padding, 1/chaff packet, 1e-3 window) applied to every attack's output. `src/attacks/modern_baselines.py`: CAPGD and NIDSGAN-style generator (our re-implementations).
 * `experiments/`: `run_full_benchmark.py`, `run_seeds.py` (5 seeds), `run_ablations.py`, `run_transferability.py`, `run_defenses.py`, `summarize_results.py` (generates every table in `paper/tables/` and `results/summary.json`: exact McNemar with Holm correction, XGBoost root splits, efficiency ratios, seed wins).
-* `paper/references.bib`: 98 entries, 39 new 2021-2026 references verified against Crossref/arXiv; four wrong existing entries corrected; published versions with DOI preferred over arXiv. Entries without DOI because none exists: `ke2017lightgbm`, `ring2017flow` (original CIDDS-001 paper), `caratheodory1918vorlesungen`.
+* `paper/references.bib`: 93 entries (five uncited arXiv-only ones were dropped), 34 new 2021-2026 references verified against Crossref/arXiv; four wrong existing entries corrected; published versions with DOI preferred over arXiv. Entries without DOI because none exists: `ke2017lightgbm`, `ring2017flow` (original CIDDS-001 paper), `caratheodory1918vorlesungen`.
 
 ## 2. Results (XGBoost, Real ASR = evades and schema-feasible)
 
 FFE 99.5 / 99.2 / 57.6 % on CSE-CIC-IDS2018 / CIC-IDS2017 / UNSW-NB15 with 16.5 / 14.6 / 93.7 queries; clean accuracy 97.30 / 99.96 / 88.51 %.
 
 * Significantly better than all seven baselines on every corpus (Holm-adjusted McNemar, largest p 3.7e-11). CAPGD: 88.5 / 89.5 / 21.1; FFE ahead in 14 of 15 retrained runs (one tie).
-* **FFE is white-box; surrogate attacks need far fewer target queries** (CAPGD 3.2-16.2, generator 2.4-4.5). Say so; do not claim query efficiency against them.
+* The full FFE reads split thresholds only for TSBS; **FFE without TSBS needs only the target's soft score** and still beats every baseline (99.5 / 97.5 / 54.6). Surrogate attacks need far fewer target queries (CAPGD 3.2-16.2, generator 2.4-4.5): do not claim query efficiency against them. Five-seed means: FFE 99.7 / 97.3 / 58.3 vs CAPGD 97.7 / 82.4 / 31.5 (the CSE-CIC-IDS2018 gap shrinks to about 2 points).
 * **TSBS adds at most 3 points of Real ASR and up to 1.8x queries** (ablation). The paper no longer claims snapping is what makes FFE efficient.
 * Cost: FFE lowest under the paper's cost model (median 0.0006 / 0.0009 / 5.6 vs 15-53), but FFE optimises that cost; in normalised L1 it is not smaller than PSO on two corpora.
 * Naive and ZOO have many feasible evasions at ~zero cost on CSE-CIC-IDS2018 (feasible share 88% / 83%): consistent with moving only the coupled rates inside the 5% tolerance of the feasibility check. The check is not exact.
@@ -30,8 +30,8 @@ FFE 99.5 / 99.2 / 57.6 % on CSE-CIC-IDS2018 / CIC-IDS2017 / UNSW-NB15 with 16.5 
 
 ## 3. Manuscript (`paper/`)
 
-Target: *Information Sciences*; review layout; **exactly 40 pages** including references (limit 40, no slack: any addition must be paid for by cutting text or moving material to the supplementary). Abstract 184 words; highlights in `highlights.tex`.
-`supplementary.tex` (10 pages): proofs, auxiliary algorithms, plus `supplementary_extra.tex` (per-family, TSBS, ablation and transfer tables). Discussion and conclusion are in `sec_discussion.tex`.
+Target: *Information Sciences*; review layout; **exactly 40 pages** including references (limit 40, no slack: any addition must be paid for by cutting text or moving material to the supplementary). Abstract 196 words (limit 200); highlights in `highlights.tex`.
+`supplementary.tex` (11 pages): proofs, auxiliary algorithms, plus `supplementary_extra.tex` (per-family, TSBS, ablation, transfer and corpus-statistics tables S1-S5). Discussion and conclusion are in `sec_discussion.tex`.
 Build: `bash paper/build.sh`. Tests: `pytest` (all pass; new modules 93-98% covered).
 
 ## 4. Open items

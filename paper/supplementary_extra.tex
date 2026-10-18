@@ -20,7 +20,7 @@ Table~S2 compares FFE with and without tree-split boundary snapping (TSBS) on th
 
 \textbf{Step budget.} ASR rises from 42.8\% at $M=1$ (5.0 queries) through 67.1\% at $M=3$ and 84.1\% at $M=5$ to 98.9\% at $M=10$ and $M=20$ (14.4 queries at $M=20$). Physical feasibility is 100.0\% for every budget.
 
-\textbf{Generators.} No single generator suffices. Temporal dilation alone evades 66.1\% of the flows but needs 32.6 queries and adds 40.7\,s of flow duration on average; window morphing alone evades 46.3\% with 2.5 queries and no added delay; chaff alone 32.5\%; padding alone 10.2\%. Pairs are better than singles (time plus chaff 78.1\%, time plus padding 69.3\%, padding plus chaff 33.6\% with no added delay), and the complete cone reaches 98.9\% with 14.4 queries and 0.18\,s of mean delay. The full cone needs fewer queries than the time-based subsets because the cheap window and chaff moves are available when delay alone would stall.
+\textbf{Generators.} No single generator suffices. Temporal dilation alone evades 66.1\% of the flows but needs 32.6 queries and adds 40.7\,s of flow duration on average; window morphing alone evades 46.3\% with 2.5 queries and no added delay; chaff alone 32.5\%; padding alone 10.2\%. Pairs are better than singles (time plus chaff 78.1\%, time plus padding 69.3\%, padding plus chaff 33.6\% with no added delay), and the complete cone reaches 98.9\% with 14.4 queries and 0.18\,s of mean delay. The full cone needs fewer queries than the time-based subsets, possibly because the cheap window and chaff moves are available when delay alone would stall.
 
 \textbf{Cost regimes and snapping offset.} These do not discriminate on this corpus. All four cost regimes reach 98.9\% ASR with 14.1--14.4 queries, and the snapping offset leaves ASR at 98.9\% and the queries between 14.2 and 14.4. The regimes do change the mean added delay (181\,ms under regime A, 133\,ms under the latency-sensitive regime B), so FFE responds to the operator's cost model, but because the corpus is saturated we have no evidence on how the regime affects success; a harder target such as UNSW-NB15 would be needed for that.
 
@@ -42,4 +42,15 @@ Flows crafted by FFE against a source ensemble were scored by the three other ar
 \resizebox{\columnwidth}{!}{%
 \input{tables/tab_transfer.tex}%
 }
+\end{table}
+
+\section*{S6. Corpus statistics}
+
+Table~S5 gives the record counts of the three corpora. Valid records pass the validity filter; Kept = Valid $-$ Duplicates, where duplicates are records with identical features and label after projection onto the flow manifold. Records with identical features but different labels are kept (149,526, 22 and 1,040).
+
+\begin{table}[!htbp]
+\centering
+\caption*{Table S5. Full-scale benchmark corpora.}
+\footnotesize
+\input{tables/tab_corpora.tex}
 \end{table}

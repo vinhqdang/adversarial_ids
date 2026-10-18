@@ -258,14 +258,16 @@ def pairwise(data: Dict[str, Dict]) -> Dict:
 
 
 def efficiency_ratios(data: Dict[str, Dict]) -> Dict:
-    """Queries and time per flow of the surrogate-free constrained searches relative to FFE."""
+    """Queries of the 200-flow black-box searches relative to FFE on the same flows (paired)."""
     out = {}
     for key, _ in DATASETS:
         atk = data[key]['models']['xgboost']['attacks']
-        f = atk[FFE]
-        out[key] = {name: {'queries_x': atk[name]['avg_queries'] / f['avg_queries'],
-                           'time_x': atk[name]['ms_per_flow'] / f['ms_per_flow']}
-                    for name in ('CAA / MOEVA', 'Traffic Manipulator PSO')}
+        out[key] = {}
+        for name in ('CAA / MOEVA', 'Traffic Manipulator PSO'):
+            n = atk[name]['n']
+            ffe_q = float(np.mean([o['queries'] for o in atk[FFE]['outcomes'][:n]]))
+            out[key][name] = {'n': n, 'ffe_queries_same_flows': ffe_q,
+                              'queries_x': atk[name]['avg_queries'] / ffe_q}
     return out
 
 

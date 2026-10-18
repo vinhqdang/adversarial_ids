@@ -131,6 +131,19 @@ class NIDSEnsembleTrainer:
                 for tree_info in dump.get('tree_info', []):
                     if 'tree_structure' in tree_info:
                         recurse_tree(tree_info['tree_structure'])
+            elif self.model_type == 'catboost':
+                import json
+                import os
+                import tempfile
+                with tempfile.TemporaryDirectory() as tmp:
+                    path = os.path.join(tmp, 'cb.json')
+                    self.model.save_model(path, format='json')
+                    with open(path) as fh:
+                        info = json.load(fh)
+                for tree in info.get('oblivious_trees', []):
+                    for sp in tree.get('splits', []):
+                        if 'float_feature_index' in sp and 'border' in sp:
+                            splits.append((int(sp['float_feature_index']), float(sp['border'])))
             elif self.model_type in ('random_forest', 'rf'):
                 for estimator in self.model.estimators_:
                     tree = estimator.tree_

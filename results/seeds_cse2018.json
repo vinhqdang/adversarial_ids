@@ -1,0 +1,140 @@
+{
+ "dataset": "cse2018",
+ "runs": [
+  {
+   "seed": 1,
+   "accuracy": 0.9729802078940986,
+   "f1": 0.8732958004369924,
+   "surrogate_agreement": 0.99818,
+   "n_cohort": 300,
+   "attacks": {
+    "FFE": {
+     "real_asr": 99.66666666666667,
+     "asr": 99.66666666666667,
+     "avg_queries": 22.733333333333334,
+     "mean_op_cost_all": 13393.527996666668
+    },
+    "CAPGD": {
+     "real_asr": 97.66666666666667,
+     "asr": 97.66666666666667,
+     "avg_queries": 1.52,
+     "mean_op_cost_all": 29295.075469999996
+    },
+    "NIDSGAN-style": {
+     "real_asr": 97.33333333333333,
+     "asr": 97.33333333333333,
+     "avg_queries": 1.1066666666666667,
+     "mean_op_cost_all": 36683.11094
+    }
+   }
+  },
+  {
+   "seed": 2,
+   "accuracy": 0.9730194559812575,
+   "f1": 0.8733046642408204,
+   "surrogate_agreement": 0.99858,
+   "n_cohort": 300,
+   "attacks": {
+    "FFE": {
+     "real_asr": 100.0,
+     "asr": 100.0,
+     "avg_queries": 18.55666666666667,
+     "mean_op_cost_all": 12867.565286666666
+    },
+    "CAPGD": {
+     "real_asr": 99.66666666666667,
+     "asr": 99.66666666666667,
+     "avg_queries": 1.0633333333333332,
+     "mean_op_cost_all": 35348.52893
+    },
+    "NIDSGAN-style": {
+     "real_asr": 94.0,
+     "asr": 94.0,
+     "avg_queries": 1.24,
+     "mean_op_cost_all": 28391.081263333337
+    }
+   }
+  },
+  {
+   "seed": 3,
+   "accuracy": 0.9729661188371698,
+   "f1": 0.8730512038940479,
+   "surrogate_agreement": 0.9987,
+   "n_cohort": 300,
+   "attacks": {
+    "FFE": {
+     "real_asr": 99.33333333333333,
+     "asr": 99.33333333333333,
+     "avg_queries": 17.4,
+     "mean_op_cost_all": 13902.314283333333
+    },
+    "CAPGD": {
+     "real_asr": 99.33333333333333,
+     "asr": 99.33333333333333,
+     "avg_queries": 1.1566666666666667,
+     "mean_op_cost_all": 46349.090540000005
+    },
+    "NIDSGAN-style": {
+     "real_asr": 99.33333333333333,
+     "asr": 99.33333333333333,
+     "avg_queries": 1.0266666666666666,
+     "mean_op_cost_all": 46187.166240000006
+    }
+   }
+  },
+  {
+   "seed": 4,
+   "accuracy": 0.9730063732855379,
+   "f1": 0.8736069814672579,
+   "surrogate_agreement": 0.99794,
+   "n_cohort": 300,
+   "attacks": {
+    "FFE": {
+     "real_asr": 100.0,
+     "asr": 100.0,
+     "avg_queries": 15.446666666666667,
+     "mean_op_cost_all": 13330.907076666666
+    },
+    "CAPGD": {
+     "real_asr": 93.66666666666667,
+     "asr": 93.66666666666667,
+     "avg_queries": 2.203333333333333,
+     "mean_op_cost_all": 27075.574016666666
+    },
+    "NIDSGAN-style": {
+     "real_asr": 96.33333333333333,
+     "asr": 96.33333333333333,
+     "avg_queries": 1.1466666666666667,
+     "mean_op_cost_all": 35893.24002333333
+    }
+   }
+  },
+  {
+   "seed": 5,
+   "accuracy": 0.9729590743087053,
+   "f1": 0.8729863106942973,
+   "surrogate_agreement": 0.99856,
+   "n_cohort": 300,
+   "attacks": {
+    "FFE": {
+     "real_asr": 99.66666666666667,
+     "asr": 99.66666666666667,
+     "avg_queries": 17.126666666666665,
+     "mean_op_cost_all": 15023.85419333333
+    },
+    "CAPGD": {
+     "real_asr": 98.33333333333333,
+     "asr": 98.33333333333333,
+     "avg_queries": 1.4466666666666668,
+     "mean_op_cost_all": 39106.89903
+    },
+    "NIDSGAN-style": {
+     "real_asr": 99.0,
+     "asr": 99.0,
+     "avg_queries": 1.0466666666666666,
+     "mean_op_cost_all": 34234.09185333334
+    }
+   }
+  }
+ ]
+}

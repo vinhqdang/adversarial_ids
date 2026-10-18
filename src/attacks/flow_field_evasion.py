@@ -10,6 +10,7 @@ mathematically guaranteed to be 100% physically realizable on the network flow m
 """
 
 from typing import List, Tuple, Dict, Optional, Callable, FrozenSet
+import warnings
 import numpy as np
 from .base import BaseNIDSAttack, AttackResult
 from ..datasets.schema import NetworkFeatureSchema, project_network_invariants, verify_physical_feasibility
@@ -172,6 +173,9 @@ def extract_active_splits(model, x: np.ndarray, schema: NetworkFeatureSchema) ->
         except Exception:
             pass
 
+    if not splits:
+        warnings.warn('FFE: no tree split thresholds could be extracted from the target model; '
+                      'tree-split boundary snapping (TSBS) is unavailable for it.', RuntimeWarning)
     try:
         model._cached_splits = splits
     except Exception:
@@ -298,9 +302,11 @@ class FlowFieldEvasionAttack(BaseNIDSAttack):
         epsilon_rel: float = 1e-4,
         feature_stds: Optional[np.ndarray] = None,
         enabled_generators: FrozenSet[str] = ALL_GENERATORS,
-        control_costs: Optional[Dict[str, float]] = None
+        control_costs: Optional[Dict[str, float]] = None,
+        enable_tsbs: bool = True
     ):
         super().__init__(model, schema)
+        self.enable_tsbs = enable_tsbs
         self.step_budget = step_budget
         self.epsilon_rel = epsilon_rel
         self.feature_stds = feature_stds if feature_stds is not None else np.ones(len(schema.feature_names))
@@ -390,13 +396,14 @@ class FlowFieldEvasionAttack(BaseNIDSAttack):
 
             # If local continuous Lie derivatives are flat/stagnated,
             # evaluate Tree-Split Boundary Snapping to cross nearest threshold
-            x_snapped, p_snapped = tree_boundary_snap(
-                self.predict_malicious_prob, self.model, x_curr, self.schema, x_orig,
-                self.epsilon_rel, self.enabled_generators
-            )
-            if p_snapped < p_curr:
-                x_curr, p_curr = x_snapped, p_snapped
-                continue
+            if self.enable_tsbs:
+                x_snapped, p_snapped = tree_boundary_snap(
+                    self.predict_malicious_prob, self.model, x_curr, self.schema, x_orig,
+                    self.epsilon_rel, self.enabled_generators
+                )
+                if p_snapped < p_curr:
+                    x_curr, p_curr = x_snapped, p_snapped
+                    continue
             if 'time' not in self.enabled_generators:
                 break  # No admissible fallback: terminate on stagnation
             # Low-and-slow temporal dilation fallback

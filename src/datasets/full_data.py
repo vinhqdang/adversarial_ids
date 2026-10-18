@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 import requests
 
-from .schema import get_cicids_schema
+from .schema import get_cicids_schema, project_network_invariants_batch
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 RAW_DIR = os.path.join(ROOT, 'data', 'raw')
@@ -96,8 +96,12 @@ def _clean(df: pd.DataFrame) -> pd.DataFrame:
     df = df.replace([np.inf, -np.inf], np.nan).dropna(subset=FEATURES)
     df = df[(df['flow_duration'] > 0) & (df['tot_fwd_pkts'] > 0)]
     df = df[df['protocol'].isin([6, 17])]
-    df = df[(df['init_fwd_win_byts'] >= 0) & (df['flow_bytes_s'] >= 0)]
-    return df
+    df = df[df['flow_bytes_s'] >= 0]
+    # CICFlowMeter writes -1 when no TCP window was observed and for every UDP flow. UDP has no
+    # window (schema value 0); TCP flows without an observed window are dropped.
+    win = np.where(df['protocol'] == 17, 0.0, df['init_fwd_win_byts'])
+    df = df.assign(init_fwd_win_byts=win)
+    return df[df['init_fwd_win_byts'] >= 0]
 
 
 def _family_2018(label: str) -> str:
@@ -123,6 +127,8 @@ def _family_2017(label: str) -> str:
     low = label.lower()
     if low == 'benign':
         return 'Benign'
+    if 'portscan' in low:  # includes 'Infiltration - Portscan', which is port scanning
+        return 'PortScan'
     if 'ddos' in low:
         return 'DDoS'
     if 'dos' in low:
@@ -140,25 +146,26 @@ def _family_2017(label: str) -> str:
     return label
 
 
-def _build_csv_dataset(dataset: str, family_fn) -> pd.DataFrame:
+def _build_csv_dataset(dataset: str):
     folder = os.path.join(RAW_DIR, dataset)
     files = sorted(f for f in os.listdir(folder) if f.endswith('.csv'))
     if not files:
         raise FileNotFoundError(f'no raw files in {folder}; run download_raw({dataset!r})')
     parts = []
+    raw_rows = 0
     for fname in files:
         raw = pd.read_csv(os.path.join(folder, fname), low_memory=False)
         raw.columns = [c.strip() for c in raw.columns]
         frame = _numeric_frame(raw, ALIASES[dataset])
         frame['label_orig'] = raw['Label'].astype(str).str.strip().values
         frame['source'] = fname.replace('.csv', '')
-        frame['row_order'] = np.arange(len(frame))
+        raw_rows += len(raw)
         parts.append(_clean(frame))
         print(f'  [{dataset}] {fname}: {len(raw):,} raw -> {len(parts[-1]):,} usable')
-    return pd.concat(parts, ignore_index=True)
+    return pd.concat(parts, ignore_index=True), raw_rows
 
 
-def _build_unsw() -> pd.DataFrame:
+def _build_unsw():
     folder = os.path.join(RAW_DIR, 'unsw')
     parts = []
     for split in ('train', 'test'):
@@ -167,8 +174,9 @@ def _build_unsw() -> pd.DataFrame:
             raise FileNotFoundError(path)
         parts.append(pd.read_parquet(path).assign(source=split))
     df = pd.concat(parts, ignore_index=True)
+    raw_rows = len(df)
     proto = df['proto'].str.lower().map({'tcp': 6.0, 'udp': 17.0})
-    df = df[proto.notna()].copy()
+    df = df[proto.notna() & (df['dur'] > 0)].copy()  # zero duration: rates undefined
     proto = proto[df.index]
     service_ports = {'http': 80.0, 'ftp': 21.0, 'smtp': 25.0, 'ssh': 22.0, 'dns': 53.0,
                      'ftp-data': 20.0, 'irc': 6667.0, 'pop3': 110.0, 'ssl': 443.0,
@@ -177,7 +185,7 @@ def _build_unsw() -> pd.DataFrame:
     bwd = np.maximum(0.0, df['dpkts'].astype(float))
     lf = np.maximum(0.0, df['sbytes'].astype(float))
     lb = np.maximum(0.0, df['dbytes'].astype(float))
-    dur_us = np.maximum(10.0, df['dur'].astype(float) * 1e6)
+    dur_us = np.maximum(1.0, df['dur'].astype(float) * 1e6)
     is_tcp = proto == 6.0
     out = pd.DataFrame({
         'dst_port': df['service'].str.lower().map(service_ports).fillna(0.0),
@@ -194,8 +202,7 @@ def _build_unsw() -> pd.DataFrame:
         'label': df['label'].astype(int),
         'source': df['source'],
     })
-    out['row_order'] = np.arange(len(out))
-    return _clean(out)
+    return _clean(out), raw_rows
 
 
 def build_full_dataset(name: str, force: bool = False) -> pd.DataFrame:
@@ -210,33 +217,48 @@ def build_full_dataset(name: str, force: bool = False) -> pd.DataFrame:
                 df.attrs['dedup_stats'] = json.load(fh)
         return df
 
+    raw_rows = None
     if name == 'cse2018':
-        df = _build_csv_dataset(name, _family_2018)
+        df, raw_rows = _build_csv_dataset(name)
         df['attack_family'] = df['label_orig'].map(_family_2018)
         df['label'] = (df['attack_family'] != 'Benign').astype(int)
     elif name == 'cic2017':
-        df = _build_csv_dataset(name, _family_2017)
+        df, raw_rows = _build_csv_dataset(name)
+        # '<attack> - Attempted' records are probes without a delivered attack payload.
+        attempted = df['label_orig'].str.contains('Attempted', case=False)
+        n_attempted = int(attempted.sum())
+        df = df[~attempted].copy()
         df['attack_family'] = df['label_orig'].map(_family_2017)
         df['label'] = (df['attack_family'] != 'Benign').astype(int)
     elif name == 'unsw':
-        df = _build_unsw()
+        df, raw_rows = _build_unsw()
         df['attack_family'] = np.where(df['label'] == 0, 'Benign', df['label_orig'])
     else:
         raise ValueError(f'unknown dataset {name!r}')
 
-    n_before = len(df)
-    # A flow that appears with conflicting labels is unusable as ground truth.
-    key = FEATURES
-    n_labels = df.groupby(key, sort=False)['label'].transform('nunique')
-    df = df[n_labels == 1]
-    n_conflict = n_before - len(df)
-    df = df.drop_duplicates(subset=key + ['label'], keep='first').reset_index(drop=True)
-    stats = {'before_dedup': n_before, 'label_conflicts_removed': int(n_conflict),
-             'after_dedup': len(df), 'attacks': int(df['label'].sum())}
-    print(f'  [{name}] dedup summary: {stats}')
+    n_valid = len(df)
+    # Project onto the flow manifold first, so that flows made identical by the projection collapse.
+    df = df.copy()
+    raw_x = df[FEATURES].values.astype(float)
+    proj_x = project_network_invariants_batch(raw_x)
+    changed_gt5 = float((~np.isclose(raw_x, proj_x, rtol=0.05, atol=1e-6).all(axis=1)).mean())
+    df[FEATURES] = proj_x
+    # Exact duplicates (same 12 features and label) are collapsed so no flow can sit on both sides
+    # of the split. Records with identical features but different labels are KEPT: they are real
+    # ambiguity of the 12-feature schema and deleting them would remove the hardest flows.
+    df = df.drop_duplicates(subset=FEATURES + ['label'], keep='first').reset_index(drop=True)
+    n_labels = df.groupby(FEATURES, sort=False)['label'].transform('nunique')
+    stats = {'raw_rows': raw_rows, 'valid_records': n_valid, 'after_dedup': len(df),
+             'duplicates_removed': n_valid - len(df), 'conflicting_label_records': int((n_labels > 1).sum()),
+             'attacks': int(df['label'].sum()),
+             'attempted_removed': n_attempted if name == 'cic2017' else 0,
+             'projection_changed_gt5pct': changed_gt5,
+             'family_counts': {k: int(v) for k, v in df['attack_family'].value_counts().items()}}
+    print(f'  [{name}] summary: {stats}')
     df.attrs['dedup_stats'] = stats
     df.to_parquet(cache, index=False)
-    pd.Series(stats).to_json(os.path.join(CACHE_DIR, f'{name}_stats.json'))
+    with open(os.path.join(CACHE_DIR, f'{name}_stats.json'), 'w') as fh:
+        json.dump(stats, fh, indent=1)
     return df
 
 

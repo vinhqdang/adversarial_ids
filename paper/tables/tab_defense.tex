@@ -1,10 +1,10 @@
-\begin{tabular}{@{}lcccc@{}}
+\begin{tabular}{@{}lcccccc@{}}
 \toprule
-\textbf{Model} & \textbf{Acc.\ (\%)} & \textbf{AUC (\%)} & \textbf{Robust recall (\%)} & \textbf{FFE ASR (\%)} \\
+\textbf{Model} & \textbf{Acc.} & \textbf{F1} & \textbf{Attack recall} & \textbf{FFE $M{=}5$} & \textbf{FFE $M{=}20$} & \textbf{CAPGD} \\
 \midrule
-Baseline XGBoost (Undefended) & 98.04 & 98.07 & 3.7 & 96.3 \\
-MPS-Hardened XGBoost & 98.04 & 98.01 & 33.0 & 67.0 \\
-LGAT-Hardened XGBoost & 98.04 & 98.06 & 67.0 & 33.0 \\
-Dual-Hardened (MPS + LGAT) & 98.04 & 98.00 & 62.0 & 38.0 \\
+Undefended & 97.30 & 87.31 & 77.62 & 84.1 & 98.9 & 88.3 \\
+MPS & 97.30 & 87.30 & 77.61 & 78.8 & 78.8 & 71.9 \\
+LGAT & 97.28 & 87.26 & 77.83 & 46.5 & 80.3 & 74.3 \\
+MPS + LGAT & 97.30 & 87.30 & 77.62 & 62.0 & 62.0 & 55.1 \\
 \bottomrule
 \end{tabular}

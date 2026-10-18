@@ -1,1 +1,21 @@
-{"before_dedup":2097825,"label_conflicts_removed":54,"after_dedup":1692949,"attacks":405355}
+{
+ "raw_rows": 2099971,
+ "valid_records": 2085851,
+ "after_dedup": 1658869,
+ "duplicates_removed": 426982,
+ "conflicting_label_records": 22,
+ "attacks": 396403,
+ "attempted_removed": 11974,
+ "projection_changed_gt5pct": 0.04695733300221348,
+ "family_counts": {
+  "Benign": 1262466,
+  "DoS": 169602,
+  "PortScan": 124211,
+  "DDoS": 94772,
+  "BruteForce": 6931,
+  "Botnet": 736,
+  "WebExploit": 104,
+  "InfiltrationBeacon": 36,
+  "Heartbleed": 11
+ }
+}

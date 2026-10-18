@@ -1,31 +1,115 @@
 {
   "dataset": "cse2018",
+  "cohort_size": 283,
   "lgat_augment_samples": 5000,
-  "cohort_size": 300,
+  "masked_features": [
+    6,
+    8,
+    9
+  ],
+  "malleability_index": [
+    0.0,
+    0.0,
+    0.0004440498963367172,
+    0.0,
+    0.0009232562976788363,
+    0.0,
+    0.00035660422243179613,
+    0.03629372870470811,
+    100.20482280412868,
+    838.0036701862246,
+    0.5623012156821043,
+    0.0010776030492131538
+  ],
+  "attack_prevalence_test": 0.11971974853046105,
   "models": {
-    "Baseline XGBoost (Undefended)": {
-      "clean_accuracy": 98.04,
-      "clean_roc_auc": 98.07,
-      "robust_recall": 3.7,
-      "ffe_asr": 96.3
+    "Undefended": {
+      "clean_accuracy": 97.3,
+      "clean_f1": 87.31,
+      "clean_attack_recall": 77.62,
+      "clean_roc_auc": 96.81,
+      "cohort_detected": 283,
+      "ffe_m5": {
+        "n": 283,
+        "asr": 84.1,
+        "real_asr": 84.1
+      },
+      "ffe_m20": {
+        "n": 283,
+        "asr": 98.9,
+        "real_asr": 98.9
+      },
+      "capgd": {
+        "n": 283,
+        "asr": 88.3,
+        "real_asr": 88.3
+      }
     },
-    "MPS-Hardened XGBoost": {
-      "clean_accuracy": 98.04,
-      "clean_roc_auc": 98.01,
-      "robust_recall": 33.0,
-      "ffe_asr": 67.0
+    "MPS": {
+      "clean_accuracy": 97.3,
+      "clean_f1": 87.3,
+      "clean_attack_recall": 77.61,
+      "clean_roc_auc": 96.54,
+      "cohort_detected": 274,
+      "ffe_m5": {
+        "n": 274,
+        "asr": 78.8,
+        "real_asr": 78.8
+      },
+      "ffe_m20": {
+        "n": 274,
+        "asr": 78.8,
+        "real_asr": 78.8
+      },
+      "capgd": {
+        "n": 274,
+        "asr": 71.9,
+        "real_asr": 71.9
+      }
     },
-    "LGAT-Hardened XGBoost": {
-      "clean_accuracy": 98.04,
-      "clean_roc_auc": 98.06,
-      "robust_recall": 67.0,
-      "ffe_asr": 33.0
+    "LGAT": {
+      "clean_accuracy": 97.28,
+      "clean_f1": 87.26,
+      "clean_attack_recall": 77.83,
+      "clean_roc_auc": 96.79,
+      "cohort_detected": 269,
+      "ffe_m5": {
+        "n": 269,
+        "asr": 46.5,
+        "real_asr": 46.5
+      },
+      "ffe_m20": {
+        "n": 269,
+        "asr": 80.3,
+        "real_asr": 80.3
+      },
+      "capgd": {
+        "n": 269,
+        "asr": 74.3,
+        "real_asr": 74.3
+      }
     },
-    "Dual-Hardened (MPS + LGAT)": {
-      "clean_accuracy": 98.04,
-      "clean_roc_auc": 98.0,
-      "robust_recall": 62.0,
-      "ffe_asr": 38.0
+    "MPS + LGAT": {
+      "clean_accuracy": 97.3,
+      "clean_f1": 87.3,
+      "clean_attack_recall": 77.62,
+      "clean_roc_auc": 96.53,
+      "cohort_detected": 274,
+      "ffe_m5": {
+        "n": 274,
+        "asr": 62.0,
+        "real_asr": 62.0
+      },
+      "ffe_m20": {
+        "n": 274,
+        "asr": 62.0,
+        "real_asr": 62.0
+      },
+      "capgd": {
+        "n": 274,
+        "asr": 55.1,
+        "real_asr": 55.1
+      }
     }
   }
 }

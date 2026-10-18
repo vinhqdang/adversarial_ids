@@ -1,7 +1,7 @@
 """
 Reproducible ablation studies for Flow-Field Evasion (paper Section 8, Ablations 1-4).
 
-Evaluates FFE on a balanced cohort (20 detected flows per attack family) against the same
+Evaluates FFE on a balanced cohort (up to 50 detected flows per attack family) against the same
 XGBoost target used by experiments/run_benchmark.py while sweeping:
   1. the step budget M,
   2. the enabled generator subset,

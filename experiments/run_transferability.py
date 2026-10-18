@@ -70,9 +70,10 @@ def run_transferability_experiment(dataset: str = 'cse2018', n_per_family: int =
     models['XGBoost (CUDA)'].model.get_booster().set_param({'device': 'cpu'})
 
     # 2. Build test cohort (detected by at least XGBoost)
-    # Flows detected by the primary source model (XGBoost), balanced over families
-    cohort, _ = detected_cohort(models['XGBoost (CUDA)'], X_test, y_test, fam_test, n_per_family)
-    print(f"\nCohort size for transferability: {len(cohort)} detected flows")
+    # Malicious flows that EVERY architecture detects when clean (so that a transferred evasion is
+    # a genuine evasion and not the target's own false negative), balanced over families
+    cohort, _ = detected_cohort(list(models.values()), X_test, y_test, fam_test, n_per_family)
+    print(f"\nCohort size for transferability: {len(cohort)} flows detected by all models")
 
     model_names = list(MODEL_CONFIGS.keys())
     matrix = {src: {} for src in model_names}

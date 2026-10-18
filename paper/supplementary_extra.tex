@@ -1,6 +1,6 @@
 \section*{S3. Per-family results}
 
-Table~S1 breaks the XGBoost results of the main text down by attack family (families with at least five flows in the attacked cohort). On CSE-CIC-IDS2018 every family in the cohort is evaded in 100.0\% of the flows (DoS 415 flows, DDoS 370, brute force 176, botnet 35), with 5.5 queries for DoS and 21.1 for DDoS. On CIC-IDS2017 only brute force (64.3\% on 14 flows) and DoS (91.6\%) fall below 100\%. On UNSW-NB15 more than half of the cohort are exploits, which are evaded in only 51.0\% of 520 flows and so set the aggregate figure; generic attacks are similar (51.7\% on 29 flows), while fuzzers (80.1\%), reconnaissance (68.8\%) and DoS (65.7\%) are easier. Families with fewer than five cohort flows are not reported.
+Table~S1 breaks the XGBoost results of the main text down by attack family (all families that appear in the 1,000-flow cohort; families with a handful of flows, such as one CIC-IDS2017 botnet flow, give no reliable rate). On CSE-CIC-IDS2018 the families in the cohort are evaded in 98.7\%--100.0\% of the flows (DoS 390 flows, DDoS 375, brute force 200, botnet 35). On CIC-IDS2017 DoS (422 flows) is evaded in 98.1\% and the other families in 100.0\%. On UNSW-NB15 more than half of the cohort are exploits, which are evaded in only 44.6\% of 504 flows and so set the aggregate figure; generic attacks (50.0\% on 22 flows) and DoS (51.2\% on 80) are similar, whereas fuzzers (79.5\% on 219) and reconnaissance (69.2\% on 143) are easier.
 
 \begin{table}[!htbp]
 \centering
@@ -10,17 +10,23 @@ Table~S1 breaks the XGBoost results of the main text down by attack family (fami
 
 \section*{S4. Ablations}
 
-The ablations use the CUDA XGBoost target of CSE-CIC-IDS2018 and a balanced cohort of $N=300$ detected malicious flows (up to 50 per attack family). Table~S2 reports three sweeps: Panel A varies the step budget $M$, Panel B isolates generator subsets, and Panel C compares operational cost regimes. The TSBS relative snapping offset $\epsilon_{\text{rel}}$ was swept over $\{0, 10^{-6}, 10^{-4}, 10^{-2}, 1\}$.
-
-\textbf{Step budget.} ASR rises from 52.7\% at $M=1$ (5.0 queries) through 89.7\% at $M=3$ and 96.3\% at $M=5$ to 100.0\% at $M=20$ (10.3 queries) and is flat beyond. A single step already evades more than half of the cohort, which is why the mean query count stays near ten. Physical feasibility is 100.0\% for every budget.
-
-\textbf{Generators.} No single generator suffices. Temporal dilation alone evades 57.0\% of the flows but needs 33.5 queries and adds 39.8\,s of flow duration on average; window morphing alone evades 53.0\% with 2.6 queries and no added delay; chaff alone 47.7\%; padding alone 30.0\%. Pairs are better than singles (time plus chaff 82.7\%, time plus padding 68.0\%, padding plus chaff 49.0\% with no added delay), and the complete cone reaches 100.0\% with 10.3 queries and 0.22\,s of mean delay. The full cone needs fewer queries than the time-based subsets because the cheap window and chaff moves are available when delay alone would stall.
-
-\textbf{Cost regimes and snapping offset.} These do not discriminate on this corpus. All four cost regimes reach 100.0\% ASR with 9.8--13.9 queries, and the snapping offset leaves ASR at 100.0\% and the queries between 10.2 and 10.3. The regimes do change which generator dominates (time under the balanced regime, window morphing under the latency-sensitive regime) and the mean added delay (216\,ms under regime A against 91\,ms under regime B), so FFE responds to the operator's cost model, but because the corpus is saturated we have no evidence on how the regime affects success; a harder target such as UNSW-NB15 would be needed for that.
+Table~S2 compares FFE with and without tree-split boundary snapping (TSBS) on the full 1,000-flow cohorts of the three corpora. Table~S3 reports the other ablations on the CUDA XGBoost target of CSE-CIC-IDS2018 with a balanced cohort of 283 detected malicious flows (up to 50 per attack family): Panel A varies the step budget $M$, Panel B isolates generator subsets, and Panel C compares operational cost regimes. The TSBS relative snapping offset $\epsilon_{\text{rel}}$ was swept over $\{0, 10^{-6}, 10^{-4}, 10^{-2}, 1\}$.
 
 \begin{table}[!htbp]
 \centering
-\caption*{Table S2. Ablation of FFE on CUDA XGBoost, CSE-CIC-IDS2018 ($N=300$). Delay is the mean added flow duration.}
+\caption*{Table S2. FFE with and without tree-split boundary snapping (XGBoost, Real ASR with Wilson 95\% interval).}
+\input{tables/tab_tsbs.tex}
+\end{table}
+
+\textbf{Step budget.} ASR rises from 42.8\% at $M=1$ (5.0 queries) through 67.1\% at $M=3$ and 84.1\% at $M=5$ to 98.9\% at $M=10$ and $M=20$ (14.4 queries at $M=20$). Physical feasibility is 100.0\% for every budget.
+
+\textbf{Generators.} No single generator suffices. Temporal dilation alone evades 66.1\% of the flows but needs 32.6 queries and adds 40.7\,s of flow duration on average; window morphing alone evades 46.3\% with 2.5 queries and no added delay; chaff alone 32.5\%; padding alone 10.2\%. Pairs are better than singles (time plus chaff 78.1\%, time plus padding 69.3\%, padding plus chaff 33.6\% with no added delay), and the complete cone reaches 98.9\% with 14.4 queries and 0.18\,s of mean delay. The full cone needs fewer queries than the time-based subsets because the cheap window and chaff moves are available when delay alone would stall.
+
+\textbf{Cost regimes and snapping offset.} These do not discriminate on this corpus. All four cost regimes reach 98.9\% ASR with 14.1--14.4 queries, and the snapping offset leaves ASR at 98.9\% and the queries between 14.2 and 14.4. The regimes do change the mean added delay (181\,ms under regime A, 133\,ms under the latency-sensitive regime B), so FFE responds to the operator's cost model, but because the corpus is saturated we have no evidence on how the regime affects success; a harder target such as UNSW-NB15 would be needed for that.
+
+\begin{table}[!htbp]
+\centering
+\caption*{Table S3. Ablation of FFE on CUDA XGBoost, CSE-CIC-IDS2018 ($N=283$). Delay is the mean added flow duration.}
 \resizebox{\columnwidth}{!}{%
 \input{tables/tab_ablation.tex}%
 }
@@ -28,11 +34,11 @@ The ablations use the CUDA XGBoost target of CSE-CIC-IDS2018 and a balanced coho
 
 \section*{S5. Cross-architecture transferability}
 
-Flows crafted by FFE against a source ensemble were scored by three independent target architectures ($N=300$ detected CSE-CIC-IDS2018 flows; Table~S3). Flows crafted against XGBoost evade LightGBM in 69.0\% of the cases, Random Forest in 81.3\% and CatBoost in 37.7\%. LightGBM flows evade XGBoost in 82.3\% and Random Forest in 83.0\%, CatBoost flows evade LightGBM in 66.7\%, and Random Forest flows evade XGBoost in 79.0\%. CatBoost is the hardest target for every source (34.0\%--37.7\%); this is consistent with its symmetric oblivious trees placing thresholds differently from the leaf-wise and depth-wise ensembles, although we did not test that explanation. Attacks against CatBoost itself succeed in 99.3\% of the cases, so its resistance to transfer reflects dissimilar boundaries and not a stronger model. Excluding CatBoost as target, 54\%--83\% of the transferred flows evade.
+Flows crafted by FFE against a source ensemble were scored by the three other architectures (Table~S4). The cohort is the 221 CSE-CIC-IDS2018 malicious flows (up to 50 per family) that XGBoost, LightGBM, CatBoost and Random Forest all detect when clean, so a transferred evasion is not the target's own false negative; all four models are trained on the same training partition. Flows crafted against XGBoost evade LightGBM in 71.5\% of the cases, Random Forest in 55.7\% and CatBoost in 24.0\%. LightGBM flows evade XGBoost in 75.6\%, Random Forest in 63.8\% and CatBoost in 24.0\%; CatBoost flows evade XGBoost in 70.1\%, LightGBM in 77.4\% and Random Forest in 77.4\%; Random Forest flows evade XGBoost in 78.7\%, LightGBM in 71.0\% and CatBoost in 24.0\%. Excluding CatBoost as target, 55.7\%--78.7\% of the transferred flows evade. CatBoost is the hardest target for the three other sources, whose flows each evade it in 53 of 221 cases (we did not check whether these are the same flows); attacks against CatBoost itself succeed in only 69.7\% of the cases. We did not test why CatBoost differs; its symmetric oblivious trees place thresholds differently from the leaf-wise and depth-wise ensembles.
 
 \begin{table}[!htbp]
 \centering
-\caption*{Table S3. Transferability of FFE flows (attack success rate in \%, $N=300$; diagonal: attack against the source model itself).}
+\caption*{Table S4. Transferability of FFE flows (attack success rate in \%, $N=221$; diagonal: attack against the source model itself).}
 \resizebox{\columnwidth}{!}{%
 \input{tables/tab_transfer.tex}%
 }

@@ -1,38 +1,38 @@
-\begin{tabular}{@{}lcccccc@{}}
+\begin{tabular}{@{}lccccccc@{}}
 \toprule
-\textbf{Method} & \textbf{ASR} & \textbf{PFR} & \textbf{Real ASR [95\% CI]} & \textbf{Queries} & \textbf{Cost} & \textbf{ms/flow} \\
+\textbf{Method} & \textbf{ASR} & \textbf{PFR} & \textbf{Real ASR [95\% CI]} & \textbf{Queries} & \textbf{Op.\ cost} & \textbf{$D_{L_1}$} & \textbf{ms/flow} \\
 \midrule
-\multicolumn{7}{@{}l}{\textbf{CSE-CIC-IDS2018} (XGBoost: accuracy 98.04\%, test attacks 108,762, detected 92,167)} \\
+\multicolumn{8}{@{}l}{\textbf{CSE-CIC-IDS2018} (XGBoost accuracy 97.30\%, test attacks 118,963, detected by both models 92,275)} \\
 \midrule
-Unconstrained feature space & 38.5 & 38.1 & 38.1 [35.1, 41.2] & 75.2 & 3,064.9 & 84.7 \\
-ZOO-NIDS \cite{chen2017zoo} & 30.3 & 14.9 & 14.9 [12.8, 17.2] & 115.6 & 3,797.5 & 128.3 \\
-HopSkipJump-NIDS \cite{chen2020hopskipjump} & 100.0 & 0.0 & 0.0 [0.0, 0.4] & 47.0 & 997,194.7 & 52.6 \\
-CAA/MOEVA \cite{simonetto2024constrained, ghamizi2020moeva} & 66.0 & 48.5 & 21.0 [15.9, 27.2] & 249.8 & 84.394 & 292.6 \\
-Traffic Manipulator PSO \cite{han2021traffic} & 60.0 & 100.0 & 60.0 [53.1, 66.5] & 161.3 & 2,502.3 & 196.2 \\
-CAPGD (surrogate) \cite{simonetto2024constrained} & 99.5 & 100.0 & 99.5 [98.8, 99.8] & 1.1 & 24,367.0 & 4.8 \\
-NIDSGAN-style \cite{zolbayar2022nidsgan} & 70.5 & 100.0 & 70.5 [67.6, 73.2] & 2.2 & 38,408.5 & 6.6 \\
-\textbf{FFE (ours)} & 100.0 & 100.0 & \textbf{100.0 [99.6, 100.0]} & 13.0 & 0.127 & 16.9 \\
+Unconstrained feature space & 36.8 & 88.0 & 32.4 [29.6, 35.4] & 66.8 & 0.000 & 0.000 & 48.0 \\
+ZOO-NIDS \cite{chen2017zoo} & 30.3 & 83.2 & 25.2 [22.6, 28.0] & 116.7 & 0.000 & 0.000 & 91.0 \\
+HopSkipJump-NIDS \cite{chen2020hopskipjump} & 100.0 & 0.0 & 0.0 [0.0, 0.4] & 47.0 & -- & -- & 30.3 \\
+MOEVA (search stage of CAA) \cite{simonetto2024constrained, ghamizi2020moeva} & 40.5 & 70.4 & 28.5 [22.7, 35.1] & 330.1 & 0.092 & 0.001 & 253.2 \\
+PSO (Traffic Manipulator, projected) \cite{han2021traffic} & 54.0 & 100.0 & 54.0 [47.1, 60.8] & 182.9 & 16.3 & 0.061 & 142.0 \\
+CAPGD (surrogate) \cite{simonetto2024constrained} & 88.5 & 100.0 & 88.5 [86.4, 90.3] & 3.4 & 46.1 & 0.824 & 15.4 \\
+NIDSGAN-style \cite{zolbayar2022nidsgan} & 61.3 & 100.0 & 61.3 [58.2, 64.3] & 2.5 & 48.0 & 0.836 & 7.1 \\
+\textbf{FFE (ours)} & 99.5 & 100.0 & \textbf{99.5 [98.8, 99.8]} & 16.5 & 0.001 & 0.116 & 15.8 \\
 \midrule
-\multicolumn{7}{@{}l}{\textbf{CIC-IDS2017} (XGBoost: accuracy 99.81\%, test attacks 81,071, detected 80,481)} \\
+\multicolumn{8}{@{}l}{\textbf{CIC-IDS2017} (XGBoost accuracy 99.96\%, test attacks 79,281, detected by both models 79,150)} \\
 \midrule
-Unconstrained feature space & 68.9 & 33.0 & 17.8 [15.6, 20.3] & 36.5 & 37,130.9 & 49.8 \\
-ZOO-NIDS \cite{chen2017zoo} & 65.0 & 26.3 & 9.0 [7.4, 10.9] & 76.4 & 35,141.0 & 83.8 \\
-HopSkipJump-NIDS \cite{chen2020hopskipjump} & 100.0 & 0.0 & 0.0 [0.0, 0.4] & 47.0 & 1,819,529.4 & 61.7 \\
-CAA/MOEVA \cite{simonetto2024constrained, ghamizi2020moeva} & 51.5 & 67.5 & 31.5 [25.5, 38.2] & 276.5 & 218.2 & 388.3 \\
-Traffic Manipulator PSO \cite{han2021traffic} & 32.0 & 100.0 & 32.0 [25.9, 38.8] & 261.8 & 2,629.8 & 358.3 \\
-CAPGD (surrogate) \cite{simonetto2024constrained} & 55.2 & 100.0 & 55.2 [52.1, 58.3] & 9.7 & 18,357.8 & 55.9 \\
-NIDSGAN-style \cite{zolbayar2022nidsgan} & 55.5 & 100.0 & 55.5 [52.4, 58.6] & 2.8 & 18,158.7 & 10.1 \\
-\textbf{FFE (ours)} & 95.9 & 100.0 & \textbf{95.9 [94.5, 97.0]} & 16.7 & 0.315 & 26.0 \\
+Unconstrained feature space & 64.8 & 34.4 & 22.3 [19.8, 25.0] & 37.6 & 0.000 & 0.000 & 30.6 \\
+ZOO-NIDS \cite{chen2017zoo} & 62.2 & 35.0 & 21.8 [19.4, 24.5] & 79.9 & 0.000 & 0.000 & 58.5 \\
+HopSkipJump-NIDS \cite{chen2020hopskipjump} & 100.0 & 0.0 & 0.0 [0.0, 0.4] & 47.0 & -- & -- & 36.5 \\
+MOEVA (search stage of CAA) \cite{simonetto2024constrained, ghamizi2020moeva} & 64.0 & 59.4 & 38.0 [31.6, 44.9] & 225.9 & 0.059 & 0.005 & 201.0 \\
+PSO (Traffic Manipulator, projected) \cite{han2021traffic} & 35.0 & 100.0 & 35.0 [28.7, 41.8] & 251.4 & 15.2 & 0.137 & 203.3 \\
+CAPGD (surrogate) \cite{simonetto2024constrained} & 89.5 & 100.0 & 89.5 [87.4, 91.3] & 3.2 & 15.0 & 0.305 & 15.1 \\
+NIDSGAN-style \cite{zolbayar2022nidsgan} & 65.3 & 100.0 & 65.3 [62.3, 68.2] & 2.4 & 24.6 & 0.490 & 5.8 \\
+\textbf{FFE (ours)} & 99.2 & 100.0 & \textbf{99.2 [98.4, 99.6]} & 14.6 & 0.001 & 0.289 & 10.7 \\
 \midrule
-\multicolumn{7}{@{}l}{\textbf{UNSW-NB15} (XGBoost: accuracy 88.80\%, test attacks 10,701, detected 9,359)} \\
+\multicolumn{8}{@{}l}{\textbf{UNSW-NB15} (XGBoost accuracy 88.51\%, test attacks 11,113, detected by both models 9,673)} \\
 \midrule
-Unconstrained feature space & 16.8 & 50.0 & 9.2 [7.6, 11.2] & 44.9 & 388.2 & 94.8 \\
-ZOO-NIDS \cite{chen2017zoo} & 15.1 & 35.6 & 0.0 [0.0, 0.4] & 136.9 & 497.4 & 280.3 \\
-HopSkipJump-NIDS \cite{chen2020hopskipjump} & 4.6 & 0.0 & 0.0 [0.0, 0.4] & 47.0 & 18,935,252.8 & 91.3 \\
-CAA/MOEVA \cite{simonetto2024constrained, ghamizi2020moeva} & 15.5 & 58.0 & 14.5 [10.3, 20.0] & 433.9 & 30.771 & 960.8 \\
-Traffic Manipulator PSO \cite{han2021traffic} & 43.5 & 100.0 & 43.5 [36.8, 50.4] & 226.8 & 2,331.9 & 475.2 \\
-CAPGD (surrogate) \cite{simonetto2024constrained} & 26.8 & 100.0 & 26.8 [24.1, 29.6] & 15.0 & 5,056.2 & 135.3 \\
-NIDSGAN-style \cite{zolbayar2022nidsgan} & 13.6 & 100.0 & 13.6 [11.6, 15.9] & 4.5 & 2,487.3 & 18.5 \\
-\textbf{FFE (ours)} & 61.5 & 100.0 & \textbf{61.5 [58.4, 64.5]} & 91.4 & 0.915 & 213.6 \\
+Unconstrained feature space & 21.6 & 0.9 & 0.2 [0.1, 0.7] & 48.5 & 0.082 & 0.000 & 49.1 \\
+ZOO-NIDS \cite{chen2017zoo} & 20.6 & 0.0 & 0.0 [0.0, 0.4] & 130.1 & -- & -- & 96.5 \\
+HopSkipJump-NIDS \cite{chen2020hopskipjump} & 8.1 & 0.0 & 0.0 [0.0, 0.4] & 47.0 & -- & -- & 40.6 \\
+MOEVA (search stage of CAA) \cite{simonetto2024constrained, ghamizi2020moeva} & 13.0 & 100.0 & 13.0 [9.0, 18.4] & 445.0 & 0.092 & 0.002 & 339.2 \\
+PSO (Traffic Manipulator, projected) \cite{han2021traffic} & 42.0 & 100.0 & 42.0 [35.4, 48.9] & 228.4 & 21.6 & 0.060 & 164.3 \\
+CAPGD (surrogate) \cite{simonetto2024constrained} & 21.1 & 100.0 & 21.1 [18.7, 23.7] & 16.2 & 53.2 & 1.158 & 73.4 \\
+NIDSGAN-style \cite{zolbayar2022nidsgan} & 11.3 & 100.0 & 11.3 [9.5, 13.4] & 4.5 & 34.0 & 1.211 & 11.2 \\
+\textbf{FFE (ours)} & 57.6 & 100.0 & \textbf{57.6 [54.5, 60.6]} & 93.7 & 5.610 & 0.027 & 89.1 \\
 \bottomrule
 \end{tabular}

@@ -23,18 +23,23 @@ from typing import Dict, List
 import numpy as np
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
+from common import detected_by_all
 from src.datasets.full_data import FEATURES, build_full_dataset, stratified_split
 from src.datasets.schema import get_cicids_schema, project_network_invariants_batch
 from src.models.tree_models import NIDSEnsembleTrainer
+from src.attacks.cost import operational_cost
 from src.attacks.unconstrained import UnconstrainedFeatureSpaceAttack
 from src.attacks.flow_field_evasion import FlowFieldEvasionAttack
 from src.attacks.modern_baselines import (
-    CAPGDTransferAttack, LogStandardizer, NIDSGANAttack, train_surrogate,
+    DEVICE, CAPGDTransferAttack, LogStandardizer, NIDSGANAttack, train_surrogate,
 )
 from src.attacks.baselines import (
     ZOONIDSAttack, HopSkipJumpNIDSAttack, TrafficManipulatorPSOAttack, MOEVAAttack,
 )
+
+import torch  # noqa: E402  (must come after xgboost/lightgbm are loaded)
 
 RESULTS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'results'))
 SEED = 42
@@ -70,35 +75,50 @@ def build_attacks(model, schema, stds, surrogate_bundle) -> Dict[str, tuple]:
         'CAPGD (surrogate transfer)': (CAPGDTransferAttack(model, schema, surrogate, norm), False),
         'NIDSGAN-style generator': (NIDSGANAttack(model, schema, surrogate, norm, generator), False),
         'Flow-Field Evasion (FFE)': (FlowFieldEvasionAttack(model, schema, step_budget=20, feature_stds=stds), False),
+        'FFE without TSBS': (FlowFieldEvasionAttack(model, schema, step_budget=20, feature_stds=stds, enable_tsbs=False), False),
     }
 
 
-def run_attack(attack, cohort: np.ndarray) -> Dict:
+def run_attack(attack, cohort: np.ndarray, schema, stds: np.ndarray) -> Dict:
+    """Attack every flow and score all methods with the same two cost measures.
+
+    ``op_cost`` is the paper's operational cost (delay, padding, chaff, window; see
+    ``src.attacks.cost``), ``dl1`` the feature-normalised L1 distance mean_j |dx_j| / sigma_j and
+    ``schema_cost`` the schema-weighted L1; all are computed here from the original and final
+    flow, so every method is measured identically. Costs are those of the final candidate.
+    """
     outcomes = []
     t0 = time.time()
     for flow in cohort:
         res = attack.attack_sample(flow)
+        delta = np.abs(res.x_adversarial - res.x_original)
         outcomes.append({'success': bool(res.success), 'valid': bool(res.physically_valid),
-                         'queries': int(res.queries_used), 'cost': float(res.weighted_cost)})
+                         'queries': int(res.queries_used),
+                         'op_cost': operational_cost(res.x_original, res.x_adversarial),
+                         'schema_cost': float(np.sum(schema.perturbation_costs * delta)),
+                         'dl1': float(np.mean(delta / stds))})
     elapsed = time.time() - t0
     n = len(outcomes)
     real = sum(o['success'] and o['valid'] for o in outcomes)
     succ = sum(o['success'] for o in outcomes)
     valid = sum(o['valid'] for o in outcomes)
-    real_costs = [o['cost'] for o in outcomes if o['success'] and o['valid']]
+    real_o = [o for o in outcomes if o['success'] and o['valid']]
     return {
         'n': n, 'asr': 100 * succ / n, 'pfr': 100 * valid / n, 'real_asr': 100 * real / n,
         'real_asr_ci95': wilson(real, n),
         'avg_queries': float(np.mean([o['queries'] for o in outcomes])),
-        'median_cost_real': float(np.median(real_costs)) if real_costs else None,
-        'mean_cost_all': float(np.mean([o['cost'] for o in outcomes])),
+        'mean_op_cost_all': float(np.mean([o['op_cost'] for o in outcomes])),
+        'median_op_cost_real': float(np.median([o['op_cost'] for o in real_o])) if real_o else None,
+        'mean_dl1_all': float(np.mean([o['dl1'] for o in outcomes])),
+        'median_dl1_real': float(np.median([o['dl1'] for o in real_o])) if real_o else None,
         'ms_per_flow': 1000 * elapsed / n, 'outcomes': outcomes,
     }
 
 
-def pick_cohort(model, X_test, y_test, fam_test, n: int, rng) -> Dict:
+def pick_cohort(models, X_test, y_test, fam_test, n: int, rng) -> Dict:
+    """Random malicious test flows that every given model detects (one cohort for all models)."""
     mal = np.where(y_test == 1)[0]
-    detected = mal[model.predict_proba(X_test[mal])[:, 1] >= 0.5]
+    detected = mal[detected_by_all(models, X_test[mal])]
     take = rng.choice(len(detected), size=min(n, len(detected)), replace=False)
     idx = detected[take]
     return {'idx': idx, 'X': X_test[idx], 'family': fam_test[idx].tolist(),
@@ -125,6 +145,8 @@ def run_dataset(name: str, n_fast: int, n_slow: int) -> Dict:
         trainer = NIDSEnsembleTrainer(m_type, cfg)
         t0 = time.time()
         trainer.train(X_tr, y_tr)
+        if m_type == 'xgboost':
+            trainer.model.get_booster().set_param({'device': 'cpu'})  # one device for metrics and attacks
         metrics = trainer.evaluate(X_te, y_te)
         metrics['train_seconds'] = time.time() - t0
         out['models'][m_type] = {'clean': metrics}
@@ -132,16 +154,21 @@ def run_dataset(name: str, n_fast: int, n_slow: int) -> Dict:
         print(f'  {m_type}: acc={metrics["accuracy"]:.4f} f1={metrics["f1"]:.4f} '
               f'auc={metrics["roc_auc"]:.4f} ({metrics["train_seconds"]:.1f}s)')
 
-    # Single-flow queries are faster on CPU; predictions are identical.
-    trained['xgboost'].model.get_booster().set_param({'device': 'cpu'})
     norm = LogStandardizer.fit(X_tr)
     t0 = time.time()
     surrogate = train_surrogate(X_tr, y_tr, norm)
-    generator = NIDSGANAttack.train_generator(X_tr[y_tr == 1][:500_000], surrogate, norm, schema)
+    mal_idx = np.random.RandomState(SEED).permutation(np.where(y_tr == 1)[0])[:500_000]
+    generator = NIDSGANAttack.train_generator(X_tr[mal_idx], surrogate, norm, schema)
     out['surrogate_train_seconds'] = time.time() - t0
-    rng = np.random.RandomState(SEED)
+    probe = X_te[np.random.RandomState(SEED).choice(len(X_te), min(50_000, len(X_te)), replace=False)]
+    with torch.no_grad():
+        s_dec = (surrogate(torch.tensor(norm.forward(probe), dtype=torch.float32,
+                                        device=DEVICE)).squeeze(1) > 0).cpu().numpy()
     for m_type, trainer in trained.items():
-        cohort = pick_cohort(trainer, X_te, y_te, fam_te, n_fast, rng)
+        t_dec = trainer.predict_proba(probe)[:, 1] >= 0.5
+        out['models'][m_type]['surrogate_agreement'] = float((s_dec == t_dec).mean())
+    cohort = pick_cohort(list(trained.values()), X_te, y_te, fam_te, n_fast, np.random.RandomState(SEED))
+    for m_type, trainer in trained.items():
         out['models'][m_type]['cohort'] = {k: cohort[k] for k in ('n_malicious_test', 'n_detected', 'family')}
         attacks = build_attacks(trainer, schema, stds, (surrogate, norm, generator))
         # The multi-method table is produced for XGBoost; LightGBM runs FFE only.
@@ -150,7 +177,8 @@ def run_dataset(name: str, n_fast: int, n_slow: int) -> Dict:
         for atk_name in names:
             atk, is_slow = attacks[atk_name]
             sub = cohort['X'][:n_slow] if is_slow else cohort['X']
-            res = run_attack(atk, sub)
+            np.random.seed(SEED)  # stochastic baselines are reproducible
+            res = run_attack(atk, sub, schema, stds)
             out['models'][m_type]['attacks'][atk_name] = res
             print(f'  [{m_type}] {atk_name:28s} N={res["n"]:4d} ASR={res["asr"]:5.1f} '
                   f'PFR={res["pfr"]:5.1f} RealASR={res["real_asr"]:5.1f} '

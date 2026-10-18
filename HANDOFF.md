@@ -1,46 +1,45 @@
 # HANDOFF: "Steering Through the Trees" (FFE), state of work
 
 Repo: `vinhqdang/adversarial_ids`, branch `main` only (owner's rules: push to `main`, no other branch, no AI attribution anywhere, git identity `Vinh <dqvinh87@gmail.com>`).
-Paper: `paper/` (LaTeX, `elsarticle`), author Quang-Vinh Dang. Python: conda env `py313` (call `.../envs/py313/python.exe` directly; `conda run` is broken on this machine). GPU: RTX 5000 Ada, 16 GB.
+Paper: `paper/` (LaTeX, `elsarticle`), author Quang-Vinh Dang. Python: conda env `py313` (call `.../envs/py313/python.exe` directly; `conda run` is broken on this machine). GPU: RTX 5000 Ada, 16 GB, 32 CPU cores. **Import xgboost/lightgbm before torch** (reverse order segfaults).
 
-## 1. What changed in this round (and why)
+## 1. What changed and why
 
-The previous results came from **12,000-flow samples** built by `real_data_loader.py` (byte-range slices of a few raw files, then random subsampling, silent fallback to synthetic data on error). They were not full-data results. This round replaced them:
+The earlier results came from **12,000-flow samples** (byte-range slices of a few raw files, subsampled, silent fallback to synthetic data). They were not full-data results and several headline claims did not survive the full-data rerun. Everything was rebuilt:
 
-* `src/datasets/full_data.py` reads every raw file (`data/raw/`, git-ignored; `download_raw()` fetches them), maps to the 12-feature schema, drops invalid records, removes exact duplicates and label-conflicting records, and writes `data/full/*.parquet` (git-ignored; `*_stats.json` are tracked). `stratified_split` makes the 70/10/20 split after dedup.
-* Datasets: CSE-CIC-IDS2018 (4,300,373 flows kept), CIC-IDS2017 (1,692,949), UNSW-NB15 (120,317; official train+test partition only, 257,673 records, not the full 2.54 M capture). CSE-CIC-IDS2018 files are capped at 1,048,575 rows each in the official distribution.
-* `project_network_invariants_batch` (vectorised P_M, tested equal to the scalar one).
-* New baselines in `src/attacks/modern_baselines.py`: CAPGD (surrogate transfer) and a NIDSGAN-style generator. Both are **our re-implementations**, one MLP surrogate, one hyperparameter setting.
-* `experiments/run_full_benchmark.py` (1,000-flow cohort for fast methods, first 200 for MOEVA/PSO), `run_ablations.py`, `run_transferability.py`, `run_defenses.py` now use the full data (cohort 300 balanced by family; LGAT augmentation capped at 5,000 flows).
-* `experiments/summarize_results.py` generates every manuscript table (`paper/tables/*.tex`) and `results/summary.json` (exact McNemar, XGBoost root-split counts). Nothing in the tables is typed by hand.
-* `paper/references.bib`: 98 entries, 39 new 2021-2026 references verified against Crossref/arXiv; four wrong existing entries corrected (verkerken2026problem, gerlach2025efficiency, lindqvist2025adversarial, simonetto2024constrained); published versions with DOI preferred over arXiv. Entries without a DOI because none exists: `ke2017lightgbm` (NeurIPS), `ring2017flow` (ECCWS, original CIDDS-001 paper), `caratheodory1918vorlesungen` (1918 book).
+* `src/datasets/full_data.py`: reads every raw file (`data/raw/`, git-ignored; `download_raw()` fetches them), maps to the 12-feature schema, drops invalid records, **projects onto the flow manifold, then** collapses exact duplicates (same 12 features and label). Records with identical features but different labels are **kept** and counted. UDP flows are kept (CICFlowMeter window -1 becomes 0). CIC-IDS2017 "Attempted" probes are dropped and "Infiltration - Portscan" is mapped to PortScan. UNSW-NB15 zero-duration flows are dropped. Cache in `data/full/*.parquet` (git-ignored; `*_stats.json` tracked).
+* Kept flows: CSE-CIC-IDS2018 4,968,389; CIC-IDS2017 1,658,869; UNSW-NB15 123,508 (official train+test partition only, 257,673 records, not the 2.54 M capture). The CSE-CIC-IDS2018 distribution is capped at 1,048,575 rows per file.
+* Code review by independent agents found and we fixed: UDP flows were silently dropped from CSE-CIC-IDS2018; FFE's cost was normalised L1 while baselines used schema-weighted cost (the old "7,500x lower cost" was a unit mix-up); FFE silently had no TSBS against CatBoost; transfer was not conditioned on all models detecting the clean flow; the MPS defense zeroed columns (degenerate attack start state) instead of hiding them from the model; cohorts differed between XGBoost and LightGBM.
+* `src/attacks/cost.py`: the paper's operational cost (1e-4/s delay, 1e-2/byte padding, 1/chaff packet, 1e-3 window) applied to every attack's output. `src/attacks/modern_baselines.py`: CAPGD and NIDSGAN-style generator (our re-implementations).
+* `experiments/`: `run_full_benchmark.py`, `run_seeds.py` (5 seeds), `run_ablations.py`, `run_transferability.py`, `run_defenses.py`, `summarize_results.py` (generates every table in `paper/tables/` and `results/summary.json`: exact McNemar with Holm correction, XGBoost root splits, efficiency ratios, seed wins).
+* `paper/references.bib`: 98 entries, 39 new 2021-2026 references verified against Crossref/arXiv; four wrong existing entries corrected; published versions with DOI preferred over arXiv. Entries without DOI because none exists: `ke2017lightgbm`, `ring2017flow` (original CIDDS-001 paper), `caratheodory1918vorlesungen`.
 
-## 2. Results (all from `results/full_*.json`, `ablation_results.json`, `transferability_results.json`, `defense_results.json`)
+## 2. Results (XGBoost, Real ASR = evades and schema-feasible)
 
-XGBoost, Real ASR (evades and physically feasible): FFE 100.0 / 95.9 / 61.5 % on CSE-CIC-IDS2018 / CIC-IDS2017 / UNSW-NB15 with 13.0 / 16.7 / 91.4 queries and 100 % PFR.
+FFE 99.5 / 99.2 / 57.6 % on CSE-CIC-IDS2018 / CIC-IDS2017 / UNSW-NB15 with 16.5 / 14.6 / 93.7 queries; clean accuracy 97.30 / 99.96 / 88.51 %.
 
-* Significantly better than PSO and CAA/MOEVA on all three corpora.
-* CAPGD (surrogate): 99.5 / 55.2 / 26.8 %. **On CSE-CIC-IDS2018 FFE and CAPGD are statistically tied** (McNemar p = 0.0625) and CAPGD needs 1.1 queries vs 13.0. The paper says so; do not overstate.
-* LightGBM: FFE 100.0 / 34.6 / 55.2 %. CIC-IDS2017 LightGBM resists far better than XGBoost; no mechanism was analysed.
-* The "cost" column favours FFE partly by construction (FFE steers by it); the paper states this.
-* Clean accuracy: 98.04 / 99.81 / 88.80 % (XGBoost). UNSW-NB15 is weak because the 12-feature mapping is lossy.
-* Ablation (CSE-CIC-IDS2018, N=300): saturated at 100 % for the full cone, so cost regime and snapping offset are uninformative.
-* Transfer (N=300): XGBoost to LightGBM 69.0, Random Forest 81.3, CatBoost 37.7 %; CatBoost is the hardest target (34-38 %).
-* Defenses (M=5, N=300): undefended 96.3 % ASR, MPS 67.0, LGAT 33.0, MPS+LGAT 38.0 (LGAT vs dual not distinguishable). The old "malleability penalty trap" (MPS 98.9 %) and "5.3 % dual" claims are **not reproduced** at full scale and were removed from the paper. Old numbers live only in `results/legacy_12k_benchmark_results.json`.
+* Significantly better than all seven baselines on every corpus (Holm-adjusted McNemar, largest p 3.7e-11). CAPGD: 88.5 / 89.5 / 21.1; FFE ahead in 14 of 15 retrained runs (one tie).
+* **FFE is white-box; surrogate attacks need far fewer target queries** (CAPGD 3.2-16.2, generator 2.4-4.5). Say so; do not claim query efficiency against them.
+* **TSBS adds at most 3 points of Real ASR and up to 1.8x queries** (ablation). The paper no longer claims snapping is what makes FFE efficient.
+* Cost: FFE lowest under the paper's cost model (median 0.0006 / 0.0009 / 5.6 vs 15-53), but FFE optimises that cost; in normalised L1 it is not smaller than PSO on two corpora.
+* Naive and ZOO have many feasible evasions at ~zero cost on CSE-CIC-IDS2018 (feasible share 88% / 83%): consistent with moving only the coupled rates inside the 5% tolerance of the feasibility check. The check is not exact.
+* LightGBM resists FFE on CIC-IDS2017 (35.1% vs 99.2%); not explained.
+* Ablation (CSE-CIC-IDS2018, N=283): saturated at 98.9% for the full cone; cost regime and snapping offset uninformative.
+* Transfer (N=221 flows detected by all four architectures): 55.7-78.7% to non-CatBoost targets, 24.0% to CatBoost.
+* Defenses (CSE-CIC-IDS2018, FFE M=5 / M=20 / CAPGD): undefended 84.1 / 98.9 / 88.3; MPS 78.8 / 78.8 / 71.9; LGAT 46.5 / 80.3 / 74.3; MPS+LGAT 62.0 / 62.0 / 55.1. LGAT mainly protects against the attack it trained on. No clean-accuracy cost.
 
 ## 3. Manuscript (`paper/`)
 
-Target: *Information Sciences*; `elsarticle` review layout; **40 pages** including references (limit 40, currently exactly at the limit; any addition must be paid for by cutting or moving text to the supplementary). Abstract 172 words; highlights in `highlights.tex` (5 bullets, <= 85 characters).
-Supplementary (`supplementary.tex`, 10 pages): proofs, auxiliary algorithms, plus per-family table, full ablation table and transferability table (`supplementary_extra.tex`).
-Build everything: `bash paper/build.sh`. Tests: `pytest` (68 tests pass; coverage of the new modules 93-98 %).
-
-Section map: `sec1` intro, `sec2` related work + taxonomy table, `sec3`-`sec5` formulation/geometry/algorithm, `sec6` setup, `sec7` master results, `sec8` ablation/transfer summary, `sec9` defenses, discussion and conclusion inside `elsevier_manuscript.tex`.
+Target: *Information Sciences*; review layout; **exactly 40 pages** including references (limit 40, no slack: any addition must be paid for by cutting text or moving material to the supplementary). Abstract 184 words; highlights in `highlights.tex`.
+`supplementary.tex` (10 pages): proofs, auxiliary algorithms, plus `supplementary_extra.tex` (per-family, TSBS, ablation and transfer tables). Discussion and conclusion are in `sec_discussion.tex`.
+Build: `bash paper/build.sh`. Tests: `pytest` (all pass; new modules 93-98% covered).
 
 ## 4. Open items
 
-1. **Further datasets.** The owner has CIDDS-001, USB-IDS-1, InSDN and others; not found on this machine and no path was given. To add one: add an alias table to `ALIASES` in `full_data.py`, a family mapping, a builder branch, and a dataset row in `experiments/summarize_results.py::DATASETS`; then rerun the benchmark. The page limit means the new rows must go to the supplementary.
-2. **Seeds.** One training seed per experiment; CIs capture cohort sampling only. A multi-seed run (retrain + new cohort) is the main remaining statistical gap.
-3. **Defenses** were only attacked with FFE (the attack that generated the augmentation) and only on CSE-CIC-IDS2018. Evaluate against CAPGD and on the other corpora.
-4. **LightGBM/CIC-IDS2017** gap is unexplained; inspect LightGBM splits.
-5. White-box tree attacks (LT-Attack, Cascioli et al.) are cited but not run (need tree structure, no flow constraints).
-6. Hardware/line-rate replay of the packet realisation is still future work.
+1. **More datasets.** The owner has CIDDS-001, USB-IDS-1, InSDN and others; none was found on this machine and no path was given. To add one: alias table in `ALIASES`, family mapping and builder branch in `full_data.py`, a row in `summarize_results.DATASETS`, rerun. New rows must go to the supplementary because of the page limit.
+2. **Defenses** are evaluated on one corpus, one seed, FFE and CAPGD only; the attacker is not adaptive to the training procedure.
+3. **White-box tree attacks** (LT-Attack, Cascioli et al.) are cited, not run; the novelty claim against them is untested.
+4. **Packet-level validation**: feasibility is schema conformance only; replay with feature re-extraction is not done.
+5. **Baseline tuning**: default budgets, one small surrogate; no sensitivity study. Repaired variants of ZOO/HSJ not run.
+6. LightGBM/CIC-IDS2017 gap, and why CatBoost resists transfer, are unexplained.
+7. Random IID split: near-duplicate flows can sit on both sides; a time- or host-grouped split would give lower, more realistic accuracies.

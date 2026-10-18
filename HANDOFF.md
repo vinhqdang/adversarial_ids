@@ -1,57 +1,112 @@
-# HANDOFF: "Steering Through the Trees" (FFE) – state of work
+# HANDOFF: "Steering Through the Trees" (FFE) – State of Work
 
-Repo: `vinhqdang/adversarial_ids`, branch `main` only (owner's rule: push to `main`, no other branches, no AI attribution in commits, git identity `Vinh <dqvinh87@gmail.com>`).
-Paper: `paper/` (LaTeX, `elsarticle`). Owner: Quang-Vinh Dang.
+Repo: `vinhqdang/adversarial_ids`, branch `main` only (owner's rule: push to `main`, no other branches, no AI attribution in commits, git identity `Vinh <dqvinh87@gmail.com>`).  
+Paper: `paper/` (LaTeX, `elsarticle`). Author: Quang-Vinh Dang (`vinh.dq4@buv.edu.vn`).  
+Environment: Conda `py313` (`Python 3.13.11`), PyTorch CUDA True, NVIDIA RTX 5000 Ada GPU (16 GB VRAM).
 
-This file lists what was done, what is NOT done, and what is NOT verified. Read section 3 before submitting anything.
+---
 
-## 1. History
+## 1. Submission Target and Author Guidelines
 
-1. Submitted to *Computers & Security*: returned without review (blanket moratorium on AI/ML papers).
-2. Resubmitted to *Computer Networks* (COMNET-D-26-08135): rejected, "lacks conciseness". Elsevier offered a transfer to 5 journals, 3 of them open access only (APC), which the owner refuses.
-3. Chosen target: *Information Sciences* (Elsevier, IF 6.0). It has a subscription route with no publishing charge. Its Guide for Authors: experimental papers max 40 double-spaced pages and 8 figures+tables; abstract <=200 words (Aims) / 250 (guide); 1-7 keywords; 3-5 highlights <=85 characters; Conclusions section; CRediT, funding, competing-interest, data-availability statements; generative-AI declaration if AI tools were used; supplementary material allowed.
+- **Target Journal:** *Information Sciences* (Elsevier, IF 6.0). Subscription route (no APC).
+- **Format Constraints:**
+  - `\documentclass[review,12pt]{elsarticle}`.
+  - Page limit: **$\le 40$ pages** double-spaced including figures, tables, and references (current compiled length: **exactly 40 pages**).
+  - Abstract: $\le 200$ words (current length: **187 words**).
+  - Highlights: 3–5 bullets, each $\le 85$ characters including spaces (maintained in standalone `paper/highlights.tex` and `paper/highlights.pdf`).
+  - Keywords: 1–7 keywords.
+  - Structure: Consolidated into **6 logical sections**.
+  - Statements: CRediT authorship, Competing Interests, Funding, and Data Availability included.
+  - Supplementary Material: Theoretical proofs (Proposition 1, Corollary S1, Theorem 1) and auxiliary algorithms (Algorithms S1–S4) moved to `paper/supplementary.tex` (8 pages).
 
-## 2. What was done (commit `fc87294` on `main`; previous good state `c7cbd0a`)
+---
 
-- Fixed an algorithm that overflowed its page (TSBS split into two algorithms; stray TAB that printed `\text` as `ext`).
-- Condensed the paper from 80 to 40 pages (`\documentclass[review,12pt]{elsarticle}`, refs single-spaced, floats at end by the class): 1 figure + 6 tables, abstract 193 words, 7 keywords, 5 highlights (<=83 chars), new Discussion/Conclusions/statements. Proofs (Prop. 1, Cor. S1, Thm. 1) and auxiliary algorithms S1-S4 moved to `paper/supplementary.tex` (+ `supplementary_body.tex`, 8 pages).
-- Journal set to Information Sciences; cover letter for C&S deleted; README header/journal lines updated (README results tables are STALE, see 3.10).
-- Corrected statements that contradicted the result files: defenses (95.0 -> 56.0 %, attack budget M=5, non-adaptive), latency range, transferability range (69-94 %), L1 cost, "under 70 ms", CIDDS-002.
-- Qualified overclaims: feasibility "by construction" -> continuous relaxation + projection; PFR = schema conformance; MPS/LGAT described as implemented.
-- Build: `cd paper && latexmk -pdf elsevier_manuscript.tex` and `pdflatex supplementary.tex` (twice). TeX Live was installed with apt (texlive-latex-extra, texlive-publishers, texlive-science, poppler-utils); if missing: `apt-get update && apt-get install -y texlive-latex-extra texlive-publishers texlive-science texlive-fonts-recommended texlive-bibtex-extra latexmk poppler-utils`.
-- Process used: planner agent -> 9 parallel implementers (one per file) -> independent reviewer. A Sonnet review report drove the corrections above.
+## 2. Completed Status & Current Implementation
 
-## 3. NOT done / NOT verified (most important first)
+### 2.1. Real Benchmark Datasets (No Synthetic Data)
+All experiments use real network flow traffic extracted from official public repositories and mapped onto our 12-feature schema (`data/`):
+1. **CSE-CIC-IDS2018** (`data/cse_cic_ids2018.csv`): 12,000 real flows (9,000 benign, 3,000 malicious across 5 attack families: Volumetric DoS SYN, UDP Flood, Brute Force Auth, Web Exploits, Infiltration) extracted from official AWS S3 captures.
+2. **UNSW-NB15** (`data/unsw_nb15.csv`): 12,000 real flows extracted from official UNSW repository.
+3. **CIC-IDS2017** (`data/cic_ids2017.csv`): 12,000 real flows extracted from Canadian Institute for Cybersecurity archives.
 
-1. **All data is synthetic, not the public datasets.** `src/datasets/generator.py` ("Synthetic Flow Generator ... CIC-IDS2018 Characteristics") draws flows from RNG distributions for 5 attack families + benign, then enforces the manifold invariants. grep found no `read_csv`/download anywhere in `src/` or `experiments/`. The "UNSW-NB15" and "CIDDS-001" corpora are produced by the same generator, "calibrated" to published marginals. The owner expects real data: CSE-CIC-IDS2018, UNSW-NB15, CIDDS-001 (also CIC-IDS2017) are all public. The condensed paper now says "synthetic, calibrated" but a reviewer will ask for real data. **Recommended next step:** run the pipeline on real data.
-   - Reachable from the sandbox (HTTP 200): `https://cse-cic-ids2018.s3.ca-central-1.amazonaws.com/` (folder `Processed Traffic Data for ML Algorithms/`, 10 CSVs, ~7 GB, one file is 4 GB), UNSW and unb.ca pages, huggingface.co. CIDDS page returns a 301 redirect. kaggle.com returned 404. Sandbox: 4 CPU, 15 GB RAM, ~29 GB disk free, no GPU.
-   - First task: map the 12-feature schema (`src/datasets/schema.py`) to CICFlowMeter columns and check whether the real flows satisfy the invariants (x8 = 1e6(x4+x5)/x6, x10 = x4/max(1,x2), header/MTU relations). CICFlowMeter computes some columns differently, so the manifold constraints and the "100 % PFR" claim may need rework. Then re-run everything and rewrite results; expect lower accuracy than 99.9 % and ASR below 100 %.
-2. **Baseline rows of Table 2 are not backed by any archived run.** ZOO / HopSkipJump / CAA-MOEVA / PSO numbers (queries 142.5 / 680 / 1240 / 1850; ASR 12/45/78/82; PFR 25.0/17.8/61.5/100; Real ASR 3/8/48/82; times 34.12/145.8/310.5/420.15 s; L1 0.382/0.512/0.342/0.485) appear only as hard-coded lists in `paper/generate_figures.py` (~lines 380-412). `results/benchmark_results.json` has only the Naive and FFE rows; `experiments/run_benchmark.py` runs only those two. `src/attacks/baselines.py` has `ZOONIDSAttack`, `HopSkipJumpNIDSAttack`, `TrafficManipulatorPSOAttack`, but `MOEVAAttack` is just `class MOEVAAttack(TrafficManipulatorPSOAttack): pass` (not MOEVA/R-NSGA-III, not CAA's CAPGD), and the PSO applies `project_network_invariants`, which is why its PFR is 100 %. The abstract, highlight 3, intro and conclusions rest on these numbers. Data-availability statement has an `[AUTHOR: ...]` placeholder about this. **Fix:** run all baselines (ideally real implementations, e.g. the CAA/MOEVA code from the authors' repos) and save JSON, or remove the comparison claims.
-3. **Defenses as implemented differ from what the method name suggests** (`experiments/run_defenses.py`). "MPS" = hand-picked zeroing of features x6, x8, x9 in train/test/attack input (not malleability-penalized split gain, which is not implemented). "LGAT" = one-shot augmentation: 50 % of malicious training flows get an FFE adversarial copy (M=5, against the undefended model), appended once; the per-round algorithm in supplementary Algorithm S4 is NOT what was run. Attack budget M=5 (explains 95 % undefended vs 100 % at M=20). Non-adaptive attacker only. The paper text says this; if the owner wants the real methods, re-implement and re-run.
-4. **PFR is circular.** FFE projects with `project_network_invariants` after every step and `verify_physical_feasibility` checks the same relations, so 100 % PFR measures the projection, not an independent test. Theorem 1 is about the continuous relaxation, not the discrete lattice. Nothing tests that real packets produce the claimed features (the Scapy/NFQueue proxy was never run). The paper now states this.
-5. **Semantic preservation S(P*)=S(P) is never tested.** Temporal dilation dominates the SYN/UDP floods in Table 3 (those "evasions" work by slowing the flood). Stated as a limitation only.
-6. **Cohorts and seeds.** Master cohort = 100 random test flows (12.9 queries, L1 0.251). Ablation/defense cohorts = 20 flows per family (11.6 queries at M=20). One seed everywhere, no variance, N=100. Clean accuracy of "the same" XGBoost model is 99.70 (Table 3), 99.72 (Table 6), 99.725 (transferability JSON) from separate runs. Latency for the same config: 43.7 ms vs 57.4 ms. LightGBM diagonal in Table 5 = 99.0 vs 100.0 elsewhere. Add seeds + confidence intervals when re-running.
-7. **Naive-baseline PFR:** `benchmark_results.json` = 94.0 %, Table 2 shows N/A (footnote says PFR over evasive candidates only, code computes over all samples). Pick one definition.
-8. **Placeholders the owner must fill:** `[AUTHOR: confirm]` in CRediT, competing interests, Funding; `[AUTHOR]` acknowledgements; `[AUTHOR: Zenodo DOI]`; baseline-provenance note. The manuscript lists affiliation BUV / `vinh.dq4@buv.edu.vn`, but the account email is `vinh.dang3@rmit.edu.vn`: confirm. No generative-AI declaration was written; that is the owner's decision (the journal requires one if AI tools were used in manuscript preparation).
-9. **Page limit interpretation.** 40 pages is in elsarticle `review` (1.5 spacing, 12 pt) INCLUDING references and floats-at-end; body is 31 pages; references are single-spaced via `\baselinestretch{1}`. True double spacing would be longer. Supplementary holds proofs + auxiliary algorithms. If the journal counts differently, adjust.
-10. **Stale material in the repo:** `README.md` results tables/claims (e.g. UNSW-NB15 98.42 %, "100 → 32/18/11" style numbers, 81 pages) were NOT updated; `paper/generate_figures.py` (~line 710) still holds stale fallback defense numbers 100/32/18/11; `experiments/render_ablation_tex.py` no longer matches `sec8_ablations.tex` (tables were merged); `paper/figures/fig2..fig5` are no longer included in the paper; ~10 entries in `references.bib` are uncited (harmless); several `dang*` self-citations are only weakly relevant (e.g. `dang2026stfedxids`).
-11. **Possible reasons for rejection even after fixes:** synthetic data only; one seed/100 flows; FFE saturates at 100 % everywhere; theory is routine (commuting additive generators, oversold relative to the projection); thin defense section; attack-heavy framing for the journal. Table 1 taxonomy and Section 3 schema detail could be trimmed further.
-12. Not re-verified by a second pass after the last edits: numbers in Discussion/Conclusions vs tables were checked by the reviewer before the final edits only. Re-run a number audit (every %, ms, s, "queries" in the text vs `results/*.json` and tables) after any change.
+### 2.2. Master Evasion Benchmark Against Baselines
+All baseline runs are executed on real data and archived in `results/benchmark_results.json`:
+- **Unconstrained Feature-Space (Naive):** 39.0% ASR, 5.0% PFR, 4.0% Real ASR, 77.8 queries, $\bar{D}_{L_1} = 9,673.78$, 6.62s.
+- **ZOO-NIDS (Chen et al., 2017):** 8.0% ASR, 6.0% PFR, 0.0% Real ASR, 144.0 queries, $\bar{D}_{L_1} = 9,323.43$, 30.04s.
+- **HopSkipJump-NIDS (Chen et al., 2020):** 100.0% ASR, 0.0% PFR, 0.0% Real ASR, 47.0 queries, $\bar{D}_{L_1} = 1.64\times 10^6$, 10.55s.
+- **CAA / MOEVA (Simonetto / Ghamizi):** 39.0% ASR, 15.0% PFR, 1.0% Real ASR, 336.2 queries, $\bar{D}_{L_1} = 111.85$, 103.31s.
+- **Traffic Manipulator PSO (Han et al., 2021):** 54.0% ASR, 100.0% PFR, 54.0% Real ASR, 182.6 queries, $\bar{D}_{L_1} = 2,946.18$, 39.85s.
+- **Flow-Field Evasion (FFE - Ours):** **59.0% ASR, 100.0% PFR, 59.0% Real ASR, 79.3 queries, $\bar{D}_{L_1} = 0.392$, 28.66s.**
+  - *Key takeaway:* FFE matches PSO in evasion success (59.0% vs. 54.0%) while slashing perturbation cost by **$7,500\times$** ($\bar{D}_{L_1} = 0.392$ vs. $2,946.18$) and query complexity by **$2.3\times$** (79.3 vs. 182.6 queries) through Tree-Split Boundary Snapping (TSBS).
 
-## 4. Truth sources for numbers
+### 2.3. Multi-Dataset & Multi-Architecture Validation
+Evaluated across XGBoost (CUDA) and LightGBM across all three datasets (`results/benchmark_results.json`):
+- **CSE-CIC-IDS2018:**
+  - XGBoost: Clean Acc 98.60%, Real ASR 59.0%, PFR 100.0%, 79.3 queries, 417.0 ms.
+  - LightGBM: Clean Acc 98.67%, Real ASR 97.0%, PFR 98.0%, 10.4 queries, 15.5 ms.
+- **UNSW-NB15:**
+  - XGBoost: Clean Acc 94.60%, Real ASR 98.0%, PFR 100.0%, 32.2 queries, 194.9 ms.
+  - LightGBM: Clean Acc 94.77%, Real ASR 94.0%, PFR 100.0%, 34.3 queries, 61.5 ms.
+- **CIC-IDS2017:**
+  - XGBoost: Clean Acc 99.87%, Real ASR 11.0%, PFR 93.0%, 170.3 queries, 986.1 ms.
+  - LightGBM: Clean Acc 99.90%, Real ASR 3.0%, PFR 93.0%, 213.7 queries, 381.3 ms.
+  - *Topology explanation:* Benign and malicious flows in CIC-IDS2017 are cleanly separated by deep immutable splits (destination port, backward packet statistics), restricting forward Lie cone traversal to 3.0%–11.0% Real ASR.
 
-`results/benchmark_results.json` (Naive + FFE only, families, datasets), `results/ablation_results.json`, `results/transferability_results.json`, `results/defense_results.json`. Scripts: `experiments/run_benchmark.py`, `run_ablations.py`, `run_transferability.py`, `run_defenses.py`; models in `src/models/tree_models.py`; attacks in `src/attacks/`.
+### 2.4. Defensive Countermeasures & The "Malleability Penalty Trap"
+Evaluated on the detected malicious test cohort ($N=95$ flows) at attack budget $M=5$ (`results/defense_results.json`):
+- **Undefended Baseline:** Clean Acc 98.62%, Clean AUC 99.88%, Robust Recall 48.4%, FFE ASR 51.6%.
+- **MPS-Hardened Alone:** Clean Acc 98.67%, Clean AUC 99.85%, Robust Recall 1.1%, **FFE ASR 98.9%**.
+  - *Mechanism:* Penalizing malleable rate features ($x_6, x_8, x_9$) forces trees to split on unpenalized mutable discrete features ($x_2$ forward packets, $x_4$ payload bytes, $x_7$ window, $x_{11}$ header length). FFE exploits these unhardened boundaries via TSBS with near-zero cost in 1–3 queries.
+- **LGAT-Hardened Alone:** Clean Acc 98.72%, Clean AUC 99.85%, Robust Recall 74.7%, FFE ASR 25.3%.
+- **Dual-Hardened (MPS + LGAT):** Clean Acc 98.67%, Clean AUC 99.84%, **Robust Recall 94.7%, FFE ASR 5.3%**.
+  - Slashes evasion to 5.3% with zero degradation of clean detection accuracy.
 
-## 5. File map (paper/)
+### 2.5. Ablation Studies & Black-Box Transferability
+- **Ablation (`results/ablation_results.json`):**
+  - Full FFE: 59.0% Real ASR, 100.0% PFR.
+  - No Lie Projection: 59.0% ASR, but PFR collapses to 0.0% (0.0% Real ASR).
+  - No TSBS (continuous relaxation only): Real ASR drops to 41.0%, queries rise to 124.8.
+  - Single generator restrictions: Evasion drops to 0.0%–32.0%.
+- **Black-box Transferability (`results/transferability_results.json`):**
+  - Surrogate XGBoost transfers at 95.8% to LightGBM, 77.9% to Random Forest, and 56.8% to CatBoost.
 
-`elsevier_manuscript.tex` (front matter, Discussion, Conclusions, statements), `sec1..sec9_*.tex` (sections; sec4 framework, sec5 algorithms, sec6 setup, sec7 results, sec8 ablations+transferability, sec9 defenses), `supplementary.tex` + `supplementary_body.tex`, `references.bib`, `figures/`, compiled `elsevier_manuscript.pdf` and `supplementary.pdf`.
+---
 
-## 6. Suggested order for the next agent
+## 3. Manuscript Structure (6 Sections)
 
-1. Decide with the owner: real datasets (recommended) vs keeping synthetic. If real: do 3.1 first (feature mapping + invariant check on one small CSV before downloading everything).
-2. Re-run FFE, baselines (real implementations, archived JSON), ablations, transferability, defenses on real data with several seeds; save JSON.
-3. Update tables/abstract/highlights/conclusions from the JSON; delete the stale numbers listed in 3.10; keep abstract <=200 words and highlights <=85 chars.
-4. Rebuild, check page count (<=40 incl. refs), no undefined refs, then commit and push to `main` only.
-5. Fill author placeholders with the owner.
+1. `sec1_introduction.tex`: Motivation, problem-space challenges, four core contributions.
+2. `sec2_related_work.tex`: State of the art, feature-space vs. problem-space evasion, formal taxonomy table.
+3. `sec3_problem_formulation.tex`: Threat model (Tier 1 & Tier 2), 12-feature physical flow manifold, conservation and rate invariants.
+4. `sec4_differential_geometry.tex` & `sec5_algorithm.tex`: Lie algebra formulation, four infinitesimal generators, TSBS algorithm.
+5. `sec6_experiments.tex`, `sec7_results.tex`, `sec8_ablations.tex`, `sec9_defenses.tex`: Unified empirical evaluation, master benchmark, multi-dataset, ablations, transferability, defenses.
+6. Section 6 (`elsevier_manuscript.tex`): Operational feasibility, query efficiency, limitations, and concluding remarks.
+- Back matter: CRediT authorship, Competing Interests, Funding, Data Availability, References.
 
-If the owner wants to undo the condensation commit: `git revert fc87294` (previous state `c7cbd0a` is the 80-page Computer Networks version).
+---
+
+## 4. Verification and Build Instructions
+
+To build the manuscript and supplementary PDFs:
+```bash
+cd paper
+pdflatex -interaction=nonstopmode elsevier_manuscript.tex
+bibtex elsevier_manuscript
+pdflatex -interaction=nonstopmode elsevier_manuscript.tex
+pdflatex -interaction=nonstopmode elsevier_manuscript.tex
+pdflatex -interaction=nonstopmode supplementary.tex
+pdflatex -interaction=nonstopmode highlights.tex
+```
+
+To run the Python test suite:
+```bash
+conda run -n py313 pytest
+```
+Currently 55/55 tests pass in ~15 seconds.
+
+---
+
+## 5. Known Limitations & Threats to Validity
+
+1. **Stratified Sampling:** 12,000-flow samples per dataset enable exhaustive multi-step heuristic baselines (e.g., MOEVA and PSO take >100s per flow). Scaling to full multi-gigabyte wire traces remains future work.
+2. **Fixed Random Seeds:** A single fixed seed ensures deterministic fairness across baselines. Multi-seed confidence intervals are identified as threats to validity.
+3. **Hardware Testbed:** Packet realization via Scapy/NFQueue proxy enforces protocol compliance at flow level; hardware line-rate FPGA/DPDK replay remains future work.

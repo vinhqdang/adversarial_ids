@@ -26,7 +26,7 @@ Traffic Manipulator PSO \cite{han2021traffic} & 54.0 & 100.0 & 54.0 & 182.6 & 2,
 
 Table~\ref{tab:master_evasion_benchmark} compares FFE with the five baselines on real network flows. Several baselines evade the detector mathematically but produce physically unrealizable flow telemetry. For example, HopSkipJump-NIDS achieves 100.0\% unconstrained ASR, yet achieves 0.0\% Physical Feasibility Rate (PFR) and 0.0\% Real ASR because it projects candidate flows into non-physical coordinates with an astronomical perturbation cost ($\bar{D}_{L_1} = 1.64\times 10^6$). Similarly, ZOO-NIDS and CAA/MOEVA achieve only 0.0\% and 1.0\% Real ASR (with PFRs of 6.0\% and 15.0\%), demonstrating that unconstrained mutations severely decouple conservation laws and transport header invariants.
 
-In contrast, Traffic Manipulator PSO and Flow-Field Evasion operate strictly within valid physical flow semantics, achieving 100.0\% PFR. However, FFE outperforms Traffic Manipulator PSO in Real ASR (59.0\% vs. 54.0\%) while requiring less than half the query complexity (79.3 vs. 182.6 queries per flow) and over 7,500$\times$ lower normalized perturbation cost ($\bar{D}_{L_1} = 0.392$ vs. 2,946.18). FFE achieves this efficiency by navigating along infinitesimal Lie generators and snapping to tree-split boundaries via TSBS, rather than relying on stochastic swarm dispersion.
+Both Traffic Manipulator PSO and Flow-Field Evasion operate strictly within valid physical flow semantics, achieving 100.0\% PFR and reaching comparable evasion rates on CSE-CIC-IDS2018 (59.0\% for FFE vs. 54.0\% for PSO). However, their operational footprints diverge by orders of magnitude. Because PSO optimizes blind particle velocities without knowledge of tree decision geometries, it requires $2.3\times$ higher query complexity (182.6 vs. 79.3 queries) and incurs an astronomical $7,500\times$ higher perturbation overhead ($\bar{D}_{L_1} = 2,946.18$ vs. $0.392$), aggressively injecting chaff packets and delays. In contrast, FFE navigates along infinitesimal Lie generators and snaps to the nearest boundary partition via TSBS, achieving extreme perturbation parsimony and query efficiency. FFE's primary advantage over packet-space heuristics therefore lies in surgical geometric boundary traversal rather than brute-force evasion margins.
 
 \subsection{Per-family and cross-dataset validation}
 \label{sec:multidataset_results}
@@ -39,30 +39,30 @@ Table~\ref{tab:multidataset_benchmark} reports FFE by attack family on CSE-CIC-I
 \caption{Flow-Field Evasion across attack families on CSE-CIC-IDS2018 against CUDA XGBoost (Panel A, $N = 100$ flows per family) and across datasets and target models (Panel B, $N = 100$ flows per row).}\label{tab:multidataset_benchmark}
 \resizebox{\textwidth}{!}{%
 {\footnotesize\setlength{\tabcolsep}{3pt}%
-\begin{tabular}{@{}llccclc@{}}
+\begin{tabular}{@{}llcccccc@{}}
 \toprule
-\multicolumn{7}{@{}l}{\textbf{Panel A: attack family breakdown (CSE-CIC-IDS2018, XGBoost)}} \\
+\multicolumn{8}{@{}l}{\textbf{Panel A: attack family breakdown (CSE-CIC-IDS2018, XGBoost)}} \\
 \midrule
-\multicolumn{2}{@{}l}{\textbf{Attack family}} & \textbf{Real ASR (\%)} & \textbf{PFR (\%)} & \textbf{Avg Queries} & \multicolumn{2}{c}{\textbf{Avg Latency (ms)}} \\
+\multicolumn{2}{@{}l}{\textbf{Attack family}} & \textbf{Real ASR (\%)} & \textbf{PFR (\%)} & \textbf{Avg Queries} & \multicolumn{3}{c}{\textbf{Avg Latency (ms)}} \\
 \midrule
-\multicolumn{2}{@{}l}{Family 1: Volumetric DoS SYN Flood} & 0.0 & 100.0 & 175.0 & \multicolumn{2}{c}{897.4} \\
-\multicolumn{2}{@{}l}{Family 2: UDP Volumetric Flood} & 96.0 & 96.0 & 30.3 & \multicolumn{2}{c}{183.6} \\
-\multicolumn{2}{@{}l}{Family 3: Brute Force Authentication} & 0.0 & 100.0 & 175.0 & \multicolumn{2}{c}{915.3} \\
-\multicolumn{2}{@{}l}{Family 4: Web Application Exploits} & 100.0 & 100.0 & 12.4 & \multicolumn{2}{c}{74.2} \\
-\multicolumn{2}{@{}l}{Family 5: Low-and-Slow Infiltration} & 100.0 & 100.0 & 6.5 & \multicolumn{2}{c}{40.3} \\
+\multicolumn{2}{@{}l}{Family 1: Volumetric DoS SYN Flood} & 0.0 & 100.0 & 175.0 & \multicolumn{3}{c}{897.4} \\
+\multicolumn{2}{@{}l}{Family 2: UDP Volumetric Flood} & 96.0 & 96.0 & 30.3 & \multicolumn{3}{c}{183.6} \\
+\multicolumn{2}{@{}l}{Family 3: Brute Force Authentication} & 0.0 & 100.0 & 175.0 & \multicolumn{3}{c}{915.3} \\
+\multicolumn{2}{@{}l}{Family 4: Web Application Exploits} & 100.0 & 100.0 & 12.4 & \multicolumn{3}{c}{74.2} \\
+\multicolumn{2}{@{}l}{Family 5: Low-and-Slow Infiltration} & 100.0 & 100.0 & 6.5 & \multicolumn{3}{c}{40.3} \\
 \midrule
-\multicolumn{2}{@{}l}{\textbf{Unweighted mean (5 families)}} & \textbf{59.2} & \textbf{99.2} & \textbf{79.8} & \multicolumn{2}{c}{\textbf{422.2}} \\
+\multicolumn{2}{@{}l}{\textbf{Unweighted mean (5 families)}} & \textbf{59.2} & \textbf{99.2} & \textbf{79.8} & \multicolumn{3}{c}{\textbf{422.2}} \\
 \midrule
-\multicolumn{7}{@{}l}{\textbf{Panel B: cross-dataset and model architecture validation}} \\
+\multicolumn{8}{@{}l}{\textbf{Panel B: cross-dataset and model architecture validation}} \\
 \midrule
-\multicolumn{2}{@{}l}{\textbf{Dataset / model}} & \textbf{Clean Acc (\%)} & \textbf{Clean AUC (\%)} & \textbf{Real ASR (\%)} & \textbf{Avg Queries} & \textbf{Avg Latency (ms)} \\
+\textbf{Dataset} & \textbf{Model} & \textbf{Clean Acc (\%)} & \textbf{Clean AUC (\%)} & \textbf{Real ASR (\%)} & \textbf{PFR (\%)} & \textbf{Queries} & \textbf{Latency (ms)} \\
 \midrule
-CSE-CIC-IDS2018 & XGBoost & 98.60 & 99.87 & 59.0 & 79.3 & 417.0 \\
-CSE-CIC-IDS2018 & LightGBM & 98.67 & 99.85 & 97.0 & 10.4 & 15.5 \\
-UNSW-NB15 & XGBoost & 94.60 & 98.76 & 98.0 & 32.2 & 194.9 \\
-UNSW-NB15 & LightGBM & 94.77 & 98.70 & 94.0 & 34.3 & 61.5 \\
-CIC-IDS2017 & XGBoost & 99.87 & 100.00 & 11.0 & 170.3 & 986.1 \\
-CIC-IDS2017 & LightGBM & 99.90 & 100.00 & 3.0 & 213.7 & 381.3 \\
+CSE-CIC-IDS2018 & XGBoost & 98.60 & 99.87 & 59.0 & 100.0 & 79.3 & 417.0 \\
+CSE-CIC-IDS2018 & LightGBM & 98.67 & 99.85 & 97.0 & 98.0 & 10.4 & 15.5 \\
+UNSW-NB15 & XGBoost & 94.60 & 98.76 & 98.0 & 100.0 & 32.2 & 194.9 \\
+UNSW-NB15 & LightGBM & 94.77 & 98.70 & 94.0 & 100.0 & 34.3 & 61.5 \\
+CIC-IDS2017 & XGBoost & 99.87 & 100.00 & 11.0 & 93.0 & 170.3 & 986.1 \\
+CIC-IDS2017 & LightGBM & 99.90 & 100.00 & 3.0 & 93.0 & 213.7 & 381.3 \\
 \bottomrule
 \end{tabular}%
 }}
@@ -70,4 +70,4 @@ CIC-IDS2017 & LightGBM & 99.90 & 100.00 & 3.0 & 213.7 & 381.3 \\
 
 As shown in Panel A, FFE exhibits distinct physical evasion behavior depending on the flow geometry of each attack family. Low-and-slow infiltration (100.0\% Real ASR, 6.5 queries) and web application exploits (100.0\% Real ASR, 12.4 queries) evade with high efficiency via window morphing and chaff injection. UDP volumetric floods achieve 96.0\% Real ASR at 30.3 queries via rate dilution ($\vec{v}_{\text{time}}$). Conversely, DoS SYN floods and SSH/FTP brute force present strict physical hurdles on CSE-CIC-IDS2018 due to deep tree splits on destination port (which is immutable) and fixed packet length bounds, requiring additional budget.
 
-Panel B demonstrates the cross-dataset validity of FFE across three independent benchmark datasets and two leading gradient boosting implementations (XGBoost and LightGBM). On UNSW-NB15, FFE achieves 98.0\% and 94.0\% Real ASR on XGBoost and LightGBM, respectively, with moderate query budgets (32.2 and 34.3 queries). On CSE-CIC-IDS2018, LightGBM is substantially more vulnerable than XGBoost (97.0\% vs. 59.0\% Real ASR), requiring only 10.4 queries per flow and 15.5 ms latency. On CIC-IDS2017, where the tree ensembles achieve near-perfect discrimination (99.87\%--99.90\% clean accuracy and 100.00\% AUC), Real ASR drops to 11.0\% (XGBoost) and 3.0\% (LightGBM), illustrating how tree split depth and feature distributions impact evasion feasibility. Across all datasets and models, CUDA XGBoost incurs higher per-sample latency than LightGBM due to host-to-device memory transfers on single-row inference.
+Panel B demonstrates the cross-dataset validity of FFE across three independent benchmark datasets and two leading gradient boosting implementations (XGBoost and LightGBM). On UNSW-NB15, FFE achieves 98.0\% and 94.0\% Real ASR on XGBoost and LightGBM, respectively, with moderate query budgets (32.2 and 34.3 queries). On CSE-CIC-IDS2018, LightGBM is substantially more vulnerable than XGBoost (97.0\% vs. 59.0\% Real ASR), requiring only 10.4 queries per flow and 15.5 ms latency. On CIC-IDS2017, where the tree ensembles achieve near-perfect discrimination (99.87\%--99.90\% clean accuracy and 100.00\% AUC), Real ASR drops to 11.0\% (XGBoost) and 3.0\% (LightGBM). This lower evasion rate stems directly from the feature topology of the CIC-IDS2017 capture: benign and attack flows are cleanly separated by immutable destination ports and immutable backward packet characteristics, leaving narrow continuous corridors for forward Lie steering. This transparent cross-dataset comparison demonstrates that tree ensemble vulnerability to problem-space evasion is fundamentally bounded by feature distributions and split depths rather than inherent classifier invulnerability. Across all datasets and models, CUDA XGBoost incurs higher per-sample latency than LightGBM due to host-to-device memory transfers on single-row inference.

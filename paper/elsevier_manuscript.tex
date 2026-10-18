@@ -58,14 +58,6 @@
 Gradient-boosted tree ensembles dominate flow-based network intrusion detection, yet their robustness against physically realizable problem-space evasion remains an open question. Feature-space attacks ignore coupling invariants between flow features and produce unrealizable telemetry, whereas black-box packet heuristics require high query budgets. We propose Flow-Field Evasion (FFE), which formalizes four protocol-compliant actions (temporal dilation, payload padding, chaff injection, and TCP window morphing) as infinitesimal generators of a Lie cone on the physical flow manifold. We prove that continuous trajectories within this cone preserve rate, header, and MTU invariants, while an invariant projection restores schema conformance. FFE greedily steers along the most cost-effective Lie generator and snaps to tree split thresholds via threshold-snapping binary search (TSBS). Evaluated on real flow traffic from CSE-CIC-IDS2018, UNSW-NB15, and CIC-IDS2017 against CUDA XGBoost and LightGBM, FFE achieves 59.0\% Real ASR with 100\% Physical Feasibility Rate and an ultra-low perturbation cost of $\bar{D}_{L_1} = 0.392$, outperforming Particle Swarm Optimization (54.0\% Real ASR at 7,500$\times$ higher cost) while unconstrained baselines (HopSkipJump, ZOO, MOEVA) collapse to 0\%--1\% Real ASR. Finally, dual hardening via malleability penalties and Lie-guided adversarial training slashes FFE evasion from 51.6\% to 5.3\% with zero clean accuracy loss.
 \end{abstract}
 
-%% Research Highlights
-\begin{highlights}
-\item Four packet-level attacker actions are modeled as Lie-cone generators on flows.
-\item Trajectories in the cone provably preserve rate, length, header and MTU invariants.
-\item FFE reaches 59.0\% Real ASR on real CSE-CIC-IDS2018 with 0.392 perturbation cost.
-\item Physical feasibility reaches 100\% while mathematical baselines collapse to 0--1\%.
-\item Dual defense (MPS + LGAT) slashes FFE success from 51.6\% to 5.3\% at M=5.
-\end{highlights}
 
 \begin{keyword}
 Adversarial machine learning \sep Network intrusion detection \sep Gradient boosted decision trees \sep Evasion attacks \sep Problem-space constraints \sep Lie algebra \sep Adversarial training

@@ -1,5 +1,8 @@
-\section{Related Work}
+\section{Related Work and Problem Formulation}
 \label{sec:sota}
+
+\subsection{Related Work and State-of-the-Art Taxonomy}
+\label{sec:related_work}
 
 Gradient-boosted decision trees (GBDTs), including XGBoost \cite{chen2016xgboost}, LightGBM \cite{ke2017lightgbm} and CatBoost \cite{prokhorenkova2018catboost}, are the standard choice for flow-based network intrusion detection on benchmarks such as CSE-CIC-IDS2018 \cite{sharafaldin2018toward}, UNSW-NB15 \cite{moustafa2015unsw} and CIDDS-001 \cite{ring2017flow}. Comprehensive empirical studies support this choice \cite{dang2022using, dang2023multilayer, apruzzese2022modeling}. Their split rules depend only on the rank order of feature values and are cheap to evaluate, which makes them attractive for deployment. Learned detectors have long been questioned for operation outside the closed world of their training data \cite{sommer2010outside}, but robustness to realistic evasion has received less attention.
 

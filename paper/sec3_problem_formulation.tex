@@ -1,7 +1,5 @@
-\section{Problem Formulation and Threat Model}
-\label{sec:formulation}
-
 \subsection{Valid Packet Streams and Flow Telemetry}
+\label{sec:formulation}
 A packet stream $P=((p_1,t_1),\dots,(p_m,t_m))$ is an ordered sequence of packets with $0\le t_1\le\dots\le t_m$, where $t_i$ is the transmission time at the network interface card. Only streams in the admissible set $\mathcal{P}_{\text{valid}}$ are considered. Every packet must carry valid IPv4, TCP and UDP checksums \cite{rfc791,rfc9293,rfc768} and obey the interface MTU:
 \begin{equation}
     \forall i \in \{1, \dots, m\}, \quad \text{Len}_{\text{IP}}(p_i) \le \text{MTU}_{\text{IP}} = 1500 \text{ bytes}

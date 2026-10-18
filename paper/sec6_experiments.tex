@@ -1,6 +1,9 @@
-\section{Experimental setup}
+\section{Experiments and Results}
 \label{sec:experiments}
 \label{sec:empirical_evaluation}
+
+\subsection{Experimental Setup and Benchmark Corpora}
+\label{sec:setup}
 
 Evaluations on a single testbed have limited external validity~\cite{apruzzese2022modeling, apruzzese2023real, he2023adversarial, vitorino2023sok}, and detectors trained on one environment transfer poorly to another~\cite{dang2022detecting, dang2023learning, dang2026stfedxids}. We therefore evaluate on real flow traffic extracted from three widely studied benchmark datasets: CSE-CIC-IDS2018 (enterprise AWS infrastructure)~\cite{sharafaldin2018toward}, UNSW-NB15 (contemporary hybrid network environment)~\cite{moustafa2015unsw}, and CIC-IDS2017 (Canadian Institute for Cybersecurity)~\cite{sharafaldin2018toward}. Each benchmark corpus consists of 12,000 real network flows extracted directly from official repositories (the AWS S3 repository for CSE-CIC-IDS2018 and official public archives for UNSW-NB15 and CIC-IDS2017), mapped onto our 12-feature physical flow schema.
 

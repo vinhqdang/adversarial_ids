@@ -88,7 +88,10 @@ Adversarial machine learning \sep Network intrusion detection \sep Gradient boos
 
 \input{sec9_defenses.tex}
 
-\section{Discussion}
+\section{Discussion and Conclusions}
+\label{sec:conclusion}
+
+\subsection{Operational Feasibility, Query Efficiency, and Limitations}
 \label{sec:discussion}
 
 Feature-space attacks are fast, but their output is not guaranteed to be a physically realizable flow (Section~\ref{sec:sota}). FFE pays for feasibility with a different structure. Its generators act on the flow manifold, so trajectories in the continuous Lie cone satisfy the conservation and rate-coupling invariants exactly, and a projection step restores them on the discrete flow schema. Feasibility is therefore 100\% in every experiment, but this figure measures conformance to the 12-feature schema, not an independent test on live packets.
@@ -101,8 +104,8 @@ Each generator has a protocol-compliant packet-level realization: sender pacing 
 
 We ran all experiments on benchmark network datasets in a controlled setting. The aim is to expose a weakness of GBDT detectors before it is exploited, and the results support the robust training of Section~\ref{sec:defense}.
 
-\section{Conclusions}
-\label{sec:conclusion}
+\subsection{Concluding Remarks and Future Directions}
+\label{sec:concluding_remarks}
 
 This article has shown that tree-ensemble NIDS with near-perfect benchmark accuracy are vulnerable to evasion that respects flow physics. Flow-Field Evasion models four packet-level actions as infinitesimal generators on the flow manifold. Trajectories in the continuous Lie cone preserve conservation invariants, and a projection enforces them on the discrete schema. Evaluated on real flow traffic from CSE-CIC-IDS2018, UNSW-NB15, and CIC-IDS2017, FFE reaches 59.0\% Real ASR against XGBoost at an ultra-low perturbation cost of 0.392 with 100\% physical feasibility, outperforming Traffic Manipulator PSO (54.0\% Real ASR at 7,500$\times$ higher cost) while mathematical baselines collapse to 0\%--1\% Real ASR. On UNSW-NB15 and LightGBM, FFE reaches 94.0\%--98.0\% Real ASR. Finally, dual hardening via malleability-penalized splitting and Lie-guided adversarial training (MPS + LGAT) reduces FFE evasion from 51.6\% to 5.3\% (raising robust recall to 94.7\%) with zero clean accuracy penalty (98.67\% accuracy and 99.84\% AUC). Future work will address line-rate replay on hardware testbeds and certified robustness bounds for adversarially trained ensembles.
 

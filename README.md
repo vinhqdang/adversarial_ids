@@ -47,19 +47,6 @@ What this does and does not show:
 
 Defenses on CSE-CIC-IDS2018 (Real ASR on the detected cohort; clean accuracy 97.3% for all models): undefended 84.1 / 98.9 / 88.3 (FFE M=5, FFE M=20, CAPGD), MPS 78.8 / 78.8 / 71.9, LGAT 46.5 / 80.3 / 74.3, MPS+LGAT 62.0 / 62.0 / 55.1. LGAT mainly protects against the attack it was trained on; no configuration brings evasion below 46%. Earlier 12,000-flow runs that reported a "malleability penalty trap" and 5.3% for MPS+LGAT are not reproduced at full scale and were removed (`results/legacy_12k_benchmark_results.json` is kept for the record).
 
-### Three additional public corpora (supplementary Section S7, XGBoost, Real ASR in %)
-
-| Method | InSDN | USB-IDS-1 | CIDDS-001 |
-| :--- | :---: | :---: | :---: |
-| Unconstrained / ZOO / HopSkipJump | 0.0 / 0.0 / 0.0 | 99.2 / 95.3 / 0.0 | 0.6 / 0.0 / 0.0 |
-| MOEVA (N=200) / PSO (N=200) | 0.0 / 85.5 | 98.5 / 0.0 | 7.0 / 100.0 |
-| CAPGD / NIDSGAN-style | 79.9 / 38.7 | 99.1 / 99.1 | 86.9 / 99.1 |
-| **FFE** (without TSBS) | **81.0** (46.7) | **0.0** (0.0) | **100.0** (100.0) |
-
-FFE is **not uniformly the best method**: on InSDN it is indistinguishable from PSO (82.5% vs 85.5% on the same 200 flows, Holm p = 0.44) and just ahead of CAPGD; on CIDDS-001 it ties PSO; on **USB-IDS-1 it fails (0.0%)** while surrogate and unconstrained attacks reach 95-99%. On USB-IDS-1 the target's score is identical (margin 8.57) for every attack flow we inspected, so score probes give FFE no direction; CAPGD's successes change forward packets, duration, window and header length together. Dataset-specific decisions: InSDN has no TCP window (-1 everywhere, set to 0) and its DDoS flows carry protocol 0, so the DDoS family is absent; USB-IDS-1 is 92% attacks; CIDDS-001 is unidirectional NetFlow (no backward traffic, no window), keeps only `normal` and `attacker` flows (`victim`, `suspicious`, `unknown` are dropped) and has only 5,560 attacks (0.08%).
-
-Raw sources: InSDN `aseados.ucd-cs.ie/datasets/SDN` (CC BY-NC 4.0), USB-IDS-1 `idsdata.ding.unisannio.it/usbids1.html`, CIDDS-001 `hs-coburg.de/cidds`; `download_raw('insdn' | 'usbids1' | 'cidds001')` fetches them.
-
 ## 3. Repository structure
 
 ```

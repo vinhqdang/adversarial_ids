@@ -48,15 +48,6 @@ ALIASES: Dict[str, Dict[str, str]] = {
     },
 }
 
-ALIASES['insdn'] = ALIASES['cse2018']        # CICFlowMeter column names, same family
-ALIASES['usbids1'] = ALIASES['cic2017']      # CICFlowMeter v2 column names
-USBIDS_TOOLS = ['Hulk', 'TCPFlood', 'Slowloris', 'Slowhttptest']
-USBIDS_DEFENSES = ['NoDefense', 'Reqtimeout', 'Evasive', 'Security2']
-RAW_ZIPS = {
-    'cidds001': 'https://www.hs-coburg.de/wp-content/uploads/2024/11/CIDDS-001.zip',
-    'insdn': 'https://aseados.ucd-cs.ie/datasets/SDN/InSDN_DatasetCSV.zip',
-}
-
 RAW_URLS = {
     'cse2018': ('https://cse-cic-ids2018.s3.ca-central-1.amazonaws.com/'
                 'Processed%20Traffic%20Data%20for%20ML%20Algorithms/{name}_TrafficForML_CICFlowMeter.csv',
@@ -67,8 +58,6 @@ RAW_URLS = {
                 ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']),
     'unsw': ('https://huggingface.co/datasets/wwydmanski/UNSW-NB15/resolve/main/{name}.parquet',
              ['train', 'test']),
-    'usbids1': ('https://idsdata.ding.unisannio.it/datasets/{name}.csv.gz',
-                [f'{t}-{d}' for t in USBIDS_TOOLS for d in USBIDS_DEFENSES] + ['REGULAR']),
 }
 
 
@@ -86,15 +75,8 @@ def download_raw(dataset: str) -> None:
     """Fetch every raw capture file of a dataset into ``data/raw`` (resumable by file size)."""
     out_dir = os.path.join(RAW_DIR, dataset)
     os.makedirs(out_dir, exist_ok=True)
-    if dataset in RAW_ZIPS:
-        import zipfile
-        dest = os.path.join(out_dir, os.path.basename(RAW_ZIPS[dataset]))
-        _fetch(RAW_ZIPS[dataset], dest)
-        with zipfile.ZipFile(dest) as zf:
-            zf.extractall(out_dir)
-        return
     template, names = RAW_URLS[dataset]
-    ext = {'unsw': 'parquet', 'usbids1': 'csv.gz'}.get(dataset, 'csv')
+    ext = {'unsw': 'parquet'}.get(dataset, 'csv')
     for name in names:
         _fetch(template.format(name=name), os.path.join(out_dir, f'{name}.{ext}'))
 
@@ -112,9 +94,7 @@ def _numeric_frame(df: pd.DataFrame, aliases: Dict[str, str]) -> pd.DataFrame:
     return out
 
 
-def _clean(df: pd.DataFrame, window_unavailable: bool = False) -> pd.DataFrame:
-    if window_unavailable:  # the exporter never recorded the TCP window: constant 0 for every flow
-        df = df.assign(init_fwd_win_byts=0.0)
+def _clean(df: pd.DataFrame) -> pd.DataFrame:
     df = df.replace([np.inf, -np.inf], np.nan).dropna(subset=FEATURES)
     df = df[(df['flow_duration'] > 0) & (df['tot_fwd_pkts'] > 0)]
     df = df[df['protocol'].isin([6, 17])]
@@ -168,19 +148,6 @@ def _family_2017(label: str) -> str:
     return label
 
 
-def _family_insdn(label: str) -> str:
-    low = label.strip().lower()
-    return {'normal': 'Benign', 'ddos': 'DDoS', 'dos': 'DoS', 'probe': 'Probe', 'bfa': 'BruteForce',
-            'web-attack': 'WebExploit', 'botnet': 'Botnet', 'u2r': 'U2R'}.get(low, label.strip())
-
-
-def _family_usbids1(label: str) -> str:
-    low = label.strip().lower()
-    if low in ('benign', 'regular', 'normal'):
-        return 'Benign'
-    return label.strip().split('-')[0]
-
-
 def _csv_files(folder: str):
     out = []
     for root, _, names in os.walk(folder):
@@ -203,7 +170,7 @@ def _build_csv_dataset(dataset: str):
         frame['label_orig'] = raw['Label'].astype(str).str.strip().values
         frame['source'] = fname.replace('.csv.gz', '').replace('.csv', '')
         raw_rows += len(raw)
-        parts.append(_clean(frame, window_unavailable=(dataset == 'insdn')))
+        parts.append(_clean(frame))
         print(f'  [{dataset}] {fname}: {len(raw):,} raw -> {len(parts[-1]):,} usable')
     return pd.concat(parts, ignore_index=True), raw_rows
 
@@ -248,58 +215,6 @@ def _build_unsw():
     return _clean(out), raw_rows
 
 
-def _parse_bytes(col: pd.Series) -> pd.Series:
-    """NetFlow byte counts such as '174' or '2.1 M' (M = 10^6)."""
-    m = col.astype(str).str.strip().str.extract(r'^([0-9.]+)\s*([KMG]?)$')
-    return pd.to_numeric(m[0], errors='coerce') * m[1].map({'': 1.0, 'K': 1e3, 'M': 1e6, 'G': 1e9})
-
-
-def _build_cidds():
-    """CIDDS-001: unidirectional NetFlow, so backward packets/bytes are 0 and no TCP window exists.
-
-    Attack = class ``attacker``; the response flows of the victim and the ``suspicious`` and
-    ``unknown`` classes are ambiguous and are dropped.
-    """
-    folder = os.path.join(RAW_DIR, 'cidds001')
-    files = [f for f in _csv_files(folder) if os.sep + 'traffic' + os.sep in f]
-    if not files:
-        raise FileNotFoundError(f'no CIDDS-001 traffic files in {folder}; run download_raw("cidds001")')
-    cols = ['Duration', 'Proto', 'Dst Pt', 'Packets', 'Bytes', 'class', 'attackType']
-    attack_names = {'dos': 'DoS', 'portscan': 'PortScan', 'pingscan': 'PingScan', 'bruteforce': 'BruteForce'}
-    parts, raw_rows = [], 0
-    for path in files:
-        for chunk in pd.read_csv(path, usecols=cols, dtype=str, skipinitialspace=True, chunksize=2_000_000):
-            raw_rows += len(chunk)
-            proto = chunk['Proto'].str.strip().str.upper().map({'TCP': 6.0, 'UDP': 17.0})
-            cls = chunk['class'].str.strip().str.lower()
-            keep = proto.notna() & cls.isin(['normal', 'attacker'])   # victim/suspicious/unknown are ambiguous
-            chunk, proto, cls = chunk[keep], proto[keep], cls[keep]
-            dur = pd.to_numeric(chunk['Duration'], errors='coerce')
-            pk = pd.to_numeric(chunk['Packets'], errors='coerce')
-            by = _parse_bytes(chunk['Bytes'])
-            port = pd.to_numeric(chunk['Dst Pt'], errors='coerce')
-            ok = (dur > 0) & (pk > 0) & by.notna() & port.notna()
-            chunk, proto, cls, dur, pk, by, port = (x[ok] for x in (chunk, proto, cls, dur, pk, by, port))
-            is_tcp = proto == 6.0
-            hdr = np.where(is_tcp, 20.0, 8.0)
-            fwd = pk.astype(float)
-            payload = np.maximum(0.0, by - fwd * (20.0 + hdr))        # wire bytes minus IP and transport headers
-            dur_us = dur * 1e6
-            atk = chunk['attackType'].str.strip().str.lower().map(attack_names)
-            family = np.where(cls == 'normal', 'Benign', atk.fillna('OtherAttack'))
-            frame = pd.DataFrame({
-                'dst_port': port, 'protocol': proto, 'tot_fwd_pkts': fwd, 'tot_bwd_pkts': 0.0,
-                'totlen_fwd_pkts': payload, 'totlen_bwd_pkts': 0.0, 'flow_duration': dur_us,
-                'init_fwd_win_byts': 0.0, 'flow_bytes_s': payload / dur, 'flow_pkts_s': fwd / dur,
-                'fwd_pkt_len_mean': payload / fwd, 'fwd_header_len': fwd * hdr,
-                'label_orig': cls + ':' + chunk['attackType'].str.strip(), 'source': os.path.basename(path)})
-            frame['attack_family'] = family
-            frame['label'] = (cls != 'normal').astype(int)
-            parts.append(_clean(frame, window_unavailable=True))
-        print(f'  [cidds001] {os.path.basename(path)} done ({sum(len(p) for p in parts):,} usable so far)')
-    return pd.concat(parts, ignore_index=True), raw_rows
-
-
 def build_full_dataset(name: str, force: bool = False) -> pd.DataFrame:
     """Return the deduplicated full dataset (``cse2018``, ``cic2017`` or ``unsw``)."""
     os.makedirs(CACHE_DIR, exist_ok=True)
@@ -325,16 +240,6 @@ def build_full_dataset(name: str, force: bool = False) -> pd.DataFrame:
         df = df[~attempted].copy()
         df['attack_family'] = df['label_orig'].map(_family_2017)
         df['label'] = (df['attack_family'] != 'Benign').astype(int)
-    elif name == 'insdn':
-        df, raw_rows = _build_csv_dataset(name)
-        df['attack_family'] = df['label_orig'].map(_family_insdn)
-        df['label'] = (df['attack_family'] != 'Benign').astype(int)
-    elif name == 'usbids1':
-        df, raw_rows = _build_csv_dataset(name)
-        df['attack_family'] = df['label_orig'].map(_family_usbids1)
-        df['label'] = (df['attack_family'] != 'Benign').astype(int)
-    elif name == 'cidds001':
-        df, raw_rows = _build_cidds()
     elif name == 'unsw':
         df, raw_rows = _build_unsw()
         df['attack_family'] = np.where(df['label'] == 0, 'Benign', df['label_orig'])

@@ -22,11 +22,12 @@ import numpy as np
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.datasets.schema import get_cicids_schema
-from src.datasets.generator import generate_cicids_traffic, generate_attack_family_cohorts
+from common import XGB_CFG, detected_cohort, load_arrays
 from src.models.tree_models import NIDSEnsembleTrainer
 from src.attacks.flow_field_evasion import FlowFieldEvasionAttack, ALL_GENERATORS
 
-N_PER_FAMILY = 20
+DATASET = 'cse2018'
+N_PER_FAMILY = 50
 STEP_BUDGETS = (1, 2, 3, 5, 10, 20, 50)
 EPSILONS = (0.0, 1e-6, 1e-4, 1e-2, 1.0)
 GENERATOR_SUBSETS = {
@@ -50,21 +51,17 @@ COST_REGIMES = {
 def build_target():
     """Trains the benchmark XGBoost target and returns (model, schema, feature_stds)."""
     schema = get_cicids_schema()
-    X, y, _ = generate_cicids_traffic(n_samples=12000, attack_ratio=0.25, random_state=42)
-    X_train, y_train = X[:8000], y[:8000]
-    model = NIDSEnsembleTrainer('xgboost', {
-        'n_estimators': 60, 'max_depth': 6, 'learning_rate': 0.1,
-        'tree_method': 'hist', 'device': 'cuda', 'random_state': 42,
-    })
+    data = load_arrays(DATASET)
+    X_train, y_train, _ = data['train']
+    model = NIDSEnsembleTrainer('xgboost', XGB_CFG)
     model.train(X_train, y_train)
-    return model, schema, np.std(X_train, axis=0) + 1e-6
+    model.model.get_booster().set_param({'device': 'cpu'})
+    return model, schema, np.std(X_train, axis=0) + 1e-6, data['test']
 
 
-def build_cohort(model) -> np.ndarray:
+def build_cohort(model, test) -> np.ndarray:
     """Balanced cohort of correctly detected malicious flows, N_PER_FAMILY per family."""
-    cohorts = generate_attack_family_cohorts(n_per_family=N_PER_FAMILY, random_state=42)
-    flows = np.vstack(list(cohorts.values()))
-    return flows[model.predict_proba(flows)[:, 1] >= 0.5]
+    return detected_cohort(model, *test, n_per_family=N_PER_FAMILY)[0]
 
 
 def evaluate(model, schema, stds, cohort: np.ndarray, *, step_budget: int = 20,
@@ -107,11 +104,12 @@ def evaluate(model, schema, stds, cohort: np.ndarray, *, step_budget: int = 20,
 
 
 def run_ablations() -> Dict[str, object]:
-    model, schema, stds = build_target()
-    cohort = build_cohort(model)
+    model, schema, stds, test = build_target()
+    cohort = build_cohort(model, test)
     print(f'Ablation cohort: {len(cohort)} detected malicious flows')
     common = dict(model=model, schema=schema, stds=stds, cohort=cohort)
     results = {
+        'dataset': DATASET,
         'cohort_size': int(len(cohort)),
         'budget': {str(m): evaluate(step_budget=m, **common) for m in STEP_BUDGETS},
         'generators': {k: evaluate(enabled=v, **common) for k, v in GENERATOR_SUBSETS.items()},

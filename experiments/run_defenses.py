@@ -20,9 +20,14 @@ import numpy as np
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.datasets.schema import get_cicids_schema, project_network_invariants
-from src.datasets.generator import generate_cicids_traffic, generate_attack_family_cohorts
+from common import XGB_CFG, detected_cohort, load_arrays
 from src.models.tree_models import NIDSEnsembleTrainer
 from src.attacks.flow_field_evasion import FlowFieldEvasionAttack, PhysicalFlowGenerators
+
+
+DATASET = 'cse2018'
+N_PER_FAMILY = 50
+MAX_AUGMENT = 5000  # Lie-guided samples generated per LGAT model (cost cap)
 
 
 def compute_feature_malleability_index(X: np.ndarray, schema) -> np.ndarray:
@@ -60,6 +65,7 @@ def compute_feature_malleability_index(X: np.ndarray, schema) -> np.ndarray:
 def evaluate_defense_model(trainer, X_test, y_test, cohort, schema, stds, step_budget: int = 5) -> Dict[str, float]:
     """Evaluates clean classification metrics and adversarial robustness under FFE."""
     clean_eval = trainer.evaluate(X_test, y_test)
+    trainer.model.get_booster().set_param({'device': 'cpu'})  # faster single-flow queries
     
     # Run FFE on the cohort with evaluation budget M_train = 5
     attack = FlowFieldEvasionAttack(trainer, schema, step_budget=step_budget, feature_stds=stds)
@@ -83,10 +89,10 @@ def evaluate_defense_model(trainer, X_test, y_test, cohort, schema, stds, step_b
 
 def run_defenses_experiment() -> Dict[str, object]:
     schema = get_cicids_schema()
-    print("Generating training dataset (12,000 flows)...")
-    X, y, _ = generate_cicids_traffic(n_samples=12000, attack_ratio=0.25, random_state=42)
-    X_train, y_train = X[:8000], y[:8000]
-    X_test, y_test = X[8000:], y[8000:]
+    print(f"Loading full {DATASET} dataset...")
+    data = load_arrays(DATASET)
+    X_train, y_train, _ = data['train']
+    X_test, y_test, fam_test = data['test']
     stds = np.std(X_train, axis=0) + 1e-6
 
     # 1. Baseline XGBoost (Undefended)
@@ -98,10 +104,7 @@ def run_defenses_experiment() -> Dict[str, object]:
     base_trainer.train(X_train, y_train)
 
     # Build cohort of 100 flows detected by baseline
-    cohorts = generate_attack_family_cohorts(n_per_family=20, random_state=42)
-    candidate_flows = np.vstack(list(cohorts.values()))
-    base_probs = base_trainer.predict_proba(candidate_flows)[:, 1]
-    cohort = candidate_flows[base_probs >= 0.5]
+    cohort, _ = detected_cohort(base_trainer, X_test, y_test, fam_test, N_PER_FAMILY)
     print(f"Cohort size: {len(cohort)} malicious flows")
 
     base_results = evaluate_defense_model(base_trainer, X_test, y_test, cohort, schema, stds, step_budget=5)
@@ -131,7 +134,7 @@ def run_defenses_experiment() -> Dict[str, object]:
     # 3. LGAT-Hardened XGBoost (Lie-Guided Adversarial Training)
     print("\n[3/4] Training LGAT-Hardened XGBoost (Lie-Guided AT)...")
     mal_train_indices = np.where(y_train == 1)[0]
-    n_augment = int(0.5 * len(mal_train_indices))
+    n_augment = min(int(0.5 * len(mal_train_indices)), MAX_AUGMENT)
     selected_indices = np.random.RandomState(42).choice(mal_train_indices, n_augment, replace=False)
     
     attack_fast = FlowFieldEvasionAttack(base_trainer, schema, step_budget=5, feature_stds=stds)
@@ -164,6 +167,8 @@ def run_defenses_experiment() -> Dict[str, object]:
     print("  Dual-Hardened:", dual_results)
 
     results = {
+        'dataset': DATASET,
+        'lgat_augment_samples': int(n_augment),
         'cohort_size': len(cohort),
         'models': {
             'Baseline XGBoost (Undefended)': base_results,

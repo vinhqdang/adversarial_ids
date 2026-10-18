@@ -245,3 +245,7 @@ orcid_*.json
 parse_orcid.py
 Download*.zip
 sn_template/
+
+# raw full-size benchmark captures (downloaded on demand)
+data/raw/
+data/full/*.parquet

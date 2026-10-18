@@ -222,3 +222,29 @@ def verify_physical_feasibility(x_orig: np.ndarray, x_adv: np.ndarray, schema: N
         
     return True
 
+
+
+def project_network_invariants_batch(X: np.ndarray) -> np.ndarray:
+    """
+    Vectorised P_M(x) for a matrix of flows (no reference flow).
+    Row-for-row equivalent to ``project_network_invariants(x, schema)``.
+    """
+    P = np.array(X, dtype=float, copy=True)
+    is_tcp = P[:, 1] == 6
+    h_min = np.where(is_tcp, 20.0, 8.0)
+    h_max = np.where(is_tcp, 60.0, 8.0)
+
+    fwd = np.maximum(1.0, np.round(P[:, 2]))
+    bwd = np.maximum(0.0, np.round(P[:, 3]))
+    hdr = np.minimum(fwd * h_max, np.maximum(fwd * h_min, np.round(P[:, 11])))
+    len_fwd = np.minimum(fwd * 1500.0, np.maximum(0.0, np.round(P[:, 4])))
+    len_bwd = np.maximum(0.0, P[:, 5])
+    dur = np.minimum(1.1e8, np.maximum(1.0, np.round(P[:, 6])))
+    win = np.where(is_tcp, np.clip(np.round(P[:, 7]), 0.0, 65535.0), 0.0)
+
+    P[:, 2], P[:, 3], P[:, 4], P[:, 6], P[:, 7], P[:, 11] = fwd, bwd, len_fwd, dur, win, hdr
+    dur_sec = np.maximum(1e-6, dur / 1e6)
+    P[:, 8] = (len_fwd + len_bwd) / dur_sec
+    P[:, 9] = (fwd + bwd) / dur_sec
+    P[:, 10] = len_fwd / np.maximum(1.0, fwd)
+    return P

@@ -20,7 +20,7 @@ import numpy as np
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.datasets.schema import get_cicids_schema
-from src.datasets.generator import generate_cicids_traffic, generate_attack_family_cohorts
+from common import detected_cohort, load_arrays
 from src.models.tree_models import NIDSEnsembleTrainer
 from src.attacks.flow_field_evasion import FlowFieldEvasionAttack
 
@@ -44,12 +44,12 @@ MODEL_CONFIGS = {
 }
 
 
-def run_transferability_experiment(n_per_family: int = 20) -> Dict[str, object]:
+def run_transferability_experiment(dataset: str = 'cse2018', n_per_family: int = 50) -> Dict[str, object]:
     schema = get_cicids_schema()
-    print("Generating training dataset (12,000 flows)...")
-    X, y, _ = generate_cicids_traffic(n_samples=12000, attack_ratio=0.25, random_state=42)
-    X_train, y_train = X[:8000], y[:8000]
-    X_test, y_test = X[8000:], y[8000:]
+    print(f"Loading full {dataset} dataset...")
+    data = load_arrays(dataset)
+    X_train, y_train, _ = data['train']
+    X_test, y_test, fam_test = data['test']
     stds = np.std(X_train, axis=0) + 1e-6
 
     # 1. Train all 4 models
@@ -67,13 +67,11 @@ def run_transferability_experiment(n_per_family: int = 20) -> Dict[str, object]:
         models[name] = trainer
         print(f"  {name}: Acc={metrics['accuracy']*100:.2f}%, AUC={metrics['roc_auc']*100:.2f}%, Time={elapsed:.2f}s")
 
+    models['XGBoost (CUDA)'].model.get_booster().set_param({'device': 'cpu'})
+
     # 2. Build test cohort (detected by at least XGBoost)
-    cohorts = generate_attack_family_cohorts(n_per_family=n_per_family, random_state=42)
-    candidate_flows = np.vstack(list(cohorts.values()))
-    
-    # Filter to flows detected by the primary source model (XGBoost)
-    xgb_probs = models['XGBoost (CUDA)'].predict_proba(candidate_flows)[:, 1]
-    cohort = candidate_flows[xgb_probs >= 0.5]
+    # Flows detected by the primary source model (XGBoost), balanced over families
+    cohort, _ = detected_cohort(models['XGBoost (CUDA)'], X_test, y_test, fam_test, n_per_family)
     print(f"\nCohort size for transferability: {len(cohort)} detected flows")
 
     model_names = list(MODEL_CONFIGS.keys())
@@ -111,6 +109,7 @@ def run_transferability_experiment(n_per_family: int = 20) -> Dict[str, object]:
             print(f"  -> Target {tgt_name:18s}: ASR = {asr:5.1f}% ({tgt_evaded}/{len(cohort)})")
 
     output_data = {
+        'dataset': dataset,
         'model_names': model_names,
         'cohort_size': len(cohort),
         'clean_metrics': clean_metrics,

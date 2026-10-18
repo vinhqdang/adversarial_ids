@@ -249,3 +249,4 @@ sn_template/
 # raw full-size benchmark captures (downloaded on demand)
 data/raw/
 data/full/*.parquet
+build_*.log

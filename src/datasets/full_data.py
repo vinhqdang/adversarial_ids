@@ -56,6 +56,8 @@ RAW_URLS = {
                  'Wednesday-28-02-2018', 'Thursday-01-03-2018', 'Friday-02-03-2018']),
     'cic2017': ('https://huggingface.co/datasets/bvk/CICIDS-2017/resolve/main/{name}.csv',
                 ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']),
+    'unsw': ('https://huggingface.co/datasets/wwydmanski/UNSW-NB15/resolve/main/{name}.parquet',
+             ['train', 'test']),
 }
 
 
@@ -65,7 +67,8 @@ def download_raw(dataset: str) -> None:
     out_dir = os.path.join(RAW_DIR, dataset)
     os.makedirs(out_dir, exist_ok=True)
     for name in names:
-        dest = os.path.join(out_dir, f'{name}.csv')
+        ext = 'parquet' if dataset == 'unsw' else 'csv'
+        dest = os.path.join(out_dir, f'{name}.{ext}')
         url = template.format(name=name)
         expected = int(requests.head(url, allow_redirects=True, timeout=60).headers['Content-Length'])
         if os.path.exists(dest) and os.path.getsize(dest) == expected:

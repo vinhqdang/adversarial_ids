@@ -1,0 +1,10 @@
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Model} & \textbf{Acc.\ (\%)} & \textbf{AUC (\%)} & \textbf{Robust recall (\%)} & \textbf{FFE ASR (\%)} \\
+\midrule
+Baseline XGBoost (Undefended) & 98.04 & 98.07 & 3.7 & 96.3 \\
+MPS-Hardened XGBoost & 98.04 & 98.01 & 33.0 & 67.0 \\
+LGAT-Hardened XGBoost & 98.04 & 98.06 & 67.0 & 33.0 \\
+Dual-Hardened (MPS + LGAT) & 98.04 & 98.00 & 62.0 & 38.0 \\
+\bottomrule
+\end{tabular}

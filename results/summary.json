@@ -1,0 +1,224 @@
+{
+ "pairwise_mcnemar": {
+  "cse2018": {
+   "Unconstrained Feature-Space": {
+    "n": 1000,
+    "ffe_only": 619,
+    "baseline_only": 0,
+    "p": 9.193114719783341e-187
+   },
+   "ZOO-NIDS": {
+    "n": 1000,
+    "ffe_only": 851,
+    "baseline_only": 0,
+    "p": 1.3319983461951343e-256
+   },
+   "HopSkipJump-NIDS": {
+    "n": 1000,
+    "ffe_only": 1000,
+    "baseline_only": 0,
+    "p": 1.8665272370064378e-301
+   },
+   "CAA / MOEVA": {
+    "n": 200,
+    "ffe_only": 158,
+    "baseline_only": 0,
+    "p": 5.473822126268817e-48
+   },
+   "Traffic Manipulator PSO": {
+    "n": 200,
+    "ffe_only": 80,
+    "baseline_only": 0,
+    "p": 1.6543612251060553e-24
+   },
+   "CAPGD (surrogate transfer)": {
+    "n": 1000,
+    "ffe_only": 5,
+    "baseline_only": 0,
+    "p": 0.0625
+   },
+   "NIDSGAN-style generator": {
+    "n": 1000,
+    "ffe_only": 295,
+    "baseline_only": 0,
+    "p": 3.141819817790545e-89
+   }
+  },
+  "cic2017": {
+   "Unconstrained Feature-Space": {
+    "n": 1000,
+    "ffe_only": 784,
+    "baseline_only": 3,
+    "p": 1.9961807632757763e-229
+   },
+   "ZOO-NIDS": {
+    "n": 1000,
+    "ffe_only": 872,
+    "baseline_only": 3,
+    "p": 8.864608059969526e-256
+   },
+   "HopSkipJump-NIDS": {
+    "n": 1000,
+    "ffe_only": 959,
+    "baseline_only": 0,
+    "p": 4.1045368012983762e-289
+   },
+   "CAA / MOEVA": {
+    "n": 200,
+    "ffe_only": 130,
+    "baseline_only": 0,
+    "p": 1.4693679385278594e-39
+   },
+   "Traffic Manipulator PSO": {
+    "n": 200,
+    "ffe_only": 129,
+    "baseline_only": 0,
+    "p": 2.938735877055719e-39
+   },
+   "CAPGD (surrogate transfer)": {
+    "n": 1000,
+    "ffe_only": 407,
+    "baseline_only": 0,
+    "p": 6.05092486695206e-123
+   },
+   "NIDSGAN-style generator": {
+    "n": 1000,
+    "ffe_only": 404,
+    "baseline_only": 0,
+    "p": 4.840739893561648e-122
+   }
+  },
+  "unsw": {
+   "Unconstrained Feature-Space": {
+    "n": 1000,
+    "ffe_only": 524,
+    "baseline_only": 1,
+    "p": 9.577849669461203e-156
+   },
+   "ZOO-NIDS": {
+    "n": 1000,
+    "ffe_only": 615,
+    "baseline_only": 0,
+    "p": 1.4708983551653345e-185
+   },
+   "HopSkipJump-NIDS": {
+    "n": 1000,
+    "ffe_only": 615,
+    "baseline_only": 0,
+    "p": 1.4708983551653345e-185
+   },
+   "CAA / MOEVA": {
+    "n": 200,
+    "ffe_only": 95,
+    "baseline_only": 0,
+    "p": 5.048709793414476e-29
+   },
+   "Traffic Manipulator PSO": {
+    "n": 200,
+    "ffe_only": 39,
+    "baseline_only": 2,
+    "p": 7.839844329282641e-10
+   },
+   "CAPGD (surrogate transfer)": {
+    "n": 1000,
+    "ffe_only": 382,
+    "baseline_only": 35,
+    "p": 7.345559751118591e-75
+   },
+   "NIDSGAN-style generator": {
+    "n": 1000,
+    "ffe_only": 514,
+    "baseline_only": 35,
+    "p": 2.857544173314648e-110
+   }
+  }
+ },
+ "root_splits": {
+  "cse2018": {
+   "n_trees": 60,
+   "root_feature_counts": {
+    "dst_port": 55,
+    "flow_bytes_s": 2,
+    "flow_pkts_s": 2,
+    "totlen_fwd_pkts": 1
+   },
+   "mean_root_gain": {
+    "dst_port": 85311.06734690908,
+    "totlen_fwd_pkts": 108.02023,
+    "flow_bytes_s": 176.418735,
+    "flow_pkts_s": 141.326215
+   }
+  },
+  "cic2017": {
+   "n_trees": 60,
+   "root_feature_counts": {
+    "totlen_bwd_pkts": 9,
+    "init_fwd_win_byts": 25,
+    "protocol": 26
+   },
+   "mean_root_gain": {
+    "protocol": 1701.3228953846153,
+    "totlen_bwd_pkts": 199584.92055555558,
+    "init_fwd_win_byts": 27080.11798
+   }
+  },
+  "unsw": {
+   "n_trees": 60,
+   "root_feature_counts": {
+    "flow_pkts_s": 46,
+    "flow_duration": 3,
+    "fwd_header_len": 1,
+    "totlen_fwd_pkts": 3,
+    "dst_port": 5,
+    "totlen_bwd_pkts": 1,
+    "tot_fwd_pkts": 1
+   },
+   "mean_root_gain": {
+    "dst_port": 15.106693000000002,
+    "fwd_header_len": 26.353344,
+    "tot_fwd_pkts": 11.768358,
+    "totlen_fwd_pkts": 22.281633333333332,
+    "totlen_bwd_pkts": 15.723926,
+    "flow_duration": 28.45986566666667,
+    "flow_pkts_s": 3175.7143721739135
+   }
+  }
+ },
+ "dedup": {
+  "cse2018": {
+   "before_dedup": 6468390,
+   "label_conflicts_removed": 85740,
+   "after_dedup": 4300373,
+   "attacks": 543806
+  },
+  "cic2017": {
+   "before_dedup": 2097825,
+   "label_conflicts_removed": 54,
+   "after_dedup": 1692949,
+   "attacks": 405355
+  },
+  "unsw": {
+   "before_dedup": 215742,
+   "label_conflicts_removed": 15702,
+   "after_dedup": 120317,
+   "attacks": 53502
+  }
+ },
+ "split_sizes": {
+  "cse2018": {
+   "train": 3010261,
+   "val": 430037,
+   "test": 860075
+  },
+  "cic2017": {
+   "train": 1185065,
+   "val": 169294,
+   "test": 338590
+  },
+  "unsw": {
+   "train": 84221,
+   "val": 12032,
+   "test": 24064
+  }
+ }
+}

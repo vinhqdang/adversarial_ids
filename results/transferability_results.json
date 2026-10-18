@@ -1,87 +1,88 @@
 {
+  "dataset": "cse2018",
   "model_names": [
     "XGBoost (CUDA)",
     "LightGBM",
     "CatBoost",
     "Random Forest"
   ],
-  "cohort_size": 95,
+  "cohort_size": 300,
   "clean_metrics": {
     "XGBoost (CUDA)": {
-      "accuracy": 0.98625,
-      "precision": 0.9989711934156379,
-      "recall": 0.9473170731707317,
-      "f1": 0.972458688032048,
-      "roc_auc": 0.9988027054724329,
-      "train_time_s": 0.37587451934814453
+      "accuracy": 0.9804040345318722,
+      "precision": 0.9971977582065652,
+      "recall": 0.8474191353597764,
+      "f1": 0.91622760800843,
+      "roc_auc": 0.9807155856795637,
+      "train_time_s": 2.8047735691070557
     },
     "LightGBM": {
-      "accuracy": 0.9865,
-      "precision": 0.997948717948718,
-      "recall": 0.9492682926829268,
-      "f1": 0.973,
-      "roc_auc": 0.9986298831727813,
-      "train_time_s": 3.406844139099121
+      "accuracy": 0.9803365985524518,
+      "precision": 0.998285701885728,
+      "recall": 0.8459572277082069,
+      "f1": 0.9158305462653289,
+      "roc_auc": 0.9807914697801198,
+      "train_time_s": 6.479727029800415
     },
     "CatBoost": {
-      "accuracy": 0.9865,
-      "precision": 0.9959141981613892,
-      "recall": 0.9512195121951219,
-      "f1": 0.9730538922155688,
-      "roc_auc": 0.9985687230989956,
-      "train_time_s": 3.6204769611358643
+      "accuracy": 0.9798529198035055,
+      "precision": 0.9934589728644518,
+      "recall": 0.84625144811607,
+      "f1": 0.9139656816015252,
+      "roc_auc": 0.9729046468621974,
+      "train_time_s": 9.685190916061401
     },
     "Random Forest": {
-      "accuracy": 0.988,
-      "precision": 0.9959390862944163,
-      "recall": 0.9570731707317073,
-      "f1": 0.9761194029850746,
-      "roc_auc": 0.9992198401311745,
-      "train_time_s": 2.8887975215911865
+      "accuracy": 0.980773769729384,
+      "precision": 0.9978837806905785,
+      "recall": 0.849763704234935,
+      "f1": 0.9178865825801966,
+      "roc_auc": 0.9837121690865978,
+      "train_time_s": 741.1361949443817
     }
   },
   "transferability_matrix": {
     "XGBoost (CUDA)": {
-      "XGBoost (CUDA)": 56.8,
-      "LightGBM": 95.8,
-      "CatBoost": 56.8,
-      "Random Forest": 77.9
+      "XGBoost (CUDA)": 100.0,
+      "LightGBM": 69.0,
+      "CatBoost": 37.7,
+      "Random Forest": 81.3
     },
     "LightGBM": {
-      "XGBoost (CUDA)": 25.3,
-      "LightGBM": 98.9,
-      "CatBoost": 12.6,
-      "Random Forest": 30.5
+      "XGBoost (CUDA)": 82.3,
+      "LightGBM": 100.0,
+      "CatBoost": 34.0,
+      "Random Forest": 83.0
     },
     "CatBoost": {
-      "XGBoost (CUDA)": 42.1,
-      "LightGBM": 87.4,
-      "CatBoost": 95.8,
-      "Random Forest": 76.8
+      "XGBoost (CUDA)": 54.3,
+      "LightGBM": 66.7,
+      "CatBoost": 99.3,
+      "Random Forest": 63.7
     },
     "Random Forest": {
-      "XGBoost (CUDA)": 35.8,
-      "LightGBM": 80.0,
-      "CatBoost": 14.7,
-      "Random Forest": 91.6
+      "XGBoost (CUDA)": 79.0,
+      "LightGBM": 64.0,
+      "CatBoost": 37.0,
+      "Random Forest": 100.0
     }
   },
   "detailed_results": {
     "XGBoost (CUDA)": {
-      "craft_time_s": 25.276520490646362,
-      "source_asr": 56.8421052631579
+      "craft_time_s": 3.859457015991211,
+      "source_asr": 100.0
     },
     "LightGBM": {
-      "craft_time_s": 0.9947681427001953,
-      "source_asr": 98.94736842105263
+      "craft_time_s": 4.933565139770508,
+      "source_asr": 100.0
     },
     "CatBoost": {
-      "craft_time_s": 1.4453048706054688,
-      "source_asr": 95.78947368421052
+      "craft_time_s": 3.8540594577789307,
+      "source_asr": 99.33333333333333
     },
     "Random Forest": {
-      "craft_time_s": 7.460546016693115,
-      "source_asr": 91.57894736842105
+      "craft_time_s": 61.90732216835022,
+      "source_asr": 100.0
     }
   }
 }

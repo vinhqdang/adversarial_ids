@@ -1,29 +1,31 @@
 {
-  "cohort_size": 95,
+  "dataset": "cse2018",
+  "lgat_augment_samples": 5000,
+  "cohort_size": 300,
   "models": {
     "Baseline XGBoost (Undefended)": {
-      "clean_accuracy": 98.62,
-      "clean_roc_auc": 99.88,
-      "robust_recall": 48.4,
-      "ffe_asr": 51.6
+      "clean_accuracy": 98.04,
+      "clean_roc_auc": 98.07,
+      "robust_recall": 3.7,
+      "ffe_asr": 96.3
     },
     "MPS-Hardened XGBoost": {
-      "clean_accuracy": 98.67,
-      "clean_roc_auc": 99.85,
-      "robust_recall": 1.1,
-      "ffe_asr": 98.9
+      "clean_accuracy": 98.04,
+      "clean_roc_auc": 98.01,
+      "robust_recall": 33.0,
+      "ffe_asr": 67.0
     },
     "LGAT-Hardened XGBoost": {
-      "clean_accuracy": 98.72,
-      "clean_roc_auc": 99.85,
-      "robust_recall": 74.7,
-      "ffe_asr": 25.3
+      "clean_accuracy": 98.04,
+      "clean_roc_auc": 98.06,
+      "robust_recall": 67.0,
+      "ffe_asr": 33.0
     },
     "Dual-Hardened (MPS + LGAT)": {
-      "clean_accuracy": 98.67,
-      "clean_roc_auc": 99.84,
-      "robust_recall": 94.7,
-      "ffe_asr": 5.3
+      "clean_accuracy": 98.04,
+      "clean_roc_auc": 98.0,
+      "robust_recall": 62.0,
+      "ffe_asr": 38.0
     }
   }
 }

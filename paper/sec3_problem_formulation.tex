@@ -56,7 +56,7 @@ The adversary starts from a malicious flow $x_{\text{orig}}=\Phi(P)\in\mathcal{M
 \begin{equation}
     P(\text{Malicious} \mid x^*) < 0.5 \iff F(x^*) < 0
 \end{equation}
-Tier 1 (white-box) grants access to the ensemble architecture, leaf weights and split thresholds $\Theta_j$, which enables exact Tree-Split Boundary Snapping (TSBS) and forms the primary benchmark (Section~\ref{sec:results}). Tier 2 (black-box) allows only query access or zero-knowledge transfer of flows crafted on a surrogate ensemble, which Table~\ref{tab:transferability} evaluates.
+Tier 1 (white-box) grants access to the ensemble architecture, leaf weights and split thresholds $\Theta_j$, which enables exact Tree-Split Boundary Snapping (TSBS) and forms the primary benchmark (Section~\ref{sec:results}). Tier 2 (black-box) allows only query access or zero-knowledge transfer of flows crafted on a surrogate ensemble, which Supplementary Section~S5 evaluates.
 
 The transformed trace $P^*$ must preserve the malicious semantics, $\mathcal{S}(P^*)=\mathcal{S}(P)$, so that exploit delivery, shellcode execution, credential cracking or service degradation still succeeds on the victim. Payload padding preserves discrete payload exploits by appending non-executable, protocol-compliant bytes (SSH ignore messages, RFC 4253 \cite{rfc4253}). Temporal dilation still delivers every packet, although it lowers the burst intensity of volumetric floods (Section~\ref{sec:discussion}); we do not test that the attack's effect on the victim is preserved.
 

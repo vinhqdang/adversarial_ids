@@ -36,6 +36,16 @@ the unconstrained control were attacked in this run with the same attacks (FFE M
 
 """
 
+TAIL = """
+## Findings
+
+* **G35 (backward columns hidden) is not a free tightening.** It costs much more than the gate itself: clean accuracy / F1 drop by 3.9 / 19 points on CSE-CIC-IDS2018, 4.7-4.9 / 9 points on CIC-IDS2017 and 12-14 accuracy points on UNSW-NB15 (all three libraries), the benign false-positive rate rises to 2.1 % (CSE-CIC-IDS2018), 6 % (CIC-IDS2017) and 36 % (UNSW-NB15), and the top-decile-fwd_pkts FPR to 5 / 14-16 / 44 %. It still flags 74-76 % (CSE-CIC-IDS2018), 97-99 % (CIC-IDS2017) and 89-90 % (UNSW-NB15) of the cohort and is certified under the weaker assumption (backward traffic may change). V2 rebuilt with G35 under the same parity rule is clearly weaker than V2 where the gate matters (CSE-CIC-IDS2018 whole-cohort evasion 35.1-36.3 % FFE M=20, 23-70 % CAPGD, 78-79 % white-box, versus 0.2-8.3 %, 0.2-0.5 %, 7.9-9.0 % for V2; UNSW-NB15 XGBoost 20 / 6 / 39 % versus 12 / 2 / 26 %), because the parity rule forces a high tau. On CIC-IDS2017 it stays at 1-6 %. So V2's guarantee relies on the assumption that backward packets and bytes do not change; if that assumption is dropped, the hardened model keeps only a part of its strength at a large accuracy price on these three corpora.
+* **Capacity control.** The unconstrained 300x8 model with the gate's hidden columns is as accurate as, or more accurate than, the undefended 60x6 model (CIC-IDS2017 +0.03, UNSW-NB15 +0.7 to +0.8 accuracy, CSE-CIC-IDS2018 -0.14 accuracy / -0.6 F1) and is as evadable as it (whole-cohort evasion 17-96 %, CIC-IDS2017 white-box 34-48 %). Hence the stand-alone gate's accuracy cost is the monotonicity: against the unconstrained control it is -0.55 accuracy / -3.1 F1 (CSE-CIC-IDS2018), -2.6 to -2.7 accuracy (UNSW-NB15 XGBoost/LightGBM; -2.8 CatBoost) and -0.06 (CIC-IDS2017). Capacity alone buys nothing against the attackers.
+* **Whole-cohort numbers** change the picture for the gate-only and V2 rows by the missed share: V2 whole-cohort evasion is 0.2-9.0 % on CSE-CIC-IDS2018, 0.1-0.8 % on CIC-IDS2017 and 1.0-32.4 % on UNSW-NB15 (versus conditional Real ASR within 0.5-1 point of it, since V2 keeps 98-100 % of the cohort flagged before the attack). The stand-alone gate's whole-cohort evasion is its miss rate (7.9-9.0 % on CSE-CIC-IDS2018, 0.1-0.2 % CIC-IDS2017, 4.5-6.0 % UNSW-NB15).
+* **False positives and monotone drift.** Benign FPR on the test split: CSE-CIC-IDS2018 0.03-0.07 % undefended versus 0.11-0.14 % for V2; CIC-IDS2017 0.01-0.02 % versus 0.02-0.05 %; UNSW-NB15 11-16 % versus 13-19 % (XGBoost 11.1 -> 13.3 %, LightGBM 11.1 -> 13.9 %, CatBoost 15.7 -> 18.6 %). On the top decile of benign forward-packet counts the FPR is 0.01-0.18 % (CSE-CIC-IDS2018), 0.01-0.03 % (CIC-IDS2017) and 2.2-5.1 % (UNSW-NB15) for V2, close to the undefended model on UNSW-NB15 (2.4 / 2.6 / 4.4 %) and not elevated relative to the rest; the stand-alone gate (rows "Gate G") shows no large-flow drift either (UNSW-NB15 top-decile FPR 2.9 / 2.1 / 2.4 % versus 4.4 / 2.6 / 2.4 % undefended). G35 is the exception (above). Large benign flows are rare in these 12-feature corpora, so this is weak evidence about drift in other traffic mixes.
+* **FFE-v2 (CIC-IDS2017, XGBoost, first 300 cohort flows, retrained models, configuration of `results/ffev2_config.json`, "score + snapping")**: undefended 100.0 % Real ASR; V2 1.0 % (whole-cohort 1.3 %); V2 with G35 8.4 % (8.7 %); stand-alone G35 gate 0.0 % (whole-cohort 2.3 %, the miss rate). FFE-v2 was run only here, not on the other corpora or libraries.
+"""
+
 
 def cell(a: dict) -> str:
     return f"{a['real_asr']:.1f} / {a['whole_cohort_evasion']:.1f}"
@@ -104,6 +114,7 @@ def main() -> None:
                 out.append(f'### {label}, {lib}\n\nNot run.\n')
                 continue
             out += [f'### {label}, {lib}\n', clean_table(res), '', attack_table(res), '', ffev2_table(res), '']
+    out.append(TAIL)
     open(os.path.join(RESULTS, 'defense_v2_followup.md'), 'w', encoding='utf-8').write('\n'.join(out))
 
 

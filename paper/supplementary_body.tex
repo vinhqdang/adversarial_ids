@@ -55,7 +55,7 @@ and in the same way $\dot\Psi_2=-\tfrac{u_{\text{time}}}{x_6}\Psi_2$ and $\dot\P
 \end{proof}
 
 \begin{proof}[Proof of Proposition 2 (conditional certificate)]
-The monotone-model argument is that of Incer et al.\ (2018). Let $x'$ be derived from $x$ by actions that leave $x_0,x_1,x_3,x_5$ unchanged, so $x'_j=x_j$ for $j\in\{0,1,3,5\}$ and $x'_j\ge x_j$ for $j\in\{2,4,6,11\}$. The gate $G$ reads only the columns $\{0,1,2,3,4,5,6,11\}$ and is non-decreasing in $\{2,4,6,11\}$. Moving from $x$ to $x'$ by raising the four coordinates one at a time, each step cannot lower $G$ (the other read coordinates are fixed along that step, including the previously raised ones), hence $G(x')\ge G(x)$, and the columns $7,8,9,10$ that the actions change are not inputs of $G$. For an ensemble of trees with monotone constraints the property holds at the level of the summed margin, because every tree is monotone in the constrained columns along each path by construction (XGBoost, LightGBM and CatBoost enforce this) and the sum of non-decreasing functions is non-decreasing; a monotone link keeps it for probabilities. A fused alert $\max(\text{free},G-\tau\text{-shifted})$ therefore remains raised whenever $G(x)\ge\tau$. The statement holds if the library's monotone constraint holds, which we verified by a randomized test (\texttt{tests/test\_defenses\_v2.py}) and did not prove for the library implementations; the verifier's absolute tolerance of $10^{-2}$ on the monotone columns is below the unit resolution of the integer-valued columns. The proof needs $x_3$ and $x_5$ unchanged because $G$ reads them and is not monotone in them; it says nothing about flows with $G(x)<\tau$, and it is relative to the original flow $x$ (a lower-footprint variant of the same attack flow is a different $x$). The effect of hiding $x_3$ and $x_5$ from the gate is a pending follow-up \emph{[placeholder: results to be added]}.
+The monotone-model argument is that of Incer et al.\ (2018). Let $x'$ be derived from $x$ by actions that leave $x_0,x_1,x_3,x_5$ unchanged, so $x'_j=x_j$ for $j\in\{0,1,3,5\}$ and $x'_j\ge x_j$ for $j\in\{2,4,6,11\}$. The gate $G$ reads only the columns $\{0,1,2,3,4,5,6,11\}$ and is non-decreasing in $\{2,4,6,11\}$. Moving from $x$ to $x'$ by raising the four coordinates one at a time, each step cannot lower $G$ (the other read coordinates are fixed along that step, including the previously raised ones), hence $G(x')\ge G(x)$, and the columns $7,8,9,10$ that the actions change are not inputs of $G$. For an ensemble of trees with monotone constraints the property holds at the level of the summed margin, because every tree is monotone in the constrained columns along each path by construction (XGBoost, LightGBM and CatBoost enforce this) and the sum of non-decreasing functions is non-decreasing; a monotone link keeps it for probabilities. A fused alert $\max(\text{free},G-\tau\text{-shifted})$ therefore remains raised whenever $G(x)\ge\tau$. The statement holds if the library's monotone constraint holds, which we verified by a randomized test (\texttt{tests/test\_defenses\_v2.py}) and did not prove for the library implementations; the verifier's absolute tolerance of $10^{-2}$ on the monotone columns is below the unit resolution of the integer-valued columns. The proof needs $x_3$ and $x_5$ unchanged because $G$ reads them and is not monotone in them; it says nothing about flows with $G(x)<\tau$, and it is relative to the original flow $x$ (a lower-footprint variant of the same attack flow is a different $x$). Hiding $x_3$ and $x_5$ from the gate would remove this assumption but is costly (Section~S6, Tables~S12 and~S13): the hiding gate loses about 4 accuracy and 19 F1 points on CSE-CIC-IDS2018, flags only 74--76\% of that cohort, has a benign false-positive rate of 2.1\% (CSE-CIC-IDS2018) to 36\% (UNSW-NB15), and V2 rebuilt on it has a whole-cohort evasion of 35--36\% against FFE-v1 and 78--79\% against the white-box attacker on CSE-CIC-IDS2018, against at most 9.0\% for V2.
 \end{proof}
 
 \section*{S2. Auxiliary algorithms}
@@ -197,5 +197,33 @@ Algorithm~S4 gives the general per-round Lie-guided adversarial training scheme 
     \STATE $F_t(x) \leftarrow F_{t-1}(x) + \eta \cdot f_t(x)$
 \ENDFOR
 \RETURN $F_T$
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm~S5 gives the main loop of FFE-v2 (Section~3.4 of the main paper).
+
+\begin{algorithm}[!t]
+\footnotesize\linespread{1}\selectfont
+\caption{FFE-v2 (score-only)}
+\label{alg:ffev2}
+\begin{algorithmic}[1]
+\REQUIRE Score oracle $p(\cdot)$ of the target, flow $x_0\in\mathcal{M}_{\text{flow}}$ with $p(x_0)\ge0.5$, generators $\mathcal{G}=\{\text{time},\text{pad},\text{chaff},\text{seg},\text{win}\}$, ladder ratio $r=6$, iteration budget $M=8$, relax-after $R=3$, refinement probes $B=4$, window pool $\mathcal{W}$
+\ENSURE Flow $x^*\in\mathcal{M}_{\text{flow}}$ with $p(x^*)<0.5$, or FAILURE
+\STATE $x\leftarrow\mathcal{P}_{\mathcal{M}}(x_0)$; $z\leftarrow\operatorname{logit}p(x)$
+\FOR{$t=1$ \TO $M$}
+    \STATE $\mathcal{C}\leftarrow\{\mathcal{P}_{\mathcal{M}}(\text{apply}(x,g,a)) : g\in\mathcal{G}\setminus\{\text{win}\},\ a\in\text{Ladder}_g(x)\}\ \cup\ \{\mathcal{P}_{\mathcal{M}}(x\text{ with }x_7{=}w) : w\in\mathcal{W}\}$ \COMMENT{duplicates removed}
+    \STATE score all candidates (one query each)
+    \IF{some candidate has $p<0.5$}
+        \STATE $(g,a,x')\leftarrow$ cheapest crossing candidate under $\mathcal{C}(x_0,\cdot)$; \textbf{break}
+    \ENDIF
+    \STATE $\Delta_c\leftarrow z-\operatorname{logit}p(c)$ for each candidate; keep those with $\Delta_c\ge10^{-3}$
+    \STATE select $\arg\max\ \Delta_c/(\Delta\mathcal{C}_c+10^{-4})$ if $t\le R$, else $\arg\max\Delta_c$ (also if no efficient candidate exists); \textbf{stop with FAILURE if none}
+    \STATE $x\leftarrow$ selected candidate; $z\leftarrow\operatorname{logit}p(x)$
+\ENDFOR
+\IF{a crossing $(g,a,x')$ was found}
+    \STATE bisect $a$ with $B$ further probes of the parent state; keep the smallest magnitude that is still scored benign
+    \RETURN $x^*$
+\ENDIF
+\RETURN FAILURE
 \end{algorithmic}
 \end{algorithm}

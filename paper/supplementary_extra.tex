@@ -74,7 +74,7 @@ Each seed retrains the targets on a new stratified split and redraws a cohort of
 
 \section*{S6. Defense details}
 
-\textbf{Recipe.} The gate is trained on the schema columns without the window, the two rates and the mean length, with monotone constraints $+1$ on forward packets, forward bytes, duration and header bytes and larger capacity (XGBoost 300 trees of depth 8; LightGBM 300 trees of depth 8 with 200 leaves; CatBoost 300 iterations of depth 8). The orbit set has 100,000 transformed rows; adversarial training uses two rounds of 3,000 crafted flows, alternating (FFE-v1 with $M=5$ and $M=20$) and (FFE-v1 with $M=20$ and the white-box attacker); LGAT uses 5,000 FFE-v1 flows. The monotone-safe ratio features (backward/forward ratios) gave no gain in exploration and are not used. A manipulation-signature detector is implemented (\texttt{src/defenses/anomaly.py}) but was not evaluated, and random forests are supported by the recipe (the certificate test passes for them) but were not run. In exploration on validation, raising XGBoost's capacity from 60$\times$6 to 300$\times$8 lifted the monotone model's accuracy from 84.9\% to 86.4\% on UNSW-NB15 and from 99.85\% to 99.94\% on CIC-IDS2017; a larger \emph{unconstrained} arm was not run, so the capacity effect is not separated from the constraint.
+\textbf{Recipe.} The gate is trained on the schema columns without the window, the two rates and the mean length, with monotone constraints $+1$ on forward packets, forward bytes, duration and header bytes and larger capacity (XGBoost 300 trees of depth 8; LightGBM 300 trees of depth 8 with 200 leaves; CatBoost 300 iterations of depth 8). The orbit set has 100,000 transformed rows; adversarial training uses two rounds of 3,000 crafted flows, alternating (FFE-v1 with $M=5$ and $M=20$) and (FFE-v1 with $M=20$ and the white-box attacker); LGAT uses 5,000 FFE-v1 flows. The monotone-safe ratio features (backward/forward ratios) gave no gain in exploration and are not used. A manipulation-signature detector is implemented (\texttt{src/defenses/anomaly.py}) but was not evaluated, and random forests are supported by the recipe (the certificate test passes for them) but were not run. In exploration on validation, raising XGBoost's capacity from 60$\times$6 to 300$\times$8 lifted the monotone model's accuracy from 84.9\% to 86.4\% on UNSW-NB15 and from 99.85\% to 99.94\% on CIC-IDS2017; the follow-up below separates capacity from the constraint with an unconstrained 300$\times$8 arm.
 
 \textbf{Selection.} Table~S11 gives the components chosen on validation. On four of the nine cells (CSE-CIC-IDS2018 LightGBM, CIC-IDS2017 CatBoost and LightGBM, UNSW-NB15 CatBoost) the selected free component of V2 is the undefended model itself, so the gain there comes entirely from the gate.
 
@@ -123,28 +123,49 @@ Tables~S8--S10 give, for every corpus and library, clean accuracy, F1 and recall
 \input{tables/tab_defense_sel.tex}
 \end{table}
 
+
+\textbf{Follow-up checks} (\texttt{results/defense\_v2\_followup.md}; models were retrained with the same seeds and reproduce the saved cohorts and clean accuracy exactly; Tables~S12 and~S13). \emph{Whole-cohort evasion} is the share of the 1,000-flow cohort that is not flagged after the attack, counting flows the model already misses as evaded; for the undefended models it equals Real ASR. (i) \emph{Hiding the backward columns.} The gate G35 additionally hides $x_3$ and $x_5$, which would remove the assumption that backward traffic does not change. It is costly: accuracy and F1 fall by about 4 and 19 points on CSE-CIC-IDS2018 and by 4.7--5.2 and about 9 points on CIC-IDS2017 relative to the undefended model, and by 12--14 accuracy points on UNSW-NB15; its benign false-positive rate is 2.1\%, 5.9--6.1\% and 36--37\%, and it flags only 74--76\% of the CSE-CIC-IDS2018 cohort. V2 rebuilt on G35 is much weaker where the gate matters: on CSE-CIC-IDS2018 its whole-cohort evasion is 35--36\% against FFE-v1 ($M=20$), 23--70\% against CAPGD and 78--79\% against the white-box attacker, against at most 9.0\% for V2. (ii) \emph{Capacity control.} An unconstrained 300$\times$8 model with the gate's hidden columns is as accurate as the undefended model (CSE-CIC-IDS2018: 97.1\% against 97.3\%; UNSW-NB15: 89.2--89.4\% against 86.7--88.5\%) and equally evadable (whole-cohort evasion 17--98\% across attackers on CSE-CIC-IDS2018). The gate's accuracy cost relative to this unconstrained arm (0.55 accuracy and 3.1 F1 points on CSE-CIC-IDS2018, 2.3--2.8 accuracy points on UNSW-NB15, 0.06 on CIC-IDS2017) is therefore the monotonicity itself, not a capacity effect. (iii) \emph{False positives and drift.} Benign FPR on the test split is 0.11--0.14\% for V2 on CSE-CIC-IDS2018 against 0.03--0.07\% undefended, 0.02--0.05\% against 0.01--0.02\% on CIC-IDS2017, and 13--19\% against 11--16\% on UNSW-NB15; the FPR on benign flows in the top decile of forward packets is about the same as undefended, so we found no monotone drift for V2 or the gate. (iv) \emph{FFE-v2 against the hardened models} was run only on CIC-IDS2017 XGBoost, first 300 cohort flows, retrained models, configuration of \texttt{results/ffev2\_config.json} with snapping: Real ASR / whole-cohort evasion are 100.0\% / 100.0\% for the undefended model, 1.0\% / 1.3\% for V2, 8.4\% / 8.7\% for V2 with G35 and 0.0\% / 2.3\% for G35 alone. It was not run on other corpora or libraries. (v) \emph{V2-R} was defined while building the pipeline, after a smoke run on UNSW-NB15 LightGBM (100-flow test cohort) in which its validation table and the undefended model's attack rates were seen, before any full test result existed; it is a post-hoc second tier and V2 (strict) is the headline. The selection rule is as in Section~7.1; the undefended model is V2's free component in four of the nine cells (CSE-CIC-IDS2018 LightGBM, CIC-IDS2017 LightGBM and CatBoost, UNSW-NB15 CatBoost).
+
+\begin{table}[!htbp]
+\centering
+\caption*{Table S12. Clean accuracy (\%), F1 (\%) and benign false-positive rate (\%) of the undefended model (U), the certified gate (G), the gate hiding $x_3,x_5$ (G35), the unconstrained 300$\times$8 control (Unc.) and V2.}
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\input{tables/tab_followup_clean.tex}%
+}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\caption*{Table S13. Whole-cohort evasion (\%) of V2, V2 rebuilt on G35 and the unconstrained control against FFE-v1 ($M=20$), CAPGD and the white-box attacker (WB).}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\input{tables/tab_followup_whole.tex}%
+}
+\end{table}
+
 \section*{S7. White-box leaf-tuple-style control}
 
 The official LT-Attack code needs Bazel and a C++ compiler, which this machine lacks, so we wrote a greedy attack in the same spirit (\texttt{src/attacks/whitebox\_tree.py}). For XGBoost it reads all 60 trees; each step moves one feature to the other side of one split threshold, choosing the move that lowers the exact ensemble margin most, for at most 20 steps (margins agree with \texttt{predict\_proba} to $2\times10^{-7}$). It is not LT-Attack's leaf-tuple search with an $L_\infty$ objective. Two variants share the projection and bookkeeping of the other attacks: \emph{project at end} (unconstrained attack, then projection, then re-scoring) and \emph{project in loop} (every candidate is projected before scoring). Both use all 1,000 cohort flows, two target queries (the tree reads are not counted; about 300--1,000 internal margin evaluations per flow) and are schema-feasible by construction. For LightGBM and CatBoost the control of Table~2 is our generic version on the raw ensemble margin (\texttt{RawMarginModel}), run with projection in the loop; its 56.8\% on UNSW-NB15 CatBoost may reflect single-feature greedy steps stalling on oblivious trees, which we did not test.
 
 \begin{table}[!htbp]
 \centering
-\caption*{Table S12. Real ASR (\%) of the XGBoost white-box control and FFE-v1; exact McNemar $p$ of the in-loop variant against FFE-v1 on the same 1,000 flows.}
+\caption*{Table S14. Real ASR (\%) of the XGBoost white-box control and FFE-v1; exact McNemar $p$ of the in-loop variant against FFE-v1 on the same 1,000 flows.}
 \footnotesize
 \input{tables/tab_whitebox.tex}
 \end{table}
 
-Table S12 gives the XGBoost results. Before projection the attack evades every flow on all three corpora; most of that comes from the derived packet-rate columns and the immutable columns, which the projection undoes. The project-at-end variant is the fair version of an unconstrained white-box attack and is far below FFE-v1 ($p<10^{-170}$ on UNSW-NB15). The in-loop variant equals FFE-v1 on CSE-CIC-IDS2018, beats it on the other two corpora, and is the reference against which FFE-v2 is judged in the main text. It sees the trees and is cost-blind: its median operational cost is 213 against 40.0 for FFE-v2 and 5.6 for FFE-v1 on UNSW-NB15 XGBoost.
+Table S14 gives the XGBoost results. Before projection the attack evades every flow on all three corpora; most of that comes from the derived packet-rate columns and the immutable columns, which the projection undoes. The project-at-end variant is the fair version of an unconstrained white-box attack and is far below FFE-v1 ($p<10^{-170}$ on UNSW-NB15). The in-loop variant equals FFE-v1 on CSE-CIC-IDS2018, beats it on the other two corpora, and is the reference against which FFE-v2 is judged in the main text. It sees the trees and is cost-blind: its median operational cost is 213 against 40.0 for FFE-v2 and 5.6 for FFE-v1 on UNSW-NB15 XGBoost.
 
 \section*{S8. Packet-level replay}
 
 We built a synthetic replay (\texttt{src/validation/packet\_replay.py}); no packet capture was used and nothing was sent over a network. A flow record is expanded into a packet sequence with the stated packet counts, payload and header totals, duration and initial window, and a CICFlowMeter-style extractor (our re-implementation, not CICFlowMeter) recomputes the twelve features. For 20,000 flows per corpus the round trip is exact for every flow on CSE-CIC-IDS2018 and CIC-IDS2017 and for 19,999 of 20,000 on UNSW-NB15 (one one-packet record with a duration of 1~$\mu$s); this shows that the schema is jointly realizable by packet lists, not that it matches a real capture.
 
-For FFE-v2 the integer action ledger of each successful flow (delay, chaff, re-segmented packets, padding, window) is applied to the trace; segmentation halves the largest forward packet $K$ times, and tests confirm that payload, duration, first forward packet and window are unchanged. The generators book 28--52~B of forward payload per chaff packet, whereas a minimal packet carries none, so three conventions are replayed: \emph{schema} (chaff carries the booked bytes), \emph{empty chaff, bytes as padding} (empty chaff, same feature vector), and \emph{empty chaff, bytes dropped} (the booked bytes are not delivered). Table~S13 gives the share of schema-level evasions that remain evasive (XGBoost, first 300 flows per corpus). Under the first two conventions 100\% of replayed flows reproduce the schema vector within 1\% on all twelve features and stay feasible, with no unmet segmentation or padding. The header-length mismatch of FFE-v1 does not arise because the ledger, not the vector difference, drives the replay.
+For FFE-v2 the integer action ledger of each successful flow (delay, chaff, re-segmented packets, padding, window) is applied to the trace; segmentation halves the largest forward packet $K$ times, and tests confirm that payload, duration, first forward packet and window are unchanged. The generators book 28--52~B of forward payload per chaff packet, whereas a minimal packet carries none, so three conventions are replayed: \emph{schema} (chaff carries the booked bytes), \emph{empty chaff, bytes as padding} (empty chaff, same feature vector), and \emph{empty chaff, bytes dropped} (the booked bytes are not delivered). Table~S15 gives the share of schema-level evasions that remain evasive (XGBoost, first 300 flows per corpus). Under the first two conventions 100\% of replayed flows reproduce the schema vector within 1\% on all twelve features and stay feasible, with no unmet segmentation or padding. The header-length mismatch of FFE-v1 does not arise because the ledger, not the vector difference, drives the replay.
 
 \begin{table}[!htbp]
 \centering
-\caption*{Table S13. Share (\%) of FFE-v2's schema-level evasions that remain evasive after packet-level replay (XGBoost).}
+\caption*{Table S15. Share (\%) of FFE-v2's schema-level evasions that remain evasive after packet-level replay (XGBoost).}
 \footnotesize
 \input{tables/tab_replay.tex}
 \end{table}
@@ -157,18 +178,18 @@ On the 1,000-flow cohort FFE-v1 evaded XGBoost in 99.2\% and LightGBM in 35.1\%.
 
 \section*{S10. FFE-v1 ablations}
 
-These results refer to FFE-v1 (four generators, tree-split boundary snapping) and are kept as the history of the baseline. Table~S14 compares FFE-v1 with and without snapping (TSBS) on the 1,000-flow cohorts: snapping leaves Real ASR unchanged on CSE-CIC-IDS2018, lifts it from 97.5\% to 99.2\% on CIC-IDS2017 and from 54.6\% to 57.6\% on UNSW-NB15, and costs up to 1.8 times as many queries. Table~S15 reports step-budget, generator-subset and cost-regime ablations on the CUDA XGBoost target of CSE-CIC-IDS2018 with a balanced cohort of 283 detected malicious flows (up to 50 per family): success rises from 42.8\% at $M=1$ to 98.9\% at $M\ge10$; no single generator suffices (10.2\%--66.1\%); the cost regime and snapping offset leave 98.9\% unchanged on this saturated corpus. Table~S16 gives clean performance and surrogate agreement of FFE-v1's targets.
+These results refer to FFE-v1 (four generators, tree-split boundary snapping) and are kept as the history of the baseline. Table~S16 compares FFE-v1 with and without snapping (TSBS) on the 1,000-flow cohorts: snapping leaves Real ASR unchanged on CSE-CIC-IDS2018, lifts it from 97.5\% to 99.2\% on CIC-IDS2017 and from 54.6\% to 57.6\% on UNSW-NB15, and costs up to 1.8 times as many queries. Table~S17 reports step-budget, generator-subset and cost-regime ablations on the CUDA XGBoost target of CSE-CIC-IDS2018 with a balanced cohort of 283 detected malicious flows (up to 50 per family): success rises from 42.8\% at $M=1$ to 98.9\% at $M\ge10$; no single generator suffices (10.2\%--66.1\%); the cost regime and snapping offset leave 98.9\% unchanged on this saturated corpus. Table~S18 gives clean performance and surrogate agreement of FFE-v1's targets.
 
 \begin{table}[!htbp]
 \centering
-\caption*{Table S14. FFE-v1 with and without tree-split boundary snapping (XGBoost, Real ASR with Wilson 95\% interval).}
+\caption*{Table S16. FFE-v1 with and without tree-split boundary snapping (XGBoost, Real ASR with Wilson 95\% interval).}
 \footnotesize
 \input{tables/tab_tsbs.tex}
 \end{table}
 
 \begin{table}[!htbp]
 \centering
-\caption*{Table S15. Ablation of FFE-v1 on CUDA XGBoost, CSE-CIC-IDS2018 ($N=283$). Delay is the mean added flow duration.}
+\caption*{Table S17. Ablation of FFE-v1 on CUDA XGBoost, CSE-CIC-IDS2018 ($N=283$). Delay is the mean added flow duration.}
 \footnotesize
 \resizebox{\columnwidth}{!}{%
 \input{tables/tab_ablation.tex}%
@@ -177,7 +198,7 @@ These results refer to FFE-v1 (four generators, tree-split boundary snapping) an
 
 \begin{table}[!htbp]
 \centering
-\caption*{Table S16. FFE-v1 against XGBoost and LightGBM: clean test performance, Real ASR on the 1,000-flow cohort (Wilson 95\% intervals) and surrogate--target agreement.}
+\caption*{Table S18. FFE-v1 against XGBoost and LightGBM: clean test performance, Real ASR on the 1,000-flow cohort (Wilson 95\% intervals) and surrogate--target agreement.}
 \scriptsize
 \resizebox{\columnwidth}{!}{%
 \input{tables/tab_models.tex}%
@@ -186,11 +207,11 @@ These results refer to FFE-v1 (four generators, tree-split boundary snapping) an
 
 \section*{S11. Cross-architecture transferability of FFE-v1}
 
-Flows crafted by FFE-v1 against a source ensemble were scored by the three other architectures (Table~S17). The cohort is the 221 CSE-CIC-IDS2018 malicious flows (up to 50 per family) that XGBoost, LightGBM, CatBoost and Random Forest all detect when clean, all trained on the same partition. Flows crafted against XGBoost evade LightGBM in 71.5\%, Random Forest in 55.7\% and CatBoost in 24.0\%; LightGBM flows evade XGBoost in 75.6\%, Random Forest in 63.8\% and CatBoost in 24.0\%; CatBoost flows evade XGBoost in 70.1\%, LightGBM in 77.4\% and Random Forest in 77.4\%; Random Forest flows evade XGBoost in 78.7\%, LightGBM in 71.0\% and CatBoost in 24.0\%. CatBoost is the hardest transfer target, but direct score-only attacks on it succeed in 99.5\%, 36.4\% and 97.5\% of the flows of the three corpora with FFE-v2 (Table~2), so the low transfer rate reflects mismatched borders rather than robustness.
+Flows crafted by FFE-v1 against a source ensemble were scored by the three other architectures (Table~S19). The cohort is the 221 CSE-CIC-IDS2018 malicious flows (up to 50 per family) that XGBoost, LightGBM, CatBoost and Random Forest all detect when clean, all trained on the same partition. Flows crafted against XGBoost evade LightGBM in 71.5\%, Random Forest in 55.7\% and CatBoost in 24.0\%; LightGBM flows evade XGBoost in 75.6\%, Random Forest in 63.8\% and CatBoost in 24.0\%; CatBoost flows evade XGBoost in 70.1\%, LightGBM in 77.4\% and Random Forest in 77.4\%; Random Forest flows evade XGBoost in 78.7\%, LightGBM in 71.0\% and CatBoost in 24.0\%. CatBoost is the hardest transfer target, but direct score-only attacks on it succeed in 99.5\%, 36.4\% and 97.5\% of the flows of the three corpora with FFE-v2 (Table~2), so the low transfer rate reflects mismatched borders rather than robustness.
 
 \begin{table}[!htbp]
 \centering
-\caption*{Table S17. Transferability of FFE-v1 flows (success rate in \%, $N=221$; diagonal: attack against the source model itself).}
+\caption*{Table S19. Transferability of FFE-v1 flows (success rate in \%, $N=221$; diagonal: attack against the source model itself).}
 \footnotesize
 \resizebox{\columnwidth}{!}{%
 \input{tables/tab_transfer.tex}%
@@ -199,11 +220,11 @@ Flows crafted by FFE-v1 against a source ensemble were scored by the three other
 
 \section*{S12. Corpora and cleaning}
 
-Table~S18 gives the record counts. Valid records pass the validity filter; Kept = Valid $-$ Duplicates, where duplicates are records with identical features and label after projection onto the manifold. Records with identical features but different labels are kept (149,526, 22 and 1,040). Cleaning drops records with missing or infinite values, non-positive duration, no forward packet or a protocol other than TCP or UDP, and TCP flows without an observed window (the window of UDP flows, recorded as $-1$ by CICFlowMeter, is set to 0); in CIC-IDS2017 the 11,974 ``Attempted'' probes are removed and ``Infiltration -- Portscan'' is counted as port scanning; in UNSW-NB15 zero-duration flows are dropped. The projection onto the manifold changes a feature by more than 5\% in 3.1\% of the valid CSE-CIC-IDS2018 records, 4.7\% of CIC-IDS2017 and none of UNSW-NB15.
+Table~S20 gives the record counts. Valid records pass the validity filter; Kept = Valid $-$ Duplicates, where duplicates are records with identical features and label after projection onto the manifold. Records with identical features but different labels are kept (149,526, 22 and 1,040). Cleaning drops records with missing or infinite values, non-positive duration, no forward packet or a protocol other than TCP or UDP, and TCP flows without an observed window (the window of UDP flows, recorded as $-1$ by CICFlowMeter, is set to 0); in CIC-IDS2017 the 11,974 ``Attempted'' probes are removed and ``Infiltration -- Portscan'' is counted as port scanning; in UNSW-NB15 zero-duration flows are dropped. The projection onto the manifold changes a feature by more than 5\% in 3.1\% of the valid CSE-CIC-IDS2018 records, 4.7\% of CIC-IDS2017 and none of UNSW-NB15.
 
 \begin{table}[!htbp]
 \centering
-\caption*{Table S18. Full-scale benchmark corpora.}
+\caption*{Table S20. Full-scale benchmark corpora.}
 \footnotesize
 \input{tables/tab_corpora.tex}
 \end{table}
@@ -211,7 +232,7 @@ Table~S18 gives the record counts. Valid records pass the validity filter; Kept 
 \section*{S13. Related-work taxonomy}
 
 \begin{table}[!htbp]
-\caption*{Table S19. Representative evasion, verification and defense paradigms for tabular and network telemetry. Physical feasibility reports the empirical PFR of this benchmark where it was evaluated.}
+\caption*{Table S21. Representative evasion, verification and defense paradigms for tabular and network telemetry. Physical feasibility reports the empirical PFR of this benchmark where it was evaluated.}
 \centering
 \linespread{1}\selectfont
 \footnotesize

@@ -7,13 +7,13 @@
 \begin{table}[!htbp]
 \linespread{1}\selectfont
 \centering
-\caption{Evasion benchmark against CUDA XGBoost on the full corpora. All methods except MOEVA and PSO attack the same 1,000 detected malicious test flows; MOEVA and PSO attack the first 200 of them. ASR, PFR and Real ASR in \%; PFR is the share of evasive candidates that are schema-feasible; Op.\ cost and $D_{L_1}$ are medians over the method's own feasible evasions; -- means no feasible evasion. FFE-v1 reads thresholds, the control reads the trees, FFE-v2 (bold) reads scores only.}\label{tab:master_evasion_benchmark}
+\caption{Evasion benchmark against CUDA XGBoost on the full corpora. All methods except MOEVA and PSO attack the same 1,000 detected malicious test flows; MOEVA and PSO attack the first 200 of them. PFR: share of evasive candidates that are schema-feasible; Op.\ cost and $D_{L_1}$: medians over the method's own feasible evasions. FFE-v1 reads thresholds, the control reads the trees, FFE-v2 (bold) reads scores only.}\label{tab:master_evasion_benchmark}
 \resizebox{\textwidth}{!}{%
 \input{tables/tab_master.tex}%
 }
 \end{table}
 
-Table~\ref{tab:master_evasion_benchmark} compares FFE-v2 with FFE-v1, the projected white-box control and the seven earlier baselines. Evading the model in feature space is not the same as producing a feasible flow: HopSkipJump-NIDS reaches 100.0\% ASR on two corpora yet none of its evasive candidates is feasible, and the naive attack and ZOO-NIDS keep only 34.4\% and 35.0\% of their evasions on CIC-IDS2017 and 0.9\% and 0.0\% on UNSW-NB15. On CSE-CIC-IDS2018 they keep 88.0\% and 83.2\% at essentially zero cost, which is consistent with moving only coupled rate features within the 5\% tolerance of the consistency check, so that check flatters them.
+Table~\ref{tab:master_evasion_benchmark} compares FFE-v2 with FFE-v1, the projected white-box control and the seven earlier baselines. Feature-space success is not feasibility: HopSkipJump-NIDS reaches 100.0\% ASR on two corpora with no feasible evasive flow, and the naive attack and ZOO-NIDS keep 83--88\% of their evasions on CSE-CIC-IDS2018 at zero cost, consistent with moving only coupled rates within the 5\% tolerance, so that check flatters them.
 
 FFE-v2 reaches a Real ASR of 99.5\%, 100.0\% and 98.3\% on CSE-CIC-IDS2018, CIC-IDS2017 and UNSW-NB15. It is significantly above all seven earlier baselines on every corpus (21 exact McNemar tests, largest Holm-adjusted $p=8\times10^{-28}$); the closest competitor, CAPGD (88.5\%, 89.5\%, 21.1\%), is beaten on 110, 105 and 772 flows against none. Against the stronger references the picture is more precise. On the two easy corpora our greedy white-box control, which reads the trees, ties FFE-v2 (99.5\% and 100.0\%, identical flows); the five CSE-CIC-IDS2018 flows that FFE-v2, FFE-v1 and the control all miss are DDoS flows that no tested move reached. On UNSW-NB15 FFE-v2 exceeds the control (98.3\% against 90.2\%; 89 flows against 8, $p=2\times10^{-18}$) and FFE-v1 (57.6\%; 412 against 5). FFE-v1 had been 32.6 points \emph{below} the control there, and the difference is the repair described in Section~\ref{sec:algorithm}: on the validation flows that FFE-v1 missed, the control's successful moves raise the packet count by a median of 213 and in 82\% of the cases leave the byte total unchanged, which is the re-segmentation move that FFE-v1 could not express (Supplementary Section~S3). FFE-v2 with snapping, which reads thresholds, is statistically indistinguishable on XGBoost (98.5\% on UNSW-NB15; $p=0.5$), so the score-only variant is the headline.
 
@@ -25,7 +25,7 @@ The methods pay differently. CAPGD and the NIDSGAN-style generator need far fewe
 \begin{table}[!htbp]
 \linespread{1}\selectfont
 \centering
-\caption{Real ASR (\%) on the 1,000-flow test cohorts (CatBoost: flows it detects), per corpus and target library, with the clean test accuracy of the target and mean queries per flow ($q$). Single frozen evaluation. FFE-v1 and +snap read thresholds, the control reads the trees, FFE-v2 reads scores only.}\label{tab:crosslib}
+\caption{Real ASR (\%) on the 1,000-flow test cohorts (CatBoost: flows it detects), with clean test accuracy and mean queries per flow ($q$). Single frozen evaluation.}\label{tab:crosslib}
 \linespread{1}\selectfont
 \resizebox{\textwidth}{!}{%
 \input{tables/tab_crosslib.tex}%

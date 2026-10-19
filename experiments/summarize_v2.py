@@ -304,6 +304,9 @@ def v2_tables() -> Dict[str, str]:
            'tab_replay.tex': replay_table(), 'tab_whitebox.tex': whitebox_table(),
            'tab_defense.tex': defense_main_table(dv), 'tab_defense_gate.tex': defense_gate_table(dv),
            'tab_defense_sel.tex': defense_selection_table(dv)}
+    from summarize_followup import followup_tables, load_followup, main_defense_table
+    out['tab_defense.tex'] = main_defense_table(dv, load_followup())
+    out.update(followup_tables())
     out.update(seeds_tables())
     out.update(defense_full_tables(dv))
     return out

@@ -3,6 +3,14 @@
 Repo: `vinhqdang/adversarial_ids`, branch `main` only (owner's rules: push to `main`, no other branch, no tool or assistant attribution anywhere, git identity `Vinh <dqvinh87@gmail.com>`). The owner commits and pushes.
 Paper: `paper/` (LaTeX, `elsarticle`), author Quang-Vinh Dang. Python: conda env `py313` (call `.../envs/py313/python.exe` directly). GPU: RTX 5000 Ada, 16 GB, 32 CPU cores. **Import xgboost/lightgbm before torch.**
 
+## 0. Submission status
+
+**Submitted on 2026-10-19 to SN Computer Science (Springer Nature; single-blind; Editorial Manager https://www.editorialmanager.com/sncs).**
+Submitted files: `paper_springer/sn_manuscript.pdf` (27 pages) and `paper_springer/online_resource_1.pdf` (23 pages), with the LaTeX sources (`paper_springer/` is generated from `paper/` by `paper_springer/make_sections.py`). The Elsevier version (`paper/elsevier_manuscript.tex`, 40 pages, Information Sciences) is kept but was not submitted.
+Last commit before submission: `dbd2ae7` on `main`. Declarations: no funding; no competing interests; a neutral statement on the use of generative AI tools is included in the Declarations (Springer policy); corresponding author vinh.dq4@buv.edu.vn; ORCID 0000-0002-3877-8024; postcode 160000 (owner-supplied).
+Not done at submission time: no cover letter was drafted by the assistant (owner handled the form); open scientific caveats are listed in the manuscript Limitations (FFE-v2 vs hardened models run only on CIC-IDS2017 XGBoost; defense certificate assumes unchanged backward traffic; own greedy white-box control, no LT-Attack or Cascioli et al.; single-split test is not a clean hold-out).
+If a revision is requested: edit `paper/`, then run `bash paper_springer/build.sh`; keep numbers tied to `results/*.json`; commit to `main` only.
+
 ## 1. History in one paragraph
 
 12,000-flow sample results were replaced by full-data runs (three corpora, deduplicated). FFE-v1 (four generators) was then found weaker than a projected white-box control on UNSW-NB15 and on LightGBM/CatBoost. FFE-v2 repaired it (diagnosis and tuning on the validation split, frozen configuration, one test evaluation), and a certified monotone-gate defense replaced the old MPS/LGAT-only defense section. The manuscript, supplementary, highlights and README were rewritten to report this honestly.

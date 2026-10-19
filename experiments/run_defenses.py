@@ -30,7 +30,7 @@ from src.attacks.flow_field_evasion import FlowFieldEvasionAttack, PhysicalFlowG
 from src.attacks.modern_baselines import CAPGDTransferAttack, LogStandardizer, train_surrogate
 from src.datasets.schema import get_cicids_schema
 
-DATASET = 'cse2018'
+DATASET = 'cse2018'          # overridden by the command line
 N_PER_FAMILY = 50
 MAX_AUGMENT = 5000            # Lie-guided samples generated per LGAT model (cost cap)
 MASKED = (6, 8, 9)            # duration and the two rates: the features temporal dilation changes
@@ -84,7 +84,9 @@ def train_xgb(X, y) -> NIDSEnsembleTrainer:
     return t
 
 
-def run_defenses_experiment() -> Dict[str, object]:
+def run_defenses_experiment(dataset: str = DATASET) -> Dict[str, object]:
+    global DATASET
+    DATASET = dataset
     schema = get_cicids_schema()
     print(f'Loading full {DATASET} dataset...')
     data = load_arrays(DATASET)
@@ -133,7 +135,8 @@ def run_defenses_experiment() -> Dict[str, object]:
     out = {'dataset': DATASET, 'cohort_size': int(len(cohort)), 'lgat_augment_samples': int(n_aug),
            'masked_features': list(MASKED), 'malleability_index': [float(v) for v in m_mal],
            'attack_prevalence_test': float(y_test.mean()), 'models': results}
-    out_path = os.path.join(os.path.dirname(__file__), '..', 'results', 'defense_results.json')
+    out_path = os.path.join(os.path.dirname(__file__), '..', 'results',
+                            'defense_results.json' if DATASET == 'cse2018' else f'defense_{DATASET}.json')
     with open(out_path, 'w') as fh:
         json.dump(out, fh, indent=2)
     print(f'\n[Saved] {os.path.abspath(out_path)}')
@@ -141,4 +144,5 @@ def run_defenses_experiment() -> Dict[str, object]:
 
 
 if __name__ == '__main__':
-    run_defenses_experiment()
+    import sys
+    run_defenses_experiment(sys.argv[1] if len(sys.argv) > 1 else DATASET)

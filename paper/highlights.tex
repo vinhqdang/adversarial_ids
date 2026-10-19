@@ -7,11 +7,11 @@
 
 \section*{Research Highlights}
 \begin{itemize}
-    \item Four packet-level attacker actions are modeled as Lie-cone generators on flows.
-    \item Trajectories in the cone provably preserve rate, length, header and MTU invariants.
-    \item On full IDS2018/2017/UNSW-NB15, FFE evades 99.5/99.2/57.6\% of detected attacks.
-    \item FFE beats seven baselines; a projected white-box tree attack matches or beats it.
-    \item Adversarial training helps at its training budget but much less at larger budgets.
+    \item FFE-v2 adds re-segmentation to commuting Lie generators of packet-level actions.
+    \item Score-only FFE-v2 matches or exceeds our greedy white-box control in 9 of 9 cells.
+    \item On XGBoost it evades 99.5/100/98.3\% of detected attacks; FFE-v1 gets 57.6\% on UNSW.
+    \item CatBoost on CIC-IDS2017 stays at 36.4\%: immutable features set a ceiling.
+    \item A monotone gate keeps flagged flows flagged only if backward features stay fixed.
 \end{itemize}
 
 \end{document}

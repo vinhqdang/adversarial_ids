@@ -18,6 +18,8 @@
 \usepackage{lineno}
 % \linenumbers % Uncomment if the journal editor/reviewers request line numbers
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\def\UrlBreaks{\do\/\do\-\do\.\do\_\do\?\do\=\do\&}
+\Urlmuskip=0mu plus 1mu
 
 %% Float placement parameters
 \renewcommand{\topfraction}{0.95}
@@ -55,7 +57,7 @@
             country={Vietnam}}
 
 \begin{abstract}
-Gradient-boosted decision trees dominate flow-based network intrusion detection, yet their robustness to schema-feasible evasion is rarely measured at scale. Feature-space attacks ignore the coupling invariants of flow records; packet mutators need hundreds of queries. We propose Flow-Field Evasion (FFE), which models four packet-level actions (temporal dilation, payload padding, chaff injection, TCP window morphing) as infinitesimal generators of a Lie cone on the flow manifold, steers along the most cost-effective generator and finishes with a snap to tree split thresholds. On three full, deduplicated corpora, CSE-CIC-IDS2018 (5.0 million flows), CIC-IDS2017 (1.7 million) and UNSW-NB15 (124 thousand), FFE evades XGBoost in 99.5\%, 99.2\% and 57.6\% of the detected attacks with 15--94 queries. On the main seed it is significantly more successful than seven baselines, including surrogate-based CAPGD (88.5\%, 89.5\%, 21.1\%); over five retrained seeds its mean Real ASR (99.7\%, 97.3\%, 58.3\%) stays above CAPGD's (97.7\%, 82.4\%, 31.5\%). A white-box tree attack that projects every candidate matches or exceeds FFE on all three corpora (99.5\%, 100.0\%, 90.2\%). Lie-guided adversarial training nearly halves FFE success at the budget it was trained on (84.1\% to 46.5\%) but protects much less against a larger budget (80.3\%).
+Gradient-boosted trees dominate flow-based network intrusion detection, yet their worst-case robustness to schema-feasible evasion is rarely measured. Flow-Field Evasion (FFE) models packet-level actions as commuting generators on the flow manifold. After diagnosing FFE-v1, we introduce FFE-v2 (re-segmentation, multi-scale probing, data-driven window targets), which uses scores only. On three full, deduplicated corpora and three libraries, it matches or exceeds our greedy threshold-crossing control and FFE-v1 in all nine cells (significantly above the control in four); on XGBoost its Real ASR is 99.5\%, 100.0\% and 98.3\%, against 57.6\% for FFE-v1 and 21.1\% for CAPGD on UNSW-NB15. It needs 28--38 queries (control: 2). CatBoost on CIC-IDS2017 (36.4\%) is a ceiling set by immutable features. Feasibility is relative to a schema verifier, and chaff accounting matters on UNSW-NB15. As a defense, a monotone gate is OR-fused with a free classifier (hardened on five of nine cells). If backward features stay fixed, flagged flows stay flagged. Against FFE-v1, CAPGD and a greedy white-box attacker, Real ASR is at most 8.8\% on CSE-CIC-IDS2018 and CIC-IDS2017 and 1.0--32\% on UNSW-NB15, one seed; FFE-v2 was not run against it. The single test evaluation is not a clean hold-out; five-seed runs are cleaner.
 \end{abstract}
 
 \begin{keyword}
@@ -64,6 +66,7 @@ Adversarial machine learning \sep Network intrusion detection \sep Gradient boos
 
 \end{frontmatter}
 
+\sloppy
 \input{sec1_introduction.tex}
 
 \input{sec2_related_work.tex}
@@ -93,14 +96,15 @@ The author declares no known competing financial interests or personal relations
 This research received no external funding.
 
 \section*{Data availability}
-The code, the dataset builders and the per-flow result archives for FFE and all baselines (naive, ZOO-NIDS, HopSkipJump-NIDS, MOEVA, PSO, CAPGD, NIDSGAN-style), the ablations, the transfer study and the defenses are at \url{https://github.com/vinhqdang/adversarial_ids}. All flow data come from the public CSE-CIC-IDS2018, CIC-IDS2017 and UNSW-NB15 archives.
+\sloppy
+The code, the dataset builders and the per-flow result archives for FFE-v1, FFE-v2, the white-box control, all baselines (naive, ZOO-NIDS, HopSkipJump-NIDS, MOEVA, PSO, CAPGD, NIDSGAN-style), the validation tuning, the multi-seed runs, the packet replay and the defenses are at \url{https://github.com/vinhqdang/adversarial_ids}; every table is regenerated from the result files by \texttt{experiments/summarize\_results.py}. All flow data come from the public CSE-CIC-IDS2018, CIC-IDS2017 and UNSW-NB15 archives.
 
 
 % APPENDICES
 
 % REFERENCES
 }
-{\def\baselinestretch{1}\footnotesize\selectfont
+{\def\baselinestretch{1}\footnotesize\selectfont\sloppy
 \setlength{\bibsep}{0.5pt plus 0.5pt minus 0.2pt}
 \bibliographystyle{elsarticle-num}
 \bibliography{references}}

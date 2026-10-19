@@ -16,6 +16,7 @@ from scipy.stats import binomtest
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 from common import XGB_CFG, load_arrays  # noqa: E402
+from summarize_v2 import pairwise_v2, v2_tables  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 RES = os.path.join(ROOT, 'results')
@@ -23,6 +24,9 @@ TAB = os.path.join(ROOT, 'paper', 'tables')
 DATASETS = [('cse2018', 'CSE-CIC-IDS2018'), ('cic2017', 'CIC-IDS2017'), ('unsw', 'UNSW-NB15')]
 FFE = 'Flow-Field Evasion (FFE)'
 TSBS_OFF = 'FFE without TSBS'
+V2, V2S = 'FFE-v2 (score-only)', 'FFE-v2 + snapping'
+CTRL = 'White-box control (project in loop)'
+LIBS = [('xgboost', 'XGBoost'), ('lightgbm', 'LightGBM'), ('catboost', 'CatBoost')]
 SHORT = {'Unconstrained Feature-Space': 'Unconstrained feature space', 'ZOO-NIDS': 'ZOO-NIDS',
          'HopSkipJump-NIDS': 'HopSkipJump-NIDS', 'CAA / MOEVA': 'MOEVA (search stage of CAA)',
          'Traffic Manipulator PSO': 'PSO (Traffic Manipulator, projected)',
@@ -59,10 +63,19 @@ def pfr_of_evasive(a: Dict) -> str:
     return '--' if a['asr'] == 0 else f"{100 * a['real_asr'] / a['asr']:.1f}"
 
 
-def master_table(data: Dict[str, Dict]) -> str:
+def master_table(data: Dict[str, Dict], v2: Dict[str, Dict]) -> str:
+    """XGBoost benchmark: baselines and FFE-v1 from full_*.json, control and FFE-v2 from ffev2_*.json."""
     rows = [r'\begin{tabular}{@{}lccccccc@{}}', r'\toprule',
             r'\textbf{Method} & \textbf{ASR} & \textbf{PFR} & \textbf{Real ASR [95\% CI]} & '
             r'\textbf{Queries} & \textbf{Op.\ cost} & \textbf{$D_{L_1}$} & \textbf{ms/flow} \\']
+
+    def row(label_m, a, bold=False):
+        lo, hi = a['real_asr_ci95']
+        cell = f"{a['real_asr']:.1f} [{lo:.1f}, {hi:.1f}]"
+        if bold:
+            label_m, cell = r'\textbf{' + label_m + '}', r'\textbf{' + cell + '}'
+        return (f"{label_m} & {a['asr']:.1f} & {pfr_of_evasive(a)} & {cell} & {a['avg_queries']:.1f} & "
+                f"{fmt_num(a['median_op_cost_real'])} & {fmt_num(a['median_dl1_real'])} & {a['ms_per_flow']:.1f} \\\\")
     for key, label in DATASETS:
         d = data[key]['models']['xgboost']
         c = d['cohort']
@@ -70,15 +83,14 @@ def master_table(data: Dict[str, Dict]) -> str:
                  + f"{100 * d['clean']['accuracy']:.2f}" + r'\%, test attacks ' + f"{c['n_malicious_test']:,}"
                  + r', detected by both models ' + f"{c['n_detected']:,}" + r')} \\', r'\midrule']
         for name, a in d['attacks'].items():
-            if name == TSBS_OFF:
+            if name in (TSBS_OFF, FFE):
                 continue
-            lo, hi = a['real_asr_ci95']
-            label_m = SHORT[name] + (' ' + CITE[name] if name in CITE else '')
-            cell = f"{a['real_asr']:.1f} [{lo:.1f}, {hi:.1f}]"
-            if name == FFE:
-                label_m, cell = r'\textbf{FFE (ours)}', r'\textbf{' + cell + '}'
-            rows.append(f"{label_m} & {a['asr']:.1f} & {pfr_of_evasive(a)} & {cell} & {a['avg_queries']:.1f} & "
-                        f"{fmt_num(a['median_op_cost_real'])} & {fmt_num(a['median_dl1_real'])} & {a['ms_per_flow']:.1f} \\\\")
+            rows.append(row(SHORT[name] + (' ' + CITE[name] if name in CITE else ''), a))
+        rows.append(row('FFE-v1 (reads thresholds)', d['attacks'][FFE]))
+        va = v2[key]['models']['xgboost']['attacks']
+        rows.append(row('White-box control (projected, reads trees)', va[CTRL]))
+        rows.append(row('FFE-v2 + snapping (reads thresholds)', va[V2S]))
+        rows.append(row('FFE-v2 (score-only)', va[V2], bold=True))
     rows += [r'\bottomrule', r'\end{tabular}']
     return '\n'.join(rows)
 
@@ -150,23 +162,6 @@ def tsbs_table(data: Dict[str, Dict]) -> str:
     return '\n'.join(rows)
 
 
-def seeds_table() -> str:
-    rows = [r'\begin{tabular}{@{}lcccc@{}}', r'\toprule',
-            r'\textbf{Dataset} & \textbf{Acc.\ (\%)} & \textbf{FFE} & \textbf{CAPGD} & \textbf{NIDSGAN-style} \\',
-            r'\midrule']
-    for key, label in DATASETS:
-        runs = load(f'seeds_{key}.json')['runs']
-
-        def ms(vals, scale=1.0, dec=1):
-            v = np.array(vals) * scale
-            return f'{v.mean():.{dec}f} $\\pm$ {v.std(ddof=1):.{dec}f}'
-        rows.append(f"{label} ({len(runs)} seeds) & {ms([r['accuracy'] for r in runs], 100, 2)} & "
-                    + ' & '.join(ms([r['attacks'][k]['real_asr'] for r in runs]) for k in ('FFE', 'CAPGD', 'NIDSGAN-style'))
-                    + r' \\')
-    rows += [r'\bottomrule', r'\end{tabular}']
-    return '\n'.join(rows)
-
-
 def ablation_table(ab: Dict) -> str:
     def block(title, items, key_fmt=lambda k: k):
         out = [r'\midrule', r'\multicolumn{5}{@{}l}{\textit{' + title + r'}} \\']
@@ -192,17 +187,6 @@ def transfer_table(tr: Dict) -> str:
     for s in names:
         cells = [(r'\textbf{%.1f}' if s == t else '%.1f') % tr['transferability_matrix'][s][t] for t in names]
         rows.append(r'\textbf{' + s + '} & ' + ' & '.join(cells) + r' \\')
-    rows += [r'\bottomrule', r'\end{tabular}']
-    return '\n'.join(rows)
-
-
-def defense_table(df: Dict) -> str:
-    rows = [r'\begin{tabular}{@{}lcccccc@{}}', r'\toprule',
-            r'\textbf{Model} & \textbf{Acc.} & \textbf{F1} & \textbf{Attack recall} & '
-            r'\textbf{FFE $M{=}5$} & \textbf{FFE $M{=}20$} & \textbf{CAPGD} \\', r'\midrule']
-    for name, m in df['models'].items():
-        rows.append(f"{name} & {m['clean_accuracy']:.2f} & {m['clean_f1']:.2f} & {m['clean_attack_recall']:.2f} & "
-                    f"{m['ffe_m5']['real_asr']:.1f} & {m['ffe_m20']['real_asr']:.1f} & {m['capgd']['real_asr']:.1f} \\\\")
     rows += [r'\bottomrule', r'\end{tabular}']
     return '\n'.join(rows)
 
@@ -292,16 +276,17 @@ def write(name: str, text: str) -> None:
 
 def main() -> None:
     data = {k: load(f'full_{k}.json') for k, _ in DATASETS}
-    write('tab_master.tex', master_table(data))
+    v2 = {k: load(f'ffev2_{k}.json') for k, _ in DATASETS}
+    write('tab_master.tex', master_table(data, v2))
     write('tab_corpora.tex', corpora_table())
     write('tab_family.tex', family_table(data))
     write('tab_models.tex', model_table(data))
     write('tab_tsbs.tex', tsbs_table(data))
-    write('tab_seeds.tex', seeds_table())
     write('tab_ablation.tex', ablation_table(load('ablation_results.json')))
     write('tab_transfer.tex', transfer_table(load('transferability_results.json')))
-    write('tab_defense.tex', defense_table(load('defense_results.json')))
-    summary = {'pairwise_mcnemar': pairwise(data), 'efficiency_ratios': efficiency_ratios(data),
+    for name, text in v2_tables().items():
+        write(name, text)
+    summary = {'pairwise_mcnemar': pairwise(data), 'pairwise_mcnemar_ffev2': pairwise_v2(data), 'efficiency_ratios': efficiency_ratios(data),
                'seed_wins': seed_wins(),
                'root_splits': {k: root_splits(k) for k, _ in DATASETS},
                'dedup': {k: json.load(open(os.path.join(ROOT, 'data', 'full', f'{k}_stats.json')))

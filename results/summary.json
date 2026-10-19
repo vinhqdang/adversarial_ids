@@ -196,6 +196,203 @@
    }
   }
  },
+ "pairwise_mcnemar_ffev2": {
+  "cse2018": {
+   "Unconstrained Feature-Space": {
+    "n": 1000,
+    "v2_only": 671,
+    "baseline_only": 0,
+    "p": 2.041281525984782e-202,
+    "v2_real_asr_same_flows": 99.5,
+    "baseline_real_asr": 32.4,
+    "p_holm": 2.24540967858326e-201
+   },
+   "ZOO-NIDS": {
+    "n": 1000,
+    "v2_only": 743,
+    "baseline_only": 0,
+    "p": 4.322581767826614e-224,
+    "v2_real_asr_same_flows": 99.5,
+    "baseline_real_asr": 25.2,
+    "p_holm": 5.187098121391936e-223
+   },
+   "HopSkipJump-NIDS": {
+    "n": 1000,
+    "v2_only": 995,
+    "baseline_only": 0,
+    "p": 5.972887158420601e-300,
+    "v2_real_asr_same_flows": 99.5,
+    "baseline_real_asr": 0.0,
+    "p_holm": 1.1945774316841202e-298
+   },
+   "CAA / MOEVA": {
+    "n": 200,
+    "v2_only": 142,
+    "baseline_only": 0,
+    "p": 3.587324068671532e-43,
+    "v2_real_asr_same_flows": 99.5,
+    "baseline_real_asr": 28.499999999999996,
+    "p_holm": 2.5111268480700722e-42
+   },
+   "Traffic Manipulator PSO": {
+    "n": 200,
+    "v2_only": 91,
+    "baseline_only": 0,
+    "p": 8.077935669463161e-28,
+    "v2_real_asr_same_flows": 99.5,
+    "baseline_real_asr": 54.0,
+    "p_holm": 8.077935669463161e-28
+   },
+   "CAPGD (surrogate transfer)": {
+    "n": 1000,
+    "v2_only": 110,
+    "baseline_only": 0,
+    "p": 1.5407439555097887e-33,
+    "v2_real_asr_same_flows": 99.5,
+    "baseline_real_asr": 88.5,
+    "p_holm": 6.162975822039155e-33
+   },
+   "NIDSGAN-style generator": {
+    "n": 1000,
+    "v2_only": 382,
+    "baseline_only": 0,
+    "p": 2.0303534698525194e-115,
+    "v2_real_asr_same_flows": 99.5,
+    "baseline_real_asr": 61.3,
+    "p_holm": 2.0303534698525194e-114
+   }
+  },
+  "cic2017": {
+   "Unconstrained Feature-Space": {
+    "n": 1000,
+    "v2_only": 777,
+    "baseline_only": 0,
+    "p": 2.5160737381238802e-234,
+    "v2_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 22.3,
+    "p_holm": 3.5225032333734323e-233
+   },
+   "ZOO-NIDS": {
+    "n": 1000,
+    "v2_only": 782,
+    "baseline_only": 0,
+    "p": 7.862730431637126e-236,
+    "v2_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 21.8,
+    "p_holm": 1.1794095647455688e-234
+   },
+   "HopSkipJump-NIDS": {
+    "n": 1000,
+    "v2_only": 1000,
+    "baseline_only": 0,
+    "p": 1.8665272370064378e-301,
+    "v2_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 0.0,
+    "p_holm": 3.919707197713519e-300
+   },
+   "CAA / MOEVA": {
+    "n": 200,
+    "v2_only": 124,
+    "baseline_only": 0,
+    "p": 9.4039548065783e-38,
+    "v2_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 38.0,
+    "p_holm": 4.70197740328915e-37
+   },
+   "Traffic Manipulator PSO": {
+    "n": 200,
+    "v2_only": 130,
+    "baseline_only": 0,
+    "p": 1.4693679385278594e-39,
+    "v2_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 35.0,
+    "p_holm": 8.816207631167156e-39
+   },
+   "CAPGD (surrogate transfer)": {
+    "n": 1000,
+    "v2_only": 105,
+    "baseline_only": 0,
+    "p": 4.930380657631324e-32,
+    "v2_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 89.5,
+    "p_holm": 1.4791141972893971e-31
+   },
+   "NIDSGAN-style generator": {
+    "n": 1000,
+    "v2_only": 347,
+    "baseline_only": 0,
+    "p": 6.976241401869354e-105,
+    "v2_real_asr_same_flows": 100.0,
+    "baseline_real_asr": 65.3,
+    "p_holm": 6.278617261682419e-104
+   }
+  },
+  "unsw": {
+   "Unconstrained Feature-Space": {
+    "n": 1000,
+    "v2_only": 981,
+    "baseline_only": 0,
+    "p": 9.785978320356312e-296,
+    "v2_real_asr_same_flows": 98.3,
+    "baseline_real_asr": 0.2,
+    "p_holm": 1.663616314460573e-294
+   },
+   "ZOO-NIDS": {
+    "n": 1000,
+    "v2_only": 983,
+    "baseline_only": 0,
+    "p": 2.446494580089078e-296,
+    "v2_real_asr_same_flows": 98.3,
+    "baseline_real_asr": 0.0,
+    "p_holm": 4.648339702169248e-295
+   },
+   "HopSkipJump-NIDS": {
+    "n": 1000,
+    "v2_only": 983,
+    "baseline_only": 0,
+    "p": 2.446494580089078e-296,
+    "v2_real_asr_same_flows": 98.3,
+    "baseline_real_asr": 0.0,
+    "p_holm": 4.648339702169248e-295
+   },
+   "CAA / MOEVA": {
+    "n": 200,
+    "v2_only": 171,
+    "baseline_only": 0,
+    "p": 6.681911775230489e-52,
+    "v2_real_asr_same_flows": 98.5,
+    "baseline_real_asr": 13.0,
+    "p_holm": 5.345529420184391e-51
+   },
+   "Traffic Manipulator PSO": {
+    "n": 200,
+    "v2_only": 115,
+    "baseline_only": 2,
+    "p": 8.310387710030923e-32,
+    "v2_real_asr_same_flows": 98.5,
+    "baseline_real_asr": 42.0,
+    "p_holm": 1.6620775420061845e-31
+   },
+   "CAPGD (surrogate transfer)": {
+    "n": 1000,
+    "v2_only": 772,
+    "baseline_only": 0,
+    "p": 8.051435961996417e-233,
+    "v2_real_asr_same_flows": 98.3,
+    "baseline_real_asr": 21.099999999999998,
+    "p_holm": 1.0466866750595342e-231
+   },
+   "NIDSGAN-style generator": {
+    "n": 1000,
+    "v2_only": 870,
+    "baseline_only": 0,
+    "p": 2.5405852245238005e-262,
+    "v2_real_asr_same_flows": 98.3,
+    "baseline_real_asr": 11.3,
+    "p_holm": 4.064936359238081e-261
+   }
+  }
+ },
  "efficiency_ratios": {
   "cse2018": {
    "CAA / MOEVA": {

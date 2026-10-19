@@ -1,69 +1,27 @@
-\subsection{Valid Packet Streams and Flow Telemetry}
+\subsection{Valid Packet Streams, Flow Telemetry and the Twelve-Feature Schema}
 \label{sec:formulation}
-A packet stream $P=((p_1,t_1),\dots,(p_m,t_m))$ is an ordered sequence of packets with $0\le t_1\le\dots\le t_m$, where $t_i$ is the transmission time at the network interface card. Only streams in the admissible set $\mathcal{P}_{\text{valid}}$ are considered. Every packet must carry valid IPv4, TCP and UDP checksums \cite{rfc791,rfc9293,rfc768} and obey the interface MTU:
-\begin{equation}
-    \forall i \in \{1, \dots, m\}, \quad \text{Len}_{\text{IP}}(p_i) \le \text{MTU}_{\text{IP}} = 1500 \text{ bytes}
-\end{equation}
-A flow is the bidirectional set of packets sharing a 5-tuple, split into forward (client-to-server) and backward packets. A flow exporter such as CICFlowMeter \cite{sharafaldin2018toward} computes a deterministic, many-to-one mapping
-\begin{equation}
-    \Phi: \mathcal{P}_{\text{valid}} \to \mathbb{R}^d
-\end{equation}
-and $x=\Phi(P)$ summarizes the transmission.
+A packet stream $P=((p_1,t_1),\dots,(p_m,t_m))$ is an ordered sequence of packets with $0\le t_1\le\dots\le t_m$. Only streams in the admissible set $\mathcal{P}_{\text{valid}}$ are considered: every packet carries valid IPv4, TCP and UDP checksums \cite{rfc791,rfc9293,rfc768} and obeys the interface MTU, $\text{Len}_{\text{IP}}(p_i)\le 1500$ bytes. A flow is the bidirectional set of packets sharing a 5-tuple, split into forward (client-to-server) and backward packets, and a flow exporter such as CICFlowMeter \cite{sharafaldin2018toward} computes a deterministic, many-to-one mapping $\Phi:\mathcal{P}_{\text{valid}}\to\mathbb{R}^d$, $x=\Phi(P)$.
 
-\subsection{Twelve-Dimensional Feature Schema}
-We use a standardized 12-dimensional schema of the core metrics that state-of-the-art models analyze on CSE-CIC-IDS2018 \cite{sharafaldin2018toward}. The feature vector $x\in\mathbb{R}^{12}$ comprises: $x_0$, destination port; $x_1$, protocol (6 for TCP, 17 for UDP); $x_2$, number of forward packets; $x_3$, number of backward packets; $x_4=\sum_{p_i\in P_{\text{fwd}}}\text{Len}(p_i)$, forward wire bytes including IP and transport headers; $x_5$, backward bytes; $x_6=(t_m-t_1)\times 10^6$, flow duration in microseconds; $x_7$, initial forward TCP window ($0\le x_7\le 65535$, and $x_7\equiv 0$ for UDP); $x_8$, flow bytes per second; $x_9$, flow packets per second; $x_{10}$, mean forward packet length; and $x_{11}$, forward transport header bytes, which must be at least the per-packet minimum header size times $x_2$. The rates and mean are fixed by the relation
+We use a standardized 12-dimensional schema of the core metrics that state-of-the-art models analyze on CSE-CIC-IDS2018 \cite{sharafaldin2018toward}: $x_0$, destination port; $x_1$, protocol (6 for TCP, 17 for UDP); $x_2$, forward packets; $x_3$, backward packets; $x_4$, forward length total (the exporter's Total Length of Forward Packets); $x_5$, backward length total; $x_6=(t_m-t_1)\times 10^6$, duration in microseconds; $x_7$, initial forward TCP window ($0\le x_7\le 65535$, $x_7\equiv 0$ for UDP); $x_8$, flow bytes per second; $x_9$, flow packets per second; $x_{10}$, mean forward packet length; and $x_{11}$, forward transport header bytes, at least the per-packet minimum header size times $x_2$. The coupled columns are fixed by
 \begin{equation}
-\begin{aligned}
-    x_8 &= g_8(x_4,x_5,x_6)=\frac{10^6\,(x_4+x_5)}{x_6}, \qquad x_9 = g_9(x_2,x_3,x_6)=\frac{10^6\,(x_2+x_3)}{x_6},\\
-    x_{10} &= g_{10}(x_4,x_2)=\frac{x_4}{\max(1,x_2)}
-\end{aligned}
+    x_8=\frac{10^6\,(x_4+x_5)}{x_6},\qquad x_9=\frac{10^6\,(x_2+x_3)}{x_6},\qquad x_{10}=\frac{x_4}{\max(1,x_2)}.
 \end{equation}
+The generators of Section~\ref{sec:framework} book a chaff probe as $L_0$ bytes of $x_4$ (the wire size of an empty segment), whereas a re-segmented packet moves existing bytes and leaves $x_4$ unchanged. This accounting is a modelling choice that matters empirically (Section~\ref{sec:ablation}).
 
-\subsection{Feature Invariants}
-The indices $\mathcal{D}=\{0,\dots,11\}$ fall into five constraint classes derived from network semantics, and a feature may belong to more than one class.
-\begin{itemize}
-    \item $\mathcal{I}_{\text{imm}}=\{0,1,3,5\}$: port, protocol and backward packets and bytes are fixed by the service and the server, so $\Delta x_i=0$.
-    \item $\mathcal{I}_{\text{mono}}^+=\{2,4,6,11\}$: an attacker may add packets, pad payloads or delay transmissions, but cannot remove bytes the payload needs, so $\Delta x_j\ge 0$.
-    \item $\mathcal{I}_{\text{bound}}=\{7\}$: the window stays within $0\le x_7+\Delta x_7\le 65535\cdot\mathbb{I}_{x_1=6}$.
-    \item $\mathcal{I}_{\text{dep}}=\{8,9,10\}$: these features are the deterministic functions $g_8,g_9,g_{10}$ of the base metrics given above.
-    \item $\mathcal{I}_{\text{ineq}}=\{4,11\}$: $x_{11}\ge x_2(20\,\mathbb{I}_{x_1=6}+8\,\mathbb{I}_{x_1=17})$ and $0 \le x_4\le 1500x_2$.
-\end{itemize}
-Feature $x_4$ is both monotone and MTU bounded. The set $\mathcal{I}_{\text{mono}}^+$ gives the mutable monotone features that Algorithm~\ref{alg:tsbs} modifies.
+\subsection{Feature Invariants and the Flow Manifold}
+The indices $\mathcal{D}=\{0,\dots,11\}$ fall into constraint classes derived from network semantics. $\mathcal{I}_{\text{imm}}=\{0,1,3,5\}$ (port, protocol, backward packets and bytes) are fixed by the service and the server. $\mathcal{I}_{\text{mono}}^+=\{2,4,6,11\}$ can only grow: an attacker may add packets, pad payloads or delay transmissions, but cannot remove what the exploit needs. The window obeys $0\le x_7\le 65535\cdot\mathbb{I}_{x_1=6}$, and $\mathcal{I}_{\text{dep}}=\{8,9,10\}$ are the deterministic functions above. In addition, $x_{11}\ge x_2(20\,\mathbb{I}_{x_1=6}+8\,\mathbb{I}_{x_1=17})$ and $0\le x_4\le 1500x_2$.
 
-\subsection{Flow Manifold and Ambient Relaxation}
-The physical flow space is the discrete image of valid packet streams under the telemetry exporter:
-\begin{equation}
-    \mathcal{M}_{\text{flow}} = \left\{ x \in \mathbb{R}^{12} \;\middle|\; \exists P \in \mathcal{P}_{\text{valid}} \text{ s.t. } \Phi(P) = x \right\} \subset \mathbb{Z}_{\ge 0}^9 \times \mathbb{R}_{\ge 0}^3
-\end{equation}
-where discrete coordinates $(x_0, x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_{11})$ satisfy integrality (with packet counts $x_2 \in \mathbb{N}_{\ge 1}, x_3 \in \mathbb{N}_{\ge 0}$, duration in integer microseconds $1 \le x_6 \le 1.1 \times 10^8\,\mu\text{s}$ bounded below the 120-second exporter timeout), rates $(x_8, x_9, x_{10}) \in \mathbb{R}_{\ge 0}^3$, and packet lengths comply with interface MTU restrictions ($x_4 \le 1500 x_2$). We focus on IPv4 ($L_{\text{IPv4}} = 20$ bytes) and standard Ethernet MTU.
-
-To enable continuous differential geometric optimization, we define the \emph{continuous ambient flow manifold} $\widetilde{\mathcal{M}}_{\text{flow}} \subset \mathbb{R}^{12}$ by relaxing packet counts and duration to positive reals ($x_2 \ge 1, x_6 > 0$), with transport header limits $H_{\min}(x_1) = 20 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17}$ and $H_{\max}(x_1) = 60 \cdot \mathbb{I}_{x_1=6} + 8 \cdot \mathbb{I}_{x_1=17}$:
-\begin{equation}
-    \widetilde{\mathcal{M}}_{\text{flow}} = \left\{ x \in \mathbb{R}^{12} \;\middle|\;
-    \begin{aligned}
-        &x_0 \in [1, 65535], \quad x_1 \in \{6, 17\}, \quad x_2 \ge 1, \quad x_3, x_5 \ge 0, \\
-        &H_{\min}(x_1) x_2 \le x_{11} \le H_{\max}(x_1) x_2, \\
-        &0 \le x_4 \le 1500 x_2, \quad 0 < x_6 \le 1.1 \times 10^8, \\
-        &0 \le x_7 \le 65535 \cdot \mathbb{I}_{x_1=6}, \quad x_{10} = x_4 / x_2, \\
-        &x_8 = 10^6 (x_4 + x_5)/x_6, \quad x_9 = 10^6 (x_2 + x_3)/x_6
-    \end{aligned}
-    \right\}
-\end{equation}
-Continuous vector field flows are formulated on $\widetilde{\mathcal{M}}_{\text{flow}}$, while discrete execution snaps continuous trajectories back to $\mathcal{M}_{\text{flow}}$ via the closed-form projection operator $\mathcal{P}_{\mathcal{M}}$ (Section~\ref{sec:algorithm}).
+The physical flow space is the discrete image of valid packet streams, $\mathcal{M}_{\text{flow}}=\{x\mid\exists P\in\mathcal{P}_{\text{valid}},\ \Phi(P)=x\}$, with integer packet counts, byte totals, header totals, window and duration (in microseconds, at most $1.1\times10^8\,\mu$s, below the 120-second exporter timeout). For continuous differential geometry we relax counts and duration to reals and obtain the \emph{ambient flow manifold}
+\begin{gather}
+    \widetilde{\mathcal{M}}_{\text{flow}}=\Big\{x\in\mathbb{R}^{12}\;\Big|\;x_0\in[1,65535],\ x_1\in\{6,17\},\ x_2\ge1,\ x_3,x_5\ge0,\notag\\
+    0<x_6\le1.1\times10^8,\ H_{\min}x_2\le x_{11}\le H_{\max}x_2,\ 0\le x_4\le1500x_2,\notag\\
+    0\le x_7\le65535\,\mathbb{I}_{x_1=6},\ x_{10}=\tfrac{x_4}{x_2},\ x_8=\tfrac{10^6(x_4+x_5)}{x_6},\ x_9=\tfrac{10^6(x_2+x_3)}{x_6}\Big\}
+\end{gather}
+with $H_{\min}=20\,\mathbb{I}_{x_1=6}+8\,\mathbb{I}_{x_1=17}$ and $H_{\max}=60\,\mathbb{I}_{x_1=6}+8\,\mathbb{I}_{x_1=17}$. Continuous flows are formulated on $\widetilde{\mathcal{M}}_{\text{flow}}$, and discrete execution maps trajectories back to $\mathcal{M}_{\text{flow}}$ through the closed-form projection $\mathcal{P}_{\mathcal{M}}$ (Section~\ref{sec:algorithm}).
 
 \subsection{Threat Model}
-The adversary starts from a malicious flow $x_{\text{orig}}=\Phi(P)\in\mathcal{M}_{\text{flow}}$ classified as an attack, $P(\text{Malicious}\mid x_{\text{orig}})\ge 0.5 \iff F(x_{\text{orig}})\ge 0$, and seeks a modified flow $x^*=\Phi(P^*)\in\mathcal{M}_{\text{flow}}$ with
-\begin{equation}
-    P(\text{Malicious} \mid x^*) < 0.5 \iff F(x^*) < 0
-\end{equation}
-Tier 1 (white-box) grants access to the ensemble architecture, leaf weights and split thresholds $\Theta_j$, which enables exact Tree-Split Boundary Snapping (TSBS) and forms the primary benchmark (Section~\ref{sec:results}). Tier 2 (black-box) allows only query access or zero-knowledge transfer of flows crafted on a surrogate ensemble, which Supplementary Section~S5 evaluates.
+The adversary starts from a malicious flow $x_{\text{orig}}\in\mathcal{M}_{\text{flow}}$ with $F(x_{\text{orig}})\ge0$ (probability of the malicious class at least 0.5) and seeks $x^*\in\mathcal{M}_{\text{flow}}$ with $F(x^*)<0$. Two access levels are used. The \emph{score-only} attacker queries the malicious probability of the target and nothing else; this is the headline setting of FFE-v2. The \emph{threshold} attacker additionally reads the split thresholds of the trees, which enables the optional snapping step (Section~\ref{sec:algorithm}) and is also the setting of the projected white-box control, which reads the trees entirely. Every probe counts as one query; transfer from a surrogate is covered by CAPGD and Supplementary Section~S11.
 
-The transformed trace $P^*$ must preserve the malicious semantics, $\mathcal{S}(P^*)=\mathcal{S}(P)$, so that exploit delivery, shellcode execution, credential cracking or service degradation still succeeds on the victim. Payload padding preserves discrete payload exploits by appending non-executable, protocol-compliant bytes (SSH ignore messages, RFC 4253 \cite{rfc4253}). Temporal dilation still delivers every packet, although it lowers the burst intensity of volumetric floods (Section~\ref{sec:discussion}); we do not test that the attack's effect on the victim is preserved.
+The transformed trace must keep the malicious semantics so that exploit delivery, credential cracking or service degradation still succeeds; we do not test that. Padding appends non-executable bytes (e.g.\ SSH ignore messages \cite{rfc4253}), and dilation lowers the burst intensity of volumetric floods. The NIDS is an ingress biflow sensor and the adversary controls only the client endpoint, so it changes the forward features $x_2,x_4,x_6,x_7,x_{11}$ and the derived rates, while the server-generated $x_3$ and $x_5$ are immutable. Chaff is sent as pure ACKs, which a TCP endpoint does not acknowledge (RFC 9293 \cite{rfc9293}), so $\Delta x_3=\Delta x_5=0$. \emph{Re-segmentation is different}: more forward data segments can elicit more server ACKs under delayed-ACK rules, which would raise $x_3$; the schema holds $x_3$ fixed, so the segmentation moves assume that the added segments do not change the backward direction. We flag this as a limitation of the schema-level feasibility notion.
 
-The NIDS is an ingress biflow sensor (for example, an IPFIX collector at a border router or DMZ firewall). The adversary controls only the client endpoint, so it changes the forward features $x_2,x_4,x_6,x_7,x_{11}$ and the derived rates, while the server-generated $x_3$ and $x_5$ are immutable. Forward chaff is sent as pure ACKs with $\text{seq}=\text{SND.NXT}$ and $\text{ack}=\text{RCV.NXT}$. A TCP endpoint never acknowledges a pure ACK (RFC 9293 \cite{rfc9293}, \S~3.8.1), so these packets elicit no backward packets or bytes and $\Delta x_3=\Delta x_5=0$. Chaff is spaced or interleaved with forward payload and window updates so that three duplicate ACKs do not trigger fast retransmit (RFC 5681 \cite{rfc5681}, \S~3.2). Window morphing edits the window field of the initial SYN consistently with window scaling (RFC 7323 \cite{rfc7323}). For encrypted protocols such as SSH, padding is inserted at the application layer before cryptographic encapsulation (RFC 4253 \cite{rfc4253}, \S~11.2).
-
-The adversary minimizes the total operational cost
-\begin{equation}
-    \min \quad \mathcal{C}(x^*, x_{\text{orig}}) = \sum_{k=1}^4 c_k s_k
-\end{equation}
-where $s_k$ is the amount of generator $k$ applied and $c_k$ is its unit cost in transmission latency, bandwidth expansion and socket buffer allocation.
+The adversary minimizes the operational cost $\mathcal{C}(x^*,x_{\text{orig}})=\sum_k c_ks_k$, where $s_k$ is the amount of generator $k$ applied and $c_k$ its unit cost in latency, bandwidth and socket resources (Section~\ref{sec:cost}).

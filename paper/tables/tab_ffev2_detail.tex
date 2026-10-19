@@ -1,0 +1,17 @@
+\begin{tabular}{@{}llrrrrrccc@{}}
+\toprule
+\textbf{Corpus} & \textbf{Target} & \textbf{$q$ ctrl} & \textbf{$q$ snap} & \textbf{cost v1} & \textbf{cost ctrl} & \textbf{cost v2} & \textbf{v2 vs v1} & \textbf{v2 vs ctrl} & \textbf{v2 vs CAPGD} \\
+\midrule
+CSE-CIC-IDS2018 & XGBoost & 2.0 & 30.8 & 0.00057 & 0.000495 & 3.02e-05 & 0/0, 1 & 0/0, 1 & 110/0, $1.5\times10^{-33}$ \\
+ & LightGBM & 2.0 & 31.6 & 0.000977 & 0.000496 & 2.42e-05 & 0/0, 1 & 0/0, 1 & -- \\
+ & CatBoost & 2.0 & 29.2 & 0.000977 & 0.000285 & 0.000285 & 402/0, $1.9\times10^{-121}$ & 0/0, 1 & -- \\
+\midrule
+CIC-IDS2017 & XGBoost & 2.0 & 28.3 & 0.000855 & 0.000376 & 0.000554 & 8/0, 0.0078 & 0/0, 1 & 105/0, $4.9\times10^{-32}$ \\
+ & LightGBM & 2.0 & 36.5 & 1.62 & 1.56e-05 & 0.000554 & 609/0, $9.4\times10^{-184}$ & 594/0, $3.1\times10^{-179}$ & -- \\
+ & CatBoost & 2.0 & 140.4 & 0.5 & 0.00671 & 3.22e-06 & 16/0, $3.1\times10^{-5}$ & 0/0, 1 & -- \\
+\midrule
+UNSW-NB15 & XGBoost & 2.0 & 37.9 & 5.61 & 213 & 40 & 412/5, $6.1\times10^{-115}$ & 89/8, $2.0\times10^{-18}$ & 772/0, $8.1\times10^{-233}$ \\
+ & LightGBM & 2.0 & 41.5 & 7.49 & 49 & 50.4 & 349/6, $7.4\times10^{-95}$ & 107/21, $4.5\times10^{-15}$ & -- \\
+ & CatBoost & 2.0 & 42.3 & 9.8 & 10.5 & 56 & 270/1, $1.4\times10^{-79}$ & 400/0, $7.7\times10^{-121}$ & -- \\
+\bottomrule
+\end{tabular}

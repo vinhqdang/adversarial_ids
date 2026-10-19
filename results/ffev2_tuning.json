@@ -1,0 +1,8525 @@
+[
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.591,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "base",
+  "spec": {},
+  "seconds": 99.2969880104065
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "base",
+  "spec": {},
+  "seconds": 7.962584018707275
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "base",
+  "spec": {},
+  "seconds": 12.879464149475098
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "base",
+  "spec": {},
+  "seconds": 102.09879469871521
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 30.026,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794758243662068,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "base",
+  "spec": {},
+  "seconds": 8.692026615142822
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 112.04531722054381,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "base",
+  "spec": {},
+  "seconds": 61.28987741470337
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.7,
+  "avg_queries": 33.443,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 167.5519044853507,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "base",
+  "spec": {},
+  "seconds": 117.59860968589783
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.5,
+  "avg_queries": 31.9,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 199.75313034920876,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "base",
+  "spec": {},
+  "seconds": 9.15363597869873
+ },
+ {
+  "n": 984,
+  "real_asr": 97.35772357723577,
+  "avg_queries": 32.94308943089431,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 200.1678562225805,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "base",
+  "spec": {},
+  "seconds": 16.2232346534729
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.823,
+  "median_op_cost_real": 7.49846e-05,
+  "mean_op_cost_real": 0.29048078459170046,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "ratio=2",
+  "spec": {
+   "ladder_ratio": 2.0
+  },
+  "seconds": 123.12907528877258
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.417,
+  "median_op_cost_real": 7.641700000000001e-05,
+  "mean_op_cost_real": 0.11707005429293804,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "ratio=2",
+  "spec": {
+   "ladder_ratio": 2.0
+  },
+  "seconds": 8.444235801696777
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 28.43202416918429,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003704073136966676,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "ratio=2",
+  "spec": {
+   "ladder_ratio": 2.0
+  },
+  "seconds": 14.191712617874146
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 27.887,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009785424395989167,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "ratio=2",
+  "spec": {
+   "ladder_ratio": 2.0
+  },
+  "seconds": 122.30761957168579
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.8,
+  "avg_queries": 31.492,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0004857474082680078,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "ratio=2",
+  "spec": {
+   "ladder_ratio": 2.0
+  },
+  "seconds": 9.651469469070435
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 127.92648539778449,
+  "median_op_cost_real": 1.5625238422217137e-05,
+  "mean_op_cost_real": 0.633094122049222,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "ratio=2",
+  "spec": {
+   "ladder_ratio": 2.0
+  },
+  "seconds": 66.22275376319885
+ },
+ {
+  "n": 1000,
+  "real_asr": 68.7,
+  "avg_queries": 77.344,
+  "median_op_cost_real": 8.96,
+  "mean_op_cost_real": 16.476976566535953,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "ratio=2",
+  "spec": {
+   "ladder_ratio": 2.0
+  },
+  "seconds": 241.8512454032898
+ },
+ {
+  "n": 1000,
+  "real_asr": 70.5,
+  "avg_queries": 81.07,
+  "median_op_cost_real": 8.96,
+  "mean_op_cost_real": 16.08687595046057,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "ratio=2",
+  "spec": {
+   "ladder_ratio": 2.0
+  },
+  "seconds": 21.22837209701538
+ },
+ {
+  "n": 984,
+  "real_asr": 69.20731707317073,
+  "avg_queries": 82.0010162601626,
+  "median_op_cost_real": 10.240002563515679,
+  "mean_op_cost_real": 21.22893675019366,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "ratio=2",
+  "spec": {
+   "ladder_ratio": 2.0
+  },
+  "seconds": 39.355629682540894
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.951,
+  "median_op_cost_real": 5.57066e-05,
+  "mean_op_cost_real": 0.0011455319974824686,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 120.91967415809631
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.284,
+  "median_op_cost_real": 5.6947099999999996e-05,
+  "mean_op_cost_real": 0.10016180931149705,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 9.791332721710205
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 28.299093655589125,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003702405365183459,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 14.249836921691895
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 27.265,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929491459581491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 118.50264859199524
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.8,
+  "avg_queries": 31.061,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.00044459532844964167,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 10.155782461166382
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 116.17321248741189,
+  "median_op_cost_real": 4.05e-06,
+  "mean_op_cost_real": 5.544023326630691,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 64.20661211013794
+ },
+ {
+  "n": 1000,
+  "real_asr": 93.4,
+  "avg_queries": 41.756,
+  "median_op_cost_real": 30.240000000000002,
+  "mean_op_cost_real": 89.04840487407216,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 147.90308332443237
+ },
+ {
+  "n": 1000,
+  "real_asr": 93.10000000000001,
+  "avg_queries": 40.586,
+  "median_op_cost_real": 30.240000000000002,
+  "mean_op_cost_real": 94.73609060311205,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 13.555416345596313
+ },
+ {
+  "n": 984,
+  "real_asr": 94.51219512195121,
+  "avg_queries": 39.33130081300813,
+  "median_op_cost_real": 30.240000000000002,
+  "mean_op_cost_real": 97.51692938778574,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 19.50168538093567
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 26.994,
+  "median_op_cost_real": 0.00010618590000000001,
+  "mean_op_cost_real": 0.03631124008777891,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 119.81820058822632
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 26.445,
+  "median_op_cost_real": 9.414360000000001e-05,
+  "mean_op_cost_real": 0.8363830386891443,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 8.263997793197632
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 26.454179254783483,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003711564720662026,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 14.08843994140625
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 24.77,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929411765281491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 116.47220182418823
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 27.794,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1595605286412332,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 10.156062602996826
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 105.6294058408862,
+  "median_op_cost_real": 1.08e-05,
+  "mean_op_cost_real": 8.64002733922353,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 63.49239230155945
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.89999999999999,
+  "avg_queries": 28.753,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 328.93932709774543,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 121.70631861686707
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.8,
+  "avg_queries": 30.076,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 305.01138095909755,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 9.709739446640015
+ },
+ {
+  "n": 984,
+  "real_asr": 98.06910569105692,
+  "avg_queries": 30.283536585365855,
+  "median_op_cost_real": 216.0,
+  "mean_op_cost_real": 360.55582090560944,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 18.36794877052307
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 24.996,
+  "median_op_cost_real": 0.00010196480000000002,
+  "mean_op_cost_real": 0.0004136839064173906,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 117.49077939987183
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 24.966,
+  "median_op_cost_real": 7.114239999999999e-05,
+  "mean_op_cost_real": 1.4845739163607805,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 10.235453605651855
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 24.995971802618328,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00037077573453105864,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 15.21924376487732
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 24.15,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009311593148612193,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 114.46529293060303
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 27.194,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 2.2385934638781144,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 10.293599605560303
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 100.66364551863042,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 17.521799697300278,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 56.818692684173584
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.5,
+  "avg_queries": 27.199,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 346.83887394532456,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 117.28805208206177
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.3,
+  "avg_queries": 31.151,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 1077.935107656599,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 10.2437264919281
+ },
+ {
+  "n": 984,
+  "real_asr": 98.78048780487805,
+  "avg_queries": 28.288617886178862,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 551.1133527578479,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 14.264753103256226
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 21.655,
+  "median_op_cost_real": 7.13372e-05,
+  "mean_op_cost_real": 0.0011906939064849087,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "levels=4",
+  "spec": {
+   "ladder_levels": 4
+  },
+  "seconds": 113.01831865310669
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 21.172,
+  "median_op_cost_real": 7.0917e-05,
+  "mean_op_cost_real": 0.12598837527965479,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "levels=4",
+  "spec": {
+   "ladder_levels": 4
+  },
+  "seconds": 8.340139150619507
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 21.18026183282981,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "levels=4",
+  "spec": {
+   "ladder_levels": 4
+  },
+  "seconds": 12.71263575553894
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 20.577,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009785552395989168,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "levels=4",
+  "spec": {
+   "ladder_levels": 4
+  },
+  "seconds": 111.63053941726685
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.8,
+  "avg_queries": 23.127,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.00048580563611610913,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "levels=4",
+  "spec": {
+   "ladder_levels": 4
+  },
+  "seconds": 8.457819700241089
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 90.84189325276938,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 1.6640359225243664,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "levels=4",
+  "spec": {
+   "ladder_levels": 4
+  },
+  "seconds": 57.41899752616882
+ },
+ {
+  "n": 1000,
+  "real_asr": 76.8,
+  "avg_queries": 46.665,
+  "median_op_cost_real": 17.92,
+  "mean_op_cost_real": 34.06886068869792,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "levels=4",
+  "spec": {
+   "ladder_levels": 4
+  },
+  "seconds": 159.0850956439972
+ },
+ {
+  "n": 1000,
+  "real_asr": 74.8,
+  "avg_queries": 51.166,
+  "median_op_cost_real": 17.92,
+  "mean_op_cost_real": 33.99710767733155,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "levels=4",
+  "spec": {
+   "ladder_levels": 4
+  },
+  "seconds": 17.001708269119263
+ },
+ {
+  "n": 984,
+  "real_asr": 81.5040650406504,
+  "avg_queries": 51.86686991869919,
+  "median_op_cost_real": 17.92,
+  "mean_op_cost_real": 46.76675018931605,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "levels=4",
+  "spec": {
+   "ladder_levels": 4
+  },
+  "seconds": 30.46419882774353
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 31.684,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.000321703274276419,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "levels=8",
+  "spec": {
+   "ladder_levels": 8
+  },
+  "seconds": 116.22877144813538
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 31.551,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "levels=8",
+  "spec": {
+   "ladder_levels": 8
+  },
+  "seconds": 8.411106824874878
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 31.58207452165156,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "levels=8",
+  "spec": {
+   "ladder_levels": 8
+  },
+  "seconds": 12.571580171585083
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 29.576,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "levels=8",
+  "spec": {
+   "ladder_levels": 8
+  },
+  "seconds": 121.40779852867126
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 33.487,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794758243662068,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "levels=8",
+  "spec": {
+   "ladder_levels": 8
+  },
+  "seconds": 9.917370557785034
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 125.85196374622356,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557354977834638,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "levels=8",
+  "spec": {
+   "ladder_levels": 8
+  },
+  "seconds": 57.81211233139038
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.3,
+  "avg_queries": 34.337,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 259.3388666597067,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "levels=8",
+  "spec": {
+   "ladder_levels": 8
+  },
+  "seconds": 119.62294936180115
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.1,
+  "avg_queries": 35.267,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 242.59215518877446,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "levels=8",
+  "spec": {
+   "ladder_levels": 8
+  },
+  "seconds": 9.396202087402344
+ },
+ {
+  "n": 984,
+  "real_asr": 98.6788617886179,
+  "avg_queries": 35.28760162601626,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 350.67304536307273,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "levels=8",
+  "spec": {
+   "ladder_levels": 8
+  },
+  "seconds": 14.027047872543335
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 34.006,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.0003543539977259619,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "levels=10",
+  "spec": {
+   "ladder_levels": 10
+  },
+  "seconds": 114.8245370388031
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 33.98,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "levels=10",
+  "spec": {
+   "ladder_levels": 10
+  },
+  "seconds": 8.608552694320679
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 33.91540785498489,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "levels=10",
+  "spec": {
+   "ladder_levels": 10
+  },
+  "seconds": 13.111104011535645
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 32.255,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "levels=10",
+  "spec": {
+   "ladder_levels": 10
+  },
+  "seconds": 103.36192083358765
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 36.419,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794758243662068,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "levels=10",
+  "spec": {
+   "ladder_levels": 10
+  },
+  "seconds": 9.682505130767822
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 137.5790533736153,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557354977834638,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "levels=10",
+  "spec": {
+   "ladder_levels": 10
+  },
+  "seconds": 60.81296515464783
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.3,
+  "avg_queries": 36.808,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 259.3388666597067,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "levels=10",
+  "spec": {
+   "ladder_levels": 10
+  },
+  "seconds": 99.38434481620789
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.3,
+  "avg_queries": 37.913,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 392.77643015041934,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "levels=10",
+  "spec": {
+   "ladder_levels": 10
+  },
+  "seconds": 9.80221152305603
+ },
+ {
+  "n": 984,
+  "real_asr": 98.57723577235772,
+  "avg_queries": 37.53455284552845,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 453.4229348841151,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "levels=10",
+  "spec": {
+   "ladder_levels": 10
+  },
+  "seconds": 14.778386354446411
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 29.239,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "beam=2",
+  "spec": {
+   "beam": 2
+  },
+  "seconds": 85.48476719856262
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "beam=2",
+  "spec": {
+   "beam": 2
+  },
+  "seconds": 8.703798770904541
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "beam=2",
+  "spec": {
+   "beam": 2
+  },
+  "seconds": 13.400590419769287
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "beam=2",
+  "spec": {
+   "beam": 2
+  },
+  "seconds": 73.48992419242859
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 37.873,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794758243662068,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "beam=2",
+  "spec": {
+   "beam": 2
+  },
+  "seconds": 11.161175727844238
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 229.30513595166164,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "beam=2",
+  "spec": {
+   "beam": 2
+  },
+  "seconds": 119.26739621162415
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.0,
+  "avg_queries": 37.54,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 167.01236320972248,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "beam=2",
+  "spec": {
+   "beam": 2
+  },
+  "seconds": 73.33312940597534
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.4,
+  "avg_queries": 35.302,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 198.61346354312056,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "beam=2",
+  "spec": {
+   "beam": 2
+  },
+  "seconds": 11.211766958236694
+ },
+ {
+  "n": 984,
+  "real_asr": 98.06910569105692,
+  "avg_queries": 36.295731707317074,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 205.26089866826314,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "beam=2",
+  "spec": {
+   "beam": 2
+  },
+  "seconds": 17.72626805305481
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.573,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "beam=4",
+  "spec": {
+   "beam": 4
+  },
+  "seconds": 57.27768397331238
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "beam=4",
+  "spec": {
+   "beam": 4
+  },
+  "seconds": 9.26919412612915
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "beam=4",
+  "spec": {
+   "beam": 4
+  },
+  "seconds": 14.140076637268066
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "beam=4",
+  "spec": {
+   "beam": 4
+  },
+  "seconds": 48.65112829208374
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 61.687,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.5399605451249009,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "beam=4",
+  "spec": {
+   "beam": 4
+  },
+  "seconds": 18.766033411026
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 453.67472306143003,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356894058191,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "beam=4",
+  "spec": {
+   "beam": 4
+  },
+  "seconds": 231.81091356277466
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.5,
+  "avg_queries": 43.58,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 167.12692698034868,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "beam=4",
+  "spec": {
+   "beam": 4
+  },
+  "seconds": 48.2497832775116
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.0,
+  "avg_queries": 39.136,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 198.16498324414414,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "beam=4",
+  "spec": {
+   "beam": 4
+  },
+  "seconds": 16.981516361236572
+ },
+ {
+  "n": 984,
+  "real_asr": 98.57723577235772,
+  "avg_queries": 43.4390243902439,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 214.88817302105147,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "beam=4",
+  "spec": {
+   "beam": 4
+  },
+  "seconds": 26.710270166397095
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.575,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.6430428316572278,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "lambda=0.0",
+  "spec": {
+   "cost_lambda": 0.0
+  },
+  "seconds": 23.318870067596436
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "lambda=0.0",
+  "spec": {
+   "cost_lambda": 0.0
+  },
+  "seconds": 10.11587381362915
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "lambda=0.0",
+  "spec": {
+   "cost_lambda": 0.0
+  },
+  "seconds": 15.909389734268188
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "lambda=0.0",
+  "spec": {
+   "cost_lambda": 0.0
+  },
+  "seconds": 18.833093881607056
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.8,
+  "avg_queries": 29.848,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0004446419001795995,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "lambda=0.0",
+  "spec": {
+   "cost_lambda": 0.0
+  },
+  "seconds": 11.788610935211182
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 97.84390735146022,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356984335522,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "lambda=0.0",
+  "spec": {
+   "cost_lambda": 0.0
+  },
+  "seconds": 49.05721998214722
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.7,
+  "avg_queries": 31.35,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 172.2003224761213,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "lambda=0.0",
+  "spec": {
+   "cost_lambda": 0.0
+  },
+  "seconds": 18.800244092941284
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.7,
+  "avg_queries": 31.219,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 203.19203491759316,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "lambda=0.0",
+  "spec": {
+   "cost_lambda": 0.0
+  },
+  "seconds": 10.455323219299316
+ },
+ {
+  "n": 984,
+  "real_asr": 98.8821138211382,
+  "avg_queries": 30.527439024390244,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 222.72460707255135,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "lambda=0.0",
+  "spec": {
+   "cost_lambda": 0.0
+  },
+  "seconds": 14.665416717529297
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.591,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "lambda=0.5",
+  "spec": {
+   "cost_lambda": 0.5
+  },
+  "seconds": 17.27217197418213
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "lambda=0.5",
+  "spec": {
+   "cost_lambda": 0.5
+  },
+  "seconds": 9.286036014556885
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "lambda=0.5",
+  "spec": {
+   "cost_lambda": 0.5
+  },
+  "seconds": 12.46337103843689
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "lambda=0.5",
+  "spec": {
+   "cost_lambda": 0.5
+  },
+  "seconds": 16.660889387130737
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 29.899,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794761102784305,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "lambda=0.5",
+  "spec": {
+   "cost_lambda": 0.5
+  },
+  "seconds": 9.381324291229248
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 100.82275931520644,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "lambda=0.5",
+  "spec": {
+   "cost_lambda": 0.5
+  },
+  "seconds": 45.643338680267334
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.8,
+  "avg_queries": 32.99,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 166.07837431795383,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "lambda=0.5",
+  "spec": {
+   "cost_lambda": 0.5
+  },
+  "seconds": 20.434075593948364
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.6,
+  "avg_queries": 31.599,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 199.5616635937985,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "lambda=0.5",
+  "spec": {
+   "cost_lambda": 0.5
+  },
+  "seconds": 8.616340637207031
+ },
+ {
+  "n": 984,
+  "real_asr": 97.66260162601627,
+  "avg_queries": 32.68191056910569,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 213.66885420663468,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "lambda=0.5",
+  "spec": {
+   "cost_lambda": 0.5
+  },
+  "seconds": 13.01551342010498
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.591,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.0011256587950037034,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "lambda=2.0",
+  "spec": {
+   "cost_lambda": 2.0
+  },
+  "seconds": 19.392579078674316
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "lambda=2.0",
+  "spec": {
+   "cost_lambda": 2.0
+  },
+  "seconds": 7.771804332733154
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "lambda=2.0",
+  "spec": {
+   "cost_lambda": 2.0
+  },
+  "seconds": 11.03775405883789
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "lambda=2.0",
+  "spec": {
+   "cost_lambda": 2.0
+  },
+  "seconds": 20.36926531791687
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 31.318,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794758243662068,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "lambda=2.0",
+  "spec": {
+   "cost_lambda": 2.0
+  },
+  "seconds": 8.475933074951172
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 115.30010070493454,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "lambda=2.0",
+  "spec": {
+   "cost_lambda": 2.0
+  },
+  "seconds": 51.15191125869751
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.6,
+  "avg_queries": 33.558,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 167.6893940410906,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "lambda=2.0",
+  "spec": {
+   "cost_lambda": 2.0
+  },
+  "seconds": 25.521838665008545
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.5,
+  "avg_queries": 32.298,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 199.7541559902344,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "lambda=2.0",
+  "spec": {
+   "cost_lambda": 2.0
+  },
+  "seconds": 8.128804922103882
+ },
+ {
+  "n": 984,
+  "real_asr": 97.45934959349594,
+  "avg_queries": 33.045731707317074,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 204.4971924501145,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "lambda=2.0",
+  "spec": {
+   "cost_lambda": 2.0
+  },
+  "seconds": 12.714781522750854
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.575,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.6430428316572278,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "relax=0",
+  "spec": {
+   "relax_after": 0
+  },
+  "seconds": 24.15354871749878
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "relax=0",
+  "spec": {
+   "relax_after": 0
+  },
+  "seconds": 7.486760377883911
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "relax=0",
+  "spec": {
+   "relax_after": 0
+  },
+  "seconds": 11.43798303604126
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "relax=0",
+  "spec": {
+   "relax_after": 0
+  },
+  "seconds": 23.340264320373535
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.8,
+  "avg_queries": 29.848,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0004446419001795995,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "relax=0",
+  "spec": {
+   "relax_after": 0
+  },
+  "seconds": 8.820042371749878
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 97.84390735146022,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356984335522,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "relax=0",
+  "spec": {
+   "relax_after": 0
+  },
+  "seconds": 45.82044792175293
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.7,
+  "avg_queries": 31.35,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 172.2003224761213,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "relax=0",
+  "spec": {
+   "relax_after": 0
+  },
+  "seconds": 24.656872510910034
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.7,
+  "avg_queries": 31.219,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 203.19203491759316,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "relax=0",
+  "spec": {
+   "relax_after": 0
+  },
+  "seconds": 8.775115489959717
+ },
+ {
+  "n": 984,
+  "real_asr": 98.8821138211382,
+  "avg_queries": 30.527439024390244,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 222.72460707255135,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "relax=0",
+  "spec": {
+   "relax_after": 0
+  },
+  "seconds": 12.234888076782227
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.591,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "relax=1",
+  "spec": {
+   "relax_after": 1
+  },
+  "seconds": 23.618976593017578
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "relax=1",
+  "spec": {
+   "relax_after": 1
+  },
+  "seconds": 7.880824089050293
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "relax=1",
+  "spec": {
+   "relax_after": 1
+  },
+  "seconds": 11.652374744415283
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "relax=1",
+  "spec": {
+   "relax_after": 1
+  },
+  "seconds": 22.76463556289673
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.8,
+  "avg_queries": 30.016,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0004446419001795995,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "relax=1",
+  "spec": {
+   "relax_after": 1
+  },
+  "seconds": 8.517133712768555
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 97.6515609264854,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "relax=1",
+  "spec": {
+   "relax_after": 1
+  },
+  "seconds": 45.43166923522949
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.6,
+  "avg_queries": 31.985,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 168.04410778441172,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "relax=1",
+  "spec": {
+   "relax_after": 1
+  },
+  "seconds": 25.261613845825195
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.39999999999999,
+  "avg_queries": 31.53,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 201.13965296420713,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "relax=1",
+  "spec": {
+   "relax_after": 1
+  },
+  "seconds": 8.661050081253052
+ },
+ {
+  "n": 984,
+  "real_asr": 97.86585365853658,
+  "avg_queries": 31.78760162601626,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 219.73998722555314,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "relax=1",
+  "spec": {
+   "relax_after": 1
+  },
+  "seconds": 11.645082712173462
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.591,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "relax=6",
+  "spec": {
+   "relax_after": 6
+  },
+  "seconds": 23.96217107772827
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "relax=6",
+  "spec": {
+   "relax_after": 6
+  },
+  "seconds": 7.435032844543457
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "relax=6",
+  "spec": {
+   "relax_after": 6
+  },
+  "seconds": 11.075587749481201
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "relax=6",
+  "spec": {
+   "relax_after": 6
+  },
+  "seconds": 23.440228700637817
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 30.11,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1469155201835937,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "relax=6",
+  "spec": {
+   "relax_after": 6
+  },
+  "seconds": 8.305338621139526
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 134.10473313192347,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "relax=6",
+  "spec": {
+   "relax_after": 6
+  },
+  "seconds": 61.86593270301819
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.7,
+  "avg_queries": 33.825,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 166.08353049538593,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "relax=6",
+  "spec": {
+   "relax_after": 6
+  },
+  "seconds": 26.40320062637329
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.5,
+  "avg_queries": 32.008,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 199.6971712688592,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "relax=6",
+  "spec": {
+   "relax_after": 6
+  },
+  "seconds": 9.164117097854614
+ },
+ {
+  "n": 984,
+  "real_asr": 97.45934959349594,
+  "avg_queries": 32.98170731707317,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 196.72050821653843,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "relax=6",
+  "spec": {
+   "relax_after": 6
+  },
+  "seconds": 14.32598066329956
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.591,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "relax=99",
+  "spec": {
+   "relax_after": 99
+  },
+  "seconds": 24.117589235305786
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "relax=99",
+  "spec": {
+   "relax_after": 99
+  },
+  "seconds": 8.399962186813354
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "relax=99",
+  "spec": {
+   "relax_after": 99
+  },
+  "seconds": 12.83961796760559
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "relax=99",
+  "spec": {
+   "relax_after": 99
+  },
+  "seconds": 23.699347019195557
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 30.11,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1469155201835937,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "relax=99",
+  "spec": {
+   "relax_after": 99
+  },
+  "seconds": 9.399460554122925
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 134.07653575025176,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "relax=99",
+  "spec": {
+   "relax_after": 99
+  },
+  "seconds": 63.909087896347046
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.7,
+  "avg_queries": 33.825,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 166.14259978183887,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "relax=99",
+  "spec": {
+   "relax_after": 99
+  },
+  "seconds": 25.82915735244751
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.5,
+  "avg_queries": 32.008,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 199.6971712688592,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "relax=99",
+  "spec": {
+   "relax_after": 99
+  },
+  "seconds": 8.773494482040405
+ },
+ {
+  "n": 984,
+  "real_asr": 97.45934959349594,
+  "avg_queries": 32.98170731707317,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 196.72050821653843,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "relax=99",
+  "spec": {
+   "relax_after": 99
+  },
+  "seconds": 13.151901245117188
+ },
+ {
+  "n": 1000,
+  "real_asr": 60.8,
+  "avg_queries": 62.08,
+  "median_op_cost_real": 7.42843e-05,
+  "mean_op_cost_real": 3.011848834376809,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "win_k=0",
+  "spec": {
+   "window_k": 0
+  },
+  "seconds": 48.4362416267395
+ },
+ {
+  "n": 1000,
+  "real_asr": 52.2,
+  "avg_queries": 64.617,
+  "median_op_cost_real": 6.93984e-05,
+  "mean_op_cost_real": 0.2354682679639847,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "win_k=0",
+  "spec": {
+   "window_k": 0
+  },
+  "seconds": 19.88633942604065
+ },
+ {
+  "n": 993,
+  "real_asr": 35.34743202416919,
+  "avg_queries": 95.78449144008056,
+  "median_op_cost_real": 0.0003061192,
+  "mean_op_cost_real": 3.080516500854131,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "win_k=0",
+  "spec": {
+   "window_k": 0
+  },
+  "seconds": 54.351003885269165
+ },
+ {
+  "n": 1000,
+  "real_asr": 35.0,
+  "avg_queries": 64.817,
+  "median_op_cost_real": 5.202000000000001e-05,
+  "mean_op_cost_real": 2.4635784234102855,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "win_k=0",
+  "spec": {
+   "window_k": 0
+  },
+  "seconds": 50.833033084869385
+ },
+ {
+  "n": 1000,
+  "real_asr": 35.0,
+  "avg_queries": 64.005,
+  "median_op_cost_real": 2.56,
+  "mean_op_cost_real": 14.331932142881714,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "win_k=0",
+  "spec": {
+   "window_k": 0
+  },
+  "seconds": 18.77472472190857
+ },
+ {
+  "n": 993,
+  "real_asr": 35.44813695871098,
+  "avg_queries": 73.97885196374622,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 11.275926299065908,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "win_k=0",
+  "spec": {
+   "window_k": 0
+  },
+  "seconds": 43.96760439872742
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.7,
+  "avg_queries": 28.388,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 167.5519044853507,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "win_k=0",
+  "spec": {
+   "window_k": 0
+  },
+  "seconds": 24.518814086914062
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.5,
+  "avg_queries": 27.085,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 199.75313034920876,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "win_k=0",
+  "spec": {
+   "window_k": 0
+  },
+  "seconds": 8.172582387924194
+ },
+ {
+  "n": 984,
+  "real_asr": 97.35772357723577,
+  "avg_queries": 27.545731707317074,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 200.16785624125492,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "win_k=0",
+  "spec": {
+   "window_k": 0
+  },
+  "seconds": 12.511216878890991
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 25.532,
+  "median_op_cost_real": 0.0001215533684290837,
+  "mean_op_cost_real": 0.001151833550572952,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "win_k=3",
+  "spec": {
+   "window_k": 3
+  },
+  "seconds": 22.592483520507812
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 24.904,
+  "median_op_cost_real": 0.0001215686274509804,
+  "mean_op_cost_real": 0.12338946649161002,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "win_k=3",
+  "spec": {
+   "window_k": 3
+  },
+  "seconds": 7.09396505355835
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 24.91842900302115,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0004032661607623963,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "win_k=3",
+  "spec": {
+   "window_k": 3
+  },
+  "seconds": 10.07721495628357
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.6,
+  "avg_queries": 23.858,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 3.1022653441285204,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "win_k=3",
+  "spec": {
+   "window_k": 3
+  },
+  "seconds": 21.836580514907837
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 26.944,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 9.287015776830588,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "win_k=3",
+  "spec": {
+   "window_k": 3
+  },
+  "seconds": 6.247940540313721
+ },
+ {
+  "n": 993,
+  "real_asr": 36.05236656596173,
+  "avg_queries": 90.42799597180262,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 11.398463541817954,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "win_k=3",
+  "spec": {
+   "window_k": 3
+  },
+  "seconds": 59.376402139663696
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.7,
+  "avg_queries": 30.41,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 167.5519044853507,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "win_k=3",
+  "spec": {
+   "window_k": 3
+  },
+  "seconds": 24.739731311798096
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.5,
+  "avg_queries": 29.011,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 199.75313034920876,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "win_k=3",
+  "spec": {
+   "window_k": 3
+  },
+  "seconds": 6.779446601867676
+ },
+ {
+  "n": 984,
+  "real_asr": 97.35772357723577,
+  "avg_queries": 29.78760162601626,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 200.16785622374326,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "win_k=3",
+  "spec": {
+   "window_k": 3
+  },
+  "seconds": 14.026755094528198
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 34.71,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.0011152474207789774,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "win_k=12",
+  "spec": {
+   "window_k": 12
+  },
+  "seconds": 23.710036277770996
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 33.875,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335622738311953,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "win_k=12",
+  "spec": {
+   "window_k": 12
+  },
+  "seconds": 6.776459693908691
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 33.89123867069486,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692569760642667,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "win_k=12",
+  "spec": {
+   "window_k": 12
+  },
+  "seconds": 12.247839450836182
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 32.509,
+  "median_op_cost_real": 6.262302586404211e-05,
+  "mean_op_cost_real": 0.0006158002616482034,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "win_k=12",
+  "spec": {
+   "window_k": 12
+  },
+  "seconds": 23.309062957763672
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 36.77,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794755525658843,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "win_k=12",
+  "spec": {
+   "window_k": 12
+  },
+  "seconds": 7.017606019973755
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 139.0845921450151,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.55735689456289,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "win_k=12",
+  "spec": {
+   "window_k": 12
+  },
+  "seconds": 68.1989336013794
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.7,
+  "avg_queries": 39.509,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 167.5519044853507,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "win_k=12",
+  "spec": {
+   "window_k": 12
+  },
+  "seconds": 27.470402479171753
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.5,
+  "avg_queries": 37.678,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 199.75313034920876,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "win_k=12",
+  "spec": {
+   "window_k": 12
+  },
+  "seconds": 7.121963262557983
+ },
+ {
+  "n": 984,
+  "real_asr": 97.35772357723577,
+  "avg_queries": 39.25406504065041,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 200.1678562225805,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "win_k=12",
+  "spec": {
+   "window_k": 12
+  },
+  "seconds": 15.56609034538269
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.591,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "iter=4",
+  "spec": {
+   "max_iter": 4
+  },
+  "seconds": 26.555797338485718
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "iter=4",
+  "spec": {
+   "max_iter": 4
+  },
+  "seconds": 6.378241539001465
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "iter=4",
+  "spec": {
+   "max_iter": 4
+  },
+  "seconds": 15.283077239990234
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "iter=4",
+  "spec": {
+   "max_iter": 4
+  },
+  "seconds": 27.679141998291016
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.8,
+  "avg_queries": 29.899,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0004446419001795995,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "iter=4",
+  "spec": {
+   "max_iter": 4
+  },
+  "seconds": 6.7629618644714355
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 75.34239677744209,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "iter=4",
+  "spec": {
+   "max_iter": 4
+  },
+  "seconds": 50.0058696269989
+ },
+ {
+  "n": 1000,
+  "real_asr": 95.0,
+  "avg_queries": 32.345,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 167.81301024897886,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "iter=4",
+  "spec": {
+   "max_iter": 4
+  },
+  "seconds": 31.073577165603638
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.39999999999999,
+  "avg_queries": 31.624,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 199.85291785127075,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "iter=4",
+  "spec": {
+   "max_iter": 4
+  },
+  "seconds": 10.836166858673096
+ },
+ {
+  "n": 984,
+  "real_asr": 96.84959349593495,
+  "avg_queries": 31.802845528455286,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 196.4231732637191,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "iter=4",
+  "spec": {
+   "max_iter": 4
+  },
+  "seconds": 20.761596202850342
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.591,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "iter=12",
+  "spec": {
+   "max_iter": 12
+  },
+  "seconds": 30.686166524887085
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "iter=12",
+  "spec": {
+   "max_iter": 12
+  },
+  "seconds": 13.000022411346436
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "iter=12",
+  "spec": {
+   "max_iter": 12
+  },
+  "seconds": 19.84137225151062
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "iter=12",
+  "spec": {
+   "max_iter": 12
+  },
+  "seconds": 29.66296672821045
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 30.026,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794758243662068,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "iter=12",
+  "spec": {
+   "max_iter": 12
+  },
+  "seconds": 13.142235517501831
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 112.06847935548842,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "iter=12",
+  "spec": {
+   "max_iter": 12
+  },
+  "seconds": 66.41335129737854
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.7,
+  "avg_queries": 33.467,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 167.5519044853507,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "iter=12",
+  "spec": {
+   "max_iter": 12
+  },
+  "seconds": 33.42868757247925
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.5,
+  "avg_queries": 31.9,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 199.75313034920876,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "iter=12",
+  "spec": {
+   "max_iter": 12
+  },
+  "seconds": 13.166895151138306
+ },
+ {
+  "n": 984,
+  "real_asr": 97.5609756097561,
+  "avg_queries": 32.99593495934959,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 212.7508440453614,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "iter=12",
+  "spec": {
+   "max_iter": 12
+  },
+  "seconds": 22.633424282073975
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.591,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "iter=20",
+  "spec": {
+   "max_iter": 20
+  },
+  "seconds": 29.8035888671875
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.894,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "iter=20",
+  "spec": {
+   "max_iter": 20
+  },
+  "seconds": 11.790100812911987
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.909365558912388,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "iter=20",
+  "spec": {
+   "max_iter": 20
+  },
+  "seconds": 19.81610369682312
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "iter=20",
+  "spec": {
+   "max_iter": 20
+  },
+  "seconds": 27.810638904571533
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 30.026,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794758243662068,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "iter=20",
+  "spec": {
+   "max_iter": 20
+  },
+  "seconds": 12.88296389579773
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 112.06847935548842,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "iter=20",
+  "spec": {
+   "max_iter": 20
+  },
+  "seconds": 67.01114702224731
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.7,
+  "avg_queries": 33.467,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 167.5519044853507,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "iter=20",
+  "spec": {
+   "max_iter": 20
+  },
+  "seconds": 29.897560834884644
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.5,
+  "avg_queries": 31.9,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 199.75313034920876,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "iter=20",
+  "spec": {
+   "max_iter": 20
+  },
+  "seconds": 13.351851224899292
+ },
+ {
+  "n": 984,
+  "real_asr": 97.5609756097561,
+  "avg_queries": 32.99593495934959,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 212.7508440453614,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "iter=20",
+  "spec": {
+   "max_iter": 20
+  },
+  "seconds": 17.79438543319702
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.802,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "snap_pf=4",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 4
+  },
+  "seconds": 26.53681969642639
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.116,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "snap_pf=4",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 4
+  },
+  "seconds": 10.898995161056519
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 28.057401812688823,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "snap_pf=4",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 4
+  },
+  "seconds": 14.081248044967651
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "snap_pf=4",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 4
+  },
+  "seconds": 23.782832860946655
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 32.659,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794758243662068,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "snap_pf=4",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 4
+  },
+  "seconds": 9.277682304382324
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 127.95871097683786,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "snap_pf=4",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 4
+  },
+  "seconds": 81.6736147403717
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.2,
+  "avg_queries": 35.347,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 19790.809248009533,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "snap_pf=4",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 4
+  },
+  "seconds": 28.828356742858887
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.6,
+  "avg_queries": 32.926,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 11023.475354143351,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "snap_pf=4",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 4
+  },
+  "seconds": 8.630040168762207
+ },
+ {
+  "n": 984,
+  "real_asr": 98.47560975609755,
+  "avg_queries": 34.38414634146341,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 1157.097590089313,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "snap_pf=4",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 4
+  },
+  "seconds": 13.323528051376343
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.847,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "snap_pf=8",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 25.47817301750183
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.124,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "snap_pf=8",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 7.5485334396362305
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 28.062437059415913,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "snap_pf=8",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 10.949689865112305
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "snap_pf=8",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 25.85736107826233
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 35.255,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794758243662068,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "snap_pf=8",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 8.98792552947998
+ },
+ {
+  "n": 993,
+  "real_asr": 36.35448136958711,
+  "avg_queries": 142.6968781470292,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 10.011356851016018,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "snap_pf=8",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 89.26309561729431
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.39999999999999,
+  "avg_queries": 36.709,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 13559.720481699285,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "snap_pf=8",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 32.18991470336914
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.7,
+  "avg_queries": 33.892,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 9908.431533244655,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "snap_pf=8",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 8.714144468307495
+ },
+ {
+  "n": 984,
+  "real_asr": 98.47560975609755,
+  "avg_queries": 35.02439024390244,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 1132.440242308095,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "snap_pf=8",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 18.152836799621582
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 29.01,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "snap_pf=16",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 16
+  },
+  "seconds": 29.185161113739014
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.262,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "snap_pf=16",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 16
+  },
+  "seconds": 9.183711767196655
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 28.073514602215507,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "snap_pf=16",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 16
+  },
+  "seconds": 15.952235698699951
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "snap_pf=16",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 16
+  },
+  "seconds": 28.781932592391968
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 38.143,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794758243662068,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "snap_pf=16",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 16
+  },
+  "seconds": 13.668825626373291
+ },
+ {
+  "n": 993,
+  "real_asr": 36.35448136958711,
+  "avg_queries": 226.45015105740183,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 10.011356851016018,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "snap_pf=16",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 16
+  },
+  "seconds": 113.24793219566345
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.1,
+  "avg_queries": 39.256,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 301.7748755228899,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "snap_pf=16",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 16
+  },
+  "seconds": 35.78670620918274
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.8,
+  "avg_queries": 35.381,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 9703.429358923479,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "snap_pf=16",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 16
+  },
+  "seconds": 14.287084341049194
+ },
+ {
+  "n": 984,
+  "real_asr": 98.47560975609755,
+  "avg_queries": 35.89939024390244,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 480.32513394896193,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "snap_pf=16",
+  "spec": {
+   "snap": true,
+   "snap_per_feature": 16
+  },
+  "seconds": 24.00106191635132
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 24.566,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "no_seg",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "win"
+   ]
+  },
+  "seconds": 30.201107263565063
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 24.013,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642972968773,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "no_seg",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "win"
+   ]
+  },
+  "seconds": 11.768178701400757
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 24.03021148036254,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "no_seg",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "win"
+   ]
+  },
+  "seconds": 19.20654559135437
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 23.205,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "no_seg",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "win"
+   ]
+  },
+  "seconds": 29.73298478126526
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.8,
+  "avg_queries": 26.067,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0004446419001795995,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "no_seg",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "win"
+   ]
+  },
+  "seconds": 12.657731771469116
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 89.66163141993958,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "no_seg",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "win"
+   ]
+  },
+  "seconds": 80.80234384536743
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.6,
+  "avg_queries": 26.247,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 189.87156992468368,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "no_seg",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "win"
+   ]
+  },
+  "seconds": 32.768664836883545
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.89999999999999,
+  "avg_queries": 25.285,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 213.33529393333947,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "no_seg",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "win"
+   ]
+  },
+  "seconds": 12.35436725616455
+ },
+ {
+  "n": 984,
+  "real_asr": 97.15447154471545,
+  "avg_queries": 26.79369918699187,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 236.92067910738507,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "no_seg",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "win"
+   ]
+  },
+  "seconds": 22.439664840698242
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 22.459,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.0026803464257361704,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "no_chaff",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 30.40652561187744
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 21.929,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.0601668869156456,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "no_chaff",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 11.444087505340576
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 21.921450151057403,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "no_chaff",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 19.17688798904419
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 20.515,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "no_chaff",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 29.793679237365723
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 22.758,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794758243662068,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "no_chaff",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 12.211744785308838
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 86.20140986908359,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 0.5264499041278287,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "no_chaff",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 77.15440821647644
+ },
+ {
+  "n": 1000,
+  "real_asr": 95.39999999999999,
+  "avg_queries": 27.885,
+  "median_op_cost_real": 256.0,
+  "mean_op_cost_real": 313.92275369079124,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "no_chaff",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 33.94367003440857
+ },
+ {
+  "n": 1000,
+  "real_asr": 59.9,
+  "avg_queries": 65.457,
+  "median_op_cost_real": 4.00000005,
+  "mean_op_cost_real": 69.94635140170134,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "no_chaff",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 29.31371760368347
+ },
+ {
+  "n": 984,
+  "real_asr": 63.92276422764228,
+  "avg_queries": 66.45630081300813,
+  "median_op_cost_real": 12.646660784,
+  "mean_op_cost_real": 169.72321547158188,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "no_chaff",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 55.251774072647095
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 22.868,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.08929254827884887,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "no_time",
+  "spec": {
+   "generators": [
+    "pad",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 29.88174295425415
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 22.286,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.1589330572934949,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "no_time",
+  "spec": {
+   "generators": [
+    "pad",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 11.147650241851807
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 22.27190332326284,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00037375534547427427,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "no_time",
+  "spec": {
+   "generators": [
+    "pad",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 19.11058783531189
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 21.182,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009832527962157626,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "no_time",
+  "spec": {
+   "generators": [
+    "pad",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 29.245633125305176
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.8,
+  "avg_queries": 24.057,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.00320177036846031,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "no_time",
+  "spec": {
+   "generators": [
+    "pad",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 12.445965051651001
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 81.54582074521652,
+  "median_op_cost_real": 1.5625238422217137e-05,
+  "mean_op_cost_real": 9.559289791417648,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "no_time",
+  "spec": {
+   "generators": [
+    "pad",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 59.0211455821991
+ },
+ {
+  "n": 1000,
+  "real_asr": 95.3,
+  "avg_queries": 26.369,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 180.7027911857293,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "no_time",
+  "spec": {
+   "generators": [
+    "pad",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 31.268004655838013
+ },
+ {
+  "n": 1000,
+  "real_asr": 93.30000000000001,
+  "avg_queries": 27.222,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 226.9465809217578,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "no_time",
+  "spec": {
+   "generators": [
+    "pad",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 13.286508321762085
+ },
+ {
+  "n": 984,
+  "real_asr": 98.6788617886179,
+  "avg_queries": 26.16768292682927,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 217.48350156327976,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "no_time",
+  "spec": {
+   "generators": [
+    "pad",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 20.926711320877075
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 22.681,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.001115652343489429,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "no_pad",
+  "spec": {
+   "generators": [
+    "time",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 28.99310564994812
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 22.152,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 1.4805480044538601,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "no_pad",
+  "spec": {
+   "generators": [
+    "time",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 11.386956691741943
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 22.16616314199396,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003692612455077671,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "no_pad",
+  "spec": {
+   "generators": [
+    "time",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 18.571954250335693
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 20.839,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0036895607407814914,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "no_pad",
+  "spec": {
+   "generators": [
+    "time",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 28.30018639564514
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 23.278,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1469152342713702,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "no_pad",
+  "spec": {
+   "generators": [
+    "time",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 11.890832424163818
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 84.1570996978852,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "no_pad",
+  "spec": {
+   "generators": [
+    "time",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 48.90545582771301
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.5,
+  "avg_queries": 27.065,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 193.6754846762433,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "no_pad",
+  "spec": {
+   "generators": [
+    "time",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 30.908206701278687
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.0,
+  "avg_queries": 25.509,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 230.52777524447188,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "no_pad",
+  "spec": {
+   "generators": [
+    "time",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 11.96754240989685
+ },
+ {
+  "n": 984,
+  "real_asr": 96.95121951219512,
+  "avg_queries": 26.323170731707318,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 213.31975345499208,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "no_pad",
+  "spec": {
+   "generators": [
+    "time",
+    "chaff",
+    "seg",
+    "win"
+   ]
+  },
+  "seconds": 20.977248191833496
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 32.72,
+  "median_op_cost_real": 6.69456e-05,
+  "mean_op_cost_real": 0.0011156515410822073,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "plus_hdr",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 27.99879217147827
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 31.931,
+  "median_op_cost_real": 6.15744e-05,
+  "mean_op_cost_real": 0.12335642952908593,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "plus_hdr",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 11.501060724258423
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 31.94159113796576,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003688829142436496,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "plus_hdr",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 18.21022653579712
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 30.579,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929560740781491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "plus_hdr",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 26.648186206817627
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 34.695,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794758243662068,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "plus_hdr",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 12.824846267700195
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 129.36052366565963,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 9.557356895071525,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "plus_hdr",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 40.996201038360596
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.89999999999999,
+  "avg_queries": 38.368,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 166.83455304781958,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "plus_hdr",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 26.48768901824951
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.6,
+  "avg_queries": 37.171,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 197.242627945186,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "plus_hdr",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 11.490642547607422
+ },
+ {
+  "n": 984,
+  "real_asr": 97.45934959349594,
+  "avg_queries": 38.28353658536585,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 199.9247615264579,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "plus_hdr",
+  "spec": {
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 15.97864580154419
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 39.604,
+  "median_op_cost_real": 7.29e-05,
+  "mean_op_cost_real": 0.000371406375848458,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 41.318527936935425
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 39.538,
+  "median_op_cost_real": 2.43e-05,
+  "mean_op_cost_real": 0.10011530416499363,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 8.769469976425171
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 39.49647532729104,
+  "median_op_cost_real": 0.0002187,
+  "mean_op_cost_real": 0.00035649325367044976,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 10.904934883117676
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 38.189,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009290861168612192,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 40.44774603843689
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 43.713,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.7686220071211073,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 8.94435167312622
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 158.18126888217523,
+  "median_op_cost_real": 8.1e-06,
+  "mean_op_cost_real": 5.54402391033464,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 39.09715723991394
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.2,
+  "avg_queries": 44.982,
+  "median_op_cost_real": 81.0,
+  "mean_op_cost_real": 218.5428026239712,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 43.270283937454224
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.6,
+  "avg_queries": 45.748,
+  "median_op_cost_real": 81.0,
+  "mean_op_cost_real": 182.54268002545638,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 8.77718710899353
+ },
+ {
+  "n": 984,
+  "real_asr": 98.78048780487805,
+  "avg_queries": 47.27235772357724,
+  "median_op_cost_real": 81.0,
+  "mean_op_cost_real": 199.4819839676955,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0
+  },
+  "seconds": 11.873990774154663
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 33.805,
+  "median_op_cost_real": 0.00010240000000000001,
+  "mean_op_cost_real": 0.00039554939831633454,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0
+  },
+  "seconds": 42.034523487091064
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 33.778,
+  "median_op_cost_real": 2.5600000000000002e-05,
+  "mean_op_cost_real": 0.12335132994232563,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0
+  },
+  "seconds": 7.332108020782471
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 33.76233635448137,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003701598957454302,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0
+  },
+  "seconds": 10.231638669967651
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 32.17,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009292223517814909,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0
+  },
+  "seconds": 42.566962480545044
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 36.479,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.0794763807775873,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0
+  },
+  "seconds": 7.698383092880249
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 130.95166163141994,
+  "median_op_cost_real": 6.4000000000000006e-06,
+  "mean_op_cost_real": 9.557357794779085,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0
+  },
+  "seconds": 36.82351565361023
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.39999999999999,
+  "avg_queries": 37.767,
+  "median_op_cost_real": 64.0,
+  "mean_op_cost_real": 259.034717035113,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0
+  },
+  "seconds": 44.516252279281616
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.0,
+  "avg_queries": 39.951,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 212.12423371816328,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0
+  },
+  "seconds": 7.157603740692139
+ },
+ {
+  "n": 984,
+  "real_asr": 98.3739837398374,
+  "avg_queries": 39.13414634146341,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 252.945556178724,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0
+  },
+  "seconds": 10.77182650566101
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 29.161,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.00043664785687198165,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 45.55359244346619
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 29.139,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.8363950611359063,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 6.299230098724365
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 29.119838872104733,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003720274819916569,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 9.616228818893433
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 27.74,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009307458819409476,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 45.334513425827026
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 31.135,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.159561296267577,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 7.03566575050354
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 108.28801611278952,
+  "median_op_cost_real": 3.6e-06,
+  "mean_op_cost_real": 8.640025149597164,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 32.44742035865784
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.2,
+  "avg_queries": 32.136,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 281.15492671059064,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 46.959471464157104
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.7,
+  "avg_queries": 34.218,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 258.61690563060387,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 6.154413938522339
+ },
+ {
+  "n": 984,
+  "real_asr": 98.17073170731707,
+  "avg_queries": 33.703252032520325,
+  "median_op_cost_real": 216.0,
+  "mean_op_cost_real": 296.275262909491,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0
+  },
+  "seconds": 8.60369324684143
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 25.759,
+  "median_op_cost_real": 5.1200000000000004e-05,
+  "mean_op_cost_real": 0.00036303034776420515,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 45.061434268951416
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 25.787,
+  "median_op_cost_real": 5.1200000000000004e-05,
+  "mean_op_cost_real": 1.4845983908005542,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 4.938116788864136
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 25.770392749244714,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00037109080483633937,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 7.648035049438477
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 25.355,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009296839517814908,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 44.634275913238525
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 28.546,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 2.2385931276690534,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 5.297796010971069
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 102.19838872104734,
+  "median_op_cost_real": 6.4000000000000006e-06,
+  "mean_op_cost_real": 17.521802955890195,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 30.587055921554565
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.39999999999999,
+  "avg_queries": 29.102,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 348.6002137785433,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 46.804526567459106
+ },
+ {
+  "n": 1000,
+  "real_asr": 95.0,
+  "avg_queries": 33.722,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 355.9302502753077,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 6.198887348175049
+ },
+ {
+  "n": 984,
+  "real_asr": 98.57723577235772,
+  "avg_queries": 30.51321138211382,
+  "median_op_cost_real": 71.68,
+  "mean_op_cost_real": 391.44880742490983,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0
+  },
+  "seconds": 8.416831970214844
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 24.708,
+  "median_op_cost_real": 0.0001728,
+  "mean_op_cost_real": 0.0004422360404966331,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span ratio=12",
+  "spec": {
+   "ladder_ratio": 12.0
+  },
+  "seconds": 51.75112843513489
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 24.77,
+  "median_op_cost_real": 0.0001728,
+  "mean_op_cost_real": 3.3341597905240707,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span ratio=12",
+  "spec": {
+   "ladder_ratio": 12.0
+  },
+  "seconds": 5.304231405258179
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 24.716012084592144,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003724620655012781,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span ratio=12",
+  "spec": {
+   "ladder_ratio": 12.0
+  },
+  "seconds": 7.412024259567261
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 23.212,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000929977812405585,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span ratio=12",
+  "spec": {
+   "ladder_ratio": 12.0
+  },
+  "seconds": 52.86423087120056
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 26.074,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.9730501869335975,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span ratio=12",
+  "spec": {
+   "ladder_ratio": 12.0
+  },
+  "seconds": 5.522377252578735
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 86.73917421953676,
+  "median_op_cost_real": 1.44e-05,
+  "mean_op_cost_real": 8.064029717001306,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span ratio=12",
+  "spec": {
+   "ladder_ratio": 12.0
+  },
+  "seconds": 26.937175989151
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.39999999999999,
+  "avg_queries": 26.693,
+  "median_op_cost_real": 144.0,
+  "mean_op_cost_real": 395.94058313039864,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span ratio=12",
+  "spec": {
+   "ladder_ratio": 12.0
+  },
+  "seconds": 59.270097732543945
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.69999999999999,
+  "avg_queries": 32.312,
+  "median_op_cost_real": 161.28,
+  "mean_op_cost_real": 513.7949718377002,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span ratio=12",
+  "spec": {
+   "ladder_ratio": 12.0
+  },
+  "seconds": 6.305210828781128
+ },
+ {
+  "n": 984,
+  "real_asr": 97.96747967479675,
+  "avg_queries": 28.36382113821138,
+  "median_op_cost_real": 161.28,
+  "mean_op_cost_real": 432.6404860790507,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span ratio=12",
+  "spec": {
+   "ladder_ratio": 12.0
+  },
+  "seconds": 8.374764442443848
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 23.006,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0005082135730944264,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span ratio=16",
+  "spec": {
+   "ladder_ratio": 16.0
+  },
+  "seconds": 58.634860038757324
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 22.948,
+  "median_op_cost_real": 2.5600000000000002e-05,
+  "mean_op_cost_real": 0.3159688156751784,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span ratio=16",
+  "spec": {
+   "ladder_ratio": 16.0
+  },
+  "seconds": 4.799762487411499
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 22.97985901309164,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00037017928968482414,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span ratio=16",
+  "spec": {
+   "ladder_ratio": 16.0
+  },
+  "seconds": 7.103617906570435
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 22.039,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009311034168612192,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span ratio=16",
+  "spec": {
+   "ladder_ratio": 16.0
+  },
+  "seconds": 62.339991331100464
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 24.738,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 4.586332718817631,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span ratio=16",
+  "spec": {
+   "ladder_ratio": 16.0
+  },
+  "seconds": 4.899574279785156
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 87.0503524672709,
+  "median_op_cost_real": 1.5625238422217137e-05,
+  "mean_op_cost_real": 14.336033710289795,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span ratio=16",
+  "spec": {
+   "ladder_ratio": 16.0
+  },
+  "seconds": 34.03993535041809
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.2,
+  "avg_queries": 24.679,
+  "median_op_cost_real": 256.0,
+  "mean_op_cost_real": 450.8084743621399,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span ratio=16",
+  "spec": {
+   "ladder_ratio": 16.0
+  },
+  "seconds": 67.91245985031128
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.1,
+  "avg_queries": 26.96,
+  "median_op_cost_real": 286.72,
+  "mean_op_cost_real": 522.6342431192509,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span ratio=16",
+  "spec": {
+   "ladder_ratio": 16.0
+  },
+  "seconds": 5.032123327255249
+ },
+ {
+  "n": 984,
+  "real_asr": 97.96747967479675,
+  "avg_queries": 27.059959349593495,
+  "median_op_cost_real": 286.72,
+  "mean_op_cost_real": 532.4278847457225,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span ratio=16",
+  "spec": {
+   "ladder_ratio": 16.0
+  },
+  "seconds": 6.927480936050415
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.453,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.00043664785687198165,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span pad_min=1",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 1.0
+  },
+  "seconds": 70.22190999984741
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.477,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.8366357833024058,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span pad_min=1",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 1.0
+  },
+  "seconds": 4.863576173782349
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 30.409869083585097,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003720274819916569,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span pad_min=1",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 1.0
+  },
+  "seconds": 6.483047723770142
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 29.718,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0011807458819409478,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span pad_min=1",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 1.0
+  },
+  "seconds": 73.60466003417969
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 33.397,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.159561296267577,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span pad_min=1",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 1.0
+  },
+  "seconds": 5.51389479637146
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 105.43504531722054,
+  "median_op_cost_real": 3.6e-06,
+  "mean_op_cost_real": 8.736025149597165,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span pad_min=1",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 1.0
+  },
+  "seconds": 37.00920081138611
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.4,
+  "avg_queries": 33.878,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 287.962560575813,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span pad_min=1",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 1.0
+  },
+  "seconds": 80.34683561325073
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.3,
+  "avg_queries": 36.242,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 264.63954055118194,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span pad_min=1",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 1.0
+  },
+  "seconds": 6.298880338668823
+ },
+ {
+  "n": 984,
+  "real_asr": 98.3739837398374,
+  "avg_queries": 35.521341463414636,
+  "median_op_cost_real": 216.0,
+  "mean_op_cost_real": 302.021666117257,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span pad_min=1",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 1.0
+  },
+  "seconds": 11.18296480178833
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 29.161,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.00043664785687198165,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span pad_min=16",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 16.0
+  },
+  "seconds": 81.4882242679596
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 29.139,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.8363950611359063,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span pad_min=16",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 16.0
+  },
+  "seconds": 7.024489641189575
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 29.119838872104733,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003720274819916569,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span pad_min=16",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 16.0
+  },
+  "seconds": 10.590728759765625
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 27.74,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009307458819409476,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span pad_min=16",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 16.0
+  },
+  "seconds": 91.1692864894867
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 31.135,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.159561296267577,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span pad_min=16",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 16.0
+  },
+  "seconds": 6.5611488819122314
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 108.28801611278952,
+  "median_op_cost_real": 3.6e-06,
+  "mean_op_cost_real": 8.640025149597164,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span pad_min=16",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 16.0
+  },
+  "seconds": 41.6348557472229
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.2,
+  "avg_queries": 32.136,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 281.15492671059064,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span pad_min=16",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 16.0
+  },
+  "seconds": 94.80976343154907
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.7,
+  "avg_queries": 34.218,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 258.61690563060387,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span pad_min=16",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 16.0
+  },
+  "seconds": 7.54306697845459
+ },
+ {
+  "n": 984,
+  "real_asr": 98.17073170731707,
+  "avg_queries": 33.703252032520325,
+  "median_op_cost_real": 216.0,
+  "mean_op_cost_real": 296.275262909491,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span pad_min=16",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 16.0
+  },
+  "seconds": 11.974087953567505
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.134,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.00043664785687198165,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span pad_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 100.0
+  },
+  "seconds": 91.74190878868103
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.11,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.8366357833024058,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span pad_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 100.0
+  },
+  "seconds": 5.706769704818726
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 28.113796576032225,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003720274819916569,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span pad_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 100.0
+  },
+  "seconds": 9.481156349182129
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.738,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.003450745881940947,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span pad_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 100.0
+  },
+  "seconds": 90.96384048461914
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 30.013,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.159561296267577,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span pad_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 100.0
+  },
+  "seconds": 6.143517017364502
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 104.20443101711984,
+  "median_op_cost_real": 3.6e-06,
+  "mean_op_cost_real": 8.664025149597165,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span pad_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 100.0
+  },
+  "seconds": 41.00061011314392
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.2,
+  "avg_queries": 31.072,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 280.3913014560082,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span pad_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 100.0
+  },
+  "seconds": 94.44378781318665
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.7,
+  "avg_queries": 32.98,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 259.0340601853634,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span pad_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 100.0
+  },
+  "seconds": 6.129186630249023
+ },
+ {
+  "n": 984,
+  "real_asr": 98.27235772357723,
+  "avg_queries": 32.72052845528455,
+  "median_op_cost_real": 216.0,
+  "mean_op_cost_real": 295.572143541022,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span pad_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pad_min": 100.0
+  },
+  "seconds": 10.6835618019104
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.163,
+  "median_op_cost_real": 7.776e-05,
+  "mean_op_cost_real": 0.00037649670684143687,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span time_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 100.0
+  },
+  "seconds": 91.07313299179077
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.141,
+  "median_op_cost_real": 7.776e-05,
+  "mean_op_cost_real": 0.8363800475150439,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span time_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 100.0
+  },
+  "seconds": 5.6414384841918945
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 30.12185297079557,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00037134324928078373,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span time_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 100.0
+  },
+  "seconds": 10.195049524307251
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 28.743,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009297581619409478,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span time_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 100.0
+  },
+  "seconds": 90.59538650512695
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 32.247,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1595601013255323,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span time_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 100.0
+  },
+  "seconds": 5.762006044387817
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 116.2074521651561,
+  "median_op_cost_real": 1.296e-05,
+  "mean_op_cost_real": 8.640029379659303,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span time_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 100.0
+  },
+  "seconds": 39.9888129234314
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.7,
+  "avg_queries": 32.956,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 282.16356855269316,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span time_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 100.0
+  },
+  "seconds": 93.03518867492676
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.2,
+  "avg_queries": 35.997,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 259.9320939452923,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span time_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 100.0
+  },
+  "seconds": 5.829927206039429
+ },
+ {
+  "n": 984,
+  "real_asr": 97.96747967479675,
+  "avg_queries": 35.60060975609756,
+  "median_op_cost_real": 216.0,
+  "mean_op_cost_real": 296.36330097183435,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span time_min=100",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 100.0
+  },
+  "seconds": 12.515414237976074
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.147,
+  "median_op_cost_real": 3.6e-05,
+  "mean_op_cost_real": 0.00031762943756117674,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span time_min=10000",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 10000.0
+  },
+  "seconds": 90.2868242263794
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.125,
+  "median_op_cost_real": 3.6e-05,
+  "mean_op_cost_real": 0.8363952795912726,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span time_min=10000",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 10000.0
+  },
+  "seconds": 6.933096885681152
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 28.109768378650553,
+  "median_op_cost_real": 0.00021600000000000002,
+  "mean_op_cost_real": 0.0003565565870037832,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span time_min=10000",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 10000.0
+  },
+  "seconds": 9.638816595077515
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.731,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009293359517814909,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span time_min=10000",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 10000.0
+  },
+  "seconds": 89.69295644760132
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 30.017,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1595633036437625,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span time_min=10000",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 10000.0
+  },
+  "seconds": 5.493622541427612
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 114.07250755287009,
+  "median_op_cost_real": 6e-06,
+  "mean_op_cost_real": 8.640023258667973,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span time_min=10000",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 10000.0
+  },
+  "seconds": 39.2448627948761
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.2,
+  "avg_queries": 30.529,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 280.61197944602856,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span time_min=10000",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 10000.0
+  },
+  "seconds": 92.23090815544128
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.39999999999999,
+  "avg_queries": 33.897,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 252.95079936344973,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span time_min=10000",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 10000.0
+  },
+  "seconds": 5.639141798019409
+ },
+ {
+  "n": 984,
+  "real_asr": 97.86585365853658,
+  "avg_queries": 32.46849593495935,
+  "median_op_cost_real": 216.0,
+  "mean_op_cost_real": 296.89604450421973,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span time_min=10000",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "time_min_us": 10000.0
+  },
+  "seconds": 9.093555212020874
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.932,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.00043664785687198165,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span pkt_max=512",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 512
+  },
+  "seconds": 89.51105451583862
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.912,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.8363950611359063,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span pkt_max=512",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 512
+  },
+  "seconds": 4.642023086547852
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 27.895266868076536,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003720274819916569,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span pkt_max=512",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 512
+  },
+  "seconds": 8.884665727615356
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.72,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009307458819409476,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span pkt_max=512",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 512
+  },
+  "seconds": 88.90462613105774
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 29.964,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.5399617177638891,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span pkt_max=512",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 512
+  },
+  "seconds": 5.651776075363159
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 101.90634441087613,
+  "median_op_cost_real": 3.6e-06,
+  "mean_op_cost_real": 8.640025149597164,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span pkt_max=512",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 512
+  },
+  "seconds": 36.826050996780396
+ },
+ {
+  "n": 1000,
+  "real_asr": 96.7,
+  "avg_queries": 36.304,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 124.72745556795958,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span pkt_max=512",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 512
+  },
+  "seconds": 100.14611530303955
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.39999999999999,
+  "avg_queries": 32.915,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 150.27743783275156,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span pkt_max=512",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 512
+  },
+  "seconds": 5.814541816711426
+ },
+ {
+  "n": 984,
+  "real_asr": 97.2560975609756,
+  "avg_queries": 35.21036585365854,
+  "median_op_cost_real": 216.0,
+  "mean_op_cost_real": 185.9029953897153,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span pkt_max=512",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 512
+  },
+  "seconds": 10.737958192825317
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.17,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.00043664785687198165,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "span pkt_max=16384",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 16384
+  },
+  "seconds": 87.75110459327698
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.146,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.8363950611359063,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "span pkt_max=16384",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 16384
+  },
+  "seconds": 4.7379114627838135
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 30.122860020140987,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003720274819916569,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "span pkt_max=16384",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 16384
+  },
+  "seconds": 8.589182376861572
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 28.741,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009307458819409476,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "span pkt_max=16384",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 16384
+  },
+  "seconds": 86.56629180908203
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 32.252,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.159561296267577,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "span pkt_max=16384",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 16384
+  },
+  "seconds": 5.4980857372283936
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 113.59415911379658,
+  "median_op_cost_real": 3.6e-06,
+  "mean_op_cost_real": 8.640025149597164,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "span pkt_max=16384",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 16384
+  },
+  "seconds": 24.399115800857544
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.2,
+  "avg_queries": 33.366,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 346.97993689388994,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "span pkt_max=16384",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 16384
+  },
+  "seconds": 89.93644142150879
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.0,
+  "avg_queries": 35.558,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 342.5402657243878,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "span pkt_max=16384",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 16384
+  },
+  "seconds": 5.642650127410889
+ },
+ {
+  "n": 984,
+  "real_asr": 98.3739837398374,
+  "avg_queries": 35.0,
+  "median_op_cost_real": 216.0,
+  "mean_op_cost_real": 429.10911580595905,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "span pkt_max=16384",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "pkt_max": 16384
+  },
+  "seconds": 7.216841220855713
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 29.161,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.00043664785687198165,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "A ratio6",
+  "spec": {},
+  "seconds": 153.30498385429382
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 29.139,
+  "median_op_cost_real": 0.0001296,
+  "mean_op_cost_real": 0.8363950611359063,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "A ratio6",
+  "spec": {},
+  "seconds": 10.585789680480957
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 29.119838872104733,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003720274819916569,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "A ratio6",
+  "spec": {},
+  "seconds": 21.767907857894897
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 27.74,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0009307458819409476,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "A ratio6",
+  "spec": {},
+  "seconds": 158.41642713546753
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 31.135,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.159561296267577,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "A ratio6",
+  "spec": {},
+  "seconds": 10.192187309265137
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 108.28801611278952,
+  "median_op_cost_real": 3.6e-06,
+  "mean_op_cost_real": 8.640025149597164,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "A ratio6",
+  "spec": {},
+  "seconds": 110.90523386001587
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.2,
+  "avg_queries": 32.136,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 281.15492671059064,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "A ratio6",
+  "spec": {},
+  "seconds": 170.15368485450745
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.7,
+  "avg_queries": 34.218,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 258.61690563060387,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "A ratio6",
+  "spec": {},
+  "seconds": 11.012908935546875
+ },
+ {
+  "n": 984,
+  "real_asr": 98.17073170731707,
+  "avg_queries": 33.703252032520325,
+  "median_op_cost_real": 216.0,
+  "mean_op_cost_real": 296.275262909491,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "A ratio6",
+  "spec": {},
+  "seconds": 24.361889123916626
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 41.164,
+  "median_op_cost_real": 3.19806e-05,
+  "mean_op_cost_real": 0.00028962638206711386,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=3 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 3
+  },
+  "seconds": 299.6604220867157
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 41.095,
+  "median_op_cost_real": 2.43e-05,
+  "mean_op_cost_real": 0.06193875027091141,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=3 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 3
+  },
+  "seconds": 15.170608520507812
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 40.21248741188318,
+  "median_op_cost_real": 0.0002187,
+  "mean_op_cost_real": 0.00035647960579166194,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=3 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 3
+  },
+  "seconds": 25.572824478149414
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 38.615,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007888825729612192,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=3 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 3
+  },
+  "seconds": 209.13369369506836
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 44.133,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.7686217743042474,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=3 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 3
+  },
+  "seconds": 13.3260977268219
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 159.202416918429,
+  "median_op_cost_real": 3.0974e-06,
+  "mean_op_cost_real": 3.4969094141338055,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=3 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 3
+  },
+  "seconds": 130.10119366645813
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.2,
+  "avg_queries": 47.832,
+  "median_op_cost_real": 36.0,
+  "mean_op_cost_real": 152.24242539456355,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=3 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 3
+  },
+  "seconds": 422.4281897544861
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.6,
+  "avg_queries": 48.518,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 115.69456224182252,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=3 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 3
+  },
+  "seconds": 20.107733964920044
+ },
+ {
+  "n": 984,
+  "real_asr": 98.78048780487805,
+  "avg_queries": 49.94410569105691,
+  "median_op_cost_real": 34.72,
+  "mean_op_cost_real": 120.38754722809115,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=3 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 3
+  },
+  "seconds": 37.26598596572876
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 42.724,
+  "median_op_cost_real": 2.93502e-05,
+  "mean_op_cost_real": 0.00027498005147533856,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=6 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 6
+  },
+  "seconds": 441.68524861335754
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 42.649,
+  "median_op_cost_real": 2.26875e-05,
+  "mean_op_cost_real": 0.059229290327180203,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=6 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 6
+  },
+  "seconds": 24.191709518432617
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 40.928499496475325,
+  "median_op_cost_real": 0.00020772260000000002,
+  "mean_op_cost_real": 0.0003533168923573186,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=6 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 6
+  },
+  "seconds": 31.640852212905884
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 39.034,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007688479025612193,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=6 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 6
+  },
+  "seconds": 245.18759322166443
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 44.553,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.7686217590171031,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=6 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 6
+  },
+  "seconds": 19.003639698028564
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 160.21651560926486,
+  "median_op_cost_real": 2.9420000000000004e-06,
+  "mean_op_cost_real": 3.322686906423528,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=6 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 6
+  },
+  "seconds": 143.60615873336792
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.2,
+  "avg_queries": 50.104,
+  "median_op_cost_real": 35.0,
+  "mean_op_cost_real": 143.29359501776617,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=6 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 6
+  },
+  "seconds": 618.5659945011139
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.6,
+  "avg_queries": 50.578,
+  "median_op_cost_real": 38.08,
+  "mean_op_cost_real": 109.39550391081258,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=6 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 6
+  },
+  "seconds": 62.73194146156311
+ },
+ {
+  "n": 984,
+  "real_asr": 98.78048780487805,
+  "avg_queries": 52.03658536585366,
+  "median_op_cost_real": 33.6,
+  "mean_op_cost_real": 113.8662096101216,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=6 ratio=3",
+  "spec": {
+   "ladder_ratio": 3.0,
+   "refine_steps": 6
+  },
+  "seconds": 58.38515329360962
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 35.227,
+  "median_op_cost_real": 3.04437e-05,
+  "mean_op_cost_real": 0.00028700751336146996,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=3 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 3
+  },
+  "seconds": 296.46961760520935
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 35.341,
+  "median_op_cost_real": 2.5600000000000002e-05,
+  "mean_op_cost_real": 0.09124714661885523,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=3 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 3
+  },
+  "seconds": 36.83124113082886
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 33.87411883182276,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00036994588150300595,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=3 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 3
+  },
+  "seconds": 28.345144510269165
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 32.599,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007588097271814908,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=3 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 3
+  },
+  "seconds": 216.18126344680786
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 36.899,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.079476365297503,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=3 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 3
+  },
+  "seconds": 24.40703797340393
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 131.97280966767372,
+  "median_op_cost_real": 3.2000000000000003e-06,
+  "mean_op_cost_real": 3.605798297801584,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=3 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 3
+  },
+  "seconds": 142.19586443901062
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.39999999999999,
+  "avg_queries": 40.621,
+  "median_op_cost_real": 38.0,
+  "mean_op_cost_real": 153.0301762706692,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=3 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 3
+  },
+  "seconds": 428.18426871299744
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.0,
+  "avg_queries": 42.756,
+  "median_op_cost_real": 36.92,
+  "mean_op_cost_real": 114.04681257806511,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=3 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 3
+  },
+  "seconds": 48.11690878868103
+ },
+ {
+  "n": 984,
+  "real_asr": 98.3739837398374,
+  "avg_queries": 41.97662601626016,
+  "median_op_cost_real": 50.4,
+  "mean_op_cost_real": 143.17080880009928,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=3 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 3
+  },
+  "seconds": 49.965169191360474
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 36.649,
+  "median_op_cost_real": 2.9153000000000004e-05,
+  "mean_op_cost_real": 0.00028593037444471975,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=6 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 6
+  },
+  "seconds": 420.9083797931671
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 36.903,
+  "median_op_cost_real": 2.248e-05,
+  "mean_op_cost_real": 0.08339180818475293,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=6 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 6
+  },
+  "seconds": 63.41362404823303
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 33.98590130916415,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00036987172089694535,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=6 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 6
+  },
+  "seconds": 33.71021580696106
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 33.021,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007587505380814909,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=6 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 6
+  },
+  "seconds": 248.14073729515076
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 37.319,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.079476331704669,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=6 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 6
+  },
+  "seconds": 31.243005990982056
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 132.9889224572004,
+  "median_op_cost_real": 2.9344e-06,
+  "mean_op_cost_real": 3.3226869028168613,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=6 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 6
+  },
+  "seconds": 142.3827736377716
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.39999999999999,
+  "avg_queries": 42.986,
+  "median_op_cost_real": 37.5,
+  "mean_op_cost_real": 142.01334371394609,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=6 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 6
+  },
+  "seconds": 631.9666523933411
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.0,
+  "avg_queries": 44.909,
+  "median_op_cost_real": 35.84,
+  "mean_op_cost_real": 106.2506166108956,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=6 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 6
+  },
+  "seconds": 65.05276012420654
+ },
+ {
+  "n": 984,
+  "real_asr": 98.3739837398374,
+  "avg_queries": 44.39939024390244,
+  "median_op_cost_real": 47.019999999999996,
+  "mean_op_cost_real": 132.68260513797406,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=6 ratio=4",
+  "spec": {
+   "ladder_ratio": 4.0,
+   "refine_steps": 6
+  },
+  "seconds": 62.0551221370697
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.091,
+  "median_op_cost_real": 3.38058e-05,
+  "mean_op_cost_real": 0.0003562767020073879,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=3 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 3
+  },
+  "seconds": 253.73548865318298
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.702,
+  "median_op_cost_real": 2.70223e-05,
+  "mean_op_cost_real": 0.6714583003895674,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=3 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 3
+  },
+  "seconds": 33.233479022979736
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 29.17119838872105,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00037188294492094984,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=3 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 3
+  },
+  "seconds": 28.401418924331665
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 28.162,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007390799484409478,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=3 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 3
+  },
+  "seconds": 214.03528952598572
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 31.555,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.159559815852403,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=3 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 3
+  },
+  "seconds": 21.19405508041382
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 109.20644511581068,
+  "median_op_cost_real": 3.6e-06,
+  "mean_op_cost_real": 3.9893841592677175,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=3 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 3
+  },
+  "seconds": 130.865553855896
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.2,
+  "avg_queries": 35.034,
+  "median_op_cost_real": 36.0,
+  "mean_op_cost_real": 163.9567479250375,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=3 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 3
+  },
+  "seconds": 430.7689335346222
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.7,
+  "avg_queries": 36.999,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 121.80250500506152,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=3 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 3
+  },
+  "seconds": 43.65816402435303
+ },
+ {
+  "n": 984,
+  "real_asr": 98.17073170731707,
+  "avg_queries": 36.58130081300813,
+  "median_op_cost_real": 56.0,
+  "mean_op_cost_real": 150.14563820009505,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=3 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 3
+  },
+  "seconds": 48.40372443199158
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 31.021,
+  "median_op_cost_real": 2.9389900000000005e-05,
+  "mean_op_cost_real": 0.000332611974123737,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=6 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 6
+  },
+  "seconds": 334.4535002708435
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 32.243,
+  "median_op_cost_real": 2.28439e-05,
+  "mean_op_cost_real": 0.6273236754767288,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=6 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 6
+  },
+  "seconds": 49.570271492004395
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 29.22255790533736,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003718694212845862,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=6 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 6
+  },
+  "seconds": 32.41253709793091
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 28.58,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007389562116409476,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=6 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 6
+  },
+  "seconds": 246.56052494049072
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 31.975,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1595597246174185,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=6 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 6
+  },
+  "seconds": 30.975332498550415
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 110.12386706948641,
+  "median_op_cost_real": 2.9593e-06,
+  "mean_op_cost_real": 3.6347171057185506,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=6 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 6
+  },
+  "seconds": 137.49970936775208
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.2,
+  "avg_queries": 37.556,
+  "median_op_cost_real": 33.6,
+  "mean_op_cost_real": 150.3607238843553,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=6 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 6
+  },
+  "seconds": 684.071617603302
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.7,
+  "avg_queries": 39.206,
+  "median_op_cost_real": 36.96,
+  "mean_op_cost_real": 112.3436790459261,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=6 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 6
+  },
+  "seconds": 63.78589129447937
+ },
+ {
+  "n": 984,
+  "real_asr": 98.17073170731707,
+  "avg_queries": 39.13109756097561,
+  "median_op_cost_real": 50.4,
+  "mean_op_cost_real": 136.97843273977278,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=6 ratio=6",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 6
+  },
+  "seconds": 59.853310108184814
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.319,
+  "median_op_cost_real": 3.04437e-05,
+  "mean_op_cost_real": 0.0002931327521774449,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=3 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 3
+  },
+  "seconds": 310.83956933021545
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 26.749,
+  "median_op_cost_real": 2.34753e-05,
+  "mean_op_cost_real": 0.7142791851443862,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=3 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 3
+  },
+  "seconds": 27.1599018573761
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 25.882175226586103,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00036991051665452113,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=3 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 3
+  },
+  "seconds": 30.489945650100708
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 25.783,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007388211010814909,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=3 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 3
+  },
+  "seconds": 211.15272784233093
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 28.966,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 2.2385929540724256,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=3 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 3
+  },
+  "seconds": 23.775317907333374
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 103.21953675730111,
+  "median_op_cost_real": 2.9344e-06,
+  "mean_op_cost_real": 3.671131643824084,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=3 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 3
+  },
+  "seconds": 138.49378871917725
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.39999999999999,
+  "avg_queries": 31.945,
+  "median_op_cost_real": 49.0,
+  "mean_op_cost_real": 189.80543547532946,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=3 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 3
+  },
+  "seconds": 430.2672984600067
+ },
+ {
+  "n": 1000,
+  "real_asr": 95.0,
+  "avg_queries": 36.444,
+  "median_op_cost_real": 42.56,
+  "mean_op_cost_real": 157.23162568777065,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=3 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 3
+  },
+  "seconds": 47.57960653305054
+ },
+ {
+  "n": 984,
+  "real_asr": 98.57723577235772,
+  "avg_queries": 33.421747967479675,
+  "median_op_cost_real": 54.88,
+  "mean_op_cost_real": 158.96006377520598,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=3 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 3
+  },
+  "seconds": 49.534335136413574
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 28.879,
+  "median_op_cost_real": 2.9470400000000005e-05,
+  "mean_op_cost_real": 0.00027862599731285113,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=6 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 6
+  },
+  "seconds": 450.82299280166626
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 27.709,
+  "median_op_cost_real": 2.2724800000000003e-05,
+  "mean_op_cost_real": 0.6380500731158003,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=6 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 6
+  },
+  "seconds": 37.18466401100159
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 25.993957703927492,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003698739798868444,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=6 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 6
+  },
+  "seconds": 32.57097887992859
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 26.207,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.000738752246881491,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=6 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 6
+  },
+  "seconds": 249.5635974407196
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 29.386,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 2.0320597304163655,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=6 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 6
+  },
+  "seconds": 28.413424730300903
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 104.24068479355489,
+  "median_op_cost_real": 2.9344e-06,
+  "mean_op_cost_real": 3.3320202706121385,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=6 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 6
+  },
+  "seconds": 145.8889479637146
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.39999999999999,
+  "avg_queries": 34.434,
+  "median_op_cost_real": 45.96,
+  "mean_op_cost_real": 168.1425450575086,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=6 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 6
+  },
+  "seconds": 672.4884300231934
+ },
+ {
+  "n": 1000,
+  "real_asr": 95.0,
+  "avg_queries": 38.603,
+  "median_op_cost_real": 40.32,
+  "mean_op_cost_real": 144.615033212064,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=6 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 6
+  },
+  "seconds": 67.19542527198792
+ },
+ {
+  "n": 984,
+  "real_asr": 98.57723577235772,
+  "avg_queries": 36.05386178861789,
+  "median_op_cost_real": 52.64,
+  "mean_op_cost_real": 142.13761947522323,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=6 ratio=8",
+  "spec": {
+   "ladder_ratio": 8.0,
+   "refine_steps": 6
+  },
+  "seconds": 64.42484903335571
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 31.41,
+  "median_op_cost_real": 3.02243e-05,
+  "mean_op_cost_real": 0.0003329826974938473,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=4 pkt16k",
+  "spec": {
+   "refine_steps": 4,
+   "pkt_max": 16384
+  },
+  "seconds": 284.69236397743225
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 32.23,
+  "median_op_cost_real": 2.41595e-05,
+  "mean_op_cost_real": 0.6714570058650939,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=4 pkt16k",
+  "spec": {
+   "refine_steps": 4,
+   "pkt_max": 16384
+  },
+  "seconds": 38.74570345878601
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 30.191339375629404,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00037187320067852555,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=4 pkt16k",
+  "spec": {
+   "refine_steps": 4,
+   "pkt_max": 16384
+  },
+  "seconds": 32.55819916725159
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 29.303,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007389897940409478,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=4 pkt16k",
+  "spec": {
+   "refine_steps": 4,
+   "pkt_max": 16384
+  },
+  "seconds": 226.74863123893738
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 32.812,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1595597432696843,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=4 pkt16k",
+  "spec": {
+   "refine_steps": 4,
+   "pkt_max": 16384
+  },
+  "seconds": 29.943801403045654
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 114.81873111782477,
+  "median_op_cost_real": 3.2186e-06,
+  "mean_op_cost_real": 3.7218283739654954,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=4 pkt16k",
+  "spec": {
+   "refine_steps": 4,
+   "pkt_max": 16384
+  },
+  "seconds": 138.41417908668518
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.2,
+  "avg_queries": 37.184,
+  "median_op_cost_real": 35.84,
+  "mean_op_cost_real": 164.97191816200916,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=4 pkt16k",
+  "spec": {
+   "refine_steps": 4,
+   "pkt_max": 16384
+  },
+  "seconds": 546.9541985988617
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.0,
+  "avg_queries": 39.146,
+  "median_op_cost_real": 40.0,
+  "mean_op_cost_real": 188.18505049193877,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=4 pkt16k",
+  "spec": {
+   "refine_steps": 4,
+   "pkt_max": 16384
+  },
+  "seconds": 58.09833335876465
+ },
+ {
+  "n": 984,
+  "real_asr": 98.3739837398374,
+  "avg_queries": 38.80691056910569,
+  "median_op_cost_real": 56.0,
+  "mean_op_cost_real": 217.42561623569992,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=4 pkt16k",
+  "spec": {
+   "refine_steps": 4,
+   "pkt_max": 16384
+  },
+  "seconds": 58.7185480594635
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.519,
+  "median_op_cost_real": 3.02243e-05,
+  "mean_op_cost_real": 0.0003329826974938473,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=4 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "beam": 2
+  },
+  "seconds": 292.66187953948975
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 31.298,
+  "median_op_cost_real": 2.41595e-05,
+  "mean_op_cost_real": 0.6714570058650939,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=4 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "beam": 2
+  },
+  "seconds": 41.11519241333008
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 29.26183282980866,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00037187320067852555,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=4 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "beam": 2
+  },
+  "seconds": 29.39099383354187
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 28.302,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007389897940409478,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=4 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "beam": 2
+  },
+  "seconds": 230.33835887908936
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 40.653,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1595597432696843,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=4 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "beam": 2
+  },
+  "seconds": 28.403523683547974
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 227.78247734138972,
+  "median_op_cost_real": 3.2186e-06,
+  "mean_op_cost_real": 3.7218283739654954,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=4 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "beam": 2
+  },
+  "seconds": 257.57860708236694
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.9,
+  "avg_queries": 37.843,
+  "median_op_cost_real": 35.84,
+  "mean_op_cost_real": 160.28467024033668,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=4 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "beam": 2
+  },
+  "seconds": 556.4053785800934
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.6,
+  "avg_queries": 41.191,
+  "median_op_cost_real": 36.0,
+  "mean_op_cost_real": 120.09622944739583,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=4 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "beam": 2
+  },
+  "seconds": 57.92491364479065
+ },
+ {
+  "n": 984,
+  "real_asr": 97.86585365853658,
+  "avg_queries": 41.26829268292683,
+  "median_op_cost_real": 50.4,
+  "mean_op_cost_real": 142.35563396702983,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=4 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "beam": 2
+  },
+  "seconds": 61.00274920463562
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.673,
+  "median_op_cost_real": 3.02243e-05,
+  "mean_op_cost_real": 0.0003329826974938473,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=4 snap8",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 303.8147118091583
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 31.495,
+  "median_op_cost_real": 2.41595e-05,
+  "mean_op_cost_real": 0.6714570058650939,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=4 snap8",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 42.49870157241821
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 29.248741188318228,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00037187320067852555,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=4 snap8",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 32.86544585227966
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 28.302,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007389897940409478,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=4 snap8",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 242.8147692680359
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 37.402,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1595597432696843,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=4 snap8",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 30.961487770080566
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 141.14300100704935,
+  "median_op_cost_real": 3.2186e-06,
+  "mean_op_cost_real": 3.7218283739654954,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=4 snap8",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 150.01989245414734
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.7,
+  "avg_queries": 37.677,
+  "median_op_cost_real": 35.84,
+  "mean_op_cost_real": 155.67333891602067,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=4 snap8",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 552.1430234909058
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.6,
+  "avg_queries": 39.711,
+  "median_op_cost_real": 39.502332800000005,
+  "mean_op_cost_real": 37673.13711877881,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=4 snap8",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 53.9729380607605
+ },
+ {
+  "n": 984,
+  "real_asr": 98.6788617886179,
+  "avg_queries": 39.59349593495935,
+  "median_op_cost_real": 56.0,
+  "mean_op_cost_real": 186.20204048543516,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=4 snap8",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 54.81214952468872
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 31.279,
+  "median_op_cost_real": 3.02243e-05,
+  "mean_op_cost_real": 0.0003329826974938473,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=4 snap16 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 16,
+   "beam": 2
+  },
+  "seconds": 312.49300050735474
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 32.056,
+  "median_op_cost_real": 2.41595e-05,
+  "mean_op_cost_real": 0.6714570058650939,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=4 snap16 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 16,
+   "beam": 2
+  },
+  "seconds": 32.009472131729126
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 29.41289023162135,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00037187320067852555,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=4 snap16 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 16,
+   "beam": 2
+  },
+  "seconds": 25.78473162651062
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 28.302,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007389897940409478,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=4 snap16 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 16,
+   "beam": 2
+  },
+  "seconds": 246.3322138786316
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 50.097,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1595597432696843,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=4 snap16 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 16,
+   "beam": 2
+  },
+  "seconds": 31.60422706604004
+ },
+ {
+  "n": 993,
+  "real_asr": 36.35448136958711,
+  "avg_queries": 422.43504531722056,
+  "median_op_cost_real": 3.2186e-06,
+  "mean_op_cost_real": 4.397644198389506,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=4 snap16 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 16,
+   "beam": 2
+  },
+  "seconds": 342.0163857936859
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.1,
+  "avg_queries": 40.831,
+  "median_op_cost_real": 35.84,
+  "mean_op_cost_real": 159.98046413775216,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=4 snap16 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 16,
+   "beam": 2
+  },
+  "seconds": 566.4815640449524
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.6,
+  "avg_queries": 44.618,
+  "median_op_cost_real": 36.0,
+  "mean_op_cost_real": 15419.427175186918,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=4 snap16 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 16,
+   "beam": 2
+  },
+  "seconds": 55.86645483970642
+ },
+ {
+  "n": 984,
+  "real_asr": 98.47560975609755,
+  "avg_queries": 46.3760162601626,
+  "median_op_cost_real": 56.0,
+  "mean_op_cost_real": 187.39748816166122,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=4 snap16 beam2",
+  "spec": {
+   "refine_steps": 4,
+   "snap": true,
+   "snap_per_feature": 16,
+   "beam": 2
+  },
+  "seconds": 62.208285093307495
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 33.635,
+  "median_op_cost_real": 3.02243e-05,
+  "mean_op_cost_real": 0.0003329823130404872,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "refine=4 plus_hdr",
+  "spec": {
+   "refine_steps": 4,
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 305.9428105354309
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 34.457,
+  "median_op_cost_real": 2.41595e-05,
+  "mean_op_cost_real": 0.6714570057849535,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "refine=4 plus_hdr",
+  "spec": {
+   "refine_steps": 4,
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 39.88925552368164
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 32.41792547834844,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.0003714948694144081,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "refine=4 plus_hdr",
+  "spec": {
+   "refine_steps": 4,
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 32.08392000198364
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 31.846,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007389897940409478,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "refine=4 plus_hdr",
+  "spec": {
+   "refine_steps": 4,
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 242.7185835838318
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 35.754,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1595597432696843,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "refine=4 plus_hdr",
+  "spec": {
+   "refine_steps": 4,
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 28.134220600128174
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 132.5679758308157,
+  "median_op_cost_real": 3.2186e-06,
+  "mean_op_cost_real": 3.7218283739654954,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "refine=4 plus_hdr",
+  "spec": {
+   "refine_steps": 4,
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 137.00210404396057
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.2,
+  "avg_queries": 39.822,
+  "median_op_cost_real": 35.84,
+  "mean_op_cost_real": 155.92961400862077,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "refine=4 plus_hdr",
+  "spec": {
+   "refine_steps": 4,
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 532.5663032531738
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.8,
+  "avg_queries": 42.307,
+  "median_op_cost_real": 36.0,
+  "mean_op_cost_real": 120.2379677636816,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "refine=4 plus_hdr",
+  "spec": {
+   "refine_steps": 4,
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 51.42319321632385
+ },
+ {
+  "n": 984,
+  "real_asr": 98.06910569105692,
+  "avg_queries": 42.03760162601626,
+  "median_op_cost_real": 50.4,
+  "mean_op_cost_real": 140.42800623720706,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "refine=4 plus_hdr",
+  "spec": {
+   "refine_steps": 4,
+   "generators": [
+    "time",
+    "pad",
+    "chaff",
+    "seg",
+    "win",
+    "hdr"
+   ]
+  },
+  "seconds": 51.021681785583496
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.401,
+  "median_op_cost_real": 3.02243e-05,
+  "mean_op_cost_real": 0.0003329826974938473,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "FFE-v2 frozen (score-only)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6
+  },
+  "seconds": 234.22183966636658
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 31.223,
+  "median_op_cost_real": 2.41595e-05,
+  "mean_op_cost_real": 0.6714570058650939,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "FFE-v2 frozen (score-only)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6
+  },
+  "seconds": 20.42018151283264
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 29.18831822759315,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00037187320067852555,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "FFE-v2 frozen (score-only)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6
+  },
+  "seconds": 17.397875547409058
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 28.302,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007389897940409478,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "FFE-v2 frozen (score-only)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6
+  },
+  "seconds": 207.20314931869507
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 31.695,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1595597432696843,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "FFE-v2 frozen (score-only)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6
+  },
+  "seconds": 14.021491050720215
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 109.51258811681772,
+  "median_op_cost_real": 3.2186e-06,
+  "mean_op_cost_real": 3.7218283739654954,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "FFE-v2 frozen (score-only)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6
+  },
+  "seconds": 98.65417838096619
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.2,
+  "avg_queries": 35.954,
+  "median_op_cost_real": 35.84,
+  "mean_op_cost_real": 156.41289575875052,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "FFE-v2 frozen (score-only)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6
+  },
+  "seconds": 287.85105538368225
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.7,
+  "avg_queries": 37.794,
+  "median_op_cost_real": 40.0,
+  "mean_op_cost_real": 116.65687397471852,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "FFE-v2 frozen (score-only)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6
+  },
+  "seconds": 26.974762439727783
+ },
+ {
+  "n": 984,
+  "real_asr": 98.17073170731707,
+  "avg_queries": 37.4979674796748,
+  "median_op_cost_real": 50.4,
+  "mean_op_cost_real": 142.47169398194362,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "FFE-v2 frozen (score-only)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6
+  },
+  "seconds": 28.033331632614136
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.673,
+  "median_op_cost_real": 3.02243e-05,
+  "mean_op_cost_real": 0.0003329826974938473,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "FFE-v2 frozen (+snapping)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 241.5128846168518
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 31.495,
+  "median_op_cost_real": 2.41595e-05,
+  "mean_op_cost_real": 0.6714570058650939,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "FFE-v2 frozen (+snapping)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 19.472429275512695
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 29.248741188318228,
+  "median_op_cost_real": 0.0002852063782711528,
+  "mean_op_cost_real": 0.00037187320067852555,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "FFE-v2 frozen (+snapping)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 16.350706100463867
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 28.302,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 0.0007389897940409478,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "FFE-v2 frozen (+snapping)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 214.95624780654907
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 37.402,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 1.1595597432696843,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "FFE-v2 frozen (+snapping)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 14.925056457519531
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 141.14300100704935,
+  "median_op_cost_real": 3.2186e-06,
+  "mean_op_cost_real": 3.7218283739654954,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "FFE-v2 frozen (+snapping)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 127.32674646377563
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.7,
+  "avg_queries": 37.677,
+  "median_op_cost_real": 35.84,
+  "mean_op_cost_real": 155.67333891602067,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "FFE-v2 frozen (+snapping)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 286.3111810684204
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.6,
+  "avg_queries": 39.711,
+  "median_op_cost_real": 39.502332800000005,
+  "mean_op_cost_real": 37673.13711877881,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "FFE-v2 frozen (+snapping)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 33.41123652458191
+ },
+ {
+  "n": 984,
+  "real_asr": 98.6788617886179,
+  "avg_queries": 39.59349593495935,
+  "median_op_cost_real": 56.0,
+  "mean_op_cost_real": 186.20204048543516,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "FFE-v2 frozen (+snapping)",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 6,
+   "snap": true,
+   "snap_per_feature": 8
+  },
+  "seconds": 36.71938514709473
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 16.582,
+  "median_op_cost_real": 0.0005700312809948882,
+  "mean_op_cost_real": 1.0921628333602222,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "FFE-v1",
+  "spec": {
+   "attack": "v1"
+  },
+  "seconds": 366.96587014198303
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 19.633,
+  "median_op_cost_real": 0.0009768062867170214,
+  "mean_op_cost_real": 2.1066347708949333,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "FFE-v1",
+  "spec": {
+   "attack": "v1"
+  },
+  "seconds": 123.05397963523865
+ },
+ {
+  "n": 993,
+  "real_asr": 58.30815709969789,
+  "avg_queries": 53.63947633434038,
+  "median_op_cost_real": 0.0009767910276951247,
+  "mean_op_cost_real": 0.4477375121740976,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "FFE-v1",
+  "spec": {
+   "attack": "v1"
+  },
+  "seconds": 186.48323726654053
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.2,
+  "avg_queries": 14.722,
+  "median_op_cost_real": 0.0008552376592660411,
+  "mean_op_cost_real": 0.752285956760161,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "FFE-v1",
+  "spec": {
+   "attack": "v1"
+  },
+  "seconds": 346.68121886253357
+ },
+ {
+  "n": 1000,
+  "real_asr": 35.099999999999994,
+  "avg_queries": 120.462,
+  "median_op_cost_real": 1.6205353562272602,
+  "mean_op_cost_real": 29.758487165036172,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "FFE-v1",
+  "spec": {
+   "attack": "v1"
+  },
+  "seconds": 504.16249775886536
+ },
+ {
+  "n": 993,
+  "real_asr": 34.239677744209466,
+  "avg_queries": 76.57905337361531,
+  "median_op_cost_real": 0.5000003041,
+  "mean_op_cost_real": 1.630866930989058,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "FFE-v1",
+  "spec": {
+   "attack": "v1"
+  },
+  "seconds": 252.90604615211487
+ },
+ {
+  "n": 1000,
+  "real_asr": 60.9,
+  "avg_queries": 86.957,
+  "median_op_cost_real": 5.6000724984,
+  "mean_op_cost_real": 38.698301685959116,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "FFE-v1",
+  "spec": {
+   "attack": "v1"
+  },
+  "seconds": 918.0881161689758
+ },
+ {
+  "n": 1000,
+  "real_asr": 64.4,
+  "avg_queries": 85.097,
+  "median_op_cost_real": 7.4900276411,
+  "mean_op_cost_real": 52.06135149474472,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "FFE-v1",
+  "spec": {
+   "attack": "v1"
+  },
+  "seconds": 414.06104803085327
+ },
+ {
+  "n": 984,
+  "real_asr": 72.76422764227642,
+  "avg_queries": 63.60569105691057,
+  "median_op_cost_real": 10.7100218427,
+  "mean_op_cost_real": 241.7615149542954,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "FFE-v1",
+  "spec": {
+   "attack": "v1"
+  },
+  "seconds": 206.58405590057373
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 2.0,
+  "median_op_cost_real": 0.0004953078507667659,
+  "mean_op_cost_real": 0.10957710638237171,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "White-box control (project in loop)",
+  "spec": {
+   "attack": "control"
+  },
+  "seconds": 155.74237179756165
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 2.0,
+  "median_op_cost_real": 0.0004955825131609064,
+  "mean_op_cost_real": 0.28013978801514144,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "White-box control (project in loop)",
+  "spec": {
+   "attack": "control"
+  },
+  "seconds": 47.503249168395996
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 2.0,
+  "median_op_cost_real": 0.00028514534218356604,
+  "mean_op_cost_real": 0.00042806504042484814,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "White-box control (project in loop)",
+  "spec": {
+   "attack": "control"
+  },
+  "seconds": 26.19194269180298
+ },
+ {
+  "n": 1000,
+  "real_asr": 100.0,
+  "avg_queries": 2.0,
+  "median_op_cost_real": 0.00037596704051270316,
+  "mean_op_cost_real": 4.2192449872672135,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "White-box control (project in loop)",
+  "spec": {
+   "attack": "control"
+  },
+  "seconds": 86.9119246006012
+ },
+ {
+  "n": 1000,
+  "real_asr": 36.8,
+  "avg_queries": 2.0,
+  "median_op_cost_real": 1.5625238422217137e-05,
+  "mean_op_cost_real": 0.08832704284281491,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "White-box control (project in loop)",
+  "spec": {
+   "attack": "control"
+  },
+  "seconds": 53.44790744781494
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 2.0,
+  "median_op_cost_real": 0.006708096100000001,
+  "mean_op_cost_real": 0.03837722052640849,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "White-box control (project in loop)",
+  "spec": {
+   "attack": "control"
+  },
+  "seconds": 115.65805149078369
+ },
+ {
+  "n": 1000,
+  "real_asr": 91.4,
+  "avg_queries": 2.0,
+  "median_op_cost_real": 213.0,
+  "mean_op_cost_real": 162.1878854110755,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "White-box control (project in loop)",
+  "spec": {
+   "attack": "control"
+  },
+  "seconds": 122.91844868659973
+ },
+ {
+  "n": 1000,
+  "real_asr": 87.3,
+  "avg_queries": 2.0,
+  "median_op_cost_real": 39.0,
+  "mean_op_cost_real": 219.27264278762087,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "White-box control (project in loop)",
+  "spec": {
+   "attack": "control"
+  },
+  "seconds": 67.73490357398987
+ },
+ {
+  "n": 984,
+  "real_asr": 57.82520325203252,
+  "avg_queries": 2.0,
+  "median_op_cost_real": 10.49,
+  "mean_op_cost_real": 25.033212160563973,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "White-box control (project in loop)",
+  "spec": {
+   "attack": "control"
+  },
+  "seconds": 83.14313316345215
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 29.405,
+  "median_op_cost_real": 0.0001215686274509804,
+  "mean_op_cost_real": 0.00033030341527395183,
+  "dataset": "cse2018",
+  "model": "xgboost",
+  "label": "FFE-v2 generic windows",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 0,
+   "generic_windows": true
+  },
+  "seconds": 41.966033697128296
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.7,
+  "avg_queries": 30.223,
+  "median_op_cost_real": 0.0001215533684290837,
+  "mean_op_cost_real": 0.6714708557075455,
+  "dataset": "cse2018",
+  "model": "lightgbm",
+  "label": "FFE-v2 generic windows",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 0,
+   "generic_windows": true
+  },
+  "seconds": 46.90620398521423
+ },
+ {
+  "n": 993,
+  "real_asr": 99.69788519637463,
+  "avg_queries": 28.27190332326284,
+  "median_op_cost_real": 0.0002767681391622797,
+  "mean_op_cost_real": 0.00035601172264419583,
+  "dataset": "cse2018",
+  "model": "catboost",
+  "label": "FFE-v2 generic windows",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 0,
+   "generic_windows": true
+  },
+  "seconds": 32.11813259124756
+ },
+ {
+  "n": 1000,
+  "real_asr": 99.6,
+  "avg_queries": 28.513,
+  "median_op_cost_real": 0.0005346761272602426,
+  "mean_op_cost_real": 1.5476387813306294,
+  "dataset": "cic2017",
+  "model": "xgboost",
+  "label": "FFE-v2 generic windows",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 0,
+   "generic_windows": true
+  },
+  "seconds": 41.09814214706421
+ },
+ {
+  "n": 1000,
+  "real_asr": 94.89999999999999,
+  "avg_queries": 33.075,
+  "median_op_cost_real": 0.0005544365606164645,
+  "mean_op_cost_real": 4.277192587813191,
+  "dataset": "cic2017",
+  "model": "lightgbm",
+  "label": "FFE-v2 generic windows",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 0,
+   "generic_windows": true
+  },
+  "seconds": 34.70321989059448
+ },
+ {
+  "n": 993,
+  "real_asr": 36.25377643504532,
+  "avg_queries": 104.6737160120846,
+  "median_op_cost_real": 3.2186e-06,
+  "mean_op_cost_real": 6.0162681905503606,
+  "dataset": "cic2017",
+  "model": "catboost",
+  "label": "FFE-v2 generic windows",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 0,
+   "generic_windows": true
+  },
+  "seconds": 100.12438225746155
+ },
+ {
+  "n": 1000,
+  "real_asr": 98.2,
+  "avg_queries": 35.954,
+  "median_op_cost_real": 35.84,
+  "mean_op_cost_real": 156.41289575875052,
+  "dataset": "unsw",
+  "model": "xgboost",
+  "label": "FFE-v2 generic windows",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 0,
+   "generic_windows": true
+  },
+  "seconds": 64.09968566894531
+ },
+ {
+  "n": 1000,
+  "real_asr": 97.7,
+  "avg_queries": 37.794,
+  "median_op_cost_real": 40.0,
+  "mean_op_cost_real": 116.65687397471852,
+  "dataset": "unsw",
+  "model": "lightgbm",
+  "label": "FFE-v2 generic windows",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 0,
+   "generic_windows": true
+  },
+  "seconds": 43.638134241104126
+ },
+ {
+  "n": 984,
+  "real_asr": 98.17073170731707,
+  "avg_queries": 37.35670731707317,
+  "median_op_cost_real": 50.4,
+  "mean_op_cost_real": 142.4863006045487,
+  "dataset": "unsw",
+  "model": "catboost",
+  "label": "FFE-v2 generic windows",
+  "spec": {
+   "ladder_ratio": 6.0,
+   "refine_steps": 4,
+   "window_k": 0,
+   "generic_windows": true
+  },
+  "seconds": 47.65952467918396
+ }
+]

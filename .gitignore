@@ -250,3 +250,4 @@ sn_template/
 data/raw/
 data/full/*.parquet
 build_*.log
+data/ffev2_cache/

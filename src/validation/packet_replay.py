@@ -222,6 +222,39 @@ def chaff_injection(t: Trace, n_chaff: int, header_bytes: int, payload_bytes: in
     )
 
 
+def resegment(t: Trace, k: int, header_bytes: int) -> Tuple[Trace, int]:
+    """MSS clamp: split forward payload into ``k`` more, smaller packets (total payload unchanged).
+
+    Each step halves the forward packet that carries the most payload (pieces of at least 1 B). The new
+    packet follows its parent back to back (same timestamp), carries ``header_bytes`` of transport header
+    and inherits the parent's window, so the duration, the first forward packet and the payload total are
+    unchanged while the forward packet count and the header sum grow. Returns (trace, splits not possible):
+    zero-payload packets cannot be split, so a flow with few payload-carrying packets may fall short.
+    """
+    k = int(k)
+    if k <= 0:
+        return t, 0
+    ts, fwd, payload, header, win = (list(a) for a in (t.ts, t.fwd, t.payload, t.header, t.win))
+    pay = np.array(payload, dtype=np.int64)
+    fw = np.array(fwd, dtype=bool)
+    done = 0
+    for _ in range(k):
+        cand = np.where(fw, pay, 0)
+        i = int(np.argmax(cand))
+        if cand[i] < 2:
+            break
+        half = int(pay[i] // 2)
+        pay[i] -= half
+        pay = np.append(pay, half)
+        fw = np.append(fw, True)
+        ts.append(ts[i]), header.append(int(header_bytes)), win.append(win[i])
+        done += 1
+    n_new = done
+    fwd2 = np.concatenate([np.asarray(t.fwd), np.ones(n_new, dtype=bool)])
+    return _sorted(t, ts=np.asarray(ts, dtype=np.int64), fwd=fwd2, payload=pay,
+                   header=np.asarray(header, dtype=np.int64), win=np.asarray(win, dtype=np.int64)), k - done
+
+
 def window_morph(t: Trace, new_window: int) -> Trace:
     """Change the advertised window of the first forward packet (TCP only)."""
     if t.proto != TCP:
@@ -265,6 +298,7 @@ class ActionPlan:
     header_extra: int      # header growth not explained by the chaff packets (TSBS header-length snap)
     header_deficit: int    # header bytes the chaff packets add beyond the schema's header growth (not realisable)
     new_window: Optional[int]
+    n_segment: int = 0     # extra forward packets created by re-segmenting existing payload (FFE-v2 'seg')
 
 
 def chaff_geometry(x_orig: np.ndarray) -> Tuple[int, int]:
@@ -309,14 +343,42 @@ def derive_actions(x_orig: np.ndarray, x_adv: np.ndarray, chaff_mode: str = 'sch
 
 
 def apply_actions(t: Trace, plan: ActionPlan, rng: Optional[np.random.Generator] = None) -> Tuple[Trace, Dict[str, int]]:
-    """Apply chaff, padding, header options, dilation and window morphing; return (trace, diagnostics)."""
+    """Apply chaff, padding, re-segmentation, header options, dilation and window morphing."""
     t1 = chaff_injection(t, plan.n_chaff, plan.chaff_header, plan.chaff_payload, rng)
     t2, pad_unmet = payload_padding(t1, plan.pad_bytes)
+    t2, seg_unmet = resegment(t2, plan.n_segment, plan.chaff_header)
     t3, hdr_unmet = header_option_padding(t2, plan.header_extra)
     t4 = temporal_dilation(t3, plan.delay_us)
     if plan.new_window is not None:
         t4 = window_morph(t4, plan.new_window)
-    return t4, {'pad_unmet_bytes': pad_unmet, 'header_unmet_bytes': hdr_unmet}
+    return t4, {'pad_unmet_bytes': pad_unmet, 'header_unmet_bytes': hdr_unmet, 'segment_unmet': seg_unmet}
+
+
+def plan_from_ledger(x_orig: np.ndarray, delay_us: int = 0, n_chaff: int = 0, n_segment: int = 0,
+                     pad_bytes: int = 0, header_option_bytes: int = 0, window: Optional[int] = None,
+                     chaff_mode: str = 'schema') -> ActionPlan:
+    """Action plan from the integer ledger of an FFE-v2 attack (exact, no vector-difference ambiguity).
+
+    The schema counts every chaff packet as ``l_0`` bytes of ``totlen_fwd`` (see ``derive_actions``);
+    ``schema`` delivers them as chaff payload, ``empty_compensated`` as extra padding, ``empty_literal``
+    drops them. Re-segmented packets and chaff both carry the transport header ``h_0`` of the original flow.
+    """
+    if chaff_mode not in CHAFF_MODES:
+        raise ValueError(f'chaff_mode must be one of {CHAFF_MODES}')
+    h0, l0 = chaff_geometry(x_orig)
+    cp, pad = {'schema': (l0, pad_bytes), 'empty_compensated': (0, pad_bytes + n_chaff * l0),
+               'empty_literal': (0, pad_bytes)}[chaff_mode]
+    return ActionPlan(delay_us=int(delay_us), n_chaff=int(n_chaff), chaff_header=h0, chaff_payload=cp,
+                      pad_bytes=int(pad), header_extra=int(header_option_bytes), header_deficit=0,
+                      new_window=None if window is None else int(window), n_segment=int(n_segment))
+
+
+def replay_plan(x_orig: np.ndarray, plan: ActionPlan, seed: int = 0) -> Dict:
+    """Expand ``x_orig`` into packets, apply ``plan`` and re-extract the 12 features."""
+    rng = np.random.default_rng(seed)
+    base = trace_from_record(x_orig, rng)
+    tr, diag = apply_actions(base, plan, rng)
+    return {'features': extract_features(tr), 'baseline_features': extract_features(base), 'plan': plan, **diag}
 
 
 def replay(x_orig: np.ndarray, x_adv: np.ndarray, chaff_mode: str = 'schema', seed: int = 0) -> Dict:

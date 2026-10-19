@@ -1,0 +1,4 @@
+{
+ "score": {"ladder_ratio": 6.0, "refine_steps": 4, "window_k": 6},
+ "snap": {"ladder_ratio": 6.0, "refine_steps": 4, "window_k": 6, "snap": true, "snap_per_feature": 8}
+}

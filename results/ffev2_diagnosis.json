@@ -1,0 +1,550 @@
+{
+ "unsw": {
+  "window_support_train": {
+   "benign": {
+    "n_tcp": 43014,
+    "share_eq_64240": 0.0,
+    "share_ge_60000": 0.0,
+    "share_eq_65535": 0.0
+   },
+   "attack": {
+    "n_tcp": 36168,
+    "share_eq_64240": 0.0,
+    "share_ge_60000": 0.0,
+    "share_eq_65535": 0.0
+   }
+  },
+  "models": {
+   "xgboost": {
+    "n": 1000,
+    "v1_asr": 60.9,
+    "v1_by_family": {
+     "Analysis": [
+      1,
+      0.0
+     ],
+     "Backdoor": [
+      8,
+      87.5
+     ],
+     "DoS": [
+      76,
+      59.210526315789465
+     ],
+     "Exploits": [
+      488,
+      47.13114754098361
+     ],
+     "Fuzzers": [
+      243,
+      82.71604938271605
+     ],
+     "Generic": [
+      22,
+      54.54545454545454
+     ],
+     "Reconnaissance": [
+      141,
+      69.50354609929079
+     ],
+     "Shellcode": [
+      16,
+      93.75
+     ],
+     "Worms": [
+      5,
+      20.0
+     ]
+    },
+    "v1_failures": 391,
+    "reachability_sample": {
+     "flows_tested": 80,
+     "samples_per_flow": 20000,
+     "share_with_any_crossing": 1.0,
+     "median_crossing_share_when_reachable": 0.2086,
+     "median_min_score": 0.008218755479902029,
+     "by_family_unreachable": {
+      "DoS": 0,
+      "Exploits": 0,
+      "Fuzzers": 0,
+      "Generic": 0,
+      "Reconnaissance": 0,
+      "Worms": 0
+     }
+    },
+    "control_wins_on_v1_failures": 326,
+    "control_profile_on_v1_failures": {
+     "n": 326,
+     "share_fwd_pkts_up": 0.9877300613496932,
+     "share_pure_segmentation_like (dfwd>0, dlen=0)": 0.8220858895705522,
+     "share_duration_up": 0.06748466257668712,
+     "share_window_changed": 0.0,
+     "share_payload_up": 0.17791411042944785,
+     "median_fwd_pkts_added": 213.0
+    }
+   },
+   "lightgbm": {
+    "n": 1000,
+    "v1_asr": 64.4,
+    "v1_by_family": {
+     "Analysis": [
+      1,
+      0.0
+     ],
+     "Backdoor": [
+      8,
+      87.5
+     ],
+     "DoS": [
+      76,
+      64.47368421052632
+     ],
+     "Exploits": [
+      488,
+      59.01639344262295
+     ],
+     "Fuzzers": [
+      243,
+      72.0164609053498
+     ],
+     "Generic": [
+      22,
+      59.09090909090909
+     ],
+     "Reconnaissance": [
+      141,
+      68.08510638297872
+     ],
+     "Shellcode": [
+      16,
+      93.75
+     ],
+     "Worms": [
+      5,
+      20.0
+     ]
+    },
+    "v1_failures": 356,
+    "reachability_sample": {
+     "flows_tested": 80,
+     "samples_per_flow": 20000,
+     "share_with_any_crossing": 1.0,
+     "median_crossing_share_when_reachable": 0.099025,
+     "median_min_score": 0.015481627347109042,
+     "by_family_unreachable": {
+      "Analysis": 0,
+      "Backdoor": 0,
+      "DoS": 0,
+      "Exploits": 0,
+      "Fuzzers": 0,
+      "Generic": 0,
+      "Reconnaissance": 0,
+      "Worms": 0
+     }
+    },
+    "control_wins_on_v1_failures": 274,
+    "control_profile_on_v1_failures": {
+     "n": 274,
+     "share_fwd_pkts_up": 0.9671532846715328,
+     "share_pure_segmentation_like (dfwd>0, dlen=0)": 0.3029197080291971,
+     "share_duration_up": 0.09854014598540146,
+     "share_window_changed": 0.0,
+     "share_payload_up": 0.6934306569343066,
+     "median_fwd_pkts_added": 387.0
+    }
+   },
+   "catboost": {
+    "n": 984,
+    "v1_asr": 72.76422764227642,
+    "v1_by_family": {
+     "Analysis": [
+      1,
+      0.0
+     ],
+     "Backdoor": [
+      8,
+      50.0
+     ],
+     "DoS": [
+      72,
+      70.83333333333334
+     ],
+     "Exploits": [
+      481,
+      67.15176715176715
+     ],
+     "Fuzzers": [
+      239,
+      79.9163179916318
+     ],
+     "Generic": [
+      21,
+      61.904761904761905
+     ],
+     "Reconnaissance": [
+      141,
+      82.97872340425532
+     ],
+     "Shellcode": [
+      16,
+      100.0
+     ],
+     "Worms": [
+      5,
+      20.0
+     ]
+    },
+    "v1_failures": 268,
+    "reachability_sample": {
+     "flows_tested": 80,
+     "samples_per_flow": 20000,
+     "share_with_any_crossing": 0.975,
+     "median_crossing_share_when_reachable": 0.09715,
+     "median_min_score": 0.11914900617458232,
+     "by_family_unreachable": {
+      "Analysis": 0,
+      "Backdoor": 0,
+      "DoS": 0,
+      "Exploits": 0,
+      "Fuzzers": 0,
+      "Generic": 1,
+      "Reconnaissance": 1,
+      "Worms": 0
+     }
+    },
+    "control_wins_on_v1_failures": 59,
+    "control_profile_on_v1_failures": {
+     "n": 59,
+     "share_fwd_pkts_up": 0.7966101694915254,
+     "share_pure_segmentation_like (dfwd>0, dlen=0)": 0.1864406779661017,
+     "share_duration_up": 0.2711864406779661,
+     "share_window_changed": 0.0,
+     "share_payload_up": 0.8135593220338984,
+     "median_fwd_pkts_added": 35.0
+    }
+   }
+  }
+ },
+ "cic2017": {
+  "window_support_train": {
+   "benign": {
+    "n_tcp": 387032,
+    "share_eq_64240": 0.0007828810020876827,
+    "share_ge_60000": 0.11881963248516919,
+    "share_eq_65535": 0.1153315488125013
+   },
+   "attack": {
+    "n_tcp": 277384,
+    "share_eq_64240": 0.00015141464540132093,
+    "share_ge_60000": 0.0002920139589882618,
+    "share_eq_65535": 0.00014059931358694085
+   }
+  },
+  "models": {
+   "xgboost": {
+    "n": 1000,
+    "v1_asr": 99.2,
+    "v1_by_family": {
+     "Botnet": [
+      2,
+      100.0
+     ],
+     "BruteForce": [
+      18,
+      100.0
+     ],
+     "DDoS": [
+      243,
+      100.0
+     ],
+     "DoS": [
+      411,
+      98.05352798053528
+     ],
+     "PortScan": [
+      325,
+      100.0
+     ],
+     "WebExploit": [
+      1,
+      100.0
+     ]
+    },
+    "v1_failures": 8,
+    "reachability_sample": {
+     "flows_tested": 8,
+     "samples_per_flow": 20000,
+     "share_with_any_crossing": 1.0,
+     "median_crossing_share_when_reachable": 0.13855,
+     "median_min_score": 0.01692279428243637,
+     "by_family_unreachable": {
+      "DoS": 0
+     }
+    },
+    "control_wins_on_v1_failures": 8,
+    "control_profile_on_v1_failures": {
+     "n": 8,
+     "share_fwd_pkts_up": 0.0,
+     "share_pure_segmentation_like (dfwd>0, dlen=0)": 0.0,
+     "share_duration_up": 0.0,
+     "share_window_changed": 1.0,
+     "share_payload_up": 0.0,
+     "median_fwd_pkts_added": 0.0
+    }
+   },
+   "lightgbm": {
+    "n": 1000,
+    "v1_asr": 35.099999999999994,
+    "v1_by_family": {
+     "Botnet": [
+      2,
+      100.0
+     ],
+     "BruteForce": [
+      18,
+      100.0
+     ],
+     "DDoS": [
+      243,
+      0.0
+     ],
+     "DoS": [
+      411,
+      1.2165450121654502
+     ],
+     "PortScan": [
+      325,
+      100.0
+     ],
+     "WebExploit": [
+      1,
+      100.0
+     ]
+    },
+    "v1_failures": 649,
+    "reachability_sample": {
+     "flows_tested": 80,
+     "samples_per_flow": 20000,
+     "share_with_any_crossing": 0.9,
+     "median_crossing_share_when_reachable": 0.0002,
+     "median_min_score": 0.22429594954719476,
+     "by_family_unreachable": {
+      "DDoS": 0,
+      "DoS": 8
+     }
+    },
+    "control_wins_on_v1_failures": 17,
+    "control_profile_on_v1_failures": {
+     "n": 17,
+     "share_fwd_pkts_up": 0.0,
+     "share_pure_segmentation_like (dfwd>0, dlen=0)": 0.0,
+     "share_duration_up": 0.0,
+     "share_window_changed": 1.0,
+     "share_payload_up": 0.0,
+     "median_fwd_pkts_added": 0.0
+    }
+   },
+   "catboost": {
+    "n": 993,
+    "v1_asr": 34.239677744209466,
+    "v1_by_family": {
+     "Botnet": [
+      2,
+      100.0
+     ],
+     "BruteForce": [
+      18,
+      100.0
+     ],
+     "DDoS": [
+      243,
+      0.0
+     ],
+     "DoS": [
+      407,
+      0.7371007371007371
+     ],
+     "PortScan": [
+      323,
+      98.14241486068111
+     ]
+    },
+    "v1_failures": 653,
+    "reachability_sample": {
+     "flows_tested": 80,
+     "samples_per_flow": 20000,
+     "share_with_any_crossing": 0.0375,
+     "median_crossing_share_when_reachable": 0.57545,
+     "median_min_score": 0.914845552036374,
+     "by_family_unreachable": {
+      "DDoS": 37,
+      "DoS": 40,
+      "PortScan": 0
+     }
+    },
+    "control_wins_on_v1_failures": 20,
+    "control_profile_on_v1_failures": {
+     "n": 20,
+     "share_fwd_pkts_up": 0.0,
+     "share_pure_segmentation_like (dfwd>0, dlen=0)": 0.0,
+     "share_duration_up": 0.3,
+     "share_window_changed": 0.7,
+     "share_payload_up": 0.0,
+     "median_fwd_pkts_added": 0.0
+    }
+   }
+  }
+ },
+ "cse2018": {
+  "window_support_train": {
+   "benign": {
+    "n_tcp": 2458675,
+    "share_eq_64240": 0.008452520158215298,
+    "share_ge_60000": 0.17799465159079586,
+    "share_eq_65535": 0.10415935412366417
+   },
+   "attack": {
+    "n_tcp": 385547,
+    "share_eq_64240": 0.0005887738719274174,
+    "share_ge_60000": 0.2629381113067927,
+    "share_eq_65535": 0.2591357214554905
+   }
+  },
+  "models": {
+   "xgboost": {
+    "n": 1000,
+    "v1_asr": 99.7,
+    "v1_by_family": {
+     "Botnet": [
+      37,
+      100.0
+     ],
+     "BruteForce": [
+      200,
+      100.0
+     ],
+     "DDoS": [
+      364,
+      99.17582417582418
+     ],
+     "DoS": [
+      392,
+      100.0
+     ],
+     "InfiltrationBeacon": [
+      3,
+      100.0
+     ],
+     "WebExploit": [
+      4,
+      100.0
+     ]
+    },
+    "v1_failures": 3,
+    "reachability_sample": {
+     "flows_tested": 3,
+     "samples_per_flow": 20000,
+     "share_with_any_crossing": 0.0,
+     "median_crossing_share_when_reachable": null,
+     "median_min_score": 0.9062466621398926,
+     "by_family_unreachable": {
+      "DDoS": 3
+     }
+    },
+    "control_wins_on_v1_failures": 0,
+    "control_profile_on_v1_failures": {}
+   },
+   "lightgbm": {
+    "n": 1000,
+    "v1_asr": 99.7,
+    "v1_by_family": {
+     "Botnet": [
+      37,
+      100.0
+     ],
+     "BruteForce": [
+      200,
+      100.0
+     ],
+     "DDoS": [
+      364,
+      99.17582417582418
+     ],
+     "DoS": [
+      392,
+      100.0
+     ],
+     "InfiltrationBeacon": [
+      3,
+      100.0
+     ],
+     "WebExploit": [
+      4,
+      100.0
+     ]
+    },
+    "v1_failures": 3,
+    "reachability_sample": {
+     "flows_tested": 3,
+     "samples_per_flow": 20000,
+     "share_with_any_crossing": 0.0,
+     "median_crossing_share_when_reachable": null,
+     "median_min_score": 0.9189166087859543,
+     "by_family_unreachable": {
+      "DDoS": 3
+     }
+    },
+    "control_wins_on_v1_failures": 0,
+    "control_profile_on_v1_failures": {}
+   },
+   "catboost": {
+    "n": 993,
+    "v1_asr": 58.30815709969789,
+    "v1_by_family": {
+     "Botnet": [
+      37,
+      100.0
+     ],
+     "BruteForce": [
+      200,
+      100.0
+     ],
+     "DDoS": [
+      364,
+      21.978021978021978
+     ],
+     "DoS": [
+      391,
+      66.75191815856778
+     ],
+     "InfiltrationBeacon": [
+      1,
+      100.0
+     ]
+    },
+    "v1_failures": 414,
+    "reachability_sample": {
+     "flows_tested": 80,
+     "samples_per_flow": 20000,
+     "share_with_any_crossing": 1.0,
+     "median_crossing_share_when_reachable": 0.264325,
+     "median_min_score": 0.022930191765153558,
+     "by_family_unreachable": {
+      "DDoS": 0,
+      "DoS": 0
+     }
+    },
+    "control_wins_on_v1_failures": 411,
+    "control_profile_on_v1_failures": {
+     "n": 411,
+     "share_fwd_pkts_up": 0.0,
+     "share_pure_segmentation_like (dfwd>0, dlen=0)": 0.0,
+     "share_duration_up": 0.0,
+     "share_window_changed": 1.0,
+     "share_payload_up": 0.0,
+     "median_fwd_pkts_added": 0.0
+    }
+   }
+  }
+ }
+}

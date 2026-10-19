@@ -196,3 +196,31 @@ class WhiteBoxLeafTupleAttack(BaseNIDSAttack):
             x_original=x_orig, x_adversarial=x_final, success=bool(p_final < 0.5),
             physically_valid=verify_physical_feasibility(x_orig, x_final, self.schema),
             queries_used=self.query_count, weighted_cost=cost, feature_shifts=x_final - x_orig)
+
+
+class RawMarginModel:
+    """White-box margin reader for LightGBM / CatBoost (and any model with raw scores and thresholds).
+
+    Plays the role of ``TreeDump`` for ``WhiteBoxLeafTupleAttack``: ``thresholds`` per feature and a free
+    ``margin`` (raw log-odds of the malicious class, read from the model, not a query). LightGBM and
+    CatBoost send ``x <= threshold`` (``x <= border``) to the left child, XGBoost ``x < threshold``; the
+    thresholds are shifted by one float32 ulp so that the greedy search's convention "x < threshold is
+    the left side" holds for them.
+    """
+
+    def __init__(self, trainer, n_features: int = 12):
+        self.trainer = trainer
+        self.n_features = n_features
+        raw = [[] for _ in range(n_features)]
+        for j, th in trainer.get_split_thresholds():
+            raw[int(j)].append(th)
+        self.thresholds = [
+            np.unique(np.nextafter(np.asarray(t, dtype=np.float32), np.float32(np.inf))) if t
+            else np.empty(0, dtype=np.float32) for t in raw]
+
+    def margin(self, X: np.ndarray) -> np.ndarray:
+        X = np.atleast_2d(X)
+        model = self.trainer.model
+        if self.trainer.model_type == 'catboost':
+            return np.asarray(model.predict(X, prediction_type='RawFormulaVal'), dtype=float)
+        return np.asarray(model.predict(X, raw_score=True), dtype=float)

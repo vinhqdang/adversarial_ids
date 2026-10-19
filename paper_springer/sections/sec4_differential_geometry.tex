@@ -1,0 +1,50 @@
+\section{The Flow-Field Evasion Framework}
+\label{sec:framework}
+
+\subsection{Geometry of the Flow Manifold and Its Generators}
+\label{sec:geometry}
+
+The physical flow set $\mathcal{M}_{\text{flow}}$ is a discrete lattice in $\mathbb{R}^{12}$. Its differential geometry is analyzed through the smooth relaxation $\widetilde{\mathcal{M}}_{\text{flow}}$ (Section~\ref{sec:formulation}), the zero set of the conservation residual
+\begin{equation}
+    \Psi(x)=\begin{bmatrix} x_8-10^6(x_4+x_5)/x_6\\ x_9-10^6(x_2+x_3)/x_6\\ x_{10}-x_4/x_2\end{bmatrix}=\mathbf{0}
+\end{equation}
+subject to the bounds listed there. At points where the Jacobian $J_\Psi$ has full rank 3, the tangent space is $\ker J_\Psi(x)$, so a physically realizable velocity satisfies the linearized conservation laws $\dot x_8=\tfrac{10^6(\dot x_4+\dot x_5)}{x_6}-\tfrac{x_8}{x_6}\dot x_6$, $\dot x_9=\tfrac{10^6(\dot x_2+\dot x_3)}{x_6}-\tfrac{x_9}{x_6}\dot x_6$ and $\dot x_{10}=\tfrac{\dot x_4-x_{10}\dot x_2}{x_2}$.
+
+The attacker controls five elementary degrees of freedom, each generating a one-parameter flow whose push-forward is a tangent vector field ($\vec e_k$ is the $k$th basis vector of $\mathbb{R}^{12}$, indexed from 0):
+\begin{equation}
+\label{eq:generators}
+\begin{aligned}
+    \vec v_{\text{time}} &= \vec e_6 - \tfrac{x_8}{x_6}\vec e_8 - \tfrac{x_9}{x_6}\vec e_9, \qquad
+    \vec v_{\text{pad}} = \vec e_4 + \tfrac{10^6}{x_6}\vec e_8 + \tfrac{1}{x_2}\vec e_{10},\\
+    \vec v_{\text{chaff}} &= \vec e_2 + L_0\vec e_4 + \tfrac{L_0 10^6}{x_6}\vec e_8 + \tfrac{10^6}{x_6}\vec e_9 + \tfrac{L_0-x_{10}}{x_2}\vec e_{10} + H_0\vec e_{11},\\
+    \vec v_{\text{seg}} &= \vec e_2 + \tfrac{10^6}{x_6}\vec e_9 - \tfrac{x_{10}}{x_2}\vec e_{10} + H_0\vec e_{11},\qquad
+    \vec v_{\text{win}} = \mathbb{I}_{x_1=6}\,\operatorname{sat}\!\left(\tfrac{W_{\text{target}}-x_7}{\epsilon_{\text{win}}}\right)\vec e_7.
+\end{aligned}
+\end{equation}
+Temporal dilation adds delay without bytes or packets, padding adds forward dummy bytes, chaff adds forward header-only probes, booked as $L_0$ bytes of the length column, and window morphing moves the client window toward a target $W_{\text{target}}$. The probe sizes are $L_0=40$, $H_0=20$ for empty TCP segments \cite{rfc9293}, $L_0=52$, $H_0=32$ with TCP timestamps \cite{rfc7323}, and $L_0=28$, $H_0=8$ for UDP \cite{rfc768}. The new generator, \emph{re-segmentation} (an MSS clamp), carries the same forward payload in more, smaller packets: the packet count and the header total grow by $H_0$ per packet, while the byte total and the duration are unchanged and the mean length falls. It is the chaff field with $L_0=0$, hence $\vec v_{\text{seg}}=\vec v_{\text{chaff}}-L_0\vec v_{\text{pad}}$ component-wise: the five fields commute but are \emph{not} linearly independent, and re-segmentation lies in the span of chaff and padding but outside their nonnegative cone (it corresponds to chaff with negative padding). An integer move of $K$ packets is exactly the time-$K$ flow of this field ($x_{10}=x_4/(x_2+K)$). A sixth generator, TCP option padding ($\vec v_{\text{hdr}}=\vec e_{11}$), is implemented but is not part of the frozen configuration. The window field is globally Lipschitz; the implementation uses its limit $\epsilon_{\text{win}}\to0$, which lands exactly on $W_{\text{target}}$.
+
+\subsection{Commutativity, Invariants and the Lie Cone}
+\label{sec:invariants}
+
+\begin{proposition}[Commutativity of the physical generators]
+\label{prop:lie_commutativity}
+Because the protocol $x_1\in\{6,17\}$ is immutable, $\widetilde{\mathcal{M}}_{\text{flow}}$ decomposes into a TCP and a UDP component on which $\mathbb{I}_{x_1=6}$, $L_0$ and $H_0$ are constant along trajectories (FFE-v2 fixes $H_0=32$ iff the mean forward header $x_{11}/x_2\ge26$ \emph{of the original flow}; FFE-v1 re-evaluates it on the current flow, where injecting packets of header size $H_0$ moves that mean toward $H_0$ and never across the threshold). On each component the fields $\vec v_{\text{time}},\vec v_{\text{pad}},\vec v_{\text{chaff}},\vec v_{\text{seg}}$ are $C^\infty$, $\vec v_{\text{win}}$ is Lipschitz, and
+\begin{equation}
+    [\vec v_i,\vec v_j]\equiv\mathbf{0}\qquad\text{for all }i,j\in\{\text{time},\text{pad},\text{chaff},\text{seg},\text{win}\},
+\end{equation}
+so the fields span an Abelian Lie algebra, of dimension 4 on TCP (3 on UDP) because $\vec v_{\text{seg}}$ is a linear combination of $\vec v_{\text{chaff}}$ and $\vec v_{\text{pad}}$. The same holds with $\vec v_{\text{hdr}}$.
+\end{proposition}
+The proof is an entry-wise check of the four new brackets involving $\vec v_{\text{seg}}$ on top of the six of FFE-v1 (Online Resource~1, Section~S1, Lemma S1); the window field acts only on $x_7$, which no other field reads or writes. The admissible cone is $\mathcal{K}_{\text{net}}(x)=\{\sum_k u_k\vec v_k(x)\mid u_k\ge0\}\subset T_x\widetilde{\mathcal{M}}_{\text{flow}}$.
+
+\begin{theorem}[Invariant preservation]
+\label{thm:invariant_universal}
+Let $x_0\in\widetilde{\mathcal{M}}_{\text{flow}}$ and $u\in L^\infty_{\text{loc}}(\mathbb{R}_{\ge0},\mathbb{R}^5_{\ge0})$ satisfy the admissibility rules: $u_{\text{pad}}\le(1500-L_0)u_{\text{chaff}}+1500u_{\text{seg}}$ whenever $x_4=1500x_2$; $u_{\text{time}}=0$ whenever $x_6=1.1\times10^8$; and $u_{\text{seg}}=0$ whenever $x_{10}\le1$ (a re-segmented packet carries at least one payload byte). Then the solution of $\dot x=\sum_ku_k\vec v_k(x)$, $x(0)=x_0$, exists, is unique, is global and stays in $\widetilde{\mathcal{M}}_{\text{flow}}$.
+\end{theorem}
+\noindent\textit{Proof sketch.} Differentiating $\Psi$ along the flow gives $\dot\Psi=A(t)\Psi$ with $A=\operatorname{diag}\!\big(-\tfrac{u_{\text{time}}}{x_6},-\tfrac{u_{\text{time}}}{x_6},-\tfrac{u_{\text{chaff}}+u_{\text{seg}}}{x_2}\big)$ locally integrable, so $\Psi\equiv0$ by Carath\'eodory's theorem \cite{caratheodory1918vorlesungen}. All remaining bounds are affine and satisfy the Nagumo--Brezis condition \cite{nagumo1942lage, brezis1970characterization} on every face under the admissibility rules, which gives forward invariance, existence and uniqueness. The full proof, including the new case of $\vec v_{\text{seg}}$ at the MTU face and its effect on the header-total bound, is in Online Resource~1, Section~S1. Under discrete stepping the closed-form operator $\mathcal{P}_{\mathcal{M}}$ is a retraction (exact on feasible inputs, not a metric projection) that removes truncation drift and enforces integrality.
+
+The theorem concerns the continuous relaxation and the schema, not side effects at a real endpoint (Section~\ref{sec:formulation}).
+
+\subsection{Operational Cost}
+\label{sec:cost}
+
+The unit costs are $c_1=10^{-4}$ per second of induced delay, $c_2=10^{-2}$ per byte of padding, $c_3=1.0$ per added packet and $c_4=10^{-3}$ per normalized window displacement $|W_{\text{target}}-x_7|/65535$. A re-segmented packet is priced exactly like a chaff packet, and header-option bytes are not priced. Because the generators commute, the displacement on the interior of the manifold depends only on the integrated amounts $s_k=\int u_k\,dt\ge0$, and the cost $\mathcal{C}(s)=\sum_kc_ks_k$ is linear and path-independent there (not at the boundary faces). The cost model is the one FFE steers by. The boundary $F(x)=0$ of a tree ensemble is piecewise constant and non-convex, so the evasion problem, minimizing $\mathcal{C}$ subject to $F(x(T^*))<0$ and the dynamics above, is solved heuristically (Section~\ref{sec:algorithm}).

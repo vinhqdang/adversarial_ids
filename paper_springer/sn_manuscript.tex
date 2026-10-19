@@ -1,0 +1,103 @@
+\documentclass[pdflatex,sn-basic,Numbered]{sn-jnl}% numbered references, SN Computer Science
+
+%% Packages (sections are generated from ../paper by make_sections.py)
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{bm}
+\usepackage{enumitem}
+\usepackage{placeins}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\usepackage{manyfoot}
+\usepackage{varwidth}
+\def\UrlBreaks{\do\/\do\-\do\.\do\_\do\?\do\=\do\&}
+\Urlmuskip=0mu plus 1mu
+
+\theoremstyle{thmstyleone}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{thmstyletwo}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+\theoremstyle{thmstylethree}
+\newtheorem{definition}{Definition}
+
+\raggedbottom
+
+\begin{document}
+
+\title[Evasion of Tree Ensembles in Network Intrusion Detection]{Steering Through the Trees: Physical Lie Vector Field Evasion of Tree Ensembles in Network Intrusion Detection}
+
+\author*[1]{\fnm{Quang-Vinh} \sur{Dang}}\email{vinh.dq4@buv.edu.vn}
+
+\affil*[1]{\orgdiv{School of Innovative and Computing Sciences}, \orgname{British University Vietnam}, \orgaddress{\city{Hung Yen}, \country{Vietnam}}}
+
+\abstract{\textbf{Purpose:} Gradient-boosted decision trees dominate flow-based network intrusion detection, yet their worst-case robustness to schema-feasible evasion is rarely measured. We ask how far an adversary with score access only can evade them, and whether a defense can bound what remains.
+\textbf{Methods:} Flow-Field Evasion (FFE) models packet-level actions as commuting generators on the flow manifold. After diagnosing FFE-v1, we introduce FFE-v2 (re-segmentation, multi-scale probing, data-driven windows), which uses scores only. We compare it with FFE-v1, constrained adaptive projected gradient descent (CAPGD) and our own greedy white-box control on three full, deduplicated corpora and three tree libraries, and add a defense that OR-fuses a monotone gate with a free classifier.
+\textbf{Results:} FFE-v2 matches or exceeds the control and FFE-v1 in all nine cells (significantly above the control in four). On XGBoost its real attack success rate (ASR) is 99.5\%, 100.0\% and 98.3\%, against 57.6\% for FFE-v1 and 21.1\% for CAPGD on UNSW-NB15, with 28--38 queries. CatBoost on CIC-IDS2017 (36.4\%) is a ceiling set by immutable features. Against FFE-v1, CAPGD and a greedy white-box attacker, the defense leaves a real ASR of at most 8.8\% on CSE-CIC-IDS2018 and CIC-IDS2017 and 1.0--32\% on UNSW-NB15.
+\textbf{Conclusion:} Feasibility is relative to a schema verifier, and chaff accounting matters on UNSW-NB15. Flagged flows stay flagged only if backward traffic is unchanged; hiding those features costs accuracy and weakens the defense. FFE-v2 was run against it only on CIC-IDS2017 XGBoost. The single test evaluation is not a clean hold-out; five-seed runs are cleaner.}
+
+\keywords{Adversarial machine learning, Network intrusion detection, Gradient boosted decision trees, Evasion attacks, Problem-space constraints, Lie algebra}
+
+\maketitle
+\sloppy
+
+\input{sections/sec1_introduction.tex}
+\input{sections/sec2_related_work.tex}
+\input{sections/sec3_problem_formulation.tex}
+\input{sections/sec4_differential_geometry.tex}
+\input{sections/sec5_algorithm.tex}
+\input{sections/sec6_experiments.tex}
+\input{sections/sec7_results.tex}
+\input{sections/sec8_ablations.tex}
+\input{sections/sec9_defenses.tex}
+\input{sections/sec_discussion.tex}
+
+\backmatter
+
+\bmhead{Supplementary information}
+The accompanying file Online Resource~1 contains the proofs, auxiliary algorithms and additional experiments referred to in the text (Sections~S1--S13, Tables~S1--S21, Algorithms~S1--S5).
+
+\section*{Declarations}
+
+\bmhead{Funding}
+This research received no external funding. [To be confirmed by the author.]
+
+\bmhead{Competing interests}
+The author declares no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\bmhead{Ethics approval}
+Not applicable. The study uses only public network-flow datasets and involves no human participants or animals. No real network was attacked.
+
+\bmhead{Consent to participate}
+Not applicable.
+
+\bmhead{Consent for publication}
+Not applicable.
+
+\bmhead{Data availability}
+All flow data come from the public CSE-CIC-IDS2018 and CIC-IDS2017 archives of the Canadian Institute for Cybersecurity (University of New Brunswick, \url{https://www.unb.ca/cic/datasets/}) and the UNSW-NB15 archive of UNSW Canberra (\url{https://research.unsw.edu.au/projects/unsw-nb15-dataset}). The dataset builders and the per-flow result archives for FFE-v1, FFE-v2, the white-box control, all baselines, the validation tuning, the multi-seed runs, the packet replay and the defenses are in the repository \url{https://github.com/vinhqdang/adversarial_ids}.
+
+\bmhead{Code availability}
+The code of all attacks, baselines and defenses is at \url{https://github.com/vinhqdang/adversarial_ids}; every table is regenerated from the result files by \texttt{experiments/summarize\_results.py}.
+
+\bmhead{Author contributions}
+Quang-Vinh Dang: Conceptualization, Methodology, Software, Formal analysis, Investigation, Writing -- original draft, Writing -- review \& editing.
+
+\bmhead{Use of AI tools}
+Generative AI tools were used under the author's supervision to assist with software development, experiment scripting and drafting and editing of the text; the author reviewed and verified all code, results and text and takes full responsibility for the content.
+
+\bmhead{Dual use and responsible disclosure}
+This article studies the evasion of intrusion detectors. The attacks are red-teaming tools that estimate what a schema-constrained adversary with score access can reach, and no real network was attacked; the discussion frames the results as a robustness audit and the monotone-gate defense of Section~\ref{sec:defense} is offered together with its limits so that defenders can act on the findings.
+
+\bibliography{references}
+
+\end{document}

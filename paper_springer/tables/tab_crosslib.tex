@@ -1,0 +1,17 @@
+\begin{tabular}{@{}llccccccrr@{}}
+\toprule
+\textbf{Corpus} & \textbf{Target} & \textbf{$N$} & \textbf{Acc.} & \textbf{FFE-v1} & \textbf{Control} & \textbf{FFE-v2} & \textbf{+snap} & \textbf{$q$ v1} & \textbf{$q$ v2} \\
+\midrule
+CSE-CIC-IDS2018 & XGBoost & 1000 & 97.30 & 99.5 & 99.5 & \textbf{99.5} & 99.5 & 16.5 & 30.3 \\
+ & LightGBM & 1000 & 97.28 & 99.5 & 99.5 & \textbf{99.5} & 99.5 & 20.2 & 31.1 \\
+ & CatBoost & 1000 & 97.26 & 59.3 & 99.5 & \textbf{99.5} & 99.5 & 52.5 & 29.1 \\
+\midrule
+CIC-IDS2017 & XGBoost & 1000 & 99.96 & 99.2 & 100.0 & \textbf{100.0} & 100.0 & 14.6 & 28.3 \\
+ & LightGBM & 1000 & 99.96 & 35.1 & 36.6 & \textbf{96.0} & 96.0 & 120.1 & 32.4 \\
+ & CatBoost & 997 & 99.85 & 34.8 & 36.4 & \textbf{36.4} & 36.4 & 76.3 & 109.0 \\
+\midrule
+UNSW-NB15 & XGBoost & 1000 & 88.51 & 57.6 & 90.2 & \textbf{98.3} & 98.5 & 93.7 & 36.2 \\
+ & LightGBM & 1000 & 88.47 & 62.4 & 88.1 & \textbf{96.7} & 99.2 & 89.0 & 38.3 \\
+ & CatBoost & 983 & 86.67 & 70.1 & 56.8 & \textbf{97.5} & 97.7 & 67.9 & 38.0 \\
+\bottomrule
+\end{tabular}

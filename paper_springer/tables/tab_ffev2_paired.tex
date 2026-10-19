@@ -1,0 +1,17 @@
+\begin{tabular}{@{}llcc@{}}
+\toprule
+\textbf{Corpus} & \textbf{Target} & \textbf{v2 / v1 (flows both evade)} & \textbf{v2 / control (flows both evade)} \\
+\midrule
+CSE-CIC-IDS2018 & XGBoost & 3.02e-05 / 0.00057 ($n$=995) & 3.02e-05 / 0.000495 ($n$=995) \\
+ & LightGBM & 2.42e-05 / 0.000977 ($n$=995) & 2.42e-05 / 0.000496 ($n$=995) \\
+ & CatBoost & 0.000121 / 0.000977 ($n$=593) & 0.000285 / 0.000285 ($n$=995) \\
+\midrule
+CIC-IDS2017 & XGBoost & 0.000554 / 0.000855 ($n$=992) & 0.000554 / 0.000376 ($n$=1000) \\
+ & LightGBM & 1.17e-05 / 1.62 ($n$=351) & 1.17e-05 / 1.56e-05 ($n$=366) \\
+ & CatBoost & 3.22e-06 / 0.5 ($n$=347) & 3.22e-06 / 0.00671 ($n$=363) \\
+\midrule
+UNSW-NB15 & XGBoost & 6.72 / 5.77 ($n$=571) & 32.5 / 213 ($n$=894) \\
+ & LightGBM & 14.6 / 7.49 ($n$=618) & 35.8 / 49 ($n$=860) \\
+ & CatBoost & 29.1 / 9.78 ($n$=688) & 22.1 / 10.5 ($n$=558) \\
+\bottomrule
+\end{tabular}

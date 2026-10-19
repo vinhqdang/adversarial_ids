@@ -1,0 +1,49 @@
+\section{Attack Results}
+\label{sec:results}
+
+\subsection{Benchmark Against XGBoost}
+\label{sec:master}
+
+\begin{table}[!htbp]
+\centering
+\caption{Evasion benchmark against CUDA XGBoost on the full corpora. All methods except MOEVA and PSO attack the same 1,000 detected malicious test flows; MOEVA and PSO attack the first 200 of them. PFR: share of evasive candidates that are schema-feasible; Op.\ cost and $D_{L_1}$: medians over the method's own feasible evasions. FFE-v1 reads thresholds, the control reads the trees, FFE-v2 (bold) reads scores only.}\label{tab:master_evasion_benchmark}
+\resizebox{\textwidth}{!}{\begin{varwidth}{\maxdimen}\noindent%
+\input{tables/tab_master.tex}%
+\end{varwidth}}
+\end{table}
+
+Table~\ref{tab:master_evasion_benchmark} compares FFE-v2 with FFE-v1, the projected white-box control and the seven earlier baselines. Feature-space success is not feasibility: HopSkipJump-NIDS reaches 100.0\% ASR on two corpora with no feasible evasive flow, and the naive attack and ZOO-NIDS keep 83--88\% of their evasions on CSE-CIC-IDS2018 at zero cost, consistent with moving only coupled rates within the 5\% tolerance, so that check flatters them.
+
+FFE-v2 reaches a Real ASR of 99.5\%, 100.0\% and 98.3\% on CSE-CIC-IDS2018, CIC-IDS2017 and UNSW-NB15. It is significantly above all seven earlier baselines on every corpus (21 exact McNemar tests, largest Holm-adjusted $p=8\times10^{-28}$); the closest competitor, CAPGD (88.5\%, 89.5\%, 21.1\%), is beaten on 110, 105 and 772 flows against none. Against the stronger references the picture is more precise. On the two easy corpora our greedy white-box control, which reads the trees, ties FFE-v2 (99.5\% and 100.0\%, identical flows); the five CSE-CIC-IDS2018 flows that FFE-v2, FFE-v1 and the control all miss are DDoS flows that no tested move reached. On UNSW-NB15 FFE-v2 exceeds the control (98.3\% against 90.2\%; 89 flows against 8, $p=2\times10^{-18}$) and FFE-v1 (57.6\%; 412 against 5). FFE-v1 had been 32.6 points \emph{below} the control there, and the difference is the repair described in Section~\ref{sec:algorithm}: on the validation flows that FFE-v1 missed, the control's successful moves raise the packet count by a median of 213 and in 82\% of the cases leave the byte total unchanged, which is the re-segmentation move that FFE-v1 could not express (Online Resource~1, Section~S3). FFE-v2 with snapping, which reads thresholds, is statistically indistinguishable on XGBoost (98.5\% on UNSW-NB15; $p=0.5$), so the score-only variant is the headline.
+
+The methods pay differently. CAPGD and the NIDSGAN-style generator need far fewer target queries (3.2--16.2 and 2.4--4.5) because their gradient work runs on an uncounted surrogate, and the control needs two. FFE-v2 averages 30.3, 28.3 and 36.2 queries, about twice FFE-v1 on the easy corpora (16.5 and 14.6) and well below it on UNSW-NB15 (93.7). On the same 200 flows it needs 6 to 12 times fewer queries than PSO and MOEVA, although query counts are not strictly like-for-like across score, decision and surrogate methods. The median operational cost of FFE-v2's feasible evasions is $3.0\times10^{-5}$, $5.5\times10^{-4}$ and 40.0 units, against $5.7\times10^{-4}$, $8.6\times10^{-4}$ and 5.6 for FFE-v1; on UNSW-NB15 this partly reflects who succeeds (FFE-v1 evades only the cheap flows; Section~\ref{sec:ablation}), and the median of 40 is dominated by tens to hundreds of chaff or re-segmented packets priced at one unit each. These comparisons are specific to the cost model, which FFE steers by.
+
+\subsection{Three Libraries and Three Corpora}
+\label{sec:multidataset_results}
+
+\begin{table}[!htbp]
+\centering
+\caption{Real ASR (\%) on the 1,000-flow test cohorts (CatBoost: flows it detects), with clean test accuracy and mean queries per flow ($q$). Single frozen evaluation.}\label{tab:crosslib}
+\resizebox{\textwidth}{!}{\begin{varwidth}{\maxdimen}\noindent%
+\input{tables/tab_crosslib.tex}%
+\end{varwidth}}
+\end{table}
+
+Table~\ref{tab:crosslib} extends the comparison to LightGBM and CatBoost. FFE-v2 is at least as successful as our greedy projected control and as FFE-v1 in all nine cells. It is significantly higher than the control in four (UNSW-NB15 for all three libraries, $p\le5\times10^{-15}$, and CIC-IDS2017 LightGBM, 594 flows against none) and than FFE-v1 in seven (exact McNemar; the weakest is CIC-IDS2017 XGBoost, 8 flows against none, $p=0.008$); the remaining cells tie with identical flows. The two failure modes of FFE-v1 are repaired. On CSE-CIC-IDS2018 CatBoost FFE-v1 evaded 59.3\% because its single window target (64,240~B) lies on the wrong side of CatBoost's borders, whereas on the validation cohort the control evades 411 of FFE-v1's 414 failures with a window move alone, and FFE-v2 reaches 99.5\%. On CIC-IDS2017 LightGBM FFE-v1 reached 35.1\% for the same reason: 64,240~B almost never occurs in the CIC-IDS2017 training flows (0.08\% of benign and 0.015\% of attack TCP flows), so each ensemble places its splits arbitrarily in that near-empty interval (XGBoost routes it to the benign side, LightGBM keeps it malicious; Online Resource~1, Section~S9). Drawing the targets from the attacker's benign sample lifts LightGBM to 96.0\%, and the residual is concentrated in DoS flows (90.5\% evaded), which we did not examine further.
+
+\paragraph{A ceiling, not a win.} CatBoost on CIC-IDS2017 stays at 36.4\% for FFE-v2 and the control (34.8\% for FFE-v1). The decision for DDoS and DoS flows rests on attacker-immutable features (backward packets, backward bytes and destination port carry 77\% of CatBoost's gain), and a 20,000-sample multi-start search over all generators found no crossing for any of 37 sampled DDoS and 40 sampled DoS validation flows (3 of 80 sampled failed flows were reachable, all port scans; \texttt{results/ffev2\_report.md}). FFE-v2's own Real ASR on these families is 0.0\% (DDoS) and 5.0\% (DoS). We found no crossing in a multi-start search, which cannot prove unreachability; the number describes the model's reliance on immutable fields, not attack strength, and the unreachable flows make FFE-v2 spend its whole budget (109 queries).
+
+\paragraph{Snapping and per-family results.} Threshold snapping adds up to 2.5 points on UNSW-NB15 (LightGBM, 96.7\% to 99.2\%, $p=6\times10^{-8}$) and at most 0.2 point elsewhere. Per-family rates are in Online Resource~1, Table~S5; on UNSW-NB15 every XGBoost family with more than 20 flows is above 90\%.
+
+\subsection{Retraining Variance}
+\label{sec:seeds}
+
+\begin{table}[!htbp]
+\caption{Real ASR (\%, mean $\pm$ standard deviation over seeds) of the frozen attacks; each seed retrains the target and draws a new cohort of up to 300 detected flows. Five seeds for XGBoost, three for LightGBM and CatBoost. $q$: mean queries of FFE-v2.}\label{tab:seeds}
+\centering
+\resizebox{\textwidth}{!}{\begin{varwidth}{\maxdimen}\noindent%
+\input{tables/tab_seeds.tex}%
+\end{varwidth}}
+\end{table}
+
+A single split and cohort cannot show how much of the ranking is luck. Table~\ref{tab:seeds} repeats the comparison without any tuning. FFE-v2 is never below FFE-v1, the control or CAPGD in any seed of any cell, and strictly above them in most. On UNSW-NB15 XGBoost its mean is 97.7\% against 58.3\% (FFE-v1), 86.0\% (control) and 31.5\% (CAPGD); pooled over the five seeds it evades 188 flows that the control misses and misses 12 that the control evades ($p=8\times10^{-42}$). The control, our own implementation, is erratic where the model depends on a single move: on CIC-IDS2017 LightGBM its Real ASR is 95.7\%, 41.0\% and 95.7\% over the three seeds (mean 77.4\%), whereas FFE-v2 holds 95.6\% $\pm$ 0.2. CatBoost on CIC-IDS2017 remains at the ceiling (36.7\% $\pm$ 3.5). Pooled McNemar tests and win--tie--loss counts are in Online Resource~1, Table~S6. Three seeds for LightGBM and CatBoost are few, pooled $p$-values treat flows as independent, and nine cells are tested without multiplicity correction. The seeds vary the split and the cohort but the configuration was tuned on the main split's validation cohorts; they are the cleaner confirmation, not an independent tuning test.

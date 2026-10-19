@@ -1,0 +1,18 @@
+\begin{tabular}{@{}llcccrr@{}}
+\toprule
+\textbf{Corpus} & \textbf{Library} & \multicolumn{3}{c}{\textbf{Gate minus undefended}} & \textbf{Gate kept} & \textbf{V2 kept} \\
+& & Acc. & F1 & Rec. & & \\
+\midrule
+CSE-CIC-IDS2018 & XGBoost & -0.70 & -3.8 & -5.4 & 917 & 998 \\
+ & LightGBM & -0.70 & -3.8 & -5.8 & 921 & 1000 \\
+ & CatBoost & -0.68 & -3.7 & -5.8 & 910 & 998 \\
+\midrule
+CIC-IDS2017 & XGBoost & -0.03 & -0.0 & +0.0 & 998 & 999 \\
+ & LightGBM & -0.05 & -0.1 & -0.1 & 999 & 1000 \\
+ & CatBoost & +0.07 & +0.1 & +0.4 & 999 & 1000 \\
+\midrule
+UNSW-NB15 & XGBoost & -1.77 & -1.8 & -1.3 & 955 & 998 \\
+ & LightGBM & -1.56 & -1.6 & -0.8 & 951 & 992 \\
+ & CatBoost & -0.08 & -0.4 & -2.2 & 940 & 1000 \\
+\bottomrule
+\end{tabular}

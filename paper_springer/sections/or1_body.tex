@@ -1,0 +1,229 @@
+\section*{S1. Proofs}
+Proposition~1 and Theorem~1 are stated in Section~3.2 of the main paper, Proposition~2 (the certificate) in Section~7.1; the notation is that of Sections~2 and~3.
+
+
+\begin{proof}[Proof of Proposition 1]
+We evaluate the vector bracket $[X, Y] = J_Y X - J_X Y$ coordinate-wise. Items 1--5 treat the four generators of FFE-v1 (six pairs); item 6 adds the re-segmentation field and the option-padding field.
+\begin{enumerate}
+    \item \textbf{Non-Derived Coordinates $\{0, 1, 2, 3, 4, 5, 6, 7, 11\}$:} For these coordinates, the components of all four generators are either constants ($0, 1, L_0, H_0$) or depend solely on their own coordinate (e.g., $\vec{v}_{\text{win}}$ depends only on $x_7$). Since no generator modifies an independent variable on which another generator depends, the Jacobian products vanish identically: $(J_Y X)_k = 0$ and $(J_X Y)_k = 0$ for all $k \notin \{8, 9, 10\}$.
+    \item \textbf{Temporal Dilation and Payload Padding ($X = \vec{v}_{\text{time}}, Y = \vec{v}_{\text{pad}}$):} $X$ has non-zero entries in rows $6, 8, 9$ ($X_6 = 1, X_8 = -x_8/x_6, X_9 = -x_9/x_6$); $Y$ has non-zero entries in rows $4, 8, 10$ ($Y_4 = 1, Y_8 = 10^6/x_6, Y_{10} = 1/x_2$).
+    In row $8$:
+    \begin{equation}
+        (J_Y X)_8 = \frac{\partial Y_8}{\partial x_6} X_6 = -\frac{10^6}{x_6^2} \cdot 1 = -\frac{10^6}{x_6^2}
+    \end{equation}
+    \begin{equation}
+        (J_X Y)_8 = \frac{\partial X_8}{\partial x_4} Y_4 + \frac{\partial X_8}{\partial x_8} Y_8 = 0 + \left(-\frac{1}{x_6}\right)\left(\frac{10^6}{x_6}\right) = -\frac{10^6}{x_6^2}
+    \end{equation}
+    Subtracting yields $[X, Y]_8 = -\frac{10^6}{x_6^2} - \left(-\frac{10^6}{x_6^2}\right) \equiv 0$. In rows $9$ and $10$, all corresponding partial derivatives vanish, so $[X, Y] = \mathbf{0}$.
+    \item \textbf{Temporal Dilation and Chaff Injection ($X = \vec{v}_{\text{time}}, Z = \vec{v}_{\text{chaff}}$):} $Z$ has entries $Z_2 = 1, Z_4 = L_0, Z_8 = L_0 \times 10^6/x_6, Z_9 = 10^6/x_6, Z_{10} = (L_0 - x_{10})/x_2, Z_{11} = H_0$. In row $8$: $(J_Z X)_8 = -L_0 \times 10^6 / x_6^2 = (J_X Z)_8$. In row $9$: $(J_Z X)_9 = -10^6 / x_6^2 = (J_X Z)_9$. In row $10$: $(J_Z X)_{10} = 0 = (J_X Z)_{10}$. Thus $[X, Z] = \mathbf{0}$.
+    \item \textbf{Payload Padding and Chaff Injection ($Y = \vec{v}_{\text{pad}}, Z = \vec{v}_{\text{chaff}}$):} In ambient $\mathbb{R}^{12}$ coordinates, $Y_{10}(x) = 1/x_2$ and $Z_{10}(x) = (L_0 - x_{10})/x_2$. Evaluating the ambient cross-Jacobian products in row $10$:
+    \begin{equation}
+        (J_Z Y)_{10} = \sum_{k=0}^{11} \frac{\partial Z_{10}}{\partial x_k} Y_k = \frac{\partial Z_{10}}{\partial x_{10}} Y_{10} = \left(-\frac{1}{x_2}\right) \left(\frac{1}{x_2}\right) = -\frac{1}{x_2^2}
+    \end{equation}
+    \begin{equation}
+        (J_Y Z)_{10} = \sum_{k=0}^{11} \frac{\partial Y_{10}}{\partial x_k} Z_k = \frac{\partial Y_{10}}{\partial x_2} Z_2 = \left(-\frac{1}{x_2^2}\right) \cdot 1 = -\frac{1}{x_2^2}
+    \end{equation}
+    Subtracting gives $[Y, Z]_{10} = (J_Z Y)_{10} - (J_Y Z)_{10} = -\frac{1}{x_2^2} - \left(-\frac{1}{x_2^2}\right) \equiv 0$. In rows $8$ and $9$, all entries vanish identically because $Y_6 = Z_6 = 0$ while the rate entries $Y_8, Z_8, Z_9$ depend spatially only on duration $x_6$, ensuring $(J_Z Y)_k = (J_Y Z)_k = 0$ for $k \in \{8, 9\}$.
+    \item \textbf{Pairs Involving Window Morphing $\vec{v}_{\text{win}}$:} Because $\vec{v}_{\text{win}}$ acts exclusively on $x_7$, which is neither read nor modified by $\vec{v}_{\text{time}}, \vec{v}_{\text{pad}}, \vec{v}_{\text{chaff}}$, all cross-Jacobians vanish identically: $[ \vec{v}_k, \vec{v}_{\text{win}} ] = \mathbf{0}$ for all $k \in \{1, 2, 3\}$.
+    \item \textbf{Re-segmentation $\vec{v}_{\text{seg}}=\vec e_2+\tfrac{10^6}{x_6}\vec e_9-\tfrac{x_{10}}{x_2}\vec e_{10}+H_0\vec e_{11}$ (Lemma S1).} Write $S=\vec v_{\text{seg}}$. \emph{With $\vec v_{\text{time}}=X$:} row 9 gives $(J_SX)_9=\partial S_9/\partial x_6\cdot X_6=-10^6/x_6^2$ and $(J_XS)_9=\partial X_9/\partial x_9\cdot S_9=(-1/x_6)(10^6/x_6)=-10^6/x_6^2$; rows 8 and 10 vanish because $S_8=0$, $S_6=0$, $X_{10}=0$, $X_2=0$. \emph{With $\vec v_{\text{pad}}=Y$:} row 10 gives $(J_SY)_{10}=\partial S_{10}/\partial x_{10}\cdot Y_{10}=(-1/x_2)(1/x_2)$ and $(J_YS)_{10}=\partial Y_{10}/\partial x_2\cdot S_2=-1/x_2^2$; the other rows vanish. \emph{With $\vec v_{\text{chaff}}=Z$:} row 10 gives $(J_ZS)_{10}=\tfrac{\partial Z_{10}}{\partial x_{10}}S_{10}+\tfrac{\partial Z_{10}}{\partial x_2}S_2=\tfrac{x_{10}}{x_2^2}-\tfrac{L_0-x_{10}}{x_2^2}=\tfrac{2x_{10}-L_0}{x_2^2}$ and $(J_SZ)_{10}=\tfrac{\partial S_{10}}{\partial x_{10}}Z_{10}+\tfrac{\partial S_{10}}{\partial x_2}Z_2=-\tfrac{L_0-x_{10}}{x_2^2}+\tfrac{x_{10}}{x_2^2}=\tfrac{2x_{10}-L_0}{x_2^2}$; rows 8 and 9 vanish because $S_6=S_8=0$ and $Z_8,Z_9$ depend on $x_6$ only. \emph{With $\vec v_{\text{win}}$:} as in item 5. Finally $\vec v_{\text{hdr}}=\vec e_{11}$ is a constant field, so all its Jacobians vanish.
+\end{enumerate}
+Hence, $[ \vec{v}_i, \vec{v}_j ] = \mathbf{0}$ identically for all pairs of the five generators (and for $\vec v_{\text{hdr}}$).
+\end{proof}
+
+\noindent\textbf{Lemma S1 (re-segmentation).} $\vec v_{\text{seg}}$ is the chaff field with $L_0=0$: it adds $H_0$ header bytes and one packet per unit, leaves $x_4$ unchanged and lowers $x_{10}=x_4/x_2$. Along $\vec v_{\text{seg}}$ the residual $\Psi_1$ is untouched ($\dot x_4=\dot x_6=0$), $\Psi_2$ is untouched because $\dot x_9-10^6\dot x_2/x_6=0$, and $\dot\Psi_3=\dot x_{10}-\dot x_4/x_2+x_4\dot x_2/x_2^2=-\tfrac{x_{10}}{x_2}u_{\text{seg}}+\tfrac{x_4}{x_2^2}u_{\text{seg}}=-\tfrac{u_{\text{seg}}}{x_2}\Psi_3$. Hence the residual system of the main text holds with $A=\operatorname{diag}(-u_{\text{time}}/x_6,-u_{\text{time}}/x_6,-(u_{\text{chaff}}+u_{\text{seg}})/x_2)$. The gap $h=x_4-x_{11}-20x_2$ is \emph{not} preserved ($\dot h=-(H_0+20)u_{\text{seg}}<0$), which is why the header-plus-payload bound $g_2$ of the FFE-v1 proof is not a constraint of the manifold of Section~2: the corpora's length column counts payload, and chaff is the only generator that books its wire size in it. The MTU bound $g_1=1500x_2-x_4$ has $\nabla g_1\cdot\dot x=1500u_{\text{seg}}\ge0$, and the header bounds $g_3,g_4$ have $\nabla g_3\cdot\dot x=(H_0-H_{\min})u_{\text{seg}}\ge0$ and $\nabla g_4\cdot\dot x=(H_{\max}-H_0)u_{\text{seg}}\ge0$. The one new restriction is that each segmented packet carries at least one payload byte, $x_4\ge x_2$, so $u_{\text{seg}}=0$ on $\{x_{10}\le1\}$ (the integer move is $K\le\lfloor x_4\rfloor-x_2$).
+
+\begin{corollary}[Frobenius integrability and commuting flows]
+The five fields commute but are linearly dependent: $\vec v_{\text{seg}}=\vec v_{\text{chaff}}-L_0\vec v_{\text{pad}}$ component-wise (the entries in coordinates $4$, $8$ and $10$ cancel). On the regular open subdomain the distribution $\Delta=\operatorname{span}\{\vec v_{\text{time}},\vec v_{\text{pad}},\vec v_{\text{chaff}},\vec v_{\text{win}}\}$ therefore has constant rank 4 on TCP (rank 3 on UDP, where $\vec v_{\text{win}}=\mathbf 0$), and $\vec v_{\text{seg}}\in\Delta$ lies outside the nonnegative cone of chaff and padding because it needs a negative padding coefficient. Because all brackets vanish, $\Delta$ is involutive and integrable by Frobenius' theorem, and the flow maps commute, $\varphi_i^{s_1}\circ\varphi_j^{s_2}=\varphi_j^{s_2}\circ\varphi_i^{s_1}$ for $s_1,s_2\ge0$, an Abelian local Lie semigroup action on the interior of $\widetilde{\mathcal M}_{\text{flow}}$. An integer move of $K$ segmented packets is exactly the time-$K$ flow of $\vec v_{\text{seg}}$ ($x_{10}=x_4/(x_2+K)$, $x_{11}\to x_{11}+KH_0$). On the interior, where the bounds are slack, the terminal state depends only on the net integrated amounts $s_k=\int_0^Tu_k\,dt$ and not on the order of operations. At the MTU face $g_1(x)=1500x_2-x_4=0$ the admissibility rule requires packets to be added (chaff or segmentation) before more padding can be absorbed. The closed-form operator $\mathcal P_{\mathcal M}$ is a retraction onto the discrete manifold (exact on feasible inputs), not a metric projection.
+\end{corollary}
+
+\begin{proof}[Proof of Theorem 1]
+Differentiating the residuals along $\dot x=\sum_ku_k\vec v_k(x)$ gives
+\begin{align}
+\dot\Psi_1&=\dot x_8-\tfrac{10^6(\dot x_4+\dot x_5)}{x_6}+\tfrac{10^6(x_4+x_5)\dot x_6}{x_6^2}\nonumber\\
+ &=-\tfrac{u_{\text{time}}}{x_6}\Big(x_8-\tfrac{10^6(x_4+x_5)}{x_6}\Big)=-\tfrac{u_{\text{time}}}{x_6}\Psi_1,
+\end{align}
+where the padding and chaff contributions $10^6(u_{\text{pad}}+L_0u_{\text{chaff}})/x_6$ to $\dot x_8$ and to $10^6\dot x_4/x_6$ cancel,
+and in the same way $\dot\Psi_2=-\tfrac{u_{\text{time}}}{x_6}\Psi_2$ and $\dot\Psi_3=-\tfrac{u_{\text{chaff}}+u_{\text{seg}}}{x_2}\Psi_3$ (for chaff, $\dot x_{10}=(u_{\text{pad}}+u_{\text{chaff}}(L_0-x_{10}))/x_2$ and $\dot x_4=u_{\text{pad}}+L_0u_{\text{chaff}}$; for segmentation, Lemma S1). Hence $\dot\Psi=A(t)\Psi$ with $A=\operatorname{diag}(-u_{\text{time}}/x_6,-u_{\text{time}}/x_6,-(u_{\text{chaff}}+u_{\text{seg}})/x_2)$. Since $x_6(t)\ge x_6(0)>0$ and $x_2(t)\ge x_2(0)\ge1$, $A\in L^1_{\text{loc}}$, and $\Psi(0)=\mathbf 0$ because $x_0\in\widetilde{\mathcal M}_{\text{flow}}$. By Carath\'eodory's theorem for linear systems, $\Psi\equiv\mathbf 0$. The remaining coordinates behave as follows.
+\begin{itemize}
+    \item $\dot x_0=\dot x_1=\dot x_3=\dot x_5\equiv0$ (immutability); $\dot x_6=u_{\text{time}}\ge0$, with $x_6\le1.1\times10^8$ by the cap rule; $\dot x_2=u_{\text{chaff}}+u_{\text{seg}}\ge0$.
+    \item \textbf{Header bounds} $H_{\min}x_2\le x_{11}\le H_{\max}x_2$: $\dot x_{11}=H_0(u_{\text{chaff}}+u_{\text{seg}})$ with $H_0\in[H_{\min},H_{\max}]$ (TCP: 20 or 32; UDP: 8), so both bounds are forward invariant; for UDP $x_{11}=8x_2$ identically.
+    \item \textbf{Viability.} The set is defined by the affine inequalities $g_1=1500x_2-x_4\ge0$, $g_3=x_{11}-H_{\min}x_2\ge0$, $g_4=H_{\max}x_2-x_{11}\ge0$, $g_5=x_6-1\ge0$, $g_6=x_2-1\ge0$ and $g_7=1.1\times10^8-x_6\ge0$ (the gap $g_2=x_4-x_{11}-20x_2$ of the FFE-v1 proof is not part of the manifold, see Lemma S1; it is non-decreasing along the four FFE-v1 generators, where $\dot g_2=u_{\text{pad}}$). Because every $g_i$ is affine, the contingency cone at any boundary or corner point is the intersection of the supporting half-spaces, so it suffices that $\nabla g_i\cdot\dot x\ge0$ on every active face: $\nabla g_1\cdot\dot x=(1500-L_0)u_{\text{chaff}}+1500u_{\text{seg}}-u_{\text{pad}}\ge0$ by the admissibility rule; $\nabla g_3\cdot\dot x=(H_0-H_{\min})(u_{\text{chaff}}+u_{\text{seg}})\ge0$; $\nabla g_4\cdot\dot x=(H_{\max}-H_0)(u_{\text{chaff}}+u_{\text{seg}})\ge0$; $\nabla g_5\cdot\dot x=u_{\text{time}}\ge0$; $\nabla g_6\cdot\dot x=u_{\text{chaff}}+u_{\text{seg}}\ge0$; $\nabla g_7\cdot\dot x=-u_{\text{time}}\ge0$ on $\{x_6=1.1\times10^8\}$ because the rule forces $u_{\text{time}}=0$ there. By the Nagumo--Brezis viability theorem (Nagumo, 1942; Brezis, 1970) the set is forward invariant.
+    \item \textbf{Window.} For UDP $\vec v_{\text{win}}\equiv\mathbf0$ and $x_7\equiv0$; for TCP $x_7$ moves monotonically toward $W_{\text{target}}\in[0,65535]$ without crossing it.
+    \item \textbf{Re-segmentation.} Its only additional requirement is $x_4\ge x_2$ (each packet carries a payload byte), which the rule $u_{\text{seg}}=0$ on $\{x_{10}\le1\}$ preserves; this is a restriction on the control, not a face of $\widetilde{\mathcal M}_{\text{flow}}$.
+    \item \textbf{Existence.} Denominators $x_6(t),x_2(t)$ are bounded away from zero and the fields have linear growth, so the fields are Carath\'eodory functions and solutions exist uniquely as absolutely continuous trajectories on $[0,\infty)$.
+\end{itemize}
+\end{proof}
+
+\begin{proof}[Proof of Proposition 2 (conditional certificate)]
+The monotone-model argument is that of Incer et al.\ (2018). Let $x'$ be derived from $x$ by actions that leave $x_0,x_1,x_3,x_5$ unchanged, so $x'_j=x_j$ for $j\in\{0,1,3,5\}$ and $x'_j\ge x_j$ for $j\in\{2,4,6,11\}$. The gate $G$ reads only the columns $\{0,1,2,3,4,5,6,11\}$ and is non-decreasing in $\{2,4,6,11\}$. Moving from $x$ to $x'$ by raising the four coordinates one at a time, each step cannot lower $G$ (the other read coordinates are fixed along that step, including the previously raised ones), hence $G(x')\ge G(x)$, and the columns $7,8,9,10$ that the actions change are not inputs of $G$. For an ensemble of trees with monotone constraints the property holds at the level of the summed margin, because every tree is monotone in the constrained columns along each path by construction (XGBoost, LightGBM and CatBoost enforce this) and the sum of non-decreasing functions is non-decreasing; a monotone link keeps it for probabilities. A fused alert $\max(\text{free},G-\tau\text{-shifted})$ therefore remains raised whenever $G(x)\ge\tau$. The statement holds if the library's monotone constraint holds, which we verified by a randomized test (\texttt{tests/test\_defenses\_v2.py}) and did not prove for the library implementations; the verifier's absolute tolerance of $10^{-2}$ on the monotone columns is below the unit resolution of the integer-valued columns. The proof needs $x_3$ and $x_5$ unchanged because $G$ reads them and is not monotone in them; it says nothing about flows with $G(x)<\tau$, and it is relative to the original flow $x$ (a lower-footprint variant of the same attack flow is a different $x$). Hiding $x_3$ and $x_5$ from the gate would remove this assumption but is costly (Section~S6, Tables~S12 and~S13): the hiding gate loses about 4 accuracy and 19 F1 points on CSE-CIC-IDS2018, flags only 74--76\% of that cohort, has a benign false-positive rate of 2.1\% (CSE-CIC-IDS2018) to 36\% (UNSW-NB15), and V2 rebuilt on it has a whole-cohort evasion of 35--36\% against FFE-v1 and 78--79\% against the white-box attacker on CSE-CIC-IDS2018, against at most 9.0\% for V2.
+\end{proof}
+
+\section*{S2. Auxiliary algorithms}
+
+\setcounter{algorithm}{0}
+\renewcommand{\thealgorithm}{S\arabic{algorithm}}
+
+Algorithm~S1 is the master loop of FFE-v1, the reference baseline. In every iteration it probes the four generators once each, with the steps $\Delta s_1=\max(1000,0.5x_6)$~$\mu$s, $\Delta s_2=\max(50,0.25x_4)$ bytes, $\Delta s_3=\max(1,\operatorname{round}(0.5x_2))$ packets and $\Delta s_4=|64240-x_7|$; the directional derivatives are taken per second of delay, per byte, per packet and per window unit $\Delta s_4/65535$. It takes the step with the largest cost-normalised score decrease and falls back to boundary snapping (Algorithm~S3) or a dilation of $\max(5\times10^4,1.5x_6)$~$\mu$s when no probe lowers the score. With $M=20$ iterations it uses at most $4M+1=81$ queries for baseline and probes, 101 with stagnation fallbacks, plus the snapping candidates.
+
+\begin{algorithm}[!t]
+\footnotesize\linespread{1}\selectfont
+\caption{FFE-v1 master loop (reference baseline)}
+\label{alg:ffe_master}
+\begin{algorithmic}[1]
+\REQUIRE Classifier $F$, flow $x_0\in\mathcal{M}_{\text{flow}}$, schema $\mathcal{S}$, step budget $M$, costs $\vec c$, threshold $\tau=0$
+\ENSURE Evasive flow $x^*$ with $F(x^*)<\tau$, or FAILURE
+\STATE $x\leftarrow\mathcal{P}_{\mathcal{M}}(x_0)$; $f\leftarrow F(x)$
+\FOR{$\text{step}=1$ \TO $M$}
+    \IF{$f<\tau$} \RETURN $(x,\text{SUCCESS})$ \ENDIF
+    \STATE probe the four generators once each: $(k,\nabla_k,\vec v_k,\Delta s_k,f_k)$
+    \STATE $k^*\leftarrow$ first maximizer of $(-\nabla_k)/c_k$ with $\nabla_k<0$; null if none
+    \IF{$k^*\ne\text{null}$}
+        \STATE $x\leftarrow\mathcal{P}_{\mathcal{M}}(x+\Delta s_{k^*}\vec v_{k^*})$; $f\leftarrow f_{k^*}$
+    \ELSE
+        \STATE $x_{\text{snap}}\leftarrow\text{TSBS}(F,x,\mathcal{S})$ \COMMENT{Algorithm~S3}
+        \IF{$F(x_{\text{snap}})<f$} \STATE $x\leftarrow x_{\text{snap}}$; $f\leftarrow F(x_{\text{snap}})$
+        \ELSE \STATE $x\leftarrow\mathcal{P}_{\mathcal{M}}(x+\Delta t\,\vec v_{\text{time}}(x))$; $f\leftarrow F(x)$ \ENDIF
+    \ENDIF
+\ENDFOR
+\IF{$f<\tau$} \RETURN $(x,\text{SUCCESS})$ \ELSE \RETURN $(x,\text{FAILURE})$ \ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[!t]
+\footnotesize\linespread{1}\selectfont
+\caption{Analytical Manifold Projection Operator $\mathcal{P}_{\mathcal{M}}$}
+\label{alg:manifold_proj}
+\begin{algorithmic}[1]
+\REQUIRE Perturbed vector $x \in \mathbb{R}^{12}$, feature schema $\mathcal{S}$, optional baseline flow $x_{\text{orig}}$
+\ENSURE Projected flow vector $x_{\text{proj}} \in \mathcal{M}_{\text{flow}}$
+\STATE $x_{\text{proj}} \leftarrow \text{copy}(x)$
+\IF{$x_{\text{orig}}$ is provided}
+    \STATE $x_{\text{proj}}[j] \leftarrow x_{\text{orig}}[j]$ for all $j \in \mathcal{I}_{\text{immut}}$ \COMMENT{Preserve immutable features}
+    \STATE $x_{\text{proj}}[j] \leftarrow \max(x_{\text{orig}}[j], x_{\text{proj}}[j])$ for all $j \in \mathcal{I}_{\text{mono}}^+$ \COMMENT{Enforce monotonicity lower bounds}
+\ENDIF
+\STATE \COMMENT{Enforce discrete bounds and protocol-dependent packet/header sizes}
+\STATE $x_{\text{proj}}[2] \leftarrow \max(1.0, \text{round}(x_{\text{proj}}[2]))$ \COMMENT{Integer Forward Packets}
+\STATE $x_{\text{proj}}[3] \leftarrow x[3]$ \COMMENT{Immutable Backward Packets Preserved}
+\STATE $H_{\text{min}} \leftarrow \mathbf{if}\; x_{\text{proj}}[1] = 6 \;\mathbf{then}\; 20.0 \;\mathbf{else}\; 8.0$ \COMMENT{Min transport header: 20B TCP, 8B UDP}
+\STATE $H_{\text{max}} \leftarrow \mathbf{if}\; x_{\text{proj}}[1] = 6 \;\mathbf{then}\; 60.0 \;\mathbf{else}\; 8.0$ \COMMENT{Max transport header: 60B TCP, 8B UDP}
+\STATE $x_{\text{proj}}[11] \leftarrow \min(x_{\text{proj}}[2] \times H_{\text{max}}, \max(x_{\text{proj}}[2] \times H_{\text{min}}, \text{round}(x_{\text{proj}}[11])))$ \COMMENT{Transport Header Length}
+\STATE $x_{\text{proj}}[4] \leftarrow \min(x_{\text{proj}}[2] \times 1500.0, \max(0.0, \text{round}(x_{\text{proj}}[4])))$ \COMMENT{Forward Bytes $\in [0, 1500 N_{\text{fwd}}]$}
+\STATE $x_{\text{proj}}[5] \leftarrow x[5]$ \COMMENT{Immutable Backward Bytes Preserved}
+\STATE $x_{\text{proj}}[6] \leftarrow \min(1.1 \times 10^8, \max(1.0, \text{round}(x_{\text{proj}}[6])))$ \COMMENT{Integer Duration $\ge 1 \mu$s, capped below flow timeout}
+\STATE $x_{\text{proj}}[7] \leftarrow \mathbf{if}\; x_{\text{proj}}[1] = 6 \;\mathbf{then}\; \text{clamp}(\text{round}(x_{\text{proj}}[7]), 0.0, 65535.0) \;\mathbf{else}\; 0.0$ \COMMENT{TCP Window $[0, 65535]$, 0 for UDP}
+
+\STATE \COMMENT{Analytically recalculate coupled non-linear flow rates}
+\STATE $T_{\text{sec}} \leftarrow x_{\text{proj}}[6] / 10^6$
+\STATE $B_{\text{tot}} \leftarrow x_{\text{proj}}[4] + x_{\text{proj}}[5]$
+\STATE $N_{\text{tot}} \leftarrow x_{\text{proj}}[2] + x_{\text{proj}}[3]$
+\STATE $x_{\text{proj}}[8] \leftarrow B_{\text{tot}} / T_{\text{sec}}$ \COMMENT{Flow Bytes/s}
+\STATE $x_{\text{proj}}[9] \leftarrow N_{\text{tot}} / T_{\text{sec}}$ \COMMENT{Flow Packets/s}
+\STATE $x_{\text{proj}}[10] \leftarrow x_{\text{proj}}[4] / x_{\text{proj}}[2]$ \COMMENT{Forward Packet Length Mean}
+\RETURN $x_{\text{proj}}$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[!t]
+\footnotesize\linespread{1}\selectfont
+\caption{TSBS Candidate Generation ($\text{GenerateCandidates}$)}
+\label{alg:tsbs_candidates}
+\begin{algorithmic}[1]
+\REQUIRE Current flow $x^* \in \mathcal{M}_{\text{flow}}$, active splits $\text{active\_splits}$ (pairs $(j, \theta_j)$), tolerance $\epsilon_{\text{rel}}$
+\ENSURE Candidate boundary-crossing pool $\mathcal{C}$ (before manifold projection)
+\STATE $\mathcal{C} \leftarrow \emptyset$
+\STATE \COMMENT{1. Monotonic features: closest split strictly above $x^*[j]$; UDP header $x_{11}$ is immutable at 8B}
+\FOR{\textbf{each } $j \in \mathcal{I}_{\text{mono}}^+$ \textbf{with} NOT $(j = 11 \land x^*[1] = 17)$}
+    \STATE $\theta_j^* \leftarrow \min\{\theta_j \mid (j, \theta_j) \in \text{active\_splits} \;\land\; \theta_j > x^*[j]\}$
+    \IF{$\theta_j^*$ exists}
+        \STATE $\epsilon_j \leftarrow 1.0$ \textbf{if} $j \in \{2, 4, 11\}$ \textbf{else} $\text{round}(\epsilon_{\text{rel}} \cdot \max(1.0, |\theta_j^*|))$
+        \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[j] \leftarrow \theta_j^* + \epsilon_j$
+        \IF{$j = 11$}
+            \STATE $x_{\text{c}}[11] \leftarrow \min(60.0 \cdot x_{\text{c}}[2],\, x_{\text{c}}[11])$
+            \STATE $x_{\text{c}}[4] \leftarrow \min(1500.0 \cdot x_{\text{c}}[2],\, \max(0.0,\, x_{\text{c}}[4]))$
+        \ENDIF
+        \STATE $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
+    \ENDIF
+\ENDFOR
+\STATE \COMMENT{2. Invert coupled rate splits ($x_8, x_9$) into duration dilation}
+\FOR{\textbf{each } $(r, a, b) \in \{(8, x^*[4], x^*[5]),\, (9, x^*[2], x^*[3])\}$}
+    \STATE $\theta_r^* \leftarrow \max\{\theta_r \mid (r, \theta_r) \in \text{active\_splits} \;\land\; 0 < \theta_r < x^*[r]\}$
+    \IF{$\theta_r^*$ exists \AND $d \leftarrow 10^6 (a + b) / \theta_r^* + 10.0$ satisfies $d \le 1.1 \times 10^8$}
+        \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[6] \leftarrow d$; $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
+    \ENDIF
+\ENDFOR
+\STATE \COMMENT{3. Invert coupled packet length splits ($x_{10}$) into chaff packet injection}
+\STATE $H_0 \leftarrow 32.0$ \textbf{if} $(x^*[1] = 6 \land x^*[11]/x^*[2] \ge 26.0)$ \textbf{else} $20.0$ \textbf{if} $x^*[1] = 6$ \textbf{else} $8.0$
+\STATE $L_0 \leftarrow 20.0 + H_0$ \COMMENT{52B/40B TCP (with/without RFC 7323 options), 28B UDP}
+\STATE $\theta_{10}^* \leftarrow \max\{\theta_{10} \mid (10, \theta_{10}) \in \text{active\_splits} \;\land\; L_0 < \theta_{10} < x^*[10]\}$
+\IF{$\theta_{10}^*$ exists}
+    \STATE $N \leftarrow \lfloor (x^*[4] - \theta_{10}^* x^*[2]) / (\theta_{10}^* - L_0) \rfloor + 1$
+    \IF{$N \le 1000$}
+        \STATE \COMMENT{Chaff budget cap: $N \le 1000$ packets}
+        \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[2] \leftarrow x^*[2] + N$
+        \STATE $x_{\text{c}}[4] \leftarrow x^*[4] + N \cdot L_0$; $x_{\text{c}}[11] \leftarrow x^*[11] + N \cdot H_0$
+        \STATE $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
+    \ENDIF
+\ENDIF
+\STATE \COMMENT{4. TCP window morphing to benign OS baseline}
+\IF{$x^*[1] = 6 \;\land\; x^*[7] \neq 64240.0$}
+    \STATE $x_{\text{c}} \leftarrow \text{copy}(x^*)$; $x_{\text{c}}[7] \leftarrow 64240.0$; $\mathcal{C} \leftarrow \mathcal{C} \cup \{x_{\text{c}}\}$
+\ENDIF
+\RETURN $\mathcal{C}$
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm~S4 gives the general per-round Lie-guided adversarial training scheme for tree ensembles. The experiments in Section~7 of the main paper (the LGAT baseline) run a single-round instance of it.
+
+\begin{algorithm}[!t]
+\footnotesize\linespread{1}\selectfont
+\caption{Lie-Guided Adversarial Training (LGAT) for Tree Ensembles}
+\label{alg:lgat}
+\begin{algorithmic}[1]
+\REQUIRE Training set $\mathcal{D}_{\text{train}} = \{(x_i, y_i)\}_{i=1}^N$, number of boosting rounds $T$, adversarial ratio $\beta = 0.5$, step budget $M_{\text{train}} = 5$
+\ENSURE Robust tree ensemble $F_T(x)$
+\STATE Initialize base tree $F_0 \leftarrow \text{FitCleanBaseTree}(\mathcal{D}_{\text{train}})$
+\FOR{$t = 1$ \TO $T$}
+    \STATE $\mathcal{D}_{\text{aug}} \leftarrow \emptyset$
+    \FOR{\textbf{each } $(x_i, y_i) \in \mathcal{D}_{\text{train}}$}
+        \IF{$y_i = 1$ \AND $\text{Uniform}(0, 1) < \beta$}
+            \STATE $x_{\text{adv}} \leftarrow \text{FFE}(F_{t-1}, x_i, \text{budget}=M_{\text{train}})$
+            \STATE Add $(x_{\text{adv}}, 1)$ to $\mathcal{D}_{\text{aug}}$
+        \ELSE
+            \STATE Add $(x_i, y_i)$ to $\mathcal{D}_{\text{aug}}$
+        \ENDIF
+    \ENDFOR
+    \STATE Compute negative gradients $g_i$ and Hessians $h_i$ on $\mathcal{D}_{\text{aug}}$
+    \STATE Fit tree $f_t$ using robust split scoring $\text{Gain}_{\text{robust}}$
+    \STATE $F_t(x) \leftarrow F_{t-1}(x) + \eta \cdot f_t(x)$
+\ENDFOR
+\RETURN $F_T$
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm~S5 gives the main loop of FFE-v2 (Section~3.4 of the main paper).
+
+\begin{algorithm}[!t]
+\footnotesize\linespread{1}\selectfont
+\caption{FFE-v2 (score-only)}
+\label{alg:ffev2}
+\begin{algorithmic}[1]
+\REQUIRE Score oracle $p(\cdot)$ of the target, flow $x_0\in\mathcal{M}_{\text{flow}}$ with $p(x_0)\ge0.5$, generators $\mathcal{G}=\{\text{time},\text{pad},\text{chaff},\text{seg},\text{win}\}$, ladder ratio $r=6$, iteration budget $M=8$, relax-after $R=3$, refinement probes $B=4$, window pool $\mathcal{W}$
+\ENSURE Flow $x^*\in\mathcal{M}_{\text{flow}}$ with $p(x^*)<0.5$, or FAILURE
+\STATE $x\leftarrow\mathcal{P}_{\mathcal{M}}(x_0)$; $z\leftarrow\operatorname{logit}p(x)$
+\FOR{$t=1$ \TO $M$}
+    \STATE $\mathcal{C}\leftarrow\{\mathcal{P}_{\mathcal{M}}(\text{apply}(x,g,a)) : g\in\mathcal{G}\setminus\{\text{win}\},\ a\in\text{Ladder}_g(x)\}\ \cup\ \{\mathcal{P}_{\mathcal{M}}(x\text{ with }x_7{=}w) : w\in\mathcal{W}\}$ \COMMENT{duplicates removed}
+    \STATE score all candidates (one query each)
+    \IF{some candidate has $p<0.5$}
+        \STATE $(g,a,x')\leftarrow$ cheapest crossing candidate under $\mathcal{C}(x_0,\cdot)$; \textbf{break}
+    \ENDIF
+    \STATE $\Delta_c\leftarrow z-\operatorname{logit}p(c)$ for each candidate; keep those with $\Delta_c\ge10^{-3}$
+    \STATE select $\arg\max\ \Delta_c/(\Delta\mathcal{C}_c+10^{-4})$ if $t\le R$, else $\arg\max\Delta_c$ (also if no efficient candidate exists); \textbf{stop with FAILURE if none}
+    \STATE $x\leftarrow$ selected candidate; $z\leftarrow\operatorname{logit}p(x)$
+\ENDFOR
+\IF{a crossing $(g,a,x')$ was found}
+    \STATE bisect $a$ with $B$ further probes of the parent state; keep the smallest magnitude that is still scored benign
+    \RETURN $x^*$
+\ENDIF
+\RETURN FAILURE
+\end{algorithmic}
+\end{algorithm}

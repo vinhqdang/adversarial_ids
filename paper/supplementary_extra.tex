@@ -54,3 +54,78 @@ Table~S5 gives the record counts of the three corpora. Valid records pass the va
 \footnotesize
 \input{tables/tab_corpora.tex}
 \end{table}
+
+\section*{S7. White-box leaf-tuple-style control}
+
+The official LT-Attack code (chong-z/tree-ensemble-attack) needs Bazel and a C++ compiler, which this machine lacks, so we wrote a greedy attack in the same spirit (\texttt{src/attacks/whitebox\_tree.py}). It reads all 60 XGBoost trees; each step moves one feature to the other side of one split threshold, choosing the move that lowers the exact ensemble margin most, for at most 20 steps (margins agree with \texttt{predict\_proba} to $2\times10^{-7}$). It is greedy and not LT-Attack's leaf-tuple search with an $L_\infty$ objective. Two variants end in the same projection and bookkeeping as the other attacks: \emph{project at end} (unconstrained attack, then projection, then re-scoring) and \emph{project in loop} (every candidate is projected before scoring). Both use all 1,000 cohort flows of the main benchmark, two target queries (the tree reads are not counted; about 300--1,000 internal margin evaluations per flow) and are schema-feasible by construction.
+
+\begin{table}[!htbp]
+\centering
+\caption*{Table S7. Real ASR (\%) of the white-box control and FFE against XGBoost; exact McNemar $p$ against FFE on the same 1,000 flows.}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Corpus} & \textbf{Project at end} & \textbf{Project in loop} & \textbf{FFE} & \textbf{$p$ (in loop vs FFE)} \\
+\midrule
+CSE-CIC-IDS2018 & 31.6 & 99.5 & 99.5 & 1.0 \\
+CIC-IDS2017 & 35.1 & 100.0 & 99.2 & 0.008 \\
+UNSW-NB15 & 0.0 & 90.2 & 57.6 & $10^{-87}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Before projection the attack evades every flow on all three corpora; most of that comes from the derived packet-rate columns and the immutable columns, which the projection undoes. The projected-at-end variant is the fair version of an unconstrained white-box attack and is far below FFE ($p<10^{-170}$). The in-loop variant equals FFE on CSE-CIC-IDS2018, beats it on the other two corpora (on CIC-IDS2017 by eight flows against none), and on UNSW-NB15 by 32 points. It sees the trees and is cost-blind: its median operational cost is 213 against 5.6 for FFE on UNSW-NB15. FFE's four generators therefore limit its reach on UNSW-NB15, and its advantage is that it needs only scores (FFE without snapping) and its cost, not the success rate; the control counts two queries and reads the trees for free, whereas FFE counts every probe.
+
+\section*{S8. Packet-level replay}
+
+We built a synthetic replay (\texttt{src/validation/packet\_replay.py}); no packet capture was used and nothing was sent over a network. A flow record is expanded into a packet sequence with the stated packet counts, payload and header totals, duration and initial window, and a CICFlowMeter-style extractor (our re-implementation, not CICFlowMeter) recomputes the twelve features. For 20,000 flows per corpus the round trip is exact for every flow on CSE-CIC-IDS2018 and CIC-IDS2017 and for 19,999 of 20,000 on UNSW-NB15 (one one-packet record with a duration of 1~$\mu$s). This shows that the schema is jointly realisable by packet lists, not that it matches a real capture.
+
+We then derived the delay, chaff count, padding and window from each FFE adversarial flow (first 300 cohort flows per corpus, XGBoost; schema-level success 99.3\%, 99.3\% and 59.7\%), applied the four actions to the packet trace, re-extracted the features and re-scored. The coupled rates, forward mean, duration and window match the schema vector to $10^{-6}$; only the forward header length disagrees, on 9.1\%, 2.3\% and 6.1\% of the successful flows (up to 62\% on single flows), because snapping adds packets and the projection fills headers at 20~B per packet. All re-extracted vectors pass the feasibility check. The generators book 28--52~B of forward payload per chaff packet, whereas a minimal packet carries none, so we replayed three conventions. Table~S8 gives the share of evasions that remain.
+
+\begin{table}[!htbp]
+\centering
+\caption*{Table S8. Share of schema-level evasions that remain evasive after packet-level replay (XGBoost).}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Corpus} & \textbf{Evasions} & \textbf{Chaff carries booked bytes} & \textbf{Empty chaff, bytes as padding} & \textbf{Empty chaff, bytes dropped} \\
+\midrule
+CSE-CIC-IDS2018 & 298 & 99.3 & 99.3 & 100.0 \\
+CIC-IDS2017 & 298 & 100.0 & 100.0 & 99.0 \\
+UNSW-NB15 & 179 & 100.0 & 100.0 & 68.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+UNSW-NB15 depends on the booked chaff bytes because 69\% of its successful flows use chaff and 86\% use padding. The replay does not model a TCP state machine, server reaction, offload or flow timeouts, and part of its agreement holds by construction because the action magnitudes are derived from the adversarial vector. It does not test whether an attack payload still works after dilation or padding.
+
+\section*{S9. Why LightGBM resists FFE on CIC-IDS2017}
+
+On the 1,000-flow cohort FFE evades XGBoost in 99.2\% and LightGBM in 35.1\%. By family, LightGBM is evaded in 100\% of port scans, botnet and brute-force flows but in 1.9\% of DoS and 0.0\% of DDoS flows, which are about 66\% of the cohort; XGBoost is evaded in 98.1\% and 100\% of them. The threshold extraction and the probe are correct for LightGBM, start scores are identical (median 0.998) and the gain profiles are nearly the same (backward payload 0.31 for both, duration 0.29 for both), so reliance on immutable features does not explain the gap. Setting only the initial window to 64,240~B, FFE's window target, flips 97.2\% of the 33,857 detected DoS test flows for XGBoost and 0.9\% for LightGBM (99.96\% against 0.0\% for DDoS). No training flow has a window between 29,200 and 65,535~B; XGBoost splits at 32,831 and 65,535, so 64,240~B lands on the benign side, whereas LightGBM splits at 63,586 and 65,435 and keeps it on the malicious side. More leaves, finer histogram bins and a smaller minimum leaf size change this by about one point. Moving only the window target to the in-support value 65,535~B lifts LightGBM from 35.1\% to 93.7\% (queries 120 to 21.8) and leaves XGBoost at 99.2\%. The gap is therefore a property of one generator's fixed target meeting an empty region of the data, not evidence that LightGBM is more robust; we did not examine the remaining DoS failures at 65,535~B.
+
+\section*{S10. Related-work taxonomy}
+
+\begin{table}[!htbp]
+\caption*{Table S10. Representative evasion, verification and defense paradigms for tabular and network telemetry. Physical feasibility reports the empirical PFR of this benchmark where it was evaluated (main-text results section).}
+\centering
+\linespread{1}\selectfont
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}p{2.0cm}p{1.6cm}p{2.4cm}p{1.9cm}p{2.1cm}p{2.1cm}@{}}
+\toprule
+\textbf{Method} & \textbf{Target model} & \textbf{Engine} & \textbf{Queries} & \textbf{Coupled invariants} & \textbf{Physical feasibility} \\
+\midrule
+Kantchelian et al. & GBDT, random forest & MILP (worst case $2^{\mathcal{O}(DT)}$) & 0 (white-box) & Unsupported (linear only) & Unconstrained \\
+Zhang et al. (LT-Attack) & Tree ensembles & Discrete leaf-tuple search & $O(N_{\text{iter}})$ & Not modeled & Unconstrained \\
+Chen et al. (ZOO) & Black-box classifiers & Zeroth-order coordinate descent & 80--130 (mean) & Not modeled & 0.0--83.2\% of evasive flows (empirical) \\
+Chen et al. (HSJ) & Black-box decision & Boundary binary walk & 47 (mean) & Not modeled & 0.0\% (empirical) \\
+Lin et al. (IDSGAN); Zolbayar et al. & Black-box NIDS & Learned generator on a surrogate & 2.4--4.5 after training & Repaired after generation & 100.0\% (after repair, our re-implementation) \\
+Ghamizi et al. (MOEVA) & Constrained tabular & Multi-objective genetic search & 226--445 (mean) & Heuristic penalty & 59.4--100.0\% of evasive flows (empirical) \\
+Simonetto et al. (CAA/CAPGD) & Tabular models & Constrained APGD (surrogate) with MOEVA & 3.2--16.2 (CAPGD, mean) & Repair operator & 100.0\% (after repair, our re-implementation) \\
+PSO baseline after Han et al. (ours) & Black-box NIDS & PSO on interval and padding features & 183--251 (mean) & Invariant projection & 100.0\% (projected, our addition) \\
+\midrule
+\textbf{Flow-Field Evasion (ours)} & \textbf{XGBoost, LightGBM} & \textbf{Lie vector field steering} & \textbf{$\le 4M_{\max}+1$ probes + TSBS (mean 14.6--93.7)} & \textbf{Exact closed-form} & \textbf{100.0\% (schema-feasible)} \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\footnotesize{Note: $T$ trees, $D$ depth, $M_{\max}=20$, $K=4$ generators. Empirical query counts and feasible shares of the evasive candidates are ranges over the three full-scale benchmarks against XGBoost; FFE and the white-box rows count their own probes (main-text Table 1). LT-Attack was not run; Section~S7 reports a greedy leaf-tuple-style control. CAPGD and the NIDSGAN-style generator are our re-implementations.}
+\end{table}

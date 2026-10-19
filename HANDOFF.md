@@ -31,14 +31,14 @@ FFE 99.5 / 99.2 / 57.6 % on CSE-CIC-IDS2018 / CIC-IDS2017 / UNSW-NB15 with 16.5 
 ## 3. Manuscript (`paper/`)
 
 Target: *Information Sciences*; review layout; **exactly 40 pages** including references (limit 40, no slack: any addition must be paid for by cutting text or moving material to the supplementary). Abstract 196 words (limit 200); highlights in `highlights.tex`.
-`supplementary.tex` (11 pages): proofs, auxiliary algorithms, plus `supplementary_extra.tex` (per-family, TSBS, ablation, transfer and corpus-statistics tables S1-S5). Discussion and conclusion are in `sec_discussion.tex`.
+`supplementary.tex` (14 pages): proofs, auxiliary algorithms, plus `supplementary_extra.tex` (per-family, TSBS, ablation, transfer and corpus-statistics tables S1-S6, S7 white-box control, S8 packet replay, S9 LightGBM diagnosis, S10 taxonomy table). Discussion and conclusion are in `sec_discussion.tex`.
 Build: `bash paper/build.sh`. Tests: `pytest` (all pass; new modules 93-98% covered).
 
 ## 4. Open items
 
 1. **More datasets.** Scope is the three main corpora. InSDN, USB-IDS-1 and CIDDS-001 were tried and dropped at the owner's request (FFE failed on USB-IDS-1 and was not uniformly best on the others). To add a corpus: alias table in `ALIASES`, family mapping and builder branch in `full_data.py`, a row in `summarize_results.DATASETS`, rerun.
 2. **Defenses** are evaluated on one corpus, one seed, FFE and CAPGD only; the attacker is not adaptive to the training procedure.
-3. **White-box tree attacks** (LT-Attack, Cascioli et al.) are cited, not run; the novelty claim against them is untested.
+3. **White-box tree attacks**: a greedy leaf-tuple-style control was run (S7; `experiments/run_whitebox.py`); it matches or beats FFE when every candidate is projected. Official LT-Attack (needs Bazel/C++) and Cascioli et al. remain unrun.
 4. **Packet-level validation**: feasibility is schema conformance only; replay with feature re-extraction is not done.
 5. **Baseline tuning**: default budgets, one small surrogate; no sensitivity study. Repaired variants of ZOO/HSJ not run.
 6. LightGBM/CIC-IDS2017 gap, and why CatBoost resists transfer, are unexplained.

@@ -1,0 +1,3943 @@
+{
+ "config": {
+  "n_flows": 300,
+  "roundtrip_flows": 20000,
+  "trace_seeds": [
+   0,
+   1,
+   2
+  ],
+  "chaff_modes": [
+   "schema",
+   "empty_compensated",
+   "empty_literal"
+  ],
+  "seed": 42
+ },
+ "datasets": [
+  {
+   "dataset": "cse2018",
+   "n": 300,
+   "schema_asr": 99.33333333333333,
+   "schema_real_asr": 99.33333333333333,
+   "n_success": 298,
+   "n_real": 298,
+   "roundtrip_test_flows": {
+    "n": 20000,
+    "share_exact_1e-9": 1.0,
+    "share_within_1pct": 1.0,
+    "share_within_5pct": 1.0,
+    "worst_feature_error": {
+     "median": 0.0,
+     "p95": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "per_feature_max_error": {
+     "dst_port": 0.0,
+     "protocol": 0.0,
+     "tot_fwd_pkts": 0.0,
+     "tot_bwd_pkts": 0.0,
+     "totlen_fwd_pkts": 0.0,
+     "totlen_bwd_pkts": 0.0,
+     "flow_duration": 0.0,
+     "init_fwd_win_byts": 0.0,
+     "flow_bytes_s": 0.0,
+     "flow_pkts_s": 0.0,
+     "fwd_pkt_len_mean": 0.0,
+     "fwd_header_len": 0.0
+    },
+    "per_feature_share_exact": {
+     "dst_port": 1.0,
+     "protocol": 1.0,
+     "tot_fwd_pkts": 1.0,
+     "tot_bwd_pkts": 1.0,
+     "totlen_fwd_pkts": 1.0,
+     "totlen_bwd_pkts": 1.0,
+     "flow_duration": 1.0,
+     "init_fwd_win_byts": 1.0,
+     "flow_bytes_s": 1.0,
+     "flow_pkts_s": 1.0,
+     "fwd_pkt_len_mean": 1.0,
+     "fwd_header_len": 1.0
+    },
+    "single_packet_flows": 0
+   },
+   "roundtrip_attacked_original_flows": {
+    "n": 300,
+    "share_exact_1e-9": 1.0,
+    "share_within_1pct": 1.0,
+    "share_within_5pct": 1.0,
+    "worst_feature_error": {
+     "median": 0.0,
+     "p95": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "per_feature_max_error": {
+     "dst_port": 0.0,
+     "protocol": 0.0,
+     "tot_fwd_pkts": 0.0,
+     "tot_bwd_pkts": 0.0,
+     "totlen_fwd_pkts": 0.0,
+     "totlen_bwd_pkts": 0.0,
+     "flow_duration": 0.0,
+     "init_fwd_win_byts": 0.0,
+     "flow_bytes_s": 0.0,
+     "flow_pkts_s": 0.0,
+     "fwd_pkt_len_mean": 0.0,
+     "fwd_header_len": 0.0
+    },
+    "per_feature_share_exact": {
+     "dst_port": 1.0,
+     "protocol": 1.0,
+     "tot_fwd_pkts": 1.0,
+     "tot_bwd_pkts": 1.0,
+     "totlen_fwd_pkts": 1.0,
+     "totlen_bwd_pkts": 1.0,
+     "flow_duration": 1.0,
+     "init_fwd_win_byts": 1.0,
+     "flow_bytes_s": 1.0,
+     "flow_pkts_s": 1.0,
+     "fwd_pkt_len_mean": 1.0,
+     "fwd_header_len": 1.0
+    },
+    "single_packet_flows": 0
+   },
+   "schema_adv_model_evasive": 0.9933333333333333,
+   "action_usage_share_of_success": {
+    "time": 0.5436241610738255,
+    "chaff": 0.1040268456375839,
+    "pad": 0.03355704697986577,
+    "win": 0.8187919463087249
+   },
+   "modes": {
+    "schema": [
+     {
+      "trace_seed": 0,
+      "retention_of_schema_evasions_pct": 99.32885906040269,
+      "retention_of_real_evasions_pct": 99.32885906040269,
+      "replayed_asr_pct_of_all": 98.66666666666667,
+      "replayed_real_asr_pct_of_all": 98.66666666666667,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9093959731543624,
+      "share_flows_all_features_within_1pct": 0.9093959731543624,
+      "share_flows_all_features_within_5pct": 0.9161073825503355,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.06,
+       "p99": 0.07641428571427078,
+       "max": 0.6173913043478261
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.06,
+        "p99": 0.07641428571427078,
+        "max": 0.6173913043478261
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9093959731543624
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 27,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.12903225806451613
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 2,
+      "flip_flow_indices": [
+       90,
+       175
+      ]
+     },
+     {
+      "trace_seed": 1,
+      "retention_of_schema_evasions_pct": 99.32885906040269,
+      "retention_of_real_evasions_pct": 99.32885906040269,
+      "replayed_asr_pct_of_all": 98.66666666666667,
+      "replayed_real_asr_pct_of_all": 98.66666666666667,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9093959731543624,
+      "share_flows_all_features_within_1pct": 0.9093959731543624,
+      "share_flows_all_features_within_5pct": 0.9161073825503355,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.06,
+       "p99": 0.07641428571427078,
+       "max": 0.6173913043478261
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.06,
+        "p99": 0.07641428571427078,
+        "max": 0.6173913043478261
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9093959731543624
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 27,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.12903225806451613
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 2,
+      "flip_flow_indices": [
+       90,
+       175
+      ]
+     },
+     {
+      "trace_seed": 2,
+      "retention_of_schema_evasions_pct": 99.32885906040269,
+      "retention_of_real_evasions_pct": 99.32885906040269,
+      "replayed_asr_pct_of_all": 98.66666666666667,
+      "replayed_real_asr_pct_of_all": 98.66666666666667,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9093959731543624,
+      "share_flows_all_features_within_1pct": 0.9093959731543624,
+      "share_flows_all_features_within_5pct": 0.9161073825503355,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.06,
+       "p99": 0.07641428571427078,
+       "max": 0.6173913043478261
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.06,
+        "p99": 0.07641428571427078,
+        "max": 0.6173913043478261
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9093959731543624
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 27,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.12903225806451613
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 2,
+      "flip_flow_indices": [
+       90,
+       175
+      ]
+     }
+    ],
+    "empty_compensated": [
+     {
+      "trace_seed": 0,
+      "retention_of_schema_evasions_pct": 99.32885906040269,
+      "retention_of_real_evasions_pct": 99.32885906040269,
+      "replayed_asr_pct_of_all": 98.66666666666667,
+      "replayed_real_asr_pct_of_all": 98.66666666666667,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9093959731543624,
+      "share_flows_all_features_within_1pct": 0.9093959731543624,
+      "share_flows_all_features_within_5pct": 0.9161073825503355,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.06,
+       "p99": 0.07641428571427078,
+       "max": 0.6173913043478261
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.06,
+        "p99": 0.07641428571427078,
+        "max": 0.6173913043478261
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9093959731543624
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 27,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.12903225806451613
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 2,
+      "flip_flow_indices": [
+       90,
+       175
+      ]
+     },
+     {
+      "trace_seed": 1,
+      "retention_of_schema_evasions_pct": 99.32885906040269,
+      "retention_of_real_evasions_pct": 99.32885906040269,
+      "replayed_asr_pct_of_all": 98.66666666666667,
+      "replayed_real_asr_pct_of_all": 98.66666666666667,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9093959731543624,
+      "share_flows_all_features_within_1pct": 0.9093959731543624,
+      "share_flows_all_features_within_5pct": 0.9161073825503355,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.06,
+       "p99": 0.07641428571427078,
+       "max": 0.6173913043478261
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.06,
+        "p99": 0.07641428571427078,
+        "max": 0.6173913043478261
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9093959731543624
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 27,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.12903225806451613
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 2,
+      "flip_flow_indices": [
+       90,
+       175
+      ]
+     },
+     {
+      "trace_seed": 2,
+      "retention_of_schema_evasions_pct": 99.32885906040269,
+      "retention_of_real_evasions_pct": 99.32885906040269,
+      "replayed_asr_pct_of_all": 98.66666666666667,
+      "replayed_real_asr_pct_of_all": 98.66666666666667,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9093959731543624,
+      "share_flows_all_features_within_1pct": 0.9093959731543624,
+      "share_flows_all_features_within_5pct": 0.9161073825503355,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.06,
+       "p99": 0.07641428571427078,
+       "max": 0.6173913043478261
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.06,
+        "p99": 0.07641428571427078,
+        "max": 0.6173913043478261
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9093959731543624
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 27,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.12903225806451613
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 2,
+      "flip_flow_indices": [
+       90,
+       175
+      ]
+     }
+    ],
+    "empty_literal": [
+     {
+      "trace_seed": 0,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 99.33333333333333,
+      "replayed_real_asr_pct_of_all": 99.33333333333333,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.8959731543624161,
+      "share_flows_all_features_within_1pct": 0.8959731543624161,
+      "share_flows_all_features_within_5pct": 0.8959731543624161,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.2347076073831292,
+       "p99": 0.531272136953953,
+       "max": 0.6173913043478261
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.2347076073831292,
+        "p99": 0.43281400247900176,
+        "max": 0.583941605839416
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.06324110671936752,
+        "p99": 0.260553511852705,
+        "max": 0.43596730245231613
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.23470760738312918,
+        "p99": 0.43281400247900176,
+        "max": 0.583941605839416
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.06,
+        "p99": 0.07641428571427078,
+        "max": 0.6173913043478261
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 0.8959731543624161,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.8959731543624161,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.8959731543624161,
+       "fwd_header_len": 0.9093959731543624
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 27,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 0.24390243902439024,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.9565217391304348,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.24390243902439024,
+       "fwd_header_len": 0.12903225806451613
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     },
+     {
+      "trace_seed": 1,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 99.33333333333333,
+      "replayed_real_asr_pct_of_all": 99.33333333333333,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.8959731543624161,
+      "share_flows_all_features_within_1pct": 0.8959731543624161,
+      "share_flows_all_features_within_5pct": 0.8959731543624161,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.2347076073831292,
+       "p99": 0.531272136953953,
+       "max": 0.6173913043478261
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.2347076073831292,
+        "p99": 0.43281400247900176,
+        "max": 0.583941605839416
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.06324110671936752,
+        "p99": 0.260553511852705,
+        "max": 0.43596730245231613
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.23470760738312918,
+        "p99": 0.43281400247900176,
+        "max": 0.583941605839416
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.06,
+        "p99": 0.07641428571427078,
+        "max": 0.6173913043478261
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 0.8959731543624161,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.8959731543624161,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.8959731543624161,
+       "fwd_header_len": 0.9093959731543624
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 27,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 0.24390243902439024,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.9565217391304348,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.24390243902439024,
+       "fwd_header_len": 0.12903225806451613
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     },
+     {
+      "trace_seed": 2,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 99.33333333333333,
+      "replayed_real_asr_pct_of_all": 99.33333333333333,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.8959731543624161,
+      "share_flows_all_features_within_1pct": 0.8959731543624161,
+      "share_flows_all_features_within_5pct": 0.8959731543624161,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.2347076073831292,
+       "p99": 0.531272136953953,
+       "max": 0.6173913043478261
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.2347076073831292,
+        "p99": 0.43281400247900176,
+        "max": 0.583941605839416
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.06324110671936752,
+        "p99": 0.260553511852705,
+        "max": 0.43596730245231613
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.23470760738312918,
+        "p99": 0.43281400247900176,
+        "max": 0.583941605839416
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.06,
+        "p99": 0.07641428571427078,
+        "max": 0.6173913043478261
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 0.8959731543624161,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.8959731543624161,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.8959731543624161,
+       "fwd_header_len": 0.9093959731543624
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 27,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 0.24390243902439024,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.9565217391304348,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.24390243902439024,
+       "fwd_header_len": 0.12903225806451613
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     }
+    ]
+   },
+   "seconds": 53.677995681762695
+  },
+  {
+   "dataset": "cic2017",
+   "n": 300,
+   "schema_asr": 99.33333333333333,
+   "schema_real_asr": 99.33333333333333,
+   "n_success": 298,
+   "n_real": 298,
+   "roundtrip_test_flows": {
+    "n": 20000,
+    "share_exact_1e-9": 1.0,
+    "share_within_1pct": 1.0,
+    "share_within_5pct": 1.0,
+    "worst_feature_error": {
+     "median": 0.0,
+     "p95": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "per_feature_max_error": {
+     "dst_port": 0.0,
+     "protocol": 0.0,
+     "tot_fwd_pkts": 0.0,
+     "tot_bwd_pkts": 0.0,
+     "totlen_fwd_pkts": 0.0,
+     "totlen_bwd_pkts": 0.0,
+     "flow_duration": 0.0,
+     "init_fwd_win_byts": 0.0,
+     "flow_bytes_s": 0.0,
+     "flow_pkts_s": 0.0,
+     "fwd_pkt_len_mean": 0.0,
+     "fwd_header_len": 0.0
+    },
+    "per_feature_share_exact": {
+     "dst_port": 1.0,
+     "protocol": 1.0,
+     "tot_fwd_pkts": 1.0,
+     "tot_bwd_pkts": 1.0,
+     "totlen_fwd_pkts": 1.0,
+     "totlen_bwd_pkts": 1.0,
+     "flow_duration": 1.0,
+     "init_fwd_win_byts": 1.0,
+     "flow_bytes_s": 1.0,
+     "flow_pkts_s": 1.0,
+     "fwd_pkt_len_mean": 1.0,
+     "fwd_header_len": 1.0
+    },
+    "single_packet_flows": 0
+   },
+   "roundtrip_attacked_original_flows": {
+    "n": 300,
+    "share_exact_1e-9": 1.0,
+    "share_within_1pct": 1.0,
+    "share_within_5pct": 1.0,
+    "worst_feature_error": {
+     "median": 0.0,
+     "p95": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "per_feature_max_error": {
+     "dst_port": 0.0,
+     "protocol": 0.0,
+     "tot_fwd_pkts": 0.0,
+     "tot_bwd_pkts": 0.0,
+     "totlen_fwd_pkts": 0.0,
+     "totlen_bwd_pkts": 0.0,
+     "flow_duration": 0.0,
+     "init_fwd_win_byts": 0.0,
+     "flow_bytes_s": 0.0,
+     "flow_pkts_s": 0.0,
+     "fwd_pkt_len_mean": 0.0,
+     "fwd_header_len": 0.0
+    },
+    "per_feature_share_exact": {
+     "dst_port": 1.0,
+     "protocol": 1.0,
+     "tot_fwd_pkts": 1.0,
+     "tot_bwd_pkts": 1.0,
+     "totlen_fwd_pkts": 1.0,
+     "totlen_bwd_pkts": 1.0,
+     "flow_duration": 1.0,
+     "init_fwd_win_byts": 1.0,
+     "flow_bytes_s": 1.0,
+     "flow_pkts_s": 1.0,
+     "fwd_pkt_len_mean": 1.0,
+     "fwd_header_len": 1.0
+    },
+    "single_packet_flows": 0
+   },
+   "schema_adv_model_evasive": 0.9933333333333333,
+   "action_usage_share_of_success": {
+    "time": 0.33557046979865773,
+    "chaff": 0.05704697986577181,
+    "pad": 0.3187919463087248,
+    "win": 0.9832214765100671
+   },
+   "modes": {
+    "schema": [
+     {
+      "trace_seed": 0,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 99.33333333333333,
+      "replayed_real_asr_pct_of_all": 99.33333333333333,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9765100671140939,
+      "share_flows_all_features_within_1pct": 0.9765100671140939,
+      "share_flows_all_features_within_5pct": 0.9765100671140939,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.0,
+       "p99": 0.6,
+       "max": 0.6088888888888889
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.6,
+        "max": 0.6088888888888889
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9765100671140939
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 7,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.5882352941176471
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     },
+     {
+      "trace_seed": 1,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 99.33333333333333,
+      "replayed_real_asr_pct_of_all": 99.33333333333333,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9765100671140939,
+      "share_flows_all_features_within_1pct": 0.9765100671140939,
+      "share_flows_all_features_within_5pct": 0.9765100671140939,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.0,
+       "p99": 0.6,
+       "max": 0.6088888888888889
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.6,
+        "max": 0.6088888888888889
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9765100671140939
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 7,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.5882352941176471
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     },
+     {
+      "trace_seed": 2,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 99.33333333333333,
+      "replayed_real_asr_pct_of_all": 99.33333333333333,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9765100671140939,
+      "share_flows_all_features_within_1pct": 0.9765100671140939,
+      "share_flows_all_features_within_5pct": 0.9765100671140939,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.0,
+       "p99": 0.6,
+       "max": 0.6088888888888889
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.6,
+        "max": 0.6088888888888889
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9765100671140939
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 7,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.5882352941176471
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     }
+    ],
+    "empty_compensated": [
+     {
+      "trace_seed": 0,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 99.33333333333333,
+      "replayed_real_asr_pct_of_all": 99.33333333333333,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9765100671140939,
+      "share_flows_all_features_within_1pct": 0.9765100671140939,
+      "share_flows_all_features_within_5pct": 0.9765100671140939,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.0,
+       "p99": 0.6,
+       "max": 0.6088888888888889
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.6,
+        "max": 0.6088888888888889
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9765100671140939
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 7,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.5882352941176471
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     },
+     {
+      "trace_seed": 1,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 99.33333333333333,
+      "replayed_real_asr_pct_of_all": 99.33333333333333,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9765100671140939,
+      "share_flows_all_features_within_1pct": 0.9765100671140939,
+      "share_flows_all_features_within_5pct": 0.9765100671140939,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.0,
+       "p99": 0.6,
+       "max": 0.6088888888888889
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.6,
+        "max": 0.6088888888888889
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9765100671140939
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 7,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.5882352941176471
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     },
+     {
+      "trace_seed": 2,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 99.33333333333333,
+      "replayed_real_asr_pct_of_all": 99.33333333333333,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9765100671140939,
+      "share_flows_all_features_within_1pct": 0.9765100671140939,
+      "share_flows_all_features_within_5pct": 0.9765100671140939,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.0,
+       "p99": 0.6,
+       "max": 0.6088888888888889
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.6,
+        "max": 0.6088888888888889
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9765100671140939
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 7,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.5882352941176471
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     }
+    ],
+    "empty_literal": [
+     {
+      "trace_seed": 0,
+      "retention_of_schema_evasions_pct": 98.99328859060402,
+      "retention_of_real_evasions_pct": 98.99328859060402,
+      "replayed_asr_pct_of_all": 98.33333333333333,
+      "replayed_real_asr_pct_of_all": 98.33333333333333,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9429530201342282,
+      "share_flows_all_features_within_1pct": 0.9429530201342282,
+      "share_flows_all_features_within_5pct": 0.9429530201342282,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.2857142857142857,
+       "p99": 0.8571428571428571,
+       "max": 0.891566265060241
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.035562310030389746,
+        "p99": 0.8571428571428571,
+        "max": 0.891566265060241
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.017407476287890234,
+        "p99": 0.7604956590370945,
+        "max": 0.8571428571428572
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.035562310030389746,
+        "p99": 0.8571428571428571,
+        "max": 0.891566265060241
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.6,
+        "max": 0.6088888888888889
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 0.9496644295302014,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.9496644295302014,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.9496644295302014,
+       "fwd_header_len": 0.9765100671140939
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 7,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 0.845360824742268,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.845360824742268,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.8484848484848485,
+       "fwd_header_len": 0.5882352941176471
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 3,
+      "flip_flow_indices": [
+       45,
+       126,
+       146
+      ]
+     },
+     {
+      "trace_seed": 1,
+      "retention_of_schema_evasions_pct": 98.99328859060402,
+      "retention_of_real_evasions_pct": 98.99328859060402,
+      "replayed_asr_pct_of_all": 98.33333333333333,
+      "replayed_real_asr_pct_of_all": 98.33333333333333,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9429530201342282,
+      "share_flows_all_features_within_1pct": 0.9429530201342282,
+      "share_flows_all_features_within_5pct": 0.9429530201342282,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.2857142857142857,
+       "p99": 0.8571428571428571,
+       "max": 0.891566265060241
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.035562310030389746,
+        "p99": 0.8571428571428571,
+        "max": 0.891566265060241
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.017407476287890234,
+        "p99": 0.7604956590370945,
+        "max": 0.8571428571428572
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.035562310030389746,
+        "p99": 0.8571428571428571,
+        "max": 0.891566265060241
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.6,
+        "max": 0.6088888888888889
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 0.9496644295302014,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.9496644295302014,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.9496644295302014,
+       "fwd_header_len": 0.9765100671140939
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 7,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 0.845360824742268,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.845360824742268,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.8484848484848485,
+       "fwd_header_len": 0.5882352941176471
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 3,
+      "flip_flow_indices": [
+       45,
+       126,
+       146
+      ]
+     },
+     {
+      "trace_seed": 2,
+      "retention_of_schema_evasions_pct": 98.99328859060402,
+      "retention_of_real_evasions_pct": 98.99328859060402,
+      "replayed_asr_pct_of_all": 98.33333333333333,
+      "replayed_real_asr_pct_of_all": 98.33333333333333,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9429530201342282,
+      "share_flows_all_features_within_1pct": 0.9429530201342282,
+      "share_flows_all_features_within_5pct": 0.9429530201342282,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.2857142857142857,
+       "p99": 0.8571428571428571,
+       "max": 0.891566265060241
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.035562310030389746,
+        "p99": 0.8571428571428571,
+        "max": 0.891566265060241
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.017407476287890234,
+        "p99": 0.7604956590370945,
+        "max": 0.8571428571428572
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.035562310030389746,
+        "p99": 0.8571428571428571,
+        "max": 0.891566265060241
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.6,
+        "max": 0.6088888888888889
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 0.9496644295302014,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.9496644295302014,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.9496644295302014,
+       "fwd_header_len": 0.9765100671140939
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 7,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 0.845360824742268,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.845360824742268,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.8484848484848485,
+       "fwd_header_len": 0.5882352941176471
+      },
+      "flows_header_extra_needed": 0,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 3,
+      "flip_flow_indices": [
+       45,
+       126,
+       146
+      ]
+     }
+    ]
+   },
+   "seconds": 35.70787477493286
+  },
+  {
+   "dataset": "unsw",
+   "n": 300,
+   "schema_asr": 59.66666666666667,
+   "schema_real_asr": 59.66666666666667,
+   "n_success": 179,
+   "n_real": 179,
+   "roundtrip_test_flows": {
+    "n": 20000,
+    "share_exact_1e-9": 0.99995,
+    "share_within_1pct": 0.99995,
+    "share_within_5pct": 0.99995,
+    "worst_feature_error": {
+     "median": 0.0,
+     "p95": 0.0,
+     "p99": 0.0,
+     "max": 32.00000000000001
+    },
+    "per_feature_max_error": {
+     "dst_port": 0.0,
+     "protocol": 0.0,
+     "tot_fwd_pkts": 0.0,
+     "tot_bwd_pkts": 0.0,
+     "totlen_fwd_pkts": 0.0,
+     "totlen_bwd_pkts": 0.0,
+     "flow_duration": 1.0,
+     "init_fwd_win_byts": 0.0,
+     "flow_bytes_s": 32.00000000000001,
+     "flow_pkts_s": 32.00000000000001,
+     "fwd_pkt_len_mean": 0.0,
+     "fwd_header_len": 0.0
+    },
+    "per_feature_share_exact": {
+     "dst_port": 1.0,
+     "protocol": 1.0,
+     "tot_fwd_pkts": 1.0,
+     "tot_bwd_pkts": 1.0,
+     "totlen_fwd_pkts": 1.0,
+     "totlen_bwd_pkts": 1.0,
+     "flow_duration": 0.99995,
+     "init_fwd_win_byts": 1.0,
+     "flow_bytes_s": 0.99995,
+     "flow_pkts_s": 0.99995,
+     "fwd_pkt_len_mean": 1.0,
+     "fwd_header_len": 1.0
+    },
+    "single_packet_flows": 1
+   },
+   "roundtrip_attacked_original_flows": {
+    "n": 300,
+    "share_exact_1e-9": 1.0,
+    "share_within_1pct": 1.0,
+    "share_within_5pct": 1.0,
+    "worst_feature_error": {
+     "median": 0.0,
+     "p95": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "per_feature_max_error": {
+     "dst_port": 0.0,
+     "protocol": 0.0,
+     "tot_fwd_pkts": 0.0,
+     "tot_bwd_pkts": 0.0,
+     "totlen_fwd_pkts": 0.0,
+     "totlen_bwd_pkts": 0.0,
+     "flow_duration": 0.0,
+     "init_fwd_win_byts": 0.0,
+     "flow_bytes_s": 0.0,
+     "flow_pkts_s": 0.0,
+     "fwd_pkt_len_mean": 0.0,
+     "fwd_header_len": 0.0
+    },
+    "per_feature_share_exact": {
+     "dst_port": 1.0,
+     "protocol": 1.0,
+     "tot_fwd_pkts": 1.0,
+     "tot_bwd_pkts": 1.0,
+     "totlen_fwd_pkts": 1.0,
+     "totlen_bwd_pkts": 1.0,
+     "flow_duration": 1.0,
+     "init_fwd_win_byts": 1.0,
+     "flow_bytes_s": 1.0,
+     "flow_pkts_s": 1.0,
+     "fwd_pkt_len_mean": 1.0,
+     "fwd_header_len": 1.0
+    },
+    "single_packet_flows": 0
+   },
+   "schema_adv_model_evasive": 0.5966666666666667,
+   "action_usage_share_of_success": {
+    "time": 0.547486033519553,
+    "chaff": 0.6871508379888268,
+    "pad": 0.8603351955307262,
+    "win": 0.0
+   },
+   "modes": {
+    "schema": [
+     {
+      "trace_seed": 0,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 59.66666666666667,
+      "replayed_real_asr_pct_of_all": 59.66666666666667,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9385474860335196,
+      "share_flows_all_features_within_1pct": 0.9385474860335196,
+      "share_flows_all_features_within_5pct": 0.9385474860335196,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.07259528130671486,
+       "p99": 0.4,
+       "max": 0.4
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.07259528130671486,
+        "p99": 0.4,
+        "max": 0.4
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9385474860335196
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 11,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": null,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9739130434782609
+      },
+      "flows_header_extra_needed": 4,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     },
+     {
+      "trace_seed": 1,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 59.66666666666667,
+      "replayed_real_asr_pct_of_all": 59.66666666666667,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9385474860335196,
+      "share_flows_all_features_within_1pct": 0.9385474860335196,
+      "share_flows_all_features_within_5pct": 0.9385474860335196,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.07259528130671486,
+       "p99": 0.4,
+       "max": 0.4
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.07259528130671486,
+        "p99": 0.4,
+        "max": 0.4
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9385474860335196
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 11,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": null,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9739130434782609
+      },
+      "flows_header_extra_needed": 4,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     },
+     {
+      "trace_seed": 2,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 59.66666666666667,
+      "replayed_real_asr_pct_of_all": 59.66666666666667,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9385474860335196,
+      "share_flows_all_features_within_1pct": 0.9385474860335196,
+      "share_flows_all_features_within_5pct": 0.9385474860335196,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.07259528130671486,
+       "p99": 0.4,
+       "max": 0.4
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.07259528130671486,
+        "p99": 0.4,
+        "max": 0.4
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9385474860335196
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 11,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": null,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9739130434782609
+      },
+      "flows_header_extra_needed": 4,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     }
+    ],
+    "empty_compensated": [
+     {
+      "trace_seed": 0,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 59.66666666666667,
+      "replayed_real_asr_pct_of_all": 59.66666666666667,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9385474860335196,
+      "share_flows_all_features_within_1pct": 0.9385474860335196,
+      "share_flows_all_features_within_5pct": 0.9385474860335196,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.07259528130671486,
+       "p99": 0.4,
+       "max": 0.4
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.07259528130671486,
+        "p99": 0.4,
+        "max": 0.4
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9385474860335196
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 11,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": null,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9739130434782609
+      },
+      "flows_header_extra_needed": 4,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     },
+     {
+      "trace_seed": 1,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 59.66666666666667,
+      "replayed_real_asr_pct_of_all": 59.66666666666667,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9385474860335196,
+      "share_flows_all_features_within_1pct": 0.9385474860335196,
+      "share_flows_all_features_within_5pct": 0.9385474860335196,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.07259528130671486,
+       "p99": 0.4,
+       "max": 0.4
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.07259528130671486,
+        "p99": 0.4,
+        "max": 0.4
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9385474860335196
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 11,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": null,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9739130434782609
+      },
+      "flows_header_extra_needed": 4,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     },
+     {
+      "trace_seed": 2,
+      "retention_of_schema_evasions_pct": 100.0,
+      "retention_of_real_evasions_pct": 100.0,
+      "replayed_asr_pct_of_all": 59.66666666666667,
+      "replayed_real_asr_pct_of_all": 59.66666666666667,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.9385474860335196,
+      "share_flows_all_features_within_1pct": 0.9385474860335196,
+      "share_flows_all_features_within_5pct": 0.9385474860335196,
+      "worst_feature_error_over_success": {
+       "median": 0.0,
+       "p95": 0.07259528130671486,
+       "p99": 0.4,
+       "max": 0.4
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.07259528130671486,
+        "p99": 0.4,
+        "max": 0.4
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9385474860335196
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 11,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 1.0,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": null,
+       "flow_bytes_s": 1.0,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 1.0,
+       "fwd_header_len": 0.9739130434782609
+      },
+      "flows_header_extra_needed": 4,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 0,
+      "flip_flow_indices": []
+     }
+    ],
+    "empty_literal": [
+     {
+      "trace_seed": 0,
+      "retention_of_schema_evasions_pct": 68.15642458100558,
+      "retention_of_real_evasions_pct": 68.15642458100558,
+      "replayed_asr_pct_of_all": 40.666666666666664,
+      "replayed_real_asr_pct_of_all": 40.666666666666664,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.3240223463687151,
+      "share_flows_all_features_within_1pct": 0.3240223463687151,
+      "share_flows_all_features_within_5pct": 0.3575418994413408,
+      "worst_feature_error_over_success": {
+       "median": 0.1388888888888889,
+       "p95": 0.6186076346673546,
+       "p99": 0.7866141467551676,
+       "max": 0.8966861598440546
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.10980291783977476,
+        "p95": 0.6186076346673546,
+        "p99": 0.7866141467551676,
+        "max": 0.8966861598440545
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.08700501952035691,
+        "p95": 0.4797532204816635,
+        "p99": 0.6965768597287387,
+        "max": 0.7213237123662604
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.10980291783977475,
+        "p95": 0.6186076346673546,
+        "p99": 0.7866141467551676,
+        "max": 0.8966861598440546
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.07259528130671486,
+        "p99": 0.4,
+        "max": 0.4
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 0.3463687150837989,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.3463687150837989,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.3463687150837989,
+       "fwd_header_len": 0.9385474860335196
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 11,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 0.27607361963190186,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": null,
+       "flow_bytes_s": 0.4301675977653631,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.2976190476190476,
+       "fwd_header_len": 0.9739130434782609
+      },
+      "flows_header_extra_needed": 4,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 57,
+      "flip_flow_indices": [
+       3,
+       5,
+       8,
+       9,
+       22,
+       24,
+       27,
+       34,
+       35,
+       40,
+       52,
+       58,
+       60,
+       61,
+       62,
+       68,
+       71,
+       76,
+       77,
+       80,
+       94,
+       95,
+       98,
+       107,
+       110,
+       117,
+       120,
+       122,
+       125,
+       127,
+       129,
+       134,
+       143,
+       152,
+       155,
+       160,
+       162,
+       167,
+       170,
+       191,
+       196,
+       200,
+       202,
+       212,
+       213,
+       220,
+       221,
+       224,
+       227,
+       228,
+       233,
+       242,
+       249,
+       256,
+       269,
+       281,
+       293
+      ]
+     },
+     {
+      "trace_seed": 1,
+      "retention_of_schema_evasions_pct": 68.15642458100558,
+      "retention_of_real_evasions_pct": 68.15642458100558,
+      "replayed_asr_pct_of_all": 40.666666666666664,
+      "replayed_real_asr_pct_of_all": 40.666666666666664,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.3240223463687151,
+      "share_flows_all_features_within_1pct": 0.3240223463687151,
+      "share_flows_all_features_within_5pct": 0.3575418994413408,
+      "worst_feature_error_over_success": {
+       "median": 0.1388888888888889,
+       "p95": 0.6186076346673546,
+       "p99": 0.7866141467551676,
+       "max": 0.8966861598440546
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.10980291783977476,
+        "p95": 0.6186076346673546,
+        "p99": 0.7866141467551676,
+        "max": 0.8966861598440545
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.08700501952035691,
+        "p95": 0.4797532204816635,
+        "p99": 0.6965768597287387,
+        "max": 0.7213237123662604
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.10980291783977475,
+        "p95": 0.6186076346673546,
+        "p99": 0.7866141467551676,
+        "max": 0.8966861598440546
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.07259528130671486,
+        "p99": 0.4,
+        "max": 0.4
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 0.3463687150837989,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.3463687150837989,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.3463687150837989,
+       "fwd_header_len": 0.9385474860335196
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 11,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 0.27607361963190186,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": null,
+       "flow_bytes_s": 0.4301675977653631,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.2976190476190476,
+       "fwd_header_len": 0.9739130434782609
+      },
+      "flows_header_extra_needed": 4,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 57,
+      "flip_flow_indices": [
+       3,
+       5,
+       8,
+       9,
+       22,
+       24,
+       27,
+       34,
+       35,
+       40,
+       52,
+       58,
+       60,
+       61,
+       62,
+       68,
+       71,
+       76,
+       77,
+       80,
+       94,
+       95,
+       98,
+       107,
+       110,
+       117,
+       120,
+       122,
+       125,
+       127,
+       129,
+       134,
+       143,
+       152,
+       155,
+       160,
+       162,
+       167,
+       170,
+       191,
+       196,
+       200,
+       202,
+       212,
+       213,
+       220,
+       221,
+       224,
+       227,
+       228,
+       233,
+       242,
+       249,
+       256,
+       269,
+       281,
+       293
+      ]
+     },
+     {
+      "trace_seed": 2,
+      "retention_of_schema_evasions_pct": 68.15642458100558,
+      "retention_of_real_evasions_pct": 68.15642458100558,
+      "replayed_asr_pct_of_all": 40.666666666666664,
+      "replayed_real_asr_pct_of_all": 40.666666666666664,
+      "baseline_trace_still_detected_pct": 100.0,
+      "share_flows_all_features_within_1e-6": 0.3240223463687151,
+      "share_flows_all_features_within_1pct": 0.3240223463687151,
+      "share_flows_all_features_within_5pct": 0.3575418994413408,
+      "worst_feature_error_over_success": {
+       "median": 0.1388888888888889,
+       "p95": 0.6186076346673546,
+       "p99": 0.7866141467551676,
+       "max": 0.8966861598440546
+      },
+      "per_feature_error_success": {
+       "dst_port": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "protocol": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_fwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "tot_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "totlen_fwd_pkts": {
+        "median": 0.10980291783977476,
+        "p95": 0.6186076346673546,
+        "p99": 0.7866141467551676,
+        "max": 0.8966861598440545
+       },
+       "totlen_bwd_pkts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_duration": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "init_fwd_win_byts": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "flow_bytes_s": {
+        "median": 0.08700501952035691,
+        "p95": 0.4797532204816635,
+        "p99": 0.6965768597287387,
+        "max": 0.7213237123662604
+       },
+       "flow_pkts_s": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+       },
+       "fwd_pkt_len_mean": {
+        "median": 0.10980291783977475,
+        "p95": 0.6186076346673546,
+        "p99": 0.7866141467551676,
+        "max": 0.8966861598440546
+       },
+       "fwd_header_len": {
+        "median": 0.0,
+        "p95": 0.07259528130671486,
+        "p99": 0.4,
+        "max": 0.4
+       }
+      },
+      "per_feature_share_within_1pct": {
+       "dst_port": 1.0,
+       "protocol": 1.0,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": 1.0,
+       "totlen_fwd_pkts": 0.3463687150837989,
+       "totlen_bwd_pkts": 1.0,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": 1.0,
+       "flow_bytes_s": 0.3463687150837989,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.3463687150837989,
+       "fwd_header_len": 0.9385474860335196
+      },
+      "flows_pad_unmet": 0,
+      "flows_header_unmet": 0,
+      "flows_header_deficit": 11,
+      "per_feature_delta_share_within_1pct": {
+       "dst_port": null,
+       "protocol": null,
+       "tot_fwd_pkts": 1.0,
+       "tot_bwd_pkts": null,
+       "totlen_fwd_pkts": 0.27607361963190186,
+       "totlen_bwd_pkts": null,
+       "flow_duration": 1.0,
+       "init_fwd_win_byts": null,
+       "flow_bytes_s": 0.4301675977653631,
+       "flow_pkts_s": 1.0,
+       "fwd_pkt_len_mean": 0.2976190476190476,
+       "fwd_header_len": 0.9739130434782609
+      },
+      "flows_header_extra_needed": 4,
+      "feasible_after_replay_pct_of_success": 100.0,
+      "n_flips": 57,
+      "flip_flow_indices": [
+       3,
+       5,
+       8,
+       9,
+       22,
+       24,
+       27,
+       34,
+       35,
+       40,
+       52,
+       58,
+       60,
+       61,
+       62,
+       68,
+       71,
+       76,
+       77,
+       80,
+       94,
+       95,
+       98,
+       107,
+       110,
+       117,
+       120,
+       122,
+       125,
+       127,
+       129,
+       134,
+       143,
+       152,
+       155,
+       160,
+       162,
+       167,
+       170,
+       191,
+       196,
+       200,
+       202,
+       212,
+       213,
+       220,
+       221,
+       224,
+       227,
+       228,
+       233,
+       242,
+       249,
+       256,
+       269,
+       281,
+       293
+      ]
+     }
+    ]
+   },
+   "seconds": 72.12461853027344
+  }
+ ]
+}
